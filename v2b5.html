@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Volume 2 · 05 — How images turn back into numbers</title>
+    <style>
+      :root {
+        --bg: #0b0b0f;
+        --fg: #f2f2f5;
+        --muted: #b9b9c6;
+        --line: rgba(242, 242, 245, 0.14);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        background: var(--bg);
+        color: var(--fg);
+      }
+
+      .wrap {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 64px 20px 96px;
+      }
+
+      header { margin-bottom: 36px; }
+
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        letter-spacing: -0.02em;
+        margin: 0 0 10px;
+      }
+
+      .num {
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      article { font-size: 18px; line-height: 1.7; }
+
+      p { margin: 0 0 22px; }
+
+      .do {
+        border-left: 3px solid var(--line);
+        padding-left: 18px;
+        margin: 28px 0;
+      }
+
+      ul { margin: 10px 0 0 20px; }
+      li { margin-bottom: 6px; }
+
+      code {
+        background: rgba(255,255,255,0.05);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+
+      .note { color: var(--muted); margin-top: 6px; }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="num">Volume 2 · 05</div>
+        <h1>How images turn back into numbers</h1>
+      </header>
+
+      <article>
+        <p>
+          An image looks like a destination.
+        </p>
+
+        <p>
+          A frame on the screen feels like the end of a thought. Pixels appear and the brain
+          relaxes, as if the system has produced something final.
+        </p>
+
+        <p>
+          This environment treats images as raw material.
+        </p>
+
+        <p>
+          Pixels can be sampled, measured, reduced, and converted back into values that drive
+          everything else. This is where systems start acting like systems instead of pipelines.
+        </p>
+
+        <div class="do">
+          <p>
+            Start from what you already built in the previous page.
+          </p>
+          <p>
+            You should have a <code>Render</code> node producing an image.
+          </p>
+        </div>
+
+        <p>
+          The goal is simple: take something visible and turn it into a number.
+        </p>
+
+        <div class="do">
+          <p>
+            Move your mouse to an empty space below the <code>Render</code> output.
+          </p>
+          <p>
+            Press <code>Tab</code>.
+          </p>
+          <p>
+            Type one of the following and place it below:
+          </p>
+          <ul>
+            <li><code>TOP to CHOP</code></li>
+            <li><code>Analyze</code></li>
+          </ul>
+          <p class="note">
+            If you see both, pick <code>TOP to CHOP</code> first.
+          </p>
+        </div>
+
+        <p>
+          Wire the <code>Render</code> output into this new node.
+        </p>
+
+        <p>
+          You have crossed a border in the opposite direction.
+          Pixels became values.
+        </p>
+
+        <div class="do">
+          <p>
+            Open the viewer on the new node.
+          </p>
+        </div>
+
+        <p>
+          The numbers may look dense or meaningless. That’s normal.
+          What matters is that the image is now measurable.
+        </p>
+
+        <p>
+          Measurements become useful when they are reduced.
+          One number that summarizes a behavior beats a thousand numbers you cannot interpret.
+        </p>
+
+        <div class="do">
+          <p>
+            Press <code>Tab</code>.
+          </p>
+          <p>
+            Add one of the following to the right of your new CHOP node:
+          </p>
+          <ul>
+            <li><code>Analyze</code> (again, but as a CHOP)</li>
+            <li><code>Math</code></li>
+          </ul>
+          <p class="note">
+            Place it to the right and wire into it.
+          </p>
+        </div>
+
+        <p>
+          Now you have a number that describes the image, not just a number that came from it.
+        </p>
+
+        <p>
+          When the image changes, the number changes.
+          When the number changes, you can feed it back into geometry, effects, or control.
+        </p>
+
+        <div class="do">
+          <p>
+            Take that summarized number and wire it into something you already have.
+          </p>
+          <p>
+            Good targets:
+          </p>
+          <ul>
+            <li>the <code>Transform</code> on your geometry (Translate X, Scale X, Rotate Z)</li>
+            <li>a <code>Level</code> node on an image (Brightness or Opacity)</li>
+            <li>a <code>Noise</code> node parameter (Amplitude)</li>
+          </ul>
+        </div>
+
+        <p>
+          The system just bit its own tail.
+        </p>
+
+        <p>
+          A visible result is now influencing the conditions that produce it.
+          This does not require cleverness. It requires a border crossing and a place to apply the value.
+        </p>
+
+        <p>
+          This loop is where “effects” stop being decorations and start being behaviors.
+        </p>
+      </article>
+    </div>
+  </body>
+</html>

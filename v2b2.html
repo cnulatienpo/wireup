@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Volume 2 · 02 — How different kinds of data cross borders</title>
+    <style>
+      :root {
+        --bg: #0b0b0f;
+        --fg: #f2f2f5;
+        --muted: #b9b9c6;
+        --line: rgba(242, 242, 245, 0.14);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        background: var(--bg);
+        color: var(--fg);
+      }
+
+      .wrap {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 64px 20px 96px;
+      }
+
+      header {
+        margin-bottom: 36px;
+      }
+
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        letter-spacing: -0.02em;
+        margin: 0 0 10px;
+      }
+
+      .num {
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      article {
+        font-size: 18px;
+        line-height: 1.7;
+      }
+
+      p {
+        margin: 0 0 22px;
+      }
+
+      .do {
+        border-left: 3px solid var(--line);
+        padding-left: 18px;
+        margin: 28px 0;
+      }
+
+      ul {
+        margin: 10px 0 0 20px;
+      }
+
+      li {
+        margin-bottom: 6px;
+      }
+
+      code {
+        background: rgba(255,255,255,0.05);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+
+      .note {
+        color: var(--muted);
+        margin-top: 6px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="num">Volume 2 · 02</div>
+        <h1>How different kinds of data cross borders</h1>
+      </header>
+
+      <article>
+        <p>
+          Right now you have numbers moving.
+        </p>
+
+        <p>
+          They exist. They change. They repeat. They are useful, but they are trapped in one
+          neighborhood. This system is not built around neighborhoods. It is built around crossings.
+        </p>
+
+        <p>
+          Borders exist between types of data. Numbers. Images. Geometry. Text.
+          Nothing crosses those borders by accident.
+        </p>
+
+        <div class="do">
+          <p>
+            Start with the network from the previous page.
+          </p>
+          <p>
+            You should have a node producing numbers and another node responding to them.
+          </p>
+        </div>
+
+        <p>
+          Numbers alone do not draw. They do not render. They do not appear.
+          They need to be reinterpreted.
+        </p>
+
+        <div class="do">
+          <p>
+            Move your mouse to an empty space to the right.
+          </p>
+          <p>
+            Press <code>Tab</code>.
+          </p>
+          <p>
+            Type one of the following and place it to the right of your existing nodes:
+          </p>
+          <ul>
+            <li><code>CHOP to TOP</code></li>
+            <li><code>CHOP to SOP</code></li>
+          </ul>
+          <p class="note">
+            Either choice is correct. Pick one.
+          </p>
+        </div>
+
+        <p>
+          This node does not create content. It translates.
+        </p>
+
+        <p>
+          It listens to numbers and re-expresses them as something else.
+          No imagination. No interpretation. Just conversion.
+        </p>
+
+        <div class="do">
+          <p>
+            Wire the output of your number-based node into this new node.
+          </p>
+        </div>
+
+        <p>
+          You have crossed a border.
+        </p>
+
+        <p>
+          What comes out no longer behaves like numbers, even though numbers still exist underneath.
+          The system now treats the signal as image data or geometry, depending on what you chose.
+        </p>
+
+        <div class="do">
+          <p>
+            Open the viewer on the new node.
+          </p>
+        </div>
+
+        <p>
+          The output may look strange, flat, or unimpressive.
+          That reaction is common. It means the translation worked.
+        </p>
+
+        <p>
+          Raw conversions are not meant to look good.
+          They are meant to prove that borders are permeable when addressed directly.
+        </p>
+
+        <div class="do">
+          <p>
+            Press <code>Tab</code> again.
+          </p>
+          <p>
+            Add one node that belongs to the same family as the new output:
+          </p>
+          <ul>
+            <li>If you chose <code>CHOP to TOP</code>, add a <code>Level</code> or <code>Blur</code> node.</li>
+            <li>If you chose <code>CHOP to SOP</code>, add a <code>Transform</code> or <code>Point</code> node.</li>
+          </ul>
+        </div>
+
+        <p>
+          This node now responds to something that did not exist one step ago.
+          Nothing about it changed. The input did.
+        </p>
+
+        <p>
+          This is the pattern you will see everywhere.
+        </p>
+
+        <p>
+          When something feels impossible, it is usually because the signal is still
+          trapped on the wrong side of a border.
+        </p>
+
+        <p>
+          The system does not reward force. It rewards translation.
+        </p>
+
+        <p>
+          Once a border is crossed, entire families of operators become available
+          without needing to be introduced.
+        </p>
+      </article>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Volume 2 · 07 — How text and tables quietly run everything</title>
+    <style>
+      :root {
+        --bg: #0b0b0f;
+        --fg: #f2f2f5;
+        --muted: #b9b9c6;
+        --line: rgba(242, 242, 245, 0.14);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        background: var(--bg);
+        color: var(--fg);
+      }
+
+      .wrap {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 64px 20px 96px;
+      }
+
+      header { margin-bottom: 36px; }
+
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        letter-spacing: -0.02em;
+        margin: 0 0 10px;
+      }
+
+      .num {
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      article {
+        font-size: 18px;
+        line-height: 1.7;
+      }
+
+      p { margin: 0 0 22px; }
+
+      .do {
+        border-left: 3px solid var(--line);
+        padding-left: 18px;
+        margin: 28px 0;
+      }
+
+      ul { margin: 10px 0 0 20px; }
+      li { margin-bottom: 6px; }
+
+      code {
+        background: rgba(255,255,255,0.05);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+
+      .note {
+        color: var(--muted);
+        margin-top: 6px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="num">Volume 2 · 07</div>
+        <h1>How text and tables quietly run everything</h1>
+      </header>
+
+      <article>
+        <p>
+          So far, everything has moved because numbers pushed it.
+        </p>
+
+        <p>
+          Numbers feel powerful, but they are forgetful. They exist for a moment, do their job,
+          then vanish into the next frame.
+        </p>
+
+        <p>
+          Something else is happening underneath.
+        </p>
+
+        <p>
+          Decisions are being stored. Names are being remembered. Relationships are being held
+          in place. That work is not done by images or sound.
+        </p>
+
+        <p>
+          It is done by text and tables.
+        </p>
+
+        <div class="do">
+          <p>
+            Move your mouse to an empty area to the left of your existing network.
+          </p>
+          <p>
+            Press <code>Tab</code>.
+          </p>
+          <p>
+            Type one of the following and place it there:
+          </p>
+          <ul>
+            <li><code>Table</code></li>
+            <li><code>Text</code></li>
+            <li><code>Constant</code> (DAT)</li>
+          </ul>
+          <p class="note">
+            Any of these creates stored information. Pick one.
+          </p>
+        </div>
+
+        <p>
+          Open the viewer.
+        </p>
+
+        <p>
+          This node is not reacting to time. It is waiting.
+          Nothing changes unless something tells it to.
+        </p>
+
+        <p>
+          That waiting is the point.
+        </p>
+
+        <div class="do">
+          <p>
+            If you chose a <code>Table</code>, add a few values by clicking into the cells.
+          </p>
+          <p>
+            If you chose <code>Text</code>, type a few words or numbers.
+          </p>
+          <p>
+            If you chose <code>Constant</code>, add a few named fields.
+          </p>
+        </div>
+
+        <p>
+          You just created memory.
+        </p>
+
+        <p>
+          This data does not care about frames, audio, or visuals.
+          It exists outside the flow and can be consulted at any time.
+        </p>
+
+        <div class="do">
+          <p>
+            Press <code>Tab</code>.
+          </p>
+          <p>
+            Add one of the following to the right:
+          </p>
+          <ul>
+            <li><code>DAT to CHOP</code></li>
+            <li><code>DAT to SOP</code></li>
+            <li><code>DAT to TOP</code></li>
+          </ul>
+          <p class="note">
+            This is another border crossing. Pick any.
+          </p>
+        </div>
+
+        <p>
+          Wire the text or table into the new node.
+        </p>
+
+        <p>
+          Stored information has entered the moving system.
+        </p>
+
+        <div class="do">
+          <p>
+            Take the output and wire it into something you already built:
+          </p>
+          <ul>
+            <li>a Transform parameter</li>
+            <li>a Level or Color parameter</li>
+            <li>a Switch index</li>
+          </ul>
+        </div>
+
+        <p>
+          The system now responds to decisions instead of impulses.
+        </p>
+
+        <p>
+          Change a value in the table or text.
+          Everything downstream updates immediately.
+        </p>
+
+        <p>
+          Nothing animated the change.
+          Nothing eased it.
+          The update happened because memory changed.
+        </p>
+
+        <p>
+          This is how logic enters the system.
+        </p>
+
+        <p>
+          Images persuade the eye.
+          Sound persuades the body.
+          Tables persuade the structure.
+        </p>
+
+        <p>
+          Most large networks are not driven by noise or audio.
+          They are driven by quiet collections of values that decide
+          what is allowed to happen.
+        </p>
+
+        <p>
+          When something feels impossible to coordinate,
+          the missing piece is often not a clever node,
+          but a place to write something down and reuse it.
+        </p>
+      </article>
+    </div>
+  </body>
+</html>

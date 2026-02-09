@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Volume 2 · 06 — How sound behaves differently than images</title>
+    <style>
+      :root {
+        --bg: #0b0b0f;
+        --fg: #f2f2f5;
+        --muted: #b9b9c6;
+        --line: rgba(242, 242, 245, 0.14);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        background: var(--bg);
+        color: var(--fg);
+      }
+
+      .wrap {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 64px 20px 96px;
+      }
+
+      header { margin-bottom: 36px; }
+
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        letter-spacing: -0.02em;
+        margin: 0 0 10px;
+      }
+
+      .num {
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      article { font-size: 18px; line-height: 1.7; }
+
+      p { margin: 0 0 22px; }
+
+      .do {
+        border-left: 3px solid var(--line);
+        padding-left: 18px;
+        margin: 28px 0;
+      }
+
+      ul { margin: 10px 0 0 20px; }
+      li { margin-bottom: 6px; }
+
+      code {
+        background: rgba(255,255,255,0.05);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+
+      .note { color: var(--muted); margin-top: 6px; }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="num">Volume 2 · 06</div>
+        <h1>How sound behaves differently than images</h1>
+      </header>
+
+      <article>
+        <p>
+          Images arrive in chunks.
+        </p>
+
+        <p>
+          Frames show up, get replaced, then disappear. Even when they move, they move in slices.
+          Sound does not work that way here. Sound arrives as pressure that never pauses.
+        </p>
+
+        <p>
+          This difference matters because the system treats sound less like content
+          and more like force.
+        </p>
+
+        <div class="do">
+          <p>
+            Keep the network you already have.
+          </p>
+          <p>
+            Move your mouse to an empty area below everything else.
+          </p>
+          <p>
+            Press <code>Tab</code>.
+          </p>
+          <p>
+            Type one of the following and place it below:
+          </p>
+          <ul>
+            <li><code>Audio Device In</code></li>
+            <li><code>Audio File In</code></li>
+            <li><code>Noise</code> (if audio input is unavailable)</li>
+          </ul>
+          <p class="note">
+            Any of these produces a continuous signal. Pick one.
+          </p>
+        </div>
+
+        <p>
+          Open the viewer on this node.
+        </p>
+
+        <p>
+          What you see is not an image. It is not a picture of sound.
+          It is a trace of pressure over time.
+        </p>
+
+        <p>
+          Sound does not wait to be rendered. It pushes forward constantly.
+        </p>
+
+        <div class="do">
+          <p>
+            Press <code>Tab</code>.
+          </p>
+          <p>
+            Add one of the following to the right of the sound source:
+          </p>
+          <ul>
+            <li><code>Analyze</code></li>
+            <li><code>Math</code></li>
+            <li><code>Lag</code></li>
+          </ul>
+        </div>
+
+        <p>
+          Wire the sound source into this node.
+        </p>
+
+        <p>
+          These nodes do not shape sound as audio.
+          They shape pressure as numbers.
+        </p>
+
+        <div class="do">
+          <p>
+            Open the viewer on the new node.
+          </p>
+        </div>
+
+        <p>
+          Notice how fast the values move.
+          Even when the image-based systems earlier felt stable,
+          this one refuses to hold still.
+        </p>
+
+        <p>
+          Sound occupies time densely.
+          Every frame contains change.
+        </p>
+
+        <div class="do">
+          <p>
+            Take one channel from the sound analysis.
+          </p>
+          <p>
+            Wire it into something visual you already built:
+          </p>
+          <ul>
+            <li>Translate X on geometry</li>
+            <li>Scale on geometry</li>
+            <li>Brightness on an image</li>
+            <li>Amplitude on a noise node</li>
+          </ul>
+        </div>
+
+        <p>
+          The visual result jitters or pulses.
+        </p>
+
+        <p>
+          That reaction is honest.
+          Sound does not offer stable values unless forced to.
+        </p>
+
+        <div class="do">
+          <p>
+            Insert a <code>Lag</code> or <code>Filter</code> node
+            between the sound and the visual control.
+          </p>
+        </div>
+
+        <p>
+          The system begins to breathe instead of twitch.
+        </p>
+
+        <p>
+          This is the key difference.
+        </p>
+
+        <p>
+          Images tolerate being sampled.
+          Sound demands mediation.
+        </p>
+
+        <p>
+          Treat sound like a texture and it fights you.
+          Treat it like pressure and it cooperates.
+        </p>
+
+        <p>
+          From here on, whenever something feels too sharp,
+          too nervous, or too alive, the question is not
+          what node is wrong, but what pressure needs shaping.
+        </p>
+      </article>
+    </div>
+  </body>
+</html>

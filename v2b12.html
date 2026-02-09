@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Volume 2 · 12 — How the system talks back</title>
+    <style>
+      :root {
+        --bg: #0b0b0f;
+        --fg: #f2f2f5;
+        --muted: #b9b9c6;
+        --line: rgba(242, 242, 245, 0.14);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        background: var(--bg);
+        color: var(--fg);
+      }
+
+      .wrap {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 64px 20px 96px;
+      }
+
+      header { margin-bottom: 36px; }
+
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        letter-spacing: -0.02em;
+        margin: 0 0 10px;
+      }
+
+      .num {
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      article { font-size: 18px; line-height: 1.7; }
+
+      p { margin: 0 0 22px; }
+
+      .do {
+        border-left: 3px solid var(--line);
+        padding-left: 18px;
+        margin: 28px 0;
+      }
+
+      ul { margin: 10px 0 0 20px; }
+      li { margin-bottom: 6px; }
+
+      code {
+        background: rgba(255,255,255,0.05);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+
+      .note { color: var(--muted); margin-top: 6px; }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="num">Volume 2 · 12</div>
+        <h1>How the system talks back</h1>
+      </header>
+
+      <article>
+        <p>
+          Until now, everything has stayed inside.
+        </p>
+
+        <p>
+          Images appeared in viewers. Numbers moved through wires. Sound pushed on visuals.
+          Control came from hands on sliders and keys. All of it lived inside the same room.
+        </p>
+
+        <p>
+          Systems rarely stay contained.
+        </p>
+
+        <p>
+          Eventually something needs to leave. A signal gets recorded. A value gets sent.
+          A decision gets exposed to another machine.
+        </p>
+
+        <div class="do">
+          <p>
+            Start from a network where something meaningful is already happening.
+          </p>
+          <p>
+            Pick one signal you care about.
+          </p>
+        </div>
+
+        <p>
+          Output does not mean display.
+          It means declaration.
+        </p>
+
+        <div class="do">
+          <p>
+            Move your mouse to an empty area to the right of your network.
+          </p>
+          <p>
+            Press <code>Tab</code>.
+          </p>
+          <p>
+            Type one of the following and place it there:
+          </p>
+          <ul>
+            <li><code>Out</code> (TOP, CHOP, or SOP)</li>
+            <li><code>Record</code></li>
+            <li><code>OSC Out</code></li>
+            <li><code>MIDI Out</code></li>
+          </ul>
+          <p class="note">
+            Pick one that matches the kind of signal you want to send.
+          </p>
+        </div>
+
+        <p>
+          These nodes do not change the system.
+          They expose it.
+        </p>
+
+        <div class="do">
+          <p>
+            Wire the signal you chose into the output node.
+          </p>
+        </div>
+
+        <p>
+          Something subtle happens here.
+        </p>
+
+        <p>
+          The network does not behave differently,
+          but its role changes.
+        </p>
+
+        <p>
+          It is no longer just reacting.
+          It is announcing.
+        </p>
+
+        <div class="do">
+          <p>
+            If you chose a recorder, let it run for a moment.
+          </p>
+          <p>
+            If you chose a network output, watch the activity indicators.
+          </p>
+        </div>
+
+        <p>
+          The system is now accountable.
+        </p>
+
+        <p>
+          Output nodes enforce consistency.
+          They demand valid ranges, stable formats, and regular timing.
+        </p>
+
+        <p>
+          Anything sloppy upstream becomes obvious once it has to leave the room.
+        </p>
+
+        <p>
+          This is why output is never an afterthought.
+        </p>
+
+        <p>
+          Sending something outward forces the system to explain itself
+          in a way viewers never require.
+        </p>
+
+        <p>
+          Many networks become simpler at this stage.
+          Not because features are removed,
+          but because only the parts that survive exposure matter.
+        </p>
+
+        <p>
+          The system is no longer just running.
+          It is communicating.
+        </p>
+
+        <p>
+          What it says is exactly what you wired it to say.
+        </p>
+      </article>
+    </div>
+  </body>
+</html>
+

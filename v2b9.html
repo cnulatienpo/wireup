@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Volume 2 · 09 — How feedback turns a setup into a system</title>
+    <style>
+      :root {
+        --bg: #0b0b0f;
+        --fg: #f2f2f5;
+        --muted: #b9b9c6;
+        --line: rgba(242, 242, 245, 0.14);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        background: var(--bg);
+        color: var(--fg);
+      }
+
+      .wrap {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 64px 20px 96px;
+      }
+
+      header { margin-bottom: 36px; }
+
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        letter-spacing: -0.02em;
+        margin: 0 0 10px;
+      }
+
+      .num {
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      article { font-size: 18px; line-height: 1.7; }
+
+      p { margin: 0 0 22px; }
+
+      .do {
+        border-left: 3px solid var(--line);
+        padding-left: 18px;
+        margin: 28px 0;
+      }
+
+      ul { margin: 10px 0 0 20px; }
+      li { margin-bottom: 6px; }
+
+      code {
+        background: rgba(255,255,255,0.05);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+
+      .note { color: var(--muted); margin-top: 6px; }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="num">Volume 2 · 09</div>
+        <h1>How feedback turns a setup into a system</h1>
+      </header>
+
+      <article>
+        <p>
+          So far, everything has moved forward.
+        </p>
+
+        <p>
+          Sources push. Transforms respond. Images appear. Numbers describe them.
+          The flow has direction. That direction has been polite.
+        </p>
+
+        <p>
+          A system begins when something is allowed to look back.
+        </p>
+
+        <p>
+          Feedback is not repetition. It is influence traveling upstream.
+        </p>
+
+        <div class="do">
+          <p>
+            Start from a setup where an image is already affecting something else.
+          </p>
+          <p>
+            You should have a number that came from an image, sound, or geometry.
+          </p>
+        </div>
+
+        <p>
+          Right now that number probably feeds forward into another behavior.
+          That is safe. Feedback is not.
+        </p>
+
+        <div class="do">
+          <p>
+            Find a parameter earlier in the network that could accept a number:
+          </p>
+          <ul>
+            <li>Noise amplitude</li>
+            <li>Transform scale or rotation</li>
+            <li>Level brightness</li>
+          </ul>
+          <p class="note">
+            Pick something upstream.
+          </p>
+        </div>
+
+        <p>
+          You are about to create a loop.
+        </p>
+
+        <div class="do">
+          <p>
+            Wire the number back into that earlier parameter.
+          </p>
+        </div>
+
+        <p>
+          One of two things happens.
+        </p>
+
+        <p>
+          Either the system becomes unstable immediately, or it settles into a new behavior.
+          Both outcomes are correct.
+        </p>
+
+        <p>
+          This is the first time the system reacts to itself.
+        </p>
+
+        <p>
+          If it explodes, that is not failure. It means amplification exists.
+          Something downstream is shouting back louder than the source expects.
+        </p>
+
+        <div class="do">
+          <p>
+            Insert one of the following anywhere in the feedback path:
+          </p>
+          <ul>
+            <li><code>Lag</code></li>
+            <li><code>Filter</code></li>
+            <li><code>Math</code> (reduce the range)</li>
+          </ul>
+        </div>
+
+        <p>
+          The system calms down.
+        </p>
+
+        <p>
+          What you are seeing is not a trick.
+          It is balance being negotiated in real time.
+        </p>
+
+        <p>
+          Feedback reveals things that forward motion hides:
+          sensitivity, inertia, thresholds, memory.
+        </p>
+
+        <p>
+          Even without storing anything, the loop remembers.
+          Its current state depends on what just happened.
+        </p>
+
+        <p>
+          This is why feedback is never introduced early.
+          It requires respect for scale, timing, and pressure.
+        </p>
+
+        <p>
+          Once it exists, the network is no longer a chain.
+          It is a conversation.
+        </p>
+
+        <p>
+          Many behaviors people call “alive” come from nothing more
+          than a system being allowed to hear itself.
+        </p>
+
+        <p>
+          If something starts to feel responsive instead of reactive,
+          you are probably looking at a loop that has been given room to breathe.
+        </p>
+      </article>
+    </div>
+  </body>
+</html>

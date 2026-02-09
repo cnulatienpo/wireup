@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Volume 2 · 04 — How space becomes images</title>
+    <style>
+      :root {
+        --bg: #0b0b0f;
+        --fg: #f2f2f5;
+        --muted: #b9b9c6;
+        --line: rgba(242, 242, 245, 0.14);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        background: var(--bg);
+        color: var(--fg);
+      }
+
+      .wrap {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 64px 20px 96px;
+      }
+
+      header {
+        margin-bottom: 36px;
+      }
+
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        letter-spacing: -0.02em;
+        margin: 0 0 10px;
+      }
+
+      .num {
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      article {
+        font-size: 18px;
+        line-height: 1.7;
+      }
+
+      p {
+        margin: 0 0 22px;
+      }
+
+      .do {
+        border-left: 3px solid var(--line);
+        padding-left: 18px;
+        margin: 28px 0;
+      }
+
+      ul {
+        margin: 10px 0 0 20px;
+      }
+
+      li {
+        margin-bottom: 6px;
+      }
+
+      code {
+        background: rgba(255,255,255,0.05);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+
+      .note {
+        color: var(--muted);
+        margin-top: 6px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="num">Volume 2 · 04</div>
+        <h1>How space becomes images</h1>
+      </header>
+
+      <article>
+        <p>
+          You have something that occupies space now.
+        </p>
+
+        <p>
+          It has position. It has size. It responds to numbers.
+          What it does not have is appearance.
+        </p>
+
+        <p>
+          Space alone is invisible here.
+        </p>
+
+        <div class="do">
+          <p>
+            Start from the network you already built.
+          </p>
+          <p>
+            There should be geometry feeding through a <code>Transform</code> node,
+            reacting to changing values.
+          </p>
+        </div>
+
+        <p>
+          Geometry does not draw itself. It describes where something could be.
+          To be seen, it needs a witness.
+        </p>
+
+        <div class="do">
+          <p>
+            Move your mouse to an empty space to the right of your geometry.
+          </p>
+          <p>
+            Press <code>Tab</code>.
+          </p>
+          <p>
+            Type one of the following and place it to the right:
+          </p>
+          <ul>
+            <li><code>Camera</code></li>
+            <li><code>Light</code></li>
+          </ul>
+          <p class="note">
+            If you add only one, start with <code>Camera</code>.
+          </p>
+        </div>
+
+        <p>
+          Nothing changes yet.
+        </p>
+
+        <p>
+          A camera without a renderer sees nothing.
+          A renderer without a camera has no point of view.
+        </p>
+
+        <div class="do">
+          <p>
+            Press <code>Tab</code> again.
+          </p>
+          <p>
+            Type <code>Render</code> and place it to the right of everything.
+          </p>
+        </div>
+
+        <p>
+          This node turns space into pixels.
+          It does not create geometry. It observes it.
+        </p>
+
+        <div class="do">
+          <p>
+            Wire your geometry chain into the <code>Render</code> node.
+          </p>
+          <p>
+            Wire the <code>Camera</code> into the camera input of the <code>Render</code>.
+          </p>
+        </div>
+
+        <p>
+          Open the viewer on the Render node.
+        </p>
+
+        <p>
+          This is the first time something looks like an image.
+        </p>
+
+        <p>
+          What you are seeing is not the geometry.
+          It is a decision about the geometry, made from a particular position,
+          at a particular moment, under a particular set of conditions.
+        </p>
+
+        <p>
+          Change the numbers driving the geometry.
+          The image changes.
+        </p>
+
+        <p>
+          Change the camera.
+          The image changes again.
+        </p>
+
+        <p>
+          The geometry itself has not learned anything.
+          It is being interpreted repeatedly.
+        </p>
+
+        <div class="do">
+          <p>
+            Move the camera node around in the network.
+          </p>
+          <p>
+            Then change its position parameters.
+          </p>
+        </div>
+
+        <p>
+          Nothing downstream cares where the camera lives in the network.
+          It only cares about what the camera reports.
+        </p>
+
+        <p>
+          This is the rule.
+        </p>
+
+        <p>
+          Space becomes images only when someone is looking,
+          and the act of looking is just another signal in the system.
+        </p>
+      </article>
+    </div>
+  </body>
+</html>
