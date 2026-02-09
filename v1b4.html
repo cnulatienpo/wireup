@@ -52,6 +52,39 @@
       p {
         margin: 0 0 22px;
       }
+
+      .page-image {
+        margin: 56px 0 28px;
+        border-top: 1px solid var(--line);
+        padding-top: 28px;
+      }
+
+      .page-image img {
+        display: block;
+        width: min(100%, 640px);
+        height: auto;
+        margin: 0 auto;
+      }
+
+      .nav {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .nav a {
+        color: var(--fg);
+        text-decoration: none;
+        border: 1px solid var(--line);
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-size: 14px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .nav a:hover {
+        border-color: var(--fg);
+      }
     </style>
   </head>
 
@@ -111,6 +144,14 @@
           The best fit problems are the ones that behave like systems themselves. Ongoing, reactive, shaped by context, sensitive to timing. When the problem refuses to sit still, the environment stops fighting you and starts agreeing.
         </p>
       </article>
+
+      <div class="page-image">
+        <img src="v1b4.png" alt="Manual page 04" />
+      </div>
+
+      <div class="nav">
+        <a href="v1b5.html" aria-label="Go to page 05">Next page</a>
+      </div>
     </div>
   </body>
 </html>

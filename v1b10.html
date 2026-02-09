@@ -16,6 +16,39 @@
 
       body {
         margin: 0;
+      
+      .page-image {
+        margin: 56px 0 28px;
+        border-top: 1px solid var(--line);
+        padding-top: 28px;
+      }
+      
+      .page-image img {
+        display: block;
+        width: min(100%, 640px);
+        height: auto;
+        margin: 0 auto;
+      }
+      
+      .nav {
+        display: flex;
+        justify-content: flex-end;
+      }
+      
+      .nav a {
+        color: var(--fg);
+        text-decoration: none;
+        border: 1px solid var(--line);
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-size: 14px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      
+      .nav a:hover {
+        border-color: var(--fg);
+      }
         font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
         background: var(--bg);
         color: var(--fg);
@@ -67,6 +100,13 @@
           The interface is not trying to be friendly.
         </p>
 
+      <div class="page-image">
+        <img src="v1b10.png" alt="Manual page 10" />
+      </div>
+      
+      <div class="nav">
+        <a href="v1b11.html" aria-label="Go to page 11">Next page</a>
+      </div>
         <p>
           It is trying to be truthful.
         </p>

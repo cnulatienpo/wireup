@@ -52,6 +52,34 @@
       p {
         margin: 0 0 22px;
       }
+      .page-image {
+        margin: 56px 0 28px;
+        border-top: 1px solid var(--line);
+        padding-top: 28px;
+      }
+      .page-image img {
+        display: block;
+        width: min(100%, 640px);
+        height: auto;
+        margin: 0 auto;
+      }
+      .nav {
+        display: flex;
+        justify-content: flex-end;
+      }
+      .nav a {
+        color: var(--fg);
+        text-decoration: none;
+        border: 1px solid var(--line);
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-size: 14px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .nav a:hover {
+        border-color: var(--fg);
+      }
     </style>
   </head>
 
@@ -92,6 +120,12 @@
         </p>
 
         <p>
+      <div class="page-image">
+        <img src="v1b5.png" alt="Manual page 05" />
+      </div>
+      <div class="nav">
+        <a href="v1b6.html" aria-label="Go to page 06">Next page</a>
+      </div>
           This breaks the mental model of progress as a march forward. There is no arrow of advancement through the network. There are only relationships being maintained from moment to moment.
         </p>
 
