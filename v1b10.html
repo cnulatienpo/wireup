@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>10 — What the interface is showing you</title>
+    <style>
+      :root {
+        --bg: #0b0b0f;
+        --fg: #f2f2f5;
+        --muted: #b9b9c6;
+        --line: rgba(242, 242, 245, 0.14);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        background: var(--bg);
+        color: var(--fg);
+      }
+
+      .wrap {
+        max-width: 820px;
+        margin: 0 auto;
+        padding: 64px 20px 96px;
+      }
+
+      header {
+        margin-bottom: 36px;
+      }
+
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        letter-spacing: -0.02em;
+        margin: 0 0 10px;
+      }
+
+      .num {
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      article {
+        font-size: 18px;
+        line-height: 1.7;
+      }
+
+      p {
+        margin: 0 0 22px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="num">10</div>
+        <h1>What the interface is showing you</h1>
+      </header>
+
+      <article>
+        <p>
+          The interface is not trying to be friendly.
+        </p>
+
+        <p>
+          It is trying to be truthful.
+        </p>
+
+        <p>
+          Most software hides complexity behind a single surface. One window. One canvas. One place where things happen. Anything else is tucked away so you can feel oriented. That choice is comforting, but it comes with a cost: you only see the part of the system someone decided you should see.
+        </p>
+
+        <p>
+          This interface refuses that arrangement.
+        </p>
+
+        <p>
+          Multiple panes exist because multiple things are happening at once. Network view shows relationships. Parameter panes show conditions. Viewers show symptoms. Timelines show persistence. None of these replace the others, because none of them tell the whole story on their own.
+        </p>
+
+        <p>
+          Viewers cause the most confusion. They look authoritative. Bright. Immediate. Convincing. What they display is not truth; it is output at a particular moment under particular conditions. Treating them as ground truth leads to bad decisions fast.
+        </p>
+
+        <p>
+          Parameters feel overwhelming for the opposite reason. They expose everything. No opinionated defaults. No gentle slope from beginner to expert. Every lever that exists is visible, because the system does not know which ones matter to you.
+        </p>
+
+        <p>
+          The network editor is not a workspace in the usual sense. It is a map of obligation. Each wire represents something that must be honored continuously. Each container represents a role that never stops performing.
+        </p>
+
+        <p>
+          This is why rearranging panes does not simplify the system. It only changes which part you are listening to more closely. Complexity does not disappear when you hide it. It continues operating off-screen.
+        </p>
+
+        <p>
+          People often ask where to look when something feels wrong. The answer depends on what kind of wrong it is. Structural problems show up in the network. Behavioral problems show up in parameters. Perceptual problems show up in viewers. Time-related problems show up everywhere at once.
+        </p>
+
+        <p>
+          The interface does not prioritize any of these perspectives because the system itself does not. It expects you to move between them, correlating behavior rather than trusting a single surface.
+        </p>
+
+        <p>
+          Once this is accepted, the interface stops feeling busy and starts feeling honest. It is not presenting a simplified story. It is presenting multiple partial truths and letting you decide which one matters at the moment.
+        </p>
+
+        <p>
+          Nothing here is ornamental. Every pane exists because the system needs a place to reveal something it cannot compress into one view.
+        </p>
+      </article>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>07 — What moves: signal flow without the myth</title>
+    <style>
+      :root {
+        --bg: #0b0b0f;
+        --fg: #f2f2f5;
+        --muted: #b9b9c6;
+        --line: rgba(242, 242, 245, 0.14);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        background: var(--bg);
+        color: var(--fg);
+      }
+
+      .wrap {
+        max-width: 820px;
+        margin: 0 auto;
+        padding: 64px 20px 96px;
+      }
+
+      header {
+        margin-bottom: 36px;
+      }
+
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        letter-spacing: -0.02em;
+        margin: 0 0 10px;
+      }
+
+      .num {
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      article {
+        font-size: 18px;
+        line-height: 1.7;
+      }
+
+      p {
+        margin: 0 0 22px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="num">07</div>
+        <h1>What moves: signal flow without the myth</h1>
+      </header>
+
+      <article>
+        <p>
+          The word “flow” picks up baggage fast.
+        </p>
+
+        <p>
+          People imagine motion as something dramatic. Lines pulsing. Values surging. Waves rolling through the network like a parade. When that spectacle does not appear, the assumption follows that nothing is happening.
+        </p>
+
+        <p>
+          Flow is simpler than that.
+        </p>
+
+        <p>
+          Something enters a container. The container evaluates it. Something leaves, or nothing does. That evaluation repeats every frame. The repetition is the movement.
+        </p>
+
+        <p>
+          A steady signal is still flowing. It is just flowing without variation. Each frame asks the same question and receives the same answer. Consistency does not cancel motion. It defines it.
+        </p>
+
+        <p>
+          Wiring does not create flow. It allows it. A connection is permission, not pressure. Until something upstream insists on being processed, downstream containers have nothing to respond to.
+        </p>
+
+        <p>
+          This explains the familiar network that looks busy but behaves inert. Boxes everywhere. Wires crossing. No demand. The system is not confused. It has simply not been given anything to carry.
+        </p>
+
+        <p>
+          Flow also does not care about meaning. Numbers, pixels, positions, tables. The containers do not interpret intention. They respond to type and structure. Give them something shaped correctly and they will move it along without curiosity.
+        </p>
+
+        <p>
+          People often search for the start of the flow. A source they can point to and trust. In practice, flow can originate anywhere a value changes over time. A timer. A sensor. A file updating. Even a constant that is checked every frame participates.
+        </p>
+
+        <p>
+          This is why branching feels natural here. One signal can travel multiple paths at once without being divided. Each container receives the same insistence and responds according to its own rules. There is no notion of depletion.
+        </p>
+
+        <p>
+          When flow stops, it does not announce itself. There is no alert that says nothing is moving. The only sign is behavior flattening out. Outputs stop responding to changes elsewhere. The room goes dull.
+        </p>
+
+        <p>
+          Fixing that rarely involves adding more wires. It involves tracing demand backward. Asking where change is supposed to originate. Asking what is expected to vary and whether it ever does.
+        </p>
+
+        <p>
+          Flow is not a visual effect layered on top of the work. It is the condition that allows anything downstream to matter at all.
+        </p>
+      </article>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Volume 2 · 01 — Where things are allowed to start</title>
+    <style>
+      :root {
+        --bg: #0b0b0f;
+        --fg: #f2f2f5;
+        --muted: #b9b9c6;
+        --line: rgba(242, 242, 245, 0.14);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        background: var(--bg);
+        color: var(--fg);
+      }
+
+      .wrap {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 64px 20px 96px;
+      }
+
+      header {
+        margin-bottom: 36px;
+      }
+
+      h1 {
+        font-size: clamp(26px, 4vw, 40px);
+        letter-spacing: -0.02em;
+        margin: 0 0 10px;
+      }
+
+      .num {
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      article {
+        font-size: 18px;
+        line-height: 1.7;
+      }
+
+      p {
+        margin: 0 0 22px;
+      }
+
+      .do {
+        border-left: 3px solid var(--line);
+        padding-left: 18px;
+        margin: 28px 0;
+      }
+
+      .note {
+        color: var(--muted);
+        margin-top: -10px;
+      }
+
+      code {
+        color: var(--fg);
+        background: rgba(255,255,255,0.05);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="num">Volume 2 · 01</div>
+        <h1>Where things are allowed to start</h1>
+      </header>
+
+      <article>
+        <p>
+          This page assumes TouchDesigner is open and you are looking at an empty network.
+          Nothing is selected. Nothing is wired.
+        </p>
+
+        <p>
+          The first thing this system respects is insistence. Something that keeps producing values
+          whether anyone cares or not.
+        </p>
+
+        <div class="do">
+          <p>
+            Move your mouse into the network editor.
+          </p>
+          <p>
+            Press <code>Tab</code>.
+          </p>
+          <p>
+            In the menu that appears, type one of the following and press Enter:
+          </p>
+          <ul>
+            <li><code>Timer</code></li>
+            <li><code>Noise</code></li>
+            <li><code>LFO</code></li>
+            <li><code>Audio Device In</code> (if a microphone exists)</li>
+          </ul>
+          <p class="note">
+            Any of these is acceptable. Pick one. Place it near the center of the network.
+          </p>
+        </div>
+
+        <p>
+          You have added something that refuses to stop. Even if the numbers look boring,
+          they advance every frame. That advancement is not optional.
+        </p>
+
+        <p>
+          Nothing else in the network knows this yet.
+        </p>
+
+        <div class="do">
+          <p>
+            Press <code>Tab</code> again.
+          </p>
+          <p>
+            Type one of the following and place it to the right of the first node:
+          </p>
+          <ul>
+            <li><code>Math</code></li>
+            <li><code>Lag</code></li>
+            <li><code>Filter</code></li>
+          </ul>
+        </div>
+
+        <p>
+          These nodes accept numbers and respond to them. They do not create numbers.
+          They wait.
+        </p>
+
+        <div class="do">
+          <p>
+            Click the small output square on the right side of the first node.
+          </p>
+          <p>
+            Drag a wire to the input square on the left side of the second node.
+          </p>
+          <p>
+            Release.
+          </p>
+        </div>
+
+        <p>
+          Something new has happened.
+        </p>
+
+        <p>
+          The second node is now obligated to respond every frame. It did not change its
+          personality. It simply began receiving pressure.
+        </p>
+
+        <p>
+          If you open the viewer on the second node, you will see numbers moving or repeating.
+          That repetition is the work.
+        </p>
+
+        <div class="do">
+          <p>
+            Break the wire by selecting it and pressing <code>Delete</code>.
+          </p>
+        </div>
+
+        <p>
+          Whatever behavior you were seeing stopped instantly.
+        </p>
+
+        <p>
+          No reset occurred. No history was undone. The obligation disappeared and the system
+          reorganized itself around that absence.
+        </p>
+
+        <div class="do">
+          <p>
+            Reconnect the wire.
+          </p>
+          <p>
+            Then replace the first node with a different source from the earlier list.
+          </p>
+        </div>
+
+        <p>
+          Notice what stays the same.
+        </p>
+
+        <p>
+          The second node behaves exactly as before. Only the pressure feeding it has changed.
+          This is the shape of every setup you will build from here on.
+        </p>
+
+        <p>
+          A source insists. Everything else responds. Without insistence, nothing earns attention.
+        </p>
+      </article>
+    </div>
+  </body>
+</html>
