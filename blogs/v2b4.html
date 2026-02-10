@@ -53,6 +53,39 @@
         margin: 0 0 22px;
       }
 
+      .page-image {
+        margin: 56px 0 28px;
+        border-top: 1px solid var(--line);
+        padding-top: 28px;
+      }
+
+      .page-image img {
+        display: block;
+        width: min(100%, 640px);
+        height: auto;
+        margin: 0 auto;
+      }
+
+      .nav {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .nav a {
+        color: var(--fg);
+        text-decoration: none;
+        border: 1px solid var(--line);
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-size: 14px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .nav a:hover {
+        border-color: var(--fg);
+      }
+
       .do {
         border-left: 3px solid var(--line);
         padding-left: 18px;
@@ -220,6 +253,15 @@
           and the act of looking is just another signal in the system.
         </p>
       </article>
+
+      <div class="page-image">
+        <img src="v2b4.png" alt="Volume 2 page 04" />
+      </div>
+
+      <div class="nav">
+        <a href="../index.html" aria-label="Back to index">Index</a>
+        <a href="v2b5.html" aria-label="Go to page 05">Next page</a>
+      </div>
     </div>
   </body>
 </html>
