@@ -28,7 +28,7 @@
       body {
         margin: 0;
         font-family: "La Nu Tienpo", "Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 22px;
+        font-size: 30px;
         color: var(--fg);
         background: radial-gradient(circle at top left, rgba(244, 162, 97, 0.15), transparent 55%),
           radial-gradient(circle at 80% 10%, rgba(233, 196, 106, 0.12), transparent 50%),
@@ -59,9 +59,9 @@
       }
 
       .grid {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
+        display: grid;
+        gap: 32px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .link-card {
@@ -80,29 +80,35 @@
       }
 
       .link-title {
-        font-size: 28px;
+        font-size: 36px;
         font-weight: 600;
         margin-bottom: 8px;
       }
 
       .link-note {
         color: var(--muted);
-        font-size: 16px;
+        font-size: 18px;
         letter-spacing: 0.04em;
         text-transform: uppercase;
       }
 
       .volume-text {
-        margin: 12px 0 0;
+        margin: 16px 0 0;
         color: var(--muted);
-        font-size: 18px;
-        line-height: 1.65;
+        font-size: 20px;
+        line-height: 1.7;
+        list-style: none;
+        padding: 0;
+      }
+
+      .volume-text li {
+        margin-bottom: 8px;
       }
 
       .footer {
         margin-top: 24px;
         color: var(--muted);
-        font-size: 18px;
+        font-size: 20px;
       }
     </style>
   </head>
@@ -115,12 +121,40 @@
           <a class="link-card" href="blogs/v1b1.html">
             <span class="link-title">Volume 1</span>
             <span class="link-note">Foundations</span>
-            <p class="volume-text">Foundations (How TouchDesigner Thinks). What TouchDesigner Actually Is. Operators Are Not Objects. Signal Flow Is the Whole Game. Nothing Happens Without Input. Cooking: Why Things Update (or Don’t). Viewer vs. Output: Seeing Is Not Rendering. Operator Families and Their Roles. Time Is a Signal. Data vs. Image vs. Geometry. The Network Is the Interface. Why “Nothing Is Working” Is Usually Normal. Reading the UI Without Panic.</p>
+            <ul class="volume-text">
+              <li>Foundations (How TouchDesigner Thinks)</li>
+              <li>What TouchDesigner Actually Is</li>
+              <li>Operators Are Not Objects</li>
+              <li>Signal Flow Is the Whole Game</li>
+              <li>Nothing Happens Without Input</li>
+              <li>Cooking: Why Things Update (or Don’t)</li>
+              <li>Viewer vs. Output: Seeing Is Not Rendering</li>
+              <li>Operator Families and Their Roles</li>
+              <li>Time Is a Signal</li>
+              <li>Data vs. Image vs. Geometry</li>
+              <li>The Network Is the Interface</li>
+              <li>Why “Nothing Is Working” Is Usually Normal</li>
+              <li>Reading the UI Without Panic</li>
+            </ul>
           </a>
           <a class="link-card" href="blogs/v2b1.html">
             <span class="link-title">Volume 2</span>
             <span class="link-note">Structural Thinking</span>
-            <p class="volume-text">Structural Thinking (How to Read the Docs). What the Official Docs Assume You Already Know. Parameters Are Interfaces, Not Magic. Stateful vs. Stateless Operators. GPU Space vs. Data Space. Why Zero Often Means Invisible. The Difference Between Generators and Transformers. Upstream vs. Downstream Thinking. Why You Don’t Always Need More Nodes. Minimal Networks and Why They Matter. Failure Modes Are Clues. The Shape of a Working Network. How to Approach a New Operator Without Fear.</p>
+            <ul class="volume-text">
+              <li>Structural Thinking (How to Read the Docs)</li>
+              <li>What the Official Docs Assume You Already Know</li>
+              <li>Parameters Are Interfaces, Not Magic</li>
+              <li>Stateful vs. Stateless Operators</li>
+              <li>GPU Space vs. Data Space</li>
+              <li>Why Zero Often Means Invisible</li>
+              <li>The Difference Between Generators and Transformers</li>
+              <li>Upstream vs. Downstream Thinking</li>
+              <li>Why You Don’t Always Need More Nodes</li>
+              <li>Minimal Networks and Why They Matter</li>
+              <li>Failure Modes Are Clues</li>
+              <li>The Shape of a Working Network</li>
+              <li>How to Approach a New Operator Without Fear</li>
+            </ul>
           </a>
         </div>
         <p class="footer">If you prefer, you can jump straight to blogs/v1b1 or blogs/v2b1.</p>
