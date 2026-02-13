@@ -2,9 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content=""Guide to what is TouchDesigner for complete beginners. Learn core ideas, common mistakes, and simple checks for a more reliable TouchDesigner networks.">
         <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>01 — What this software is doing while you’re staring at it</title>
+<title>01 —What is TouchDesigner for complete beginners</title>
+        
     <style>
       @font-face {
         font-family: "La Nu Tienpo";
@@ -103,6 +104,8 @@
       <header>
         <div class="num">01</div>
         <h1>What this software is doing while you’re staring at it</h1>
+         "This guide explains what is TouchDesigner for complete beginners in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.",
+
       </header>
 
       <article>
@@ -155,6 +158,11 @@
         </p>
       </article>
 
+
+        "v1b1.html": {
+    "faqHtml": "<section class=\"blog-faq\" aria-labelledby=\"faq-heading\">\n  <h2 id=\"faq-heading\">FAQ</h2>\n  <div class=\"faq-item\">\n    <h3>why does touchdesigner keep running when i am not clicking anything</h3>\n    <p>TouchDesigner cooks continuously because operators evaluate on frame updates, not only on user actions. Even a stable value is being re-checked over time. The official docs on cooking and timelines explain this always-on execution model.</p>\n  </div>\n  <div class=\"faq-item\">\n    <h3>where does execution start in touchdesigner</h3>\n    <p>There is rarely a single start line in a networked project. Evaluation emerges from dependencies, time, and active viewers. Read the official documentation on dependency, cook order, and time components for the mental model.</p>\n  </div>\n  <div class=\"faq-item\">\n    <h3>why does nothing happen but cpu is still active in touchdesigner</h3>\n    <p>A quiet output does not mean the network is idle. Operators can keep cooking to maintain state and confirm inputs every frame. The docs describe this as continuous evaluation rather than event-only processing.</p>\n  </div>\n  <div class=\"faq-item\">\n    <h3>is touchdesigner event based or real time</h3>\n    <p>It is primarily real-time and frame-driven, with events layered on top. That is why systems keep updating even between interactions. The official docs separate timeline-driven cooking from callback/event mechanisms.</p>\n  </div>\n</section>",
+    "faqJsonLd": "<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"FAQPage\",\n  \"mainEntity\": [\n    {\n      \"@type\": \"Question\",\n      \"name\": \"why does touchdesigner keep running when i am not clicking anything\",\n      \"acceptedAnswer\": {\n        \"@type\": \"Answer\",\n        \"text\": \"TouchDesigner cooks continuously because operators evaluate on frame updates, not only on user actions. Even a stable value is being re-checked over time. The official docs on cooking and timelines explain this always-on execution model.\"\n      }\n    },\n    {\n      \"@type\": \"Question\",\n      \"name\": \"where does execution start in touchdesigner\",\n      \"acceptedAnswer\": {\n        \"@type\": \"Answer\",\n        \"text\": \"There is rarely a single start line in a networked project. Evaluation emerges from dependencies, time, and active viewers. Read the official documentation on dependency, cook order, and time components for the mental model.\"\n      }\n    },\n    {\n      \"@type\": \"Question\",\n      \"name\": \"why does nothing happen but cpu is still active in touchdesigner\",\n      \"acceptedAnswer\": {\n        \"@type\": \"Answer\",\n        \"text\": \"A quiet output does not mean the network is idle. Operators can keep cooking to maintain state and confirm inputs every frame. The docs describe this as continuous evaluation rather than event-only processing.\"\n      }\n    },\n    {\n      \"@type\": \"Question\",\n      \"name\": \"is touchdesigner event based or real time\",\n      \"acceptedAnswer\": {\n        \"@type\": \"Answer\",\n        \"text\": \"It is primarily real-time and frame-driven, with events layered on top. That is why systems keep updating even between interactions. The official docs separate timeline-driven cooking from callback/event mechanisms.\"\n      }\n    }\n  ]\n}\n</script>"
+
       <div class="page-image">
         <img src="v1b1.png" alt="Manual page 01" />
       </div>
@@ -166,3 +174,4 @@
     </div>
   </body>
 </html>
+
