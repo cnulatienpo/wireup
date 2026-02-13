@@ -1,0 +1,324 @@
+{
+  "/blogs/v1b1.html": {
+    "links_from_recommended": [
+      "/blogs/v1b11.html",
+      "/blogs/v2b10.html",
+      "/blogs/v2b12.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v1b2.html",
+      "/blogs/v1b3.html",
+      "/blogs/v1b4.html",
+      "/blogs/v2b1.html",
+      "/blogs/v2b12.html"
+    ]
+  },
+  "/blogs/v1b2.html": {
+    "links_from_recommended": [
+      "/blogs/v1b1.html",
+      "/blogs/v2b1.html",
+      "/blogs/v2b12.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v1b3.html",
+      "/blogs/v1b10.html",
+      "/blogs/v1b11.html",
+      "/blogs/v2b1.html",
+      "/blogs/v2b2.html"
+    ]
+  },
+  "/blogs/v1b3.html": {
+    "links_from_recommended": [
+      "/blogs/v1b1.html",
+      "/blogs/v1b2.html",
+      "/blogs/v2b5.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v1b5.html",
+      "/blogs/v1b7.html",
+      "/blogs/v1b9.html",
+      "/blogs/v2b2.html",
+      "/blogs/v2b3.html"
+    ]
+  },
+  "/blogs/v1b4.html": {
+    "links_from_recommended": [
+      "/blogs/v1b1.html",
+      "/blogs/v2b3.html",
+      "/blogs/v2b4.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v1b6.html",
+      "/blogs/v1b8.html",
+      "/blogs/v2b3.html",
+      "/blogs/v2b4.html",
+      "/blogs/v2b6.html"
+    ]
+  },
+  "/blogs/v1b5.html": {
+    "links_from_recommended": [
+      "/blogs/v1b3.html",
+      "/blogs/v2b6.html",
+      "/blogs/v2b8.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v1b6.html",
+      "/blogs/v1b8.html",
+      "/blogs/v1b9.html",
+      "/blogs/v2b8.html",
+      "/blogs/v2b9.html"
+    ]
+  },
+  "/blogs/v1b6.html": {
+    "links_from_recommended": [
+      "/blogs/v1b4.html",
+      "/blogs/v1b5.html",
+      "/blogs/v2b9.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v1b7.html",
+      "/blogs/v2b6.html",
+      "/blogs/v2b9.html",
+      "/blogs/v2b10.html",
+      "/blogs/v2b11.html"
+    ]
+  },
+  "/blogs/v1b7.html": {
+    "links_from_recommended": [
+      "/blogs/v1b3.html",
+      "/blogs/v1b6.html",
+      "/blogs/v2b8.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v1b8.html",
+      "/blogs/v1b9.html",
+      "/blogs/v2b3.html",
+      "/blogs/v2b8.html",
+      "/blogs/v2b11.html"
+    ]
+  },
+  "/blogs/v1b8.html": {
+    "links_from_recommended": [
+      "/blogs/v1b4.html",
+      "/blogs/v1b5.html",
+      "/blogs/v1b7.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v1b9.html",
+      "/blogs/v2b7.html",
+      "/blogs/v2b8.html",
+      "/blogs/v2b10.html",
+      "/blogs/v2b12.html"
+    ]
+  },
+  "/blogs/v1b9.html": {
+    "links_from_recommended": [
+      "/blogs/v1b3.html",
+      "/blogs/v1b5.html",
+      "/blogs/v1b7.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v1b10.html",
+      "/blogs/v1b11.html",
+      "/blogs/v2b9.html",
+      "/blogs/v2b11.html",
+      "/blogs/v2b12.html"
+    ]
+  },
+  "/blogs/v1b10.html": {
+    "links_from_recommended": [
+      "/blogs/v1b2.html",
+      "/blogs/v1b9.html",
+      "/blogs/v2b4.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v1b11.html",
+      "/blogs/v2b1.html",
+      "/blogs/v2b7.html",
+      "/blogs/v2b10.html",
+      "/blogs/v2b12.html"
+    ]
+  },
+  "/blogs/v1b11.html": {
+    "links_from_recommended": [
+      "/blogs/v1b2.html",
+      "/blogs/v1b9.html",
+      "/blogs/v1b10.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v1b1.html",
+      "/blogs/v2b1.html",
+      "/blogs/v2b2.html",
+      "/blogs/v2b10.html",
+      "/blogs/v2b12.html"
+    ]
+  },
+  "/blogs/v2b1.html": {
+    "links_from_recommended": [
+      "/blogs/v1b1.html",
+      "/blogs/v1b2.html",
+      "/blogs/v1b10.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v1b2.html",
+      "/blogs/v2b2.html",
+      "/blogs/v2b3.html",
+      "/blogs/v2b4.html",
+      "/blogs/v2b12.html"
+    ]
+  },
+  "/blogs/v2b2.html": {
+    "links_from_recommended": [
+      "/blogs/v1b2.html",
+      "/blogs/v1b3.html",
+      "/blogs/v1b11.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v2b3.html",
+      "/blogs/v2b5.html",
+      "/blogs/v2b7.html",
+      "/blogs/v2b10.html",
+      "/blogs/v2b12.html"
+    ]
+  },
+  "/blogs/v2b3.html": {
+    "links_from_recommended": [
+      "/blogs/v1b3.html",
+      "/blogs/v1b4.html",
+      "/blogs/v1b7.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v2b4.html",
+      "/blogs/v2b5.html",
+      "/blogs/v2b9.html",
+      "/blogs/v2b11.html",
+      "/blogs/v1b4.html"
+    ]
+  },
+  "/blogs/v2b4.html": {
+    "links_from_recommended": [
+      "/blogs/v1b4.html",
+      "/blogs/v2b1.html",
+      "/blogs/v2b3.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v2b5.html",
+      "/blogs/v2b6.html",
+      "/blogs/v2b12.html",
+      "/blogs/v1b4.html",
+      "/blogs/v1b10.html"
+    ]
+  },
+  "/blogs/v2b5.html": {
+    "links_from_recommended": [
+      "/blogs/v2b2.html",
+      "/blogs/v2b3.html",
+      "/blogs/v2b4.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v2b3.html",
+      "/blogs/v2b7.html",
+      "/blogs/v2b8.html",
+      "/blogs/v2b9.html",
+      "/blogs/v1b3.html"
+    ]
+  },
+  "/blogs/v2b6.html": {
+    "links_from_recommended": [
+      "/blogs/v1b4.html",
+      "/blogs/v1b6.html",
+      "/blogs/v2b4.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v2b4.html",
+      "/blogs/v2b7.html",
+      "/blogs/v2b9.html",
+      "/blogs/v2b11.html",
+      "/blogs/v1b5.html"
+    ]
+  },
+  "/blogs/v2b7.html": {
+    "links_from_recommended": [
+      "/blogs/v1b8.html",
+      "/blogs/v1b10.html",
+      "/blogs/v2b2.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v2b8.html",
+      "/blogs/v2b10.html",
+      "/blogs/v2b12.html",
+      "/blogs/v1b8.html",
+      "/blogs/v1b10.html"
+    ]
+  },
+  "/blogs/v2b8.html": {
+    "links_from_recommended": [
+      "/blogs/v1b5.html",
+      "/blogs/v1b7.html",
+      "/blogs/v1b8.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v2b9.html",
+      "/blogs/v2b10.html",
+      "/blogs/v2b11.html",
+      "/blogs/v1b5.html",
+      "/blogs/v1b7.html"
+    ]
+  },
+  "/blogs/v2b9.html": {
+    "links_from_recommended": [
+      "/blogs/v1b5.html",
+      "/blogs/v1b6.html",
+      "/blogs/v1b9.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v2b10.html",
+      "/blogs/v2b11.html",
+      "/blogs/v2b12.html",
+      "/blogs/v1b6.html",
+      "/blogs/v1b9.html"
+    ]
+  },
+  "/blogs/v2b10.html": {
+    "links_from_recommended": [
+      "/blogs/v1b6.html",
+      "/blogs/v1b8.html",
+      "/blogs/v1b10.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v2b11.html",
+      "/blogs/v2b12.html",
+      "/blogs/v1b1.html",
+      "/blogs/v1b10.html",
+      "/blogs/v1b11.html"
+    ]
+  },
+  "/blogs/v2b11.html": {
+    "links_from_recommended": [
+      "/blogs/v1b6.html",
+      "/blogs/v1b7.html",
+      "/blogs/v1b9.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v2b12.html",
+      "/blogs/v1b9.html",
+      "/blogs/v1b6.html",
+      "/blogs/v2b9.html",
+      "/blogs/v2b10.html"
+    ]
+  },
+  "/blogs/v2b12.html": {
+    "links_from_recommended": [
+      "/blogs/v1b1.html",
+      "/blogs/v1b8.html",
+      "/blogs/v1b9.html"
+    ],
+    "links_to_recommended": [
+      "/blogs/v1b1.html",
+      "/blogs/v1b2.html",
+      "/blogs/v1b10.html",
+      "/blogs/v1b11.html",
+      "/blogs/v2b1.html"
+    ]
+  }
+}
