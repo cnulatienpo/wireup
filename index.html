@@ -3,164 +3,120 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>Wireup Manual</title>
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Space+Grotesk:wght@400;600&display=swap");
-
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: swap;
-      }
-
-      :root {
-        --bg: #0f0e0b;
-        --fg: #f4f1ea;
-        --muted: #c7bfb3;
-        --accent: #f4a261;
-        --line: rgba(244, 241, 234, 0.2);
-      }
-
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
-
-      body {
-        margin: 0;
-        font-family: "La Nu Tienpo", "Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
-        color: var(--fg);
-        background: radial-gradient(circle at top left, rgba(244, 162, 97, 0.15), transparent 55%),
-          radial-gradient(circle at 80% 10%, rgba(233, 196, 106, 0.12), transparent 50%),
-          var(--bg);
-      }
-
-      .wrap {
-        min-height: 100vh;
-        padding: 48px 20px 72px;
-      }
-
-      .card {
-        width: min(880px, 100%);
-        margin: 0 auto;
-        padding: 8px 0 0;
-      }
-
-      h1 {
-        font-family: "La Nu Tienpo", "Fraunces", serif;
-        font-size: clamp(34px, 5vw, 56px);
-        margin: 0 0 12px;
-        letter-spacing: -0.02em;
-      }
-
-      .lede {
-        color: var(--muted);
-        margin: 0 0 28px;
-      }
-
-      .grid {
-        display: grid;
-        gap: 32px;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .link-card {
-        text-decoration: none;
-        color: var(--fg);
-        padding: 0;
-        transition: color 0.2s ease;
-      }
-
-      .link-card:hover {
-        color: var(--accent);
-      }
-
-      .link-card span {
-        display: block;
-      }
-
-      .link-title {
-        font-size: 36px;
-        font-weight: 600;
-        margin-bottom: 8px;
-      }
-
-      .link-note {
-        color: var(--muted);
-        font-size: 18px;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-      }
-
-      .volume-text {
-        margin: 16px 0 0;
-        color: var(--muted);
-        font-size: 20px;
-        line-height: 1.7;
-        list-style: none;
-        padding: 0;
-      }
-
-      .volume-text li {
-        margin-bottom: 8px;
-      }
-
-      .footer {
-        margin-top: 24px;
-        color: var(--muted);
-        font-size: 20px;
-      }
-    </style>
+    <title>Core Concepts for Vibe Coders and Beginners</title>
   </head>
   <body>
-    <div class="wrap">
-      <div class="card">
-        <h1>Wireup Manual</h1>
-        <p class="lede">Start here if you gotta make a thing in TouchDesigner
-           but you don't even know what it is.</p>
-        <div class="grid">
-          <a class="link-card" href="blogs/v1b1.html">
-            <span class="link-title">Volume 1</span>
-            <span class="link-note">Foundations</span>
-            <ul class="volume-text">
-              <li>Foundations (How TouchDesigner Thinks)</li>
-              <li>What TouchDesigner Actually Is</li>
-              <li>Operators Are Not Objects</li>
-              <li>Signal Flow Is the Whole Game</li>
-              <li>Nothing Happens Without Input</li>
-              <li>Cooking: Why Things Update (or Don’t)</li>
-              <li>Viewer vs. Output: Seeing Is Not Rendering</li>
-              <li>Operator Families and Their Roles</li>
-              <li>Time Is a Signal</li>
-              <li>Data vs. Image vs. Geometry</li>
-              <li>The Network Is the Interface</li>
-              <li>Why “Nothing Is Working” Is Usually Normal</li>
-              <li>Reading the UI Without Panic</li>
-            </ul>
-          </a>
-          <a class="link-card" href="blogs/v2b1.html">
-            <span class="link-title">Volume 2</span>
-            <span class="link-note">Structural Thinking</span>
-            <ul class="volume-text">
-              <li>Structural Thinking (How to Read the Docs)</li>
-              <li>What the Official Docs Assume You Already Know</li>
-              <li>Parameters Are Interfaces, Not Magic</li>
-              <li>Stateful vs. Stateless Operators</li>
-              <li>GPU Space vs. Data Space</li>
-              <li>Why Zero Often Means Invisible</li>
-              <li>The Difference Between Generators and Transformers</li>
-              <li>Upstream vs. Downstream Thinking</li>
-              <li>Why You Don’t Always Need More Nodes</li>
-              <li>Minimal Networks and Why They Matter</li>
-              <li>Failure Modes Are Clues</li>
-              <li>The Shape of a Working Network</li>
-              <li>How to Approach a New Operator Without Fear</li>
-            </ul>
-          </a>
-        </div>
-        <p class="footer">.</p>
-      </div>
-    </div>
+    <header>
+      <h1>Core Concepts for Vibe Coders and Beginners</h1>
+    </header>
+    <main>
+      <section>
+        <h2>Version 1 — Foundations</h2>
+        <ul>
+          <li>
+            <a href="/blogs/v1b1.html">What this software is doing while you’re staring at it</a>
+            <p>An introduction to how the system keeps running and evaluating even when you are doing nothing.</p>
+          </li>
+          <li>
+            <a href="/blogs/v1b2.html">Why this isn’t a normal Photoshop or Windows-style program</a>
+            <p>Explains why node-based, real-time tools behave differently from traditional document-style software.</p>
+          </li>
+          <li>
+            <a href="/blogs/v1b3.html">Nothing here is an object</a>
+            <p>Reframes common object-oriented assumptions so you can think in streams and operators instead.</p>
+          </li>
+          <li>
+            <a href="/blogs/v1b4.html">What kinds of problems this thing is meant for</a>
+            <p>Defines the kinds of dynamic, procedural, and interactive tasks this environment is built to solve.</p>
+          </li>
+          <li>
+            <a href="/blogs/v1b5.html">The system does not care about order</a>
+            <p>Shows why execution depends on dependencies and context, not the order you built the graph.</p>
+          </li>
+          <li>
+            <a href="/blogs/v1b6.html">Time is present even when nothing changes</a>
+            <p>Clarifies how time-driven evaluation exists continuously, even in networks that look visually static.</p>
+          </li>
+          <li>
+            <a href="/blogs/v1b7.html">What moves: signal flow without the myth</a>
+            <p>Breaks down what actually travels through a network and what “flow” really means in practice.</p>
+          </li>
+          <li>
+            <a href="/blogs/v1b8.html">Local truth beats global intention</a>
+            <p>Focuses on how each node behaves from local inputs, regardless of your broader design intent.</p>
+          </li>
+          <li>
+            <a href="/blogs/v1b9.html">The network is the program</a>
+            <p>Establishes that the graph itself is the executable logic, not a hidden script elsewhere.</p>
+          </li>
+          <li>
+            <a href="/blogs/v1b10.html">What the interface is showing you</a>
+            <p>Teaches you how to read panels and viewers as diagnostic tools instead of decorative UI.</p>
+          </li>
+          <li>
+            <a href="/blogs/v1b11.html">Why operators feel wrong when you meet them too early</a>
+            <p>Explains why operators can seem confusing before you have the mental model to place them correctly.</p>
+          </li>
+          <li>
+            <a href="/blogs/v1b12.html">Why “Nothing Is Working” Is Usually Normal</a>
+            <p>Normalizes early debugging friction and shows why temporary failure is part of learning the system.</p>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Version 2 — Structural Thinking</h2>
+        <ul>
+          <li>
+            <a href="/blogs/v2b1.html">Where things are allowed to start</a>
+            <p>Maps the valid starting points for signals so networks begin with clean structure and intent.</p>
+          </li>
+          <li>
+            <a href="/blogs/v2b2.html">How different kinds of data cross borders</a>
+            <p>Explains how image, geometry, and table-like data translate between operator families.</p>
+          </li>
+          <li>
+            <a href="/blogs/v2b3.html">How numbers become space</a>
+            <p>Shows how numeric channels and attributes are interpreted into position and motion in 3D space.</p>
+          </li>
+          <li>
+            <a href="/blogs/v2b4.html">How space becomes images</a>
+            <p>Describes the rendering path that turns geometry, cameras, and lights into pixels.</p>
+          </li>
+          <li>
+            <a href="/blogs/v2b5.html">How images turn back into numbers</a>
+            <p>Covers techniques for extracting measurements and control values from visual data streams.</p>
+          </li>
+          <li>
+            <a href="/blogs/v2b6.html">How sound behaves differently than images</a>
+            <p>Highlights timing, rate, and buffering differences that make audio workflows unique.</p>
+          </li>
+          <li>
+            <a href="/blogs/v2b7.html">How text and tables quietly run everything</a>
+            <p>Demonstrates how DAT-style structures coordinate configuration, logic, and state across a project.</p>
+          </li>
+          <li>
+            <a href="/blogs/v2b8.html">How switching changes meaning without changing data</a>
+            <p>Explores how routing and context can alter interpretation while the underlying values remain the same.</p>
+          </li>
+          <li>
+            <a href="/blogs/v2b9.html">How feedback turns a setup into a system</a>
+            <p>Introduces feedback loops and how recursion creates behavior, memory, and emergent dynamics.</p>
+          </li>
+          <li>
+            <a href="/blogs/v2b10.html">How control enters the system</a>
+            <p>Shows how external input, UI, and interaction layers connect to drive procedural behavior.</p>
+          </li>
+          <li>
+            <a href="/blogs/v2b11.html">What happens when everything is wired at once</a>
+            <p>Discusses scaling complexity and keeping clarity when many subsystems are active together.</p>
+          </li>
+          <li>
+            <a href="/blogs/v2b12.html">How the system talks back</a>
+            <p>Focuses on reading output, state, and diagnostics so the network can guide your next decision.</p>
+          </li>
+        </ul>
+      </section>
+    </main>
   </body>
 </html>
