@@ -1,0 +1,14 @@
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is signal flow in TouchDesigner?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Signal flow in TouchDesigner is the path that data follows through connected operators, from source inputs to processed outputs, in order to build interactive visuals and systems."
+      }
+    }
+  ]
+}
