@@ -2,18 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="Guide to TouchDesigner nothing happens without input. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks.", />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>04 — What kinds of problems this thing is meant for</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
-      }
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Guide to TouchDesigner nothing happens without input. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks.">
+    <title>TouchDesigner nothing happens without input</title>
 
+    <style>
       :root {
         --bg: #0b0b0f;
         --fg: #f2f2f5;
@@ -21,12 +14,14 @@
         --line: rgba(242, 242, 245, 0.14);
       }
 
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
+      * {
+        box-sizing: border-box;
+        font-family: Garamond, "Times New Roman", serif;
+        font-size: 14pt;
+      }
 
       body {
         margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
         background: var(--bg);
         color: var(--fg);
       }
@@ -55,12 +50,27 @@
       }
 
       article {
-        font-size: 45px;
         line-height: 1.7;
       }
 
       p {
         margin: 0 0 22px;
+      }
+
+      .blog-faq {
+        margin-top: 60px;
+        border-top: 1px solid var(--line);
+        padding-top: 40px;
+      }
+
+      .blog-faq h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+
+      .blog-faq h3 {
+        font-size: 20px;
+        margin: 20px 0 8px;
       }
 
       .page-image {
@@ -79,6 +89,7 @@
       .nav {
         display: flex;
         justify-content: flex-end;
+        gap: 12px;
       }
 
       .nav a {
@@ -103,62 +114,48 @@
       <header>
         <div class="num">04</div>
         <h1>What kinds of problems this thing is meant for</h1>
+        <p>This guide explains TouchDesigner nothing happens without input in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
       </header>
- "This guide explains TouchDesigner nothing happens without input in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.",
+
       <article>
-        <p>
-          Some problems want to be finished.
-        </p>
+        <p>Some problems want to be finished.</p>
 
-        <p>
-          They move from blank to complete, then stop. A poster gets approved. A video gets exported. A file gets archived. The value is in the final state, not in what happened while getting there.
-        </p>
+        <p>They move from blank to complete, then stop. A poster gets approved. A video gets exported. A file gets archived. The value is in the final state, not in what happened while getting there.</p>
 
-        <p>
-          This environment resists those problems.
-        </p>
+        <p>This environment resists those problems.</p>
 
-        <p>
-          It prefers situations that keep unfolding. Inputs that keep arriving. Conditions that shift. Feedback that changes behavior while it is happening. The work is not the artifact at the end; the work is the arrangement that keeps responding.
-        </p>
+        <p>It prefers situations that keep unfolding. Inputs that keep arriving. Conditions that shift. Feedback that changes behavior while it is happening. The work is not the artifact at the end; the work is the arrangement that keeps responding.</p>
 
-        <p>
-          Anything involving real-time signals fits here. Sound that never stops. Sensors that never sleep. Cameras that keep streaming. Data that keeps updating. The system thrives when there is no obvious moment to declare victory.
-        </p>
+        <p>Anything involving real-time signals fits here. Sound that never stops. Sensors that never sleep. Cameras that keep streaming. Data that keeps updating. The system thrives when there is no obvious moment to declare victory.</p>
 
-        <p>
-          This is why performance contexts feel natural. Installations, shows, tools for live manipulation, systems that need to adapt on the fly. The software does not need to be coaxed into staying awake. It expects to be.
-        </p>
+        <p>This is why performance contexts feel natural. Installations, shows, tools for live manipulation, systems that need to adapt on the fly. The software does not need to be coaxed into staying awake. It expects to be.</p>
 
-        <p>
-          Problems that include uncertainty do well here. When the exact outcome is not known in advance. When parameters need to be nudged instead of locked. When the correct response depends on timing, pressure, or accumulation.
-        </p>
+        <p>Problems that include uncertainty do well here. When the exact outcome is not known in advance. When parameters need to be nudged instead of locked. When the correct response depends on timing, pressure, or accumulation.</p>
 
-        <p>
-          Problems that involve relationships instead of assets also belong here. Mapping one stream to another. Translating motion into sound. Turning data into form. The interest comes from how signals influence each other, not from what any single signal contains.
-        </p>
+        <p>Problems that involve relationships instead of assets also belong here. Mapping one stream to another. Translating motion into sound. Turning data into form. The interest comes from how signals influence each other, not from what any single signal contains.</p>
 
-        <p>
-          Static design tasks struggle. One-off exports struggle. Layouts that need to be perfect and then forgotten struggle. The system keeps insisting on motion, evaluation, and continuation, even when the task wants a period at the end of the sentence.
-        </p>
+        <p>Static design tasks struggle. One-off exports struggle. Layouts that need to be perfect and then forgotten struggle. The system keeps insisting on motion, evaluation, and continuation, even when the task wants a period at the end of the sentence.</p>
 
-        <p>
-          This mismatch explains the sense of friction people feel when they try to use it as a replacement for familiar tools. The friction is not a lack of features. It is a difference in values. One side cares about endings. The other side keeps asking what happens next.
-        </p>
+        <p>This mismatch explains the sense of friction people feel when they try to use it as a replacement for familiar tools. The friction is not a lack of features. It is a difference in values. One side cares about endings. The other side keeps asking what happens next.</p>
 
-        <p>
-          Problems with feedback loops feel at home. A change causes a reaction, which causes another change. The system does not get confused by this. It expects it. Linear chains are optional. Circular influence is welcome.
-        </p>
+        <p>Problems with feedback loops feel at home. A change causes a reaction, which causes another change. The system does not get confused by this. It expects it. Linear chains are optional. Circular influence is welcome.</p>
 
-        <p>
-          The best fit problems are the ones that behave like systems themselves. Ongoing, reactive, shaped by context, sensitive to timing. When the problem refuses to sit still, the environment stops fighting you and starts agreeing.
-        </p>
+        <p>The best fit problems are the ones that behave like systems themselves. Ongoing, reactive, shaped by context, sensitive to timing. When the problem refuses to sit still, the environment stops fighting you and starts agreeing.</p>
       </article>
-[
-      "Why is my TouchDesigner operator blank?",
-      "Do all nodes need an input to work?",
-      "How do I know if a node is receiving data?"
-    ],
+
+      <section class="blog-faq" aria-labelledby="faq-heading">
+        <h2 id="faq-heading">FAQ</h2>
+
+        <h3>Why is my TouchDesigner operator blank?</h3>
+        <p>Most operators do nothing without input. If nothing is wired in, nothing meaningful will pass through.</p>
+
+        <h3>Do all nodes need an input to work?</h3>
+        <p>Many operators require upstream data. Some generate their own content, but most depend on incoming signals to produce output.</p>
+
+        <h3>How do I know if a node is receiving data?</h3>
+        <p>Check its viewer and look at cook indicators. If values are changing and wires are active, the operator is receiving input.</p>
+      </section>
+
       <div class="page-image">
         <img src="v1b4.png" alt="Manual page 04" />
       </div>
@@ -168,6 +165,39 @@
         <a href="v1b5.html" aria-label="Go to page 05">Next page</a>
       </div>
     </div>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why is my TouchDesigner operator blank?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Most operators do nothing without input. If nothing is wired in, nothing meaningful will pass through."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do all nodes need an input to work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Many operators require upstream data. Some generate their own content, but most depend on incoming signals to produce output."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I know if a node is receiving data?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Check its viewer and look at cook indicators. If values are changing and wires are active, the operator is receiving input."
+          }
+        }
+      ]
+    }
+    </script>
+
   </body>
 </html>
-
