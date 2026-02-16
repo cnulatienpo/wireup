@@ -3,8 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>Volume 2 · 13 — Why this stops feeling like software</title>
+    <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
+
+    <title>Why TouchDesigner stops feeling like software</title>
+
+    <meta name="description" content="Why TouchDesigner stops feeling like software and starts behaving like a system. Learn how signal flow, feedback, pressure, and structure reshape how you think about building networks." />
+
+    <meta property="og:title" content="Why TouchDesigner stops feeling like software" />
+    <meta property="og:description" content="Why TouchDesigner stops feeling like software and starts behaving like a system. Learn how signal flow, feedback, pressure, and structure reshape how you think about building networks." />
+    <meta property="og:type" content="article" />
+
     <style>
       @font-face {
         font-family: "La Nu Tienpo";
@@ -56,6 +64,8 @@
 
       p { margin: 0 0 22px; }
 
+      h2 { margin-top: 60px; }
+
       .page-image {
         margin: 56px 0 28px;
         border-top: 1px solid var(--line);
@@ -91,17 +101,9 @@
         border-color: var(--fg);
       }
 
-      .do {
-        border-left: 3px solid var(--line);
-        padding-left: 18px;
-        margin: 28px 0;
-      }
-
-      code {
-        background: rgba(255,255,255,0.05);
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 0.9em;
+      .faq-item h3 {
+        font-size: 20px;
+        margin-bottom: 8px;
       }
     </style>
   </head>
@@ -114,22 +116,25 @@
       </header>
 
       <article>
+
+        <p><strong>This guide explains why TouchDesigner stops feeling like software and starts behaving like a system. It focuses on how signal flow, pressure, feedback, and structure change the way you think about building and debugging networks.</strong></p>
+
         <p>
-          Somewhere along the way, the questions changed.
+          Somewhere along the way, the questions change.
         </p>
 
         <p>
-          Early on, everything revolved around names.
+          Early on, everything revolves around names.
           What is this node called. What menu is it in.
           Which operator am I supposed to know.
         </p>
 
         <p>
-          Those questions fade once the system starts behaving as a whole.
+          Those questions fade once the system begins behaving as a whole.
         </p>
 
         <p>
-          Right now, you are no longer assembling features.
+          You are no longer assembling features.
           You are maintaining conditions.
         </p>
 
@@ -142,70 +147,39 @@
         </p>
 
         <p>
-          None of those ideas belong to software.
-        </p>
-
-        <p>
+          None of those ideas belong strictly to software.
           They belong to systems.
         </p>
 
-        <div class="do">
-          <p>
-            Look at your network one last time.
-          </p>
-          <p>
-            Do not zoom in.
-          </p>
-        </div>
-
         <p>
-          You are not meant to read it line by line.
+          At this stage, memorizing operators becomes irrelevant.
+          What matters is recognizing roles.
         </p>
 
         <p>
-          You recognize it the way you recognize a room you know well.
-          You know where things tend to live.
-          You know which areas are sensitive.
-          You know where change will echo.
-        </p>
-
-        <p>
-          That recognition did not come from memorization.
-          It came from repeated cause and effect.
-        </p>
-
-        <p>
-          This is why the system resists step-by-step mastery.
-          Steps imply sequence.
-          What you built responds to relationship.
-        </p>
-
-        <p>
-          When something breaks now, you do not panic.
-          You isolate pressure.
+          When something breaks, you isolate pressure.
           You follow influence.
           You adjust responsibility.
         </p>
 
         <p>
-          That is not using software.
-          That is operating a rig.
+          That shift is the moment it stops feeling like an application
+          and starts feeling like operating a rig.
         </p>
 
         <p>
-          Software usually asks you what you want to make.
-          This asks you what you are willing to maintain.
+          Software usually asks what you want to make.
+          Systems ask what you are willing to maintain.
         </p>
 
         <p>
-          If you remove one piece, something else will compensate.
-          If you add something reckless, the system will tell you immediately.
+          If you remove one piece, something else compensates.
+          If you add something reckless, instability appears immediately.
         </p>
 
         <p>
-          This is why people describe the experience as physical.
-          Not because it involves hardware,
-          but because it responds like something with mass.
+          The network responds like something with mass.
+          It carries inertia. It carries tension.
         </p>
 
         <p>
@@ -214,16 +188,27 @@
         </p>
 
         <p>
-          At some point, you stop thinking about TouchDesigner at all.
+          At some point, you stop thinking about TouchDesigner.
+          You think in signals, thresholds, influence, and agreements.
         </p>
 
-        <p>
-          You think in signals, pressure, thresholds, and agreements.
-        </p>
+        <h2>Frequently Asked Questions</h2>
 
-        <p>
-          That is the real transition.
-        </p>
+        <div class="faq-item">
+          <h3>Why does TouchDesigner feel different from traditional software?</h3>
+          <p>Because it is built around signal relationships instead of step-by-step commands. Behavior emerges from connections rather than menu-driven sequences.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>When does TouchDesigner stop feeling confusing?</h3>
+          <p>Usually when you stop memorizing operator names and start recognizing structural roles like source, transform, translation, feedback, and control.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What mindset shift makes networks easier to understand?</h3>
+          <p>Thinking in pressure, thresholds, influence, and responsibility instead of features and effects.</p>
+        </div>
+
       </article>
 
       <div class="page-image">
@@ -231,9 +216,42 @@
       </div>
 
       <div class="nav">
-        <a href="../index.html" aria-label="Back to index">Index</a>
+        <a href="../index.html">Index</a>
       </div>
     </div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why does TouchDesigner feel different from traditional software?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because it is built around signal relationships instead of step-by-step commands. Behavior emerges from connections rather than menu-driven sequences."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When does TouchDesigner stop feeling confusing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Usually when you stop memorizing operator names and start recognizing structural roles like source, transform, translation, feedback, and control."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What mindset shift makes networks easier to understand?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Thinking in pressure, thresholds, influence, and responsibility instead of features and effects."
+      }
+    }
+  ]
+}
+</script>
+
   </body>
 </html>
-
