@@ -1,277 +1,275 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>Volume 2 · 04 — How space becomes images</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GPU space vs data space in TouchDesigner</title>
+
+<meta name="description" content="Guide to GPU space vs data space in TouchDesigner. Learn core ideas, common mistakes, and practical checks for building reliable TouchDesigner networks." />
+
+<meta property="og:title" content="GPU space vs data space in TouchDesigner" />
+<meta property="og:description" content="Guide to GPU space vs data space in TouchDesigner. Learn core ideas, common mistakes, and practical checks for building reliable TouchDesigner networks." />
+<meta property="og:type" content="article" />
+
+<style>
+:root {
+  --bg: #0b0b0f;
+  --fg: #f2f2f5;
+  --muted: #b9b9c6;
+  --line: rgba(242,242,245,0.14);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Garamond, "Times New Roman", serif;
+  font-size: 14pt;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 64px 20px 96px;
+}
+
+header {
+  margin-bottom: 36px;
+}
+
+h1 {
+  font-size: clamp(40px, 5vw, 72px);
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+
+.num {
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+article {
+  line-height: 1.7;
+}
+
+p {
+  margin: 0 0 22px;
+}
+
+.do {
+  border-left: 3px solid var(--line);
+  padding-left: 18px;
+  margin: 28px 0;
+}
+
+ul {
+  margin: 10px 0 0 20px;
+}
+
+li {
+  margin-bottom: 6px;
+}
+
+code {
+  background: rgba(255,255,255,0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.note {
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.page-image {
+  margin: 56px 0 28px;
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+
+.page-image img {
+  display: block;
+  width: min(100%, 640px);
+  height: auto;
+  margin: 0 auto;
+}
+
+.nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nav a {
+  color: var(--fg);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nav a:hover {
+  border-color: var(--fg);
+}
+
+.blog-faq {
+  margin-top: 60px;
+  border-top: 1px solid var(--line);
+  padding-top: 40px;
+}
+
+.blog-faq h2 {
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+.blog-faq h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<header>
+  <div class="num">Volume 2 · 04</div>
+  <h1>How space becomes images</h1>
+  <p><strong>This guide explains GPU space vs data space in TouchDesigner in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</strong></p>
+</header>
+
+<article>
+
+<p>
+TouchDesigner operates in two primary territories: GPU space and CPU data space.
+</p>
+
+<p>
+GPU space handles images, textures, geometry, and rendering. CPU data space handles tables, scripts, and structured values.
+</p>
+
+<p>
+TOPs and most 3D rendering operations occur on the GPU. DATs and many scripting operations occur on the CPU.
+</p>
+
+<p>
+These spaces behave differently.
+</p>
+
+<p>
+GPU processing is massively parallel and optimized for pixels and vertices. CPU processing is sequential and optimized for logic and structured data.
+</p>
+
+<p>
+When you move data from one space to another, translation happens. That translation costs time.
+</p>
+
+<p>
+For example, converting a TOP to CHOP values or exporting a texture into a DAT table forces GPU data into CPU memory.
+</p>
+
+<p>
+Frequent crossing between GPU and CPU can reduce performance significantly.
+</p>
+
+<p>
+The question is not which space is better. The question is which space matches the task.
+</p>
+
+<p>
+Image processing, feedback loops, compositing, and rendering belong on the GPU.
+</p>
+
+<p>
+String manipulation, structured logic, file operations, and table lookups belong on the CPU.
+</p>
+
+<p>
+If something feels unexpectedly slow, examine where it is being processed.
+</p>
+
+<p>
+Efficiency often comes from minimizing unnecessary border crossings.
+</p>
+
+<p>
+Understanding this separation allows you to design networks that remain responsive even as complexity increases.
+</p>
+
+</article>
+
+<section class="blog-faq" aria-labelledby="faq-heading">
+<h2 id="faq-heading">FAQ</h2>
+
+<div class="faq-item">
+<h3>What is GPU space in TouchDesigner?</h3>
+<p>GPU space refers to operations performed on the graphics card, including image processing, texture manipulation, and 3D rendering.</p>
+</div>
+
+<div class="faq-item">
+<h3>Why is TOP processing different from DAT processing?</h3>
+<p>TOP processing happens on the GPU and is optimized for pixel data, while DAT processing happens on the CPU and is optimized for structured text and logic operations.</p>
+</div>
+
+<div class="faq-item">
+<h3>Should I process this on GPU or CPU?</h3>
+<p>If the task involves images, textures, or rendering, use GPU operators. If it involves structured data, scripting, or file logic, use CPU-based operators.</p>
+</div>
+
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is GPU space in TouchDesigner?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "GPU space refers to operations performed on the graphics card, including image processing, texture manipulation, and 3D rendering."
       }
-
-      :root {
-        --bg: #0b0b0f;
-        --fg: #f2f2f5;
-        --muted: #b9b9c6;
-        --line: rgba(242, 242, 245, 0.14);
+    },
+    {
+      "@type": "Question",
+      "name": "Why is TOP processing different from DAT processing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "TOP processing happens on the GPU and is optimized for pixel data, while DAT processing happens on the CPU and is optimized for structured text and logic operations."
       }
-
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
-
-      body {
-        margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
-        background: var(--bg);
-        color: var(--fg);
+    },
+    {
+      "@type": "Question",
+      "name": "Should I process this on GPU or CPU?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If the task involves images, textures, or rendering, use GPU operators. If it involves structured data, scripting, or file logic, use CPU-based operators."
       }
+    }
+  ]
+}
+</script>
 
-      .wrap {
-        max-width: 860px;
-        margin: 0 auto;
-        padding: 64px 20px 96px;
-      }
+<div class="page-image">
+<img src="v2b4.png" alt="Volume 2 page 04" />
+</div>
 
-      header {
-        margin-bottom: 36px;
-      }
+<div class="nav">
+<a href="../index.html" aria-label="Back to index">Index</a>
+<a href="v2b5.html" aria-label="Go to page 05">Next page</a>
+</div>
 
-      h1 {
-        font-size: clamp(40px, 5vw, 72px);
-        letter-spacing: -0.02em;
-        margin: 0 0 10px;
-      }
-
-      .num {
-        color: var(--muted);
-        font-size: 14px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      article {
-        font-size: 45px;
-        line-height: 1.7;
-      }
-
-      p {
-        margin: 0 0 22px;
-      }
-
-      .page-image {
-        margin: 56px 0 28px;
-        border-top: 1px solid var(--line);
-        padding-top: 28px;
-      }
-
-      .page-image img {
-        display: block;
-        width: min(100%, 640px);
-        height: auto;
-        margin: 0 auto;
-      }
-
-      .nav {
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      .nav a {
-        color: var(--fg);
-        text-decoration: none;
-        border: 1px solid var(--line);
-        padding: 10px 16px;
-        border-radius: 999px;
-        font-size: 14px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-
-      .nav a:hover {
-        border-color: var(--fg);
-      }
-
-      .do {
-        border-left: 3px solid var(--line);
-        padding-left: 18px;
-        margin: 28px 0;
-      }
-
-      ul {
-        margin: 10px 0 0 20px;
-      }
-
-      li {
-        margin-bottom: 6px;
-      }
-
-      code {
-        background: rgba(255,255,255,0.05);
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 0.9em;
-      }
-
-      .note {
-        color: var(--muted);
-        margin-top: 6px;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="wrap">
-      <header>
-        <div class="num">Volume 2 · 04</div>
-        <h1>How space becomes images</h1>
-      </header>
-
-      <article>
-        <p>
-          You have something that occupies space now.
-        </p>
-
-        <p>
-          It has position. It has size. It responds to numbers.
-          What it does not have is appearance.
-        </p>
-
-        <p>
-          Space alone is invisible here.
-        </p>
-
-        <div class="do">
-          <p>
-            Start from the network you already built.
-          </p>
-          <p>
-            There should be geometry feeding through a <code>Transform</code> node,
-            reacting to changing values.
-          </p>
-        </div>
-
-        <p>
-          Geometry does not draw itself. It describes where something could be.
-          To be seen, it needs a witness.
-        </p>
-
-        <div class="do">
-          <p>
-            Move your mouse to an empty space to the right of your geometry.
-          </p>
-          <p>
-            Press <code>Tab</code>.
-          </p>
-          <p>
-            Type one of the following and place it to the right:
-          </p>
-          <ul>
-            <li><code>Camera</code></li>
-            <li><code>Light</code></li>
-          </ul>
-          <p class="note">
-            If you add only one, start with <code>Camera</code>.
-          </p>
-        </div>
-
-        <p>
-          Nothing changes yet.
-        </p>
-
-        <p>
-          A camera without a renderer sees nothing.
-          A renderer without a camera has no point of view.
-        </p>
-
-        <div class="do">
-          <p>
-            Press <code>Tab</code> again.
-          </p>
-          <p>
-            Type <code>Render</code> and place it to the right of everything.
-          </p>
-        </div>
-
-        <p>
-          This node turns space into pixels.
-          It does not create geometry. It observes it.
-        </p>
-
-        <div class="do">
-          <p>
-            Wire your geometry chain into the <code>Render</code> node.
-          </p>
-          <p>
-            Wire the <code>Camera</code> into the camera input of the <code>Render</code>.
-          </p>
-        </div>
-
-        <p>
-          Open the viewer on the Render node.
-        </p>
-
-        <p>
-          This is the first time something looks like an image.
-        </p>
-
-        <p>
-          What you are seeing is not the geometry.
-          It is a decision about the geometry, made from a particular position,
-          at a particular moment, under a particular set of conditions.
-        </p>
-
-        <p>
-          Change the numbers driving the geometry.
-          The image changes.
-        </p>
-
-        <p>
-          Change the camera.
-          The image changes again.
-        </p>
-
-        <p>
-          The geometry itself has not learned anything.
-          It is being interpreted repeatedly.
-        </p>
-
-        <div class="do">
-          <p>
-            Move the camera node around in the network.
-          </p>
-          <p>
-            Then change its position parameters.
-          </p>
-        </div>
-
-        <p>
-          Nothing downstream cares where the camera lives in the network.
-          It only cares about what the camera reports.
-        </p>
-
-        <p>
-          This is the rule.
-        </p>
-
-        <p>
-          Space becomes images only when someone is looking,
-          and the act of looking is just another signal in the system.
-        </p>
-      </article>
-
-      <div class="page-image">
-        <img src="v2b4.png" alt="Volume 2 page 04" />
-      </div>
-
-      <div class="nav">
-        <a href="../index.html" aria-label="Back to index">Index</a>
-        <a href="v2b5.html" aria-label="Go to page 05">Next page</a>
-      </div>
-    </div>
-  </body>
+</div>
+</body>
 </html>
