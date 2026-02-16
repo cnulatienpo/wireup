@@ -1,261 +1,250 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>Volume 2 · 01 — Where things are allowed to start</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>What TouchDesigner documentation assumes you know</title>
+
+<meta name="description" content="Learn what TouchDesigner documentation assumes you know with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks." />
+
+<meta property="og:title" content="What TouchDesigner documentation assumes you know" />
+<meta property="og:description" content="Learn what TouchDesigner documentation assumes you know with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks." />
+<meta property="og:type" content="article" />
+
+<style>
+:root {
+  --bg: #0b0b0f;
+  --fg: #f2f2f5;
+  --muted: #b9b9c6;
+  --line: rgba(242,242,245,0.14);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Garamond, "Times New Roman", serif;
+  font-size: 14pt;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 64px 20px 96px;
+}
+
+header {
+  margin-bottom: 36px;
+}
+
+h1 {
+  font-size: clamp(40px, 5vw, 72px);
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+
+.num {
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+article {
+  line-height: 1.7;
+}
+
+p {
+  margin: 0 0 22px;
+}
+
+.do {
+  border-left: 3px solid var(--line);
+  padding-left: 18px;
+  margin: 28px 0;
+}
+
+.note {
+  color: var(--muted);
+  margin-top: -10px;
+}
+
+.page-image {
+  margin: 56px 0 28px;
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+
+.page-image img {
+  display: block;
+  width: min(100%, 640px);
+  height: auto;
+  margin: 0 auto;
+}
+
+.nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nav a {
+  color: var(--fg);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nav a:hover {
+  border-color: var(--fg);
+}
+
+.blog-faq {
+  margin-top: 60px;
+  border-top: 1px solid var(--line);
+  padding-top: 40px;
+}
+
+.blog-faq h2 {
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+.blog-faq h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<header>
+  <div class="num">Volume 2 · 01</div>
+  <h1>Where things are allowed to start</h1>
+  <p><strong>This guide explains what TouchDesigner documentation assumes you know in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</strong></p>
+</header>
+
+<article>
+
+<p>
+The official documentation is not hostile. It is precise.
+</p>
+
+<p>
+What makes it difficult for beginners is not tone. It is compression. The wiki assumes you already understand signal flow, cooking, operator families, and dependency. When those foundations are missing, technical explanations feel abrupt.
+</p>
+
+<p>
+The documentation describes behavior at the container level. It rarely explains why containers exist in the first place. That gap creates friction.
+</p>
+
+<p>
+For example, a page may explain how a node cooks when inputs change. If you do not yet understand continuous evaluation, that sentence reads like a special case instead of a default rule.
+</p>
+
+<p>
+The wiki also assumes comfort with abstraction. Words like parameter, dependency, evaluation, frame, and data type are used precisely. They are not defined repeatedly. The system expects you to already think in terms of relationships instead of objects.
+</p>
+
+<p>
+Another assumption is that you understand time as infrastructure. Many operator descriptions reference frame updates without restating that everything is frame-driven. Without that mental model, the behavior sounds optional rather than constant.
+</p>
+
+<p>
+The documentation is written for people who already know what kind of system they are inside. It explains what each operator does. It does not explain why the environment behaves continuously instead of transactionally.
+</p>
+
+<p>
+Reading the wiki becomes easier once you reinterpret every sentence through a few lenses:
+</p>
+
+<ul>
+<li>Everything evaluates every frame.</li>
+<li>Containers respond only to current inputs.</li>
+<li>Dependencies determine behavior, not layout.</li>
+<li>No node understands intention.</li>
+</ul>
+
+<p>
+With those assumptions in place, technical descriptions stop feeling incomplete. They become concise.
+</p>
+
+<p>
+The wiki is not meant to introduce philosophy. It documents mechanics. Volume 1 covered the philosophy so Volume 2 can move forward without confusion.
+</p>
+
+</article>
+
+<section class="blog-faq" aria-labelledby="faq-heading">
+<h2 id="faq-heading">FAQ</h2>
+
+<div class="faq-item">
+<h3>Why are TouchDesigner docs hard for beginners?</h3>
+<p>They assume familiarity with real-time evaluation, signal flow, and operator families. Without those foundations, the documentation feels compressed rather than explanatory.</p>
+</div>
+
+<div class="faq-item">
+<h3>What prior knowledge does the wiki assume?</h3>
+<p>It assumes you understand cooking, dependency chains, frame-based updates, and the difference between data types like TOP, CHOP, SOP, and DAT.</p>
+</div>
+
+<div class="faq-item">
+<h3>How should I interpret technical terms in docs?</h3>
+<p>Translate every term through the idea of continuous evaluation. Most behaviors described are not special features but default system behavior.</p>
+</div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why are TouchDesigner docs hard for beginners?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "They assume familiarity with real-time evaluation, signal flow, and operator families. Without those foundations, the documentation feels compressed rather than explanatory."
       }
-
-      :root {
-        --bg: #0b0b0f;
-        --fg: #f2f2f5;
-        --muted: #b9b9c6;
-        --line: rgba(242, 242, 245, 0.14);
+    },
+    {
+      "@type": "Question",
+      "name": "What prior knowledge does the wiki assume?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It assumes you understand cooking, dependency chains, frame-based updates, and the difference between data types like TOP, CHOP, SOP, and DAT."
       }
-
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
-
-      body {
-        margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
-        background: var(--bg);
-        color: var(--fg);
+    },
+    {
+      "@type": "Question",
+      "name": "How should I interpret technical terms in docs?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Translate every term through the idea of continuous evaluation. Most behaviors described are not special features but default system behavior."
       }
+    }
+  ]
+}
+</script>
 
-      .wrap {
-        max-width: 860px;
-        margin: 0 auto;
-        padding: 64px 20px 96px;
-      }
+<div class="page-image">
+<img src="v2b1.png" alt="Volume 2 page 01" />
+</div>
 
-      header {
-        margin-bottom: 36px;
-      }
+<div class="nav">
+<a href="../index.html" aria-label="Back to index">Index</a>
+<a href="v2b2.html" aria-label="Go to page 02">Next page</a>
+</div>
 
-      h1 {
-        font-size: clamp(40px, 5vw, 72px);
-        letter-spacing: -0.02em;
-        margin: 0 0 10px;
-      }
-
-      .num {
-        color: var(--muted);
-        font-size: 14px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      article {
-        font-size: 45px;
-        line-height: 1.7;
-      }
-
-      p {
-        margin: 0 0 22px;
-      }
-
-      .page-image {
-        margin: 56px 0 28px;
-        border-top: 1px solid var(--line);
-        padding-top: 28px;
-      }
-
-      .page-image img {
-        display: block;
-        width: min(100%, 640px);
-        height: auto;
-        margin: 0 auto;
-      }
-
-      .nav {
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      .nav a {
-        color: var(--fg);
-        text-decoration: none;
-        border: 1px solid var(--line);
-        padding: 10px 16px;
-        border-radius: 999px;
-        font-size: 14px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-
-      .nav a:hover {
-        border-color: var(--fg);
-      }
-
-      .do {
-        border-left: 3px solid var(--line);
-        padding-left: 18px;
-        margin: 28px 0;
-      }
-
-      .note {
-        color: var(--muted);
-        margin-top: -10px;
-      }
-
-      code {
-        color: var(--fg);
-        background: rgba(255,255,255,0.05);
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 0.9em;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="wrap">
-      <header>
-        <div class="num">Volume 2 · 01</div>
-        <h1>Where things are allowed to start</h1>
-      </header>
-
-      <article>
-        <p>
-          This page assumes TouchDesigner is open and you are looking at an empty network.
-          Nothing is selected. Nothing is wired.
-        </p>
-
-        <p>
-          The first thing this system respects is insistence. Something that keeps producing values
-          whether anyone cares or not.
-        </p>
-
-        <div class="do">
-          <p>
-            Move your mouse into the network editor.
-          </p>
-          <p>
-            Press <code>Tab</code>.
-          </p>
-          <p>
-            In the menu that appears, type one of the following and press Enter:
-          </p>
-          <ul>
-            <li><code>Timer</code></li>
-            <li><code>Noise</code></li>
-            <li><code>LFO</code></li>
-            <li><code>Audio Device In</code> (if a microphone exists)</li>
-          </ul>
-          <p class="note">
-            Any of these is acceptable. Pick one. Place it near the center of the network.
-          </p>
-        </div>
-
-        <p>
-          You have added something that refuses to stop. Even if the numbers look boring,
-          they advance every frame. That advancement is not optional.
-        </p>
-
-        <p>
-          Nothing else in the network knows this yet.
-        </p>
-
-        <div class="do">
-          <p>
-            Press <code>Tab</code> again.
-          </p>
-          <p>
-            Type one of the following and place it to the right of the first node:
-          </p>
-          <ul>
-            <li><code>Math</code></li>
-            <li><code>Lag</code></li>
-            <li><code>Filter</code></li>
-          </ul>
-        </div>
-
-        <p>
-          These nodes accept numbers and respond to them. They do not create numbers.
-          They wait.
-        </p>
-
-        <div class="do">
-          <p>
-            Click the small output square on the right side of the first node.
-          </p>
-          <p>
-            Drag a wire to the input square on the left side of the second node.
-          </p>
-          <p>
-            Release.
-          </p>
-        </div>
-
-        <p>
-          Something new has happened.
-        </p>
-
-        <p>
-          The second node is now obligated to respond every frame. It did not change its
-          personality. It simply began receiving pressure.
-        </p>
-
-        <p>
-          If you open the viewer on the second node, you will see numbers moving or repeating.
-          That repetition is the work.
-        </p>
-
-        <div class="do">
-          <p>
-            Break the wire by selecting it and pressing <code>Delete</code>.
-          </p>
-        </div>
-
-        <p>
-          Whatever behavior you were seeing stopped instantly.
-        </p>
-
-        <p>
-          No reset occurred. No history was undone. The obligation disappeared and the system
-          reorganized itself around that absence.
-        </p>
-
-        <div class="do">
-          <p>
-            Reconnect the wire.
-          </p>
-          <p>
-            Then replace the first node with a different source from the earlier list.
-          </p>
-        </div>
-
-        <p>
-          Notice what stays the same.
-        </p>
-
-        <p>
-          The second node behaves exactly as before. Only the pressure feeding it has changed.
-          This is the shape of every setup you will build from here on.
-        </p>
-
-        <p>
-          A source insists. Everything else responds. Without insistence, nothing earns attention.
-        </p>
-      </article>
-
-      <div class="page-image">
-        <img src="v2b1.png" alt="Volume 2 page 01" />
-      </div>
-
-      <div class="nav">
-        <a href="../index.html" aria-label="Back to index">Index</a>
-        <a href="v2b2.html" aria-label="Go to page 02">Next page</a>
-      </div>
-    </div>
-  </body>
+</div>
+</body>
 </html>
