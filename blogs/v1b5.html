@@ -3,9 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Guide to TouchDesigner cooking explained simply. Learn core ideas, common mistakes, and simple checks for building more reliable TouchDesigner networks.">
-    <title>TouchDesigner cooking explained simply</title>
-
     <style>
       :root {
         --bg: #0b0b0f;
@@ -107,6 +104,52 @@
         border-color: var(--fg);
       }
     </style>
+
+    <title>TouchDesigner cooking explained simply</title>
+    <meta name="description" content="Guide to TouchDesigner cooking explained simply. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <meta property="og:title" content="TouchDesigner cooking explained simply" />
+    <meta property="og:description" content="Guide to TouchDesigner cooking explained simply. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <link rel="canonical" href="https://wireup.onrender.com/blogs/v1b5.html" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "does node position affect execution order in touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No, layout is for human readability, not program order. Execution follows dependencies and cooking rules. The official docs on cook dependency explain why spatial order is not authoritative."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "why left to right wiring doesnt guarantee result timing",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Visual direction helps comprehension but does not force strict sequential timing. Operators update when their dependencies require it. The docs on frame evaluation and cook triggers describe this behavior."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "how does touchdesigner decide what cooks first",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It resolves required outputs by tracing upstream dependencies and state needs. This can differ from how the network looks on screen. Read the official cook order and optimization documentation."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "can i control exact operator evaluation order",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can influence behavior with architecture, timing, and explicit dependencies, but not by diagram aesthetics alone. Reliable systems come from clear data contracts. The docs explain supported mechanisms such as time slicing and dependencies."
+          }
+        }
+      ]
+    }
+    </script>
   </head>
 
   <body>
@@ -118,6 +161,9 @@
       </header>
 
       <article>
+        <!-- SEO-INTRO-START -->
+        <p>This guide explains TouchDesigner cooking explained simply in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+        <!-- SEO-INTRO-END -->
         <p>The instinct to look for order shows up fast.</p>
 
         <p>Top left to bottom right. First this, then that. A sequence you can read like a sentence and trust like instructions. Most software rewards that instinct. It behaves as though it is listening to you narrate your intentions one step at a time.</p>
@@ -141,20 +187,41 @@
         <p>When order is replaced with dependency, networks become readable in a different way. You stop asking what comes next and start asking what relies on what.</p>
 
         <p>The system behaves like a set of conditions that must all be satisfied at once, over and over, as long as time keeps moving.</p>
-      </article>
 
-      <section class="blog-faq" aria-labelledby="faq-heading">
-        <h2 id="faq-heading">FAQ</h2>
+        <!-- SEO-QUESTIONS-START -->
+        <h2>What does cooking mean in TouchDesigner?</h2>
+        <p>This section explores what does cooking mean in touchdesigner with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>What does cooking mean in TouchDesigner?</h3>
-        <p>Cooking refers to an operator evaluating its inputs and producing an updated output. It happens when dependencies change or when a frame advances.</p>
+        <h2>Why is my node not updating every frame?</h2>
+        <p>This section explores why is my node not updating every frame with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>Why is my node not updating every frame?</h3>
-        <p>If nothing upstream changes, the operator may not need to cook again. Check time dependencies and input changes to confirm.</p>
+        <h2>How can I force an operator to cook?</h2>
+        <p>This section explores how can i force an operator to cook with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>How can I force an operator to cook?</h3>
-        <p>You can trigger a cook by changing a parameter, modifying an input, or using components that depend on frame updates.</p>
-      </section>
+        <!-- SEO-QUESTIONS-END -->
+
+        <!-- SEO-FAQ-START -->
+        <section class="blog-faq" aria-labelledby="faq-heading">
+          <h2 id="faq-heading">FAQ</h2>
+          <div class="faq-item">
+            <h3>does node position affect execution order in touchdesigner</h3>
+            <p>No, layout is for human readability, not program order. Execution follows dependencies and cooking rules. The official docs on cook dependency explain why spatial order is not authoritative.</p>
+          </div>
+          <div class="faq-item">
+            <h3>why left to right wiring doesnt guarantee result timing</h3>
+            <p>Visual direction helps comprehension but does not force strict sequential timing. Operators update when their dependencies require it. The docs on frame evaluation and cook triggers describe this behavior.</p>
+          </div>
+          <div class="faq-item">
+            <h3>how does touchdesigner decide what cooks first</h3>
+            <p>It resolves required outputs by tracing upstream dependencies and state needs. This can differ from how the network looks on screen. Read the official cook order and optimization documentation.</p>
+          </div>
+          <div class="faq-item">
+            <h3>can i control exact operator evaluation order</h3>
+            <p>You can influence behavior with architecture, timing, and explicit dependencies, but not by diagram aesthetics alone. Reliable systems come from clear data contracts. The docs explain supported mechanisms such as time slicing and dependencies.</p>
+          </div>
+        </section>
+        <!-- SEO-FAQ-END -->
+</article>
 
       <div class="page-image">
         <img src="v1b5.png" alt="Manual page 05" />
@@ -165,39 +232,5 @@
         <a href="v1b6.html" aria-label="Go to page 06">Next page</a>
       </div>
     </div>
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What does cooking mean in TouchDesigner?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Cooking refers to an operator evaluating its inputs and producing an updated output. It happens when dependencies change or when a frame advances."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why is my node not updating every frame?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "If nothing upstream changes, the operator may not need to cook again. Check time dependencies and input changes to confirm."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How can I force an operator to cook?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "You can trigger a cook by changing a parameter, modifying an input, or using components that depend on frame updates."
-          }
-        }
-      ]
-    }
-    </script>
-
-  </body>
+</body>
 </html>

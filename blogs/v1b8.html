@@ -3,9 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Guide to time as a signal in TouchDesigner. Learn core ideas, common mistakes, and simple checks for building more reliable TouchDesigner networks.">
-    <title>Time as a signal in TouchDesigner</title>
-
     <style>
       :root {
         --bg: #0b0b0f;
@@ -107,6 +104,52 @@
         border-color: var(--fg);
       }
     </style>
+
+    <title>Time as a signal in TouchDesigner</title>
+    <meta name="description" content="Guide to time as a signal in TouchDesigner. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <meta property="og:title" content="Time as a signal in TouchDesigner" />
+    <meta property="og:description" content="Guide to time as a signal in TouchDesigner. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <link rel="canonical" href="https://wireup.onrender.com/blogs/v1b8.html" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "why local changes override global plan in touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Networks honor actual local dependencies before abstract intent. A small local condition can dominate if it sits on the active path. The docs on dependency and operator scope explain why local truth wins."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "how to debug conflicting behavior in big touchdesigner project",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Focus on the nearest operators that directly determine the current output. Global architecture helps, but immediate dependency chains reveal real causes. The official docs on probe/info channels and performance tools are useful here."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "is top level design enough to predict touchdesigner output",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Not always; local parameter states and references can redirect behavior quickly. Prediction improves when you inspect the active subnetwork context. The docs emphasize drilling into actual cook paths, not only high-level diagrams."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "why does one parameter change break whole network",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Because networks are tightly coupled through dependencies and shared timing assumptions. A small local shift can propagate widely if many operators rely on it. The official docs on references, exports, and dependencies clarify these cascades."
+          }
+        }
+      ]
+    }
+    </script>
   </head>
 
   <body>
@@ -118,6 +161,9 @@
       </header>
 
       <article>
+        <!-- SEO-INTRO-START -->
+        <p>This guide explains time as a signal in TouchDesigner in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+        <!-- SEO-INTRO-END -->
         <p>Intention is invisible to the system.</p>
 
         <p>You can want a network to behave a certain way, but containers only know what arrives at their inputs this frame.</p>
@@ -141,20 +187,41 @@
         <p>Each part does its job without negotiating meaning. Results emerge from alignment, not interpretation.</p>
 
         <p>Intention belongs in how responsibilities are arranged, not in what you expect the system to infer.</p>
-      </article>
 
-      <section class="blog-faq" aria-labelledby="faq-heading">
-        <h2 id="faq-heading">FAQ</h2>
+        <!-- SEO-QUESTIONS-START -->
+        <h2>How is time treated as data in TouchDesigner?</h2>
+        <p>This section explores how is time treated as data in touchdesigner with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>How is time treated as data in TouchDesigner?</h3>
-        <p>Time is available as a signal through timeline components and CHOPs. It can be referenced, modified, and routed like other data streams.</p>
+        <h2>Why does my animation depend on frame rate?</h2>
+        <p>This section explores why does my animation depend on frame rate with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>Why does my animation depend on frame rate?</h3>
-        <p>If calculations are tied directly to frames rather than time values, changes in frame rate can alter behavior. Using time-based logic helps stabilize motion.</p>
+        <h2>What is time slicing in TouchDesigner?</h2>
+        <p>This section explores what is time slicing in touchdesigner with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>What is time slicing in TouchDesigner?</h3>
-        <p>Time slicing allows operators to process multiple samples per frame, improving responsiveness for time-dependent data.</p>
-      </section>
+        <!-- SEO-QUESTIONS-END -->
+
+        <!-- SEO-FAQ-START -->
+        <section class="blog-faq" aria-labelledby="faq-heading">
+          <h2 id="faq-heading">FAQ</h2>
+          <div class="faq-item">
+            <h3>why local changes override global plan in touchdesigner</h3>
+            <p>Networks honor actual local dependencies before abstract intent. A small local condition can dominate if it sits on the active path. The docs on dependency and operator scope explain why local truth wins.</p>
+          </div>
+          <div class="faq-item">
+            <h3>how to debug conflicting behavior in big touchdesigner project</h3>
+            <p>Focus on the nearest operators that directly determine the current output. Global architecture helps, but immediate dependency chains reveal real causes. The official docs on probe/info channels and performance tools are useful here.</p>
+          </div>
+          <div class="faq-item">
+            <h3>is top level design enough to predict touchdesigner output</h3>
+            <p>Not always; local parameter states and references can redirect behavior quickly. Prediction improves when you inspect the active subnetwork context. The docs emphasize drilling into actual cook paths, not only high-level diagrams.</p>
+          </div>
+          <div class="faq-item">
+            <h3>why does one parameter change break whole network</h3>
+            <p>Because networks are tightly coupled through dependencies and shared timing assumptions. A small local shift can propagate widely if many operators rely on it. The official docs on references, exports, and dependencies clarify these cascades.</p>
+          </div>
+        </section>
+        <!-- SEO-FAQ-END -->
+</article>
 
       <div class="page-image">
         <img src="v1b8.png" alt="Manual page 08" />
@@ -165,39 +232,5 @@
         <a href="v1b9.html" aria-label="Go to page 09">Next page</a>
       </div>
     </div>
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "How is time treated as data in TouchDesigner?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Time is available as a signal through timeline components and CHOPs. It can be referenced, modified, and routed like other data streams."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why does my animation depend on frame rate?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "If calculations are tied directly to frames rather than time values, changes in frame rate can alter behavior. Using time-based logic helps stabilize motion."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is time slicing in TouchDesigner?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Time slicing allows operators to process multiple samples per frame, improving responsiveness for time-dependent data."
-          }
-        }
-      ]
-    }
-    </script>
-
-  </body>
+</body>
 </html>

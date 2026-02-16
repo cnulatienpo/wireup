@@ -3,9 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Guide to TouchDesigner operator families explained. Learn core ideas, common mistakes, and simple checks for building more reliable TouchDesigner networks.">
-    <title>TouchDesigner operator families explained</title>
-
     <style>
       :root {
         --bg: #0b0b0f;
@@ -107,6 +104,52 @@
         border-color: var(--fg);
       }
     </style>
+
+    <title>TouchDesigner operator families explained</title>
+    <meta name="description" content="Guide to TouchDesigner operator families explained. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <meta property="og:title" content="TouchDesigner operator families explained" />
+    <meta property="og:description" content="Guide to TouchDesigner operator families explained. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <link rel="canonical" href="https://wireup.onrender.com/blogs/v1b7.html" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "what actually moves in touchdesigner network",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Signals move conceptually through dependencies; nodes are definitions that keep producing outputs. Thinking in flowing state rather than moving objects reduces confusion. The official docs on OP inputs/outputs and cooking align with that view."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "is signal flow real in node editors",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Signal flow is the practical model for reasoning about changes and propagation. It describes how updates travel through connected operators over time. The docs use this model across TOP, CHOP, SOP, and DAT contexts."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "why output changes when upstream looks unchanged",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Upstream may be unchanged visually but still re-cooking, time-dependent, or affected by hidden parameters. Downstream reacts to evaluated state, not only obvious image differences. The docs on cook info and performance monitor help explain this."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "touchdesigner dataflow vs command flow",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "TouchDesigner is primarily dataflow-driven with continuous reevaluation. Commands exist, but they sit beside the persistent network model. Official docs and Python integration pages describe where each paradigm fits."
+          }
+        }
+      ]
+    }
+    </script>
   </head>
 
   <body>
@@ -118,6 +161,9 @@
       </header>
 
       <article>
+        <!-- SEO-INTRO-START -->
+        <p>This guide explains TouchDesigner operator families explained in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+        <!-- SEO-INTRO-END -->
         <p>The word “flow” picks up baggage fast.</p>
 
         <p>People imagine motion as something dramatic. Lines pulsing. Values surging. When that spectacle does not appear, the assumption follows that nothing is happening.</p>
@@ -141,20 +187,41 @@
         <p>When flow stops, outputs flatten. The fix involves tracing change backward to its origin.</p>
 
         <p>Flow is the condition that allows anything downstream to matter.</p>
-      </article>
 
-      <section class="blog-faq" aria-labelledby="faq-heading">
-        <h2 id="faq-heading">FAQ</h2>
+        <!-- SEO-QUESTIONS-START -->
+        <h2>What are TOP CHOP SOP DAT and COMP in TouchDesigner?</h2>
+        <p>This section explores what are top chop sop dat and comp in touchdesigner with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>What are TOP CHOP SOP DAT and COMP in TouchDesigner?</h3>
-        <p>They are operator families. TOPs process images, CHOPs process channels, SOPs process geometry, DATs handle data tables and text, and COMPs organize networks.</p>
+        <h2>How do I know which operator family to use?</h2>
+        <p>This section explores how do i know which operator family to use with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>How do I know which operator family to use?</h3>
-        <p>Choose based on the type of data you are working with. Images use TOPs, numeric channels use CHOPs, geometry uses SOPs, structured data uses DATs.</p>
+        <h2>Can CHOP data control TOP visuals?</h2>
+        <p>This section explores can chop data control top visuals with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>Can CHOP data control TOP visuals?</h3>
-        <p>Yes. CHOP channels can be exported or referenced to control parameters inside TOP operators.</p>
-      </section>
+        <!-- SEO-QUESTIONS-END -->
+
+        <!-- SEO-FAQ-START -->
+        <section class="blog-faq" aria-labelledby="faq-heading">
+          <h2 id="faq-heading">FAQ</h2>
+          <div class="faq-item">
+            <h3>what actually moves in touchdesigner network</h3>
+            <p>Signals move conceptually through dependencies; nodes are definitions that keep producing outputs. Thinking in flowing state rather than moving objects reduces confusion. The official docs on OP inputs/outputs and cooking align with that view.</p>
+          </div>
+          <div class="faq-item">
+            <h3>is signal flow real in node editors</h3>
+            <p>Signal flow is the practical model for reasoning about changes and propagation. It describes how updates travel through connected operators over time. The docs use this model across TOP, CHOP, SOP, and DAT contexts.</p>
+          </div>
+          <div class="faq-item">
+            <h3>why output changes when upstream looks unchanged</h3>
+            <p>Upstream may be unchanged visually but still re-cooking, time-dependent, or affected by hidden parameters. Downstream reacts to evaluated state, not only obvious image differences. The docs on cook info and performance monitor help explain this.</p>
+          </div>
+          <div class="faq-item">
+            <h3>touchdesigner dataflow vs command flow</h3>
+            <p>TouchDesigner is primarily dataflow-driven with continuous reevaluation. Commands exist, but they sit beside the persistent network model. Official docs and Python integration pages describe where each paradigm fits.</p>
+          </div>
+        </section>
+        <!-- SEO-FAQ-END -->
+</article>
 
       <div class="page-image">
         <img src="v1b7.png" alt="Manual page 07" />
@@ -165,39 +232,5 @@
         <a href="v1b8.html" aria-label="Go to page 08">Next page</a>
       </div>
     </div>
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What are TOP CHOP SOP DAT and COMP in TouchDesigner?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "They are operator families. TOPs process images, CHOPs process channels, SOPs process geometry, DATs handle data tables and text, and COMPs organize networks."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do I know which operator family to use?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Choose based on the type of data you are working with. Images use TOPs, numeric channels use CHOPs, geometry uses SOPs, structured data uses DATs."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can CHOP data control TOP visuals?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. CHOP channels can be exported or referenced to control parameters inside TOP operators."
-          }
-        }
-      ]
-    }
-    </script>
-
-  </body>
+</body>
 </html>

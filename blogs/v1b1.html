@@ -3,10 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Guide to what is TouchDesigner for complete beginners. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks.">
     <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-    <title>What is TouchDesigner for complete beginners</title>
-
     <style>
       @font-face {
         font-family: "La Nu Tienpo";
@@ -115,6 +112,52 @@
         border-color: var(--fg);
       }
     </style>
+
+    <title>What is TouchDesigner for complete beginners</title>
+    <meta name="description" content="Guide to what is TouchDesigner for complete beginners. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <meta property="og:title" content="What is TouchDesigner for complete beginners" />
+    <meta property="og:description" content="Guide to what is TouchDesigner for complete beginners. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <link rel="canonical" href="https://wireup.onrender.com/blogs/v1b1.html" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "why does touchdesigner keep running when i am not clicking anything",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "TouchDesigner cooks continuously because operators evaluate on frame updates, not only on user actions. Even a stable value is being re-checked over time. The official docs on cooking and timelines explain this always-on execution model."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "where does execution start in touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "There is rarely a single start line in a networked project. Evaluation emerges from dependencies, time, and active viewers. Read the official documentation on dependency, cook order, and time components for the mental model."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "why does nothing happen but cpu is still active in touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A quiet output does not mean the network is idle. Operators can keep cooking to maintain state and confirm inputs every frame. The docs describe this as continuous evaluation rather than event-only processing."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "is touchdesigner event based or real time",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It is primarily real-time and frame-driven, with events layered on top. That is why systems keep updating even between interactions. The official docs separate timeline-driven cooking from callback/event mechanisms."
+          }
+        }
+      ]
+    }
+    </script>
   </head>
 
   <body>
@@ -126,6 +169,9 @@
       </header>
 
       <article>
+        <!-- SEO-INTRO-START -->
+        <p>This guide explains what is TouchDesigner for complete beginners in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+        <!-- SEO-INTRO-END -->
         <p>The screen is not waiting for you.</p>
 
         <p>That detail explains the strange unease people feel when this software opens and nothing acknowledges their presence. No blinking cursor asking for direction. No empty canvas suggesting intention. No pause while you decide what kind of person you plan to be today. Activity is already underway, even if you cannot name it yet.</p>
@@ -149,23 +195,41 @@
         <p>Attention shifts once this is understood. Effort moves away from trying to wake things up and toward noticing what they are already doing. Patterns become audible. Dropouts become obvious. The system communicates through behavior rather than messages.</p>
 
         <p>This software does not announce that it is running. It assumes that part is understood.</p>
-      </article>
 
-      <section class="blog-faq" aria-labelledby="faq-heading">
-        <h2 id="faq-heading">FAQ</h2>
+        <!-- SEO-QUESTIONS-START -->
+        <h2>What is TouchDesigner actually used for?</h2>
+        <p>This section explores what is touchdesigner actually used for with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>why does touchdesigner keep running when i am not clicking anything</h3>
-        <p>TouchDesigner cooks continuously because operators evaluate on frame updates, not only on user actions. Even a stable value is being re-checked over time.</p>
+        <h2>Is TouchDesigner hard for beginners to learn?</h2>
+        <p>This section explores is touchdesigner hard for beginners to learn with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>where does execution start in touchdesigner</h3>
-        <p>There is rarely a single start line in a networked project. Evaluation emerges from dependencies, time, and active viewers.</p>
+        <h2>Do I need to code to use TouchDesigner?</h2>
+        <p>This section explores do i need to code to use touchdesigner with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>why does nothing happen but cpu is still active in touchdesigner</h3>
-        <p>A quiet output does not mean the network is idle. Operators can keep cooking to maintain state and confirm inputs every frame.</p>
+        <!-- SEO-QUESTIONS-END -->
 
-        <h3>is touchdesigner event based or real time</h3>
-        <p>It is primarily real-time and frame-driven, with events layered on top.</p>
-      </section>
+        <!-- SEO-FAQ-START -->
+        <section class="blog-faq" aria-labelledby="faq-heading">
+          <h2 id="faq-heading">FAQ</h2>
+          <div class="faq-item">
+            <h3>why does touchdesigner keep running when i am not clicking anything</h3>
+            <p>TouchDesigner cooks continuously because operators evaluate on frame updates, not only on user actions. Even a stable value is being re-checked over time. The official docs on cooking and timelines explain this always-on execution model.</p>
+          </div>
+          <div class="faq-item">
+            <h3>where does execution start in touchdesigner</h3>
+            <p>There is rarely a single start line in a networked project. Evaluation emerges from dependencies, time, and active viewers. Read the official documentation on dependency, cook order, and time components for the mental model.</p>
+          </div>
+          <div class="faq-item">
+            <h3>why does nothing happen but cpu is still active in touchdesigner</h3>
+            <p>A quiet output does not mean the network is idle. Operators can keep cooking to maintain state and confirm inputs every frame. The docs describe this as continuous evaluation rather than event-only processing.</p>
+          </div>
+          <div class="faq-item">
+            <h3>is touchdesigner event based or real time</h3>
+            <p>It is primarily real-time and frame-driven, with events layered on top. That is why systems keep updating even between interactions. The official docs separate timeline-driven cooking from callback/event mechanisms.</p>
+          </div>
+        </section>
+        <!-- SEO-FAQ-END -->
+</article>
 
       <div class="page-image">
         <img src="v1b1.png" alt="Manual page 01" />
@@ -176,49 +240,7 @@
         <a href="v1b2.html" aria-label="Go to page 02">Next page</a>
       </div>
     </div>
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "why does touchdesigner keep running when i am not clicking anything",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "TouchDesigner cooks continuously because operators evaluate on frame updates, not only on user actions. Even a stable value is being re-checked over time."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "where does execution start in touchdesigner",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "There is rarely a single start line in a networked project. Evaluation emerges from dependencies, time, and active viewers."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "why does nothing happen but cpu is still active in touchdesigner",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "A quiet output does not mean the network is idle. Operators can keep cooking to maintain state and confirm inputs every frame."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "is touchdesigner event based or real time",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "It is primarily real-time and frame-driven, with events layered on top."
-          }
-        }
-      ]
-    }
-    </script>
-
-  </body>
+</body>
 </html>
 
 

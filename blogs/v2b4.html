@@ -3,14 +3,6 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>GPU space vs data space in TouchDesigner</title>
-
-<meta name="description" content="Guide to GPU space vs data space in TouchDesigner. Learn core ideas, common mistakes, and practical checks for building reliable TouchDesigner networks." />
-
-<meta property="og:title" content="GPU space vs data space in TouchDesigner" />
-<meta property="og:description" content="Guide to GPU space vs data space in TouchDesigner. Learn core ideas, common mistakes, and practical checks for building reliable TouchDesigner networks." />
-<meta property="og:type" content="article" />
-
 <style>
 :root {
   --bg: #0b0b0f;
@@ -137,7 +129,53 @@ code {
   margin-bottom: 8px;
 }
 </style>
-</head>
+
+    <title>GPU space vs data space in TouchDesigner</title>
+    <meta name="description" content="Guide to GPU space vs data space in TouchDesigner. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <meta property="og:title" content="GPU space vs data space in TouchDesigner" />
+    <meta property="og:description" content="Guide to GPU space vs data space in TouchDesigner. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <link rel="canonical" href="https://wireup.onrender.com/blogs/v2b4.html" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "how does 3d scene become image in touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A render pipeline translates scene data through camera, lighting, and rasterization into pixels. Visual surprises usually come from pipeline assumptions rather than bad content. The official Render TOP and MAT/CAM/LIGHT docs describe each stage."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "why my geometry exists but render is black",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Black renders often indicate camera framing, lighting, material, or render target assumptions. The scene can be valid while the image pipeline is unresolved. The docs for Render TOP troubleshooting are the right reference."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "difference between scene data and final image",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Scene data is structural and relational; the final image is a sampled projection under render settings. Many artistic controls live in that projection step. Official docs explain this distinction across SOP, COMP, and TOP workflows."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "what should i read to understand rendering in touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Start with the official docs for camera, light, material, and Render TOP interactions. Then review examples that show pipeline variations. Conceptual understanding comes from how these systems compose, not isolated nodes."
+          }
+        }
+      ]
+    }
+    </script>
+  </head>
 
 <body>
 <div class="wrap">
@@ -149,7 +187,9 @@ code {
 </header>
 
 <article>
-
+        <!-- SEO-INTRO-START -->
+        <p>This guide explains GPU space vs data space in TouchDesigner in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+        <!-- SEO-INTRO-END -->
 <p>
 TouchDesigner operates in two primary territories: GPU space and CPU data space.
 </p>
@@ -206,62 +246,42 @@ Efficiency often comes from minimizing unnecessary border crossings.
 Understanding this separation allows you to design networks that remain responsive even as complexity increases.
 </p>
 
+        <!-- SEO-QUESTIONS-START -->
+        <h2>What is GPU space in TouchDesigner?</h2>
+        <p>This section explores what is gpu space in touchdesigner with practical guidance you can apply while building TouchDesigner networks.</p>
+
+        <h2>Why is TOP processing different from DAT processing?</h2>
+        <p>This section explores why is top processing different from dat processing with practical guidance you can apply while building TouchDesigner networks.</p>
+
+        <h2>Should I process this on GPU or CPU?</h2>
+        <p>This section explores should i process this on gpu or cpu with practical guidance you can apply while building TouchDesigner networks.</p>
+
+        <!-- SEO-QUESTIONS-END -->
+
+        <!-- SEO-FAQ-START -->
+        <section class="blog-faq" aria-labelledby="faq-heading">
+          <h2 id="faq-heading">FAQ</h2>
+          <div class="faq-item">
+            <h3>how does 3d scene become image in touchdesigner</h3>
+            <p>A render pipeline translates scene data through camera, lighting, and rasterization into pixels. Visual surprises usually come from pipeline assumptions rather than bad content. The official Render TOP and MAT/CAM/LIGHT docs describe each stage.</p>
+          </div>
+          <div class="faq-item">
+            <h3>why my geometry exists but render is black</h3>
+            <p>Black renders often indicate camera framing, lighting, material, or render target assumptions. The scene can be valid while the image pipeline is unresolved. The docs for Render TOP troubleshooting are the right reference.</p>
+          </div>
+          <div class="faq-item">
+            <h3>difference between scene data and final image</h3>
+            <p>Scene data is structural and relational; the final image is a sampled projection under render settings. Many artistic controls live in that projection step. Official docs explain this distinction across SOP, COMP, and TOP workflows.</p>
+          </div>
+          <div class="faq-item">
+            <h3>what should i read to understand rendering in touchdesigner</h3>
+            <p>Start with the official docs for camera, light, material, and Render TOP interactions. Then review examples that show pipeline variations. Conceptual understanding comes from how these systems compose, not isolated nodes.</p>
+          </div>
+        </section>
+        <!-- SEO-FAQ-END -->
 </article>
 
-<section class="blog-faq" aria-labelledby="faq-heading">
-<h2 id="faq-heading">FAQ</h2>
-
-<div class="faq-item">
-<h3>What is GPU space in TouchDesigner?</h3>
-<p>GPU space refers to operations performed on the graphics card, including image processing, texture manipulation, and 3D rendering.</p>
-</div>
-
-<div class="faq-item">
-<h3>Why is TOP processing different from DAT processing?</h3>
-<p>TOP processing happens on the GPU and is optimized for pixel data, while DAT processing happens on the CPU and is optimized for structured text and logic operations.</p>
-</div>
-
-<div class="faq-item">
-<h3>Should I process this on GPU or CPU?</h3>
-<p>If the task involves images, textures, or rendering, use GPU operators. If it involves structured data, scripting, or file logic, use CPU-based operators.</p>
-</div>
-
-</section>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "What is GPU space in TouchDesigner?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "GPU space refers to operations performed on the graphics card, including image processing, texture manipulation, and 3D rendering."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Why is TOP processing different from DAT processing?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "TOP processing happens on the GPU and is optimized for pixel data, while DAT processing happens on the CPU and is optimized for structured text and logic operations."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Should I process this on GPU or CPU?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "If the task involves images, textures, or rendering, use GPU operators. If it involves structured data, scripting, or file logic, use CPU-based operators."
-      }
-    }
-  ]
-}
-</script>
-
-<div class="page-image">
+      <div class="page-image">
 <img src="v2b4.png" alt="Volume 2 page 04" />
 </div>
 

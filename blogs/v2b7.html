@@ -3,14 +3,6 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Upstream vs downstream thinking TouchDesigner</title>
-
-<meta name="description" content="Guide to upstream vs downstream thinking TouchDesigner. Learn core ideas, common mistakes, and practical checks for building reliable TouchDesigner networks." />
-
-<meta property="og:title" content="Upstream vs downstream thinking TouchDesigner" />
-<meta property="og:description" content="Guide to upstream vs downstream thinking TouchDesigner. Learn core ideas, common mistakes, and practical checks for building reliable TouchDesigner networks." />
-<meta property="og:type" content="article" />
-
 <style>
 :root {
   --bg: #0b0b0f;
@@ -103,7 +95,53 @@ p { margin: 0 0 22px; }
   margin-bottom: 8px;
 }
 </style>
-</head>
+
+    <title>Upstream vs downstream thinking TouchDesigner</title>
+    <meta name="description" content="Guide to upstream vs downstream thinking TouchDesigner. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <meta property="og:title" content="Upstream vs downstream thinking TouchDesigner" />
+    <meta property="og:description" content="Guide to upstream vs downstream thinking TouchDesigner. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <link rel="canonical" href="https://wireup.onrender.com/blogs/v2b7.html" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "why dat tables are important in touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "DATs carry structure, metadata, and control logic that many systems depend on quietly. They make complex setups maintainable by externalizing intent. Official DAT docs show how tables connect runtime behavior and configuration."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "is text data really part of realtime pipeline",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, textual and tabular data often governs routing, naming, state, and automation in real time. It may not render visibly, but it shapes outcomes continuously. The docs on DAT execution and callbacks explain this role."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "how do tables control node based systems",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tables provide declarative mappings that networks can read and apply dynamically. This reduces hard-coded logic and improves adaptability. The official docs and examples for Table DAT workflows cover common patterns."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "why my project is hard to scale without dat",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Without structured text data, configuration gets trapped in scattered parameters. DAT-driven organization centralizes rules and makes change safer. The docs on modular design and DAT operators support this approach."
+          }
+        }
+      ]
+    }
+    </script>
+  </head>
 
 <body>
 <div class="wrap">
@@ -115,7 +153,9 @@ p { margin: 0 0 22px; }
 </header>
 
 <article>
-
+        <!-- SEO-INTRO-START -->
+        <p>This guide explains upstream vs downstream thinking TouchDesigner in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+        <!-- SEO-INTRO-END -->
 <p>
 Every signal has a direction.
 </p>
@@ -180,62 +220,42 @@ Wires tell a story. Read them from right to left when something fails.
 Outputs never invent problems. They reveal them.
 </p>
 
+        <!-- SEO-QUESTIONS-START -->
+        <h2>What does upstream mean in TouchDesigner?</h2>
+        <p>This section explores what does upstream mean in touchdesigner with practical guidance you can apply while building TouchDesigner networks.</p>
+
+        <h2>Should I debug downstream or upstream first?</h2>
+        <p>This section explores should i debug downstream or upstream first with practical guidance you can apply while building TouchDesigner networks.</p>
+
+        <h2>How do I trace a bad output back to its source?</h2>
+        <p>This section explores how do i trace a bad output back to its source with practical guidance you can apply while building TouchDesigner networks.</p>
+
+        <!-- SEO-QUESTIONS-END -->
+
+        <!-- SEO-FAQ-START -->
+        <section class="blog-faq" aria-labelledby="faq-heading">
+          <h2 id="faq-heading">FAQ</h2>
+          <div class="faq-item">
+            <h3>why dat tables are important in touchdesigner</h3>
+            <p>DATs carry structure, metadata, and control logic that many systems depend on quietly. They make complex setups maintainable by externalizing intent. Official DAT docs show how tables connect runtime behavior and configuration.</p>
+          </div>
+          <div class="faq-item">
+            <h3>is text data really part of realtime pipeline</h3>
+            <p>Yes, textual and tabular data often governs routing, naming, state, and automation in real time. It may not render visibly, but it shapes outcomes continuously. The docs on DAT execution and callbacks explain this role.</p>
+          </div>
+          <div class="faq-item">
+            <h3>how do tables control node based systems</h3>
+            <p>Tables provide declarative mappings that networks can read and apply dynamically. This reduces hard-coded logic and improves adaptability. The official docs and examples for Table DAT workflows cover common patterns.</p>
+          </div>
+          <div class="faq-item">
+            <h3>why my project is hard to scale without dat</h3>
+            <p>Without structured text data, configuration gets trapped in scattered parameters. DAT-driven organization centralizes rules and makes change safer. The docs on modular design and DAT operators support this approach.</p>
+          </div>
+        </section>
+        <!-- SEO-FAQ-END -->
 </article>
 
-<section class="blog-faq" aria-labelledby="faq-heading">
-<h2 id="faq-heading">FAQ</h2>
-
-<div class="faq-item">
-<h3>What does upstream mean in TouchDesigner?</h3>
-<p>Upstream refers to nodes that feed data into another node. It is the earlier part of a signal chain.</p>
-</div>
-
-<div class="faq-item">
-<h3>Should I debug downstream or upstream first?</h3>
-<p>Begin downstream to identify where the problem appears, then move upstream to find the origin of the incorrect value.</p>
-</div>
-
-<div class="faq-item">
-<h3>How do I trace a bad output back to its source?</h3>
-<p>Follow the wire connections backward from the output node until you reach the first node where the signal differs from expectation.</p>
-</div>
-
-</section>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "What does upstream mean in TouchDesigner?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Upstream refers to nodes that feed data into another node. It is the earlier part of a signal chain."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Should I debug downstream or upstream first?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Begin downstream to identify where the problem appears, then move upstream to find the origin of the incorrect value."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How do I trace a bad output back to its source?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Follow the wire connections backward from the output node until you reach the first node where the signal differs from expectation."
-      }
-    }
-  ]
-}
-</script>
-
-<div class="page-image">
+      <div class="page-image">
 <img src="v2b7.png" alt="Volume 2 page 07" />
 </div>
 

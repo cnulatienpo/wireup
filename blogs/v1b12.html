@@ -3,9 +3,6 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Guide to how to read TouchDesigner UI for beginners. Learn core ideas, common mistakes, and simple checks for building reliable TouchDesigner networks.">
-  <title>How to read TouchDesigner UI for beginners</title>
-
   <style>
     :root {
       --bg: #0b0b0f;
@@ -107,7 +104,45 @@
       border-color: var(--fg);
     }
   </style>
-</head>
+
+    <title>How to read TouchDesigner UI for beginners</title>
+    <meta name="description" content="Guide to how to read TouchDesigner UI for beginners. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <meta property="og:title" content="How to read TouchDesigner UI for beginners" />
+    <meta property="og:description" content="Guide to how to read TouchDesigner UI for beginners. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <link rel="canonical" href="https://wireup.onrender.com/blogs/v1b12.html" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do I read the TouchDesigner interface quickly?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Start with the network to understand structure, then inspect parameters to confirm current conditions, and use viewers to verify output."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What do all these panels mean in TouchDesigner?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Each panel shows a different layer of the system: structure, values, output, and timing. None of them replace the others."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where do I find important status info in the UI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Look for cook indicators, warning flags, and parameter changes. These reveal whether containers are evaluating and receiving valid input."
+            }
+          }
+        ]
+      }
+      </script>
+  </head>
 
 <body>
   <div class="wrap">
@@ -118,6 +153,9 @@
     </header>
 
     <article>
+        <!-- SEO-INTRO-START -->
+        <p>This guide explains how to read TouchDesigner UI for beginners in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+        <!-- SEO-INTRO-END -->
       <p>
         The interface is not decorative.
       </p>
@@ -169,22 +207,39 @@
       <p>
         The UI is not trying to simplify the system. It is trying to show you exactly what it is doing from multiple angles at once.
       </p>
-    </article>
 
-    <section class="blog-faq" aria-labelledby="faq-heading">
-      <h2 id="faq-heading">FAQ</h2>
+        <!-- SEO-QUESTIONS-START -->
+        <h2>How do I read the TouchDesigner interface quickly?</h2>
+        <p>This section explores how do i read the touchdesigner interface quickly with practical guidance you can apply while building TouchDesigner networks.</p>
 
-      <h3>How do I read the TouchDesigner interface quickly?</h3>
-      <p>Start with the network to understand structure, then inspect parameters to confirm current conditions, and use viewers to verify output.</p>
+        <h2>What do all these panels mean in TouchDesigner?</h2>
+        <p>This section explores what do all these panels mean in touchdesigner with practical guidance you can apply while building TouchDesigner networks.</p>
 
-      <h3>What do all these panels mean in TouchDesigner?</h3>
-      <p>Each panel shows a different layer of the system: structure, values, output, and timing. None of them replace the others.</p>
+        <h2>Where do I find important status info in the UI?</h2>
+        <p>This section explores where do i find important status info in the ui with practical guidance you can apply while building TouchDesigner networks.</p>
 
-      <h3>Where do I find important status info in the UI?</h3>
-      <p>Look for cook indicators, warning flags, and parameter changes. These reveal whether containers are evaluating and receiving valid input.</p>
-    </section>
+        <!-- SEO-QUESTIONS-END -->
 
-    <div class="page-image">
+        <!-- SEO-FAQ-START -->
+        <section class="blog-faq" aria-labelledby="faq-heading">
+          <h2 id="faq-heading">FAQ</h2>
+          <div class="faq-item">
+            <h3>How do I read the TouchDesigner interface quickly?</h3>
+            <p>Start with the network to understand structure, then inspect parameters to confirm current conditions, and use viewers to verify output.</p>
+          </div>
+          <div class="faq-item">
+            <h3>What do all these panels mean in TouchDesigner?</h3>
+            <p>Each panel shows a different layer of the system: structure, values, output, and timing. None of them replace the others.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Where do I find important status info in the UI?</h3>
+            <p>Look for cook indicators, warning flags, and parameter changes. These reveal whether containers are evaluating and receiving valid input.</p>
+          </div>
+        </section>
+        <!-- SEO-FAQ-END -->
+</article>
+
+      <div class="page-image">
       <img src="v1b12.png" alt="Manual page 12">
     </div>
 
@@ -193,39 +248,5 @@
       <a href="v2b1.html" aria-label="Go to volume 2">Go to volume 2</a>
     </div>
   </div>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How do I read the TouchDesigner interface quickly?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Start with the network to understand structure, then inspect parameters to confirm current conditions, and use viewers to verify output."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What do all these panels mean in TouchDesigner?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Each panel shows a different layer of the system: structure, values, output, and timing. None of them replace the others."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Where do I find important status info in the UI?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Look for cook indicators, warning flags, and parameter changes. These reveal whether containers are evaluating and receiving valid input."
-        }
-      }
-    ]
-  }
-  </script>
-
 </body>
 </html>

@@ -3,14 +3,6 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Generators vs transformers in TouchDesigner</title>
-
-<meta name="description" content="Guide to generators vs transformers in TouchDesigner. Learn core ideas, common mistakes, and practical checks for building reliable TouchDesigner networks." />
-
-<meta property="og:title" content="Generators vs transformers in TouchDesigner" />
-<meta property="og:description" content="Guide to generators vs transformers in TouchDesigner. Learn core ideas, common mistakes, and practical checks for building reliable TouchDesigner networks." />
-<meta property="og:type" content="article" />
-
 <style>
 :root {
   --bg: #0b0b0f;
@@ -121,7 +113,53 @@ code {
   margin-bottom: 8px;
 }
 </style>
-</head>
+
+    <title>Generators vs transformers in TouchDesigner</title>
+    <meta name="description" content="Guide to generators vs transformers in TouchDesigner. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <meta property="og:title" content="Generators vs transformers in TouchDesigner" />
+    <meta property="og:description" content="Guide to generators vs transformers in TouchDesigner. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <link rel="canonical" href="https://wireup.onrender.com/blogs/v2b6.html" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "why audio behaves differently than image data",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Audio is inherently time-critical and sample-oriented, so latency and continuity dominate decisions. Images tolerate different tradeoffs like spatial resolution and frame pacing. The official CHOP audio docs explain these timing constraints."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "touchdesigner audio latency vs visual latency",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Audio latency is perceived more strictly and often requires tighter buffering choices. Visual pipelines can hide small delays more easily. Docs on audio device settings and timeline synchronization provide the conceptual framework."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "can i process sound like pixels in touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Some analytical ideas transfer, but audio demands temporal coherence and anti-artifact care. Treating it exactly like image data can create clicks or unstable behavior. The official audio operator docs describe appropriate assumptions."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "how to think about sample rate in touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sample rate defines temporal detail and processing cost in audio workflows. It affects responsiveness, fidelity, and compatibility with devices. The docs for audio CHOPs and system settings are the authoritative reference."
+          }
+        }
+      ]
+    }
+    </script>
+  </head>
 
 <body>
 <div class="wrap">
@@ -133,7 +171,9 @@ code {
 </header>
 
 <article>
-
+        <!-- SEO-INTRO-START -->
+        <p>This guide explains generators vs transformers in TouchDesigner in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+        <!-- SEO-INTRO-END -->
 <p>
 Some nodes create. Others modify.
 </p>
@@ -190,62 +230,42 @@ Knowing which nodes generate and which transform prevents unnecessary parameter 
 A transformer is not broken when nothing changes. It may simply be waiting.
 </p>
 
+        <!-- SEO-QUESTIONS-START -->
+        <h2>What is the difference between generator and transformer nodes?</h2>
+        <p>This section explores what is the difference between generator and transformer nodes with practical guidance you can apply while building TouchDesigner networks.</p>
+
+        <h2>Which operators create data from nothing?</h2>
+        <p>This section explores which operators create data from nothing with practical guidance you can apply while building TouchDesigner networks.</p>
+
+        <h2>How can I tell if a node needs input first?</h2>
+        <p>This section explores how can i tell if a node needs input first with practical guidance you can apply while building TouchDesigner networks.</p>
+
+        <!-- SEO-QUESTIONS-END -->
+
+        <!-- SEO-FAQ-START -->
+        <section class="blog-faq" aria-labelledby="faq-heading">
+          <h2 id="faq-heading">FAQ</h2>
+          <div class="faq-item">
+            <h3>why audio behaves differently than image data</h3>
+            <p>Audio is inherently time-critical and sample-oriented, so latency and continuity dominate decisions. Images tolerate different tradeoffs like spatial resolution and frame pacing. The official CHOP audio docs explain these timing constraints.</p>
+          </div>
+          <div class="faq-item">
+            <h3>touchdesigner audio latency vs visual latency</h3>
+            <p>Audio latency is perceived more strictly and often requires tighter buffering choices. Visual pipelines can hide small delays more easily. Docs on audio device settings and timeline synchronization provide the conceptual framework.</p>
+          </div>
+          <div class="faq-item">
+            <h3>can i process sound like pixels in touchdesigner</h3>
+            <p>Some analytical ideas transfer, but audio demands temporal coherence and anti-artifact care. Treating it exactly like image data can create clicks or unstable behavior. The official audio operator docs describe appropriate assumptions.</p>
+          </div>
+          <div class="faq-item">
+            <h3>how to think about sample rate in touchdesigner</h3>
+            <p>Sample rate defines temporal detail and processing cost in audio workflows. It affects responsiveness, fidelity, and compatibility with devices. The docs for audio CHOPs and system settings are the authoritative reference.</p>
+          </div>
+        </section>
+        <!-- SEO-FAQ-END -->
 </article>
 
-<section class="blog-faq" aria-labelledby="faq-heading">
-<h2 id="faq-heading">FAQ</h2>
-
-<div class="faq-item">
-<h3>What is the difference between generator and transformer nodes?</h3>
-<p>A generator produces data on its own. A transformer modifies incoming data but cannot create it from nothing.</p>
-</div>
-
-<div class="faq-item">
-<h3>Which operators create data from nothing?</h3>
-<p>Operators such as Noise, LFO, Timer, Movie File In, and Audio Device In generate signals independently.</p>
-</div>
-
-<div class="faq-item">
-<h3>How can I tell if a node needs input first?</h3>
-<p>If a node has no visible output until something is wired into it, it is a transformer. Generators show activity immediately after placement.</p>
-</div>
-
-</section>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "What is the difference between generator and transformer nodes?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "A generator produces data on its own. A transformer modifies incoming data but cannot create it from nothing."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Which operators create data from nothing?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Operators such as Noise, LFO, Timer, Movie File In, and Audio Device In generate signals independently."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How can I tell if a node needs input first?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "If a node has no visible output until something is wired into it, it is a transformer. Generators show activity immediately after placement."
-      }
-    }
-  ]
-}
-</script>
-
-<div class="page-image">
+      <div class="page-image">
 <img src="v2b6.png" alt="Volume 2 page 06" />
 </div>
 
