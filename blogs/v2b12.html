@@ -1,256 +1,285 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>Volume 2 · 12 — How the system talks back</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How to approach a new operator in TouchDesigner</title>
+
+<meta name="description" content="Learn how to approach a new operator in TouchDesigner with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks." />
+
+<meta property="og:title" content="How to approach a new operator in TouchDesigner" />
+<meta property="og:description" content="Learn how to approach a new operator in TouchDesigner with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks." />
+<meta property="og:type" content="article" />
+
+<style>
+:root {
+  --bg: #0b0b0f;
+  --fg: #f2f2f5;
+  --muted: #b9b9c6;
+  --line: rgba(242,242,245,0.14);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Garamond, "Times New Roman", serif;
+  font-size: 14pt;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 64px 20px 96px;
+}
+
+header { margin-bottom: 36px; }
+
+h1 {
+  font-size: clamp(40px, 5vw, 72px);
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+
+.num {
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+article { line-height: 1.7; }
+
+p { margin: 0 0 22px; }
+
+.page-image {
+  margin: 56px 0 28px;
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+
+.page-image img {
+  display: block;
+  width: min(100%, 640px);
+  height: auto;
+  margin: 0 auto;
+}
+
+.nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nav a {
+  color: var(--fg);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nav a:hover { border-color: var(--fg); }
+
+.blog-faq {
+  margin-top: 60px;
+  border-top: 1px solid var(--line);
+  padding-top: 40px;
+}
+
+.blog-faq h2 {
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+.blog-faq h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<header>
+  <div class="num">Volume 2 · 12</div>
+  <h1>How the system talks back</h1>
+  <p><strong>This guide explains how to approach a new operator in TouchDesigner in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</strong></p>
+</header>
+
+<article>
+
+<p>
+Opening a new operator can feel overwhelming.
+</p>
+
+<p>
+There are parameters, inputs, outputs, and viewers. The goal is not to understand everything immediately.
+</p>
+
+<p>
+Start by identifying its role.
+</p>
+
+<p>
+Ask three questions:
+</p>
+
+<ul>
+<li>Does it generate data?</li>
+<li>Does it transform data?</li>
+<li>Does it expose or route data?</li>
+</ul>
+
+<p>
+Open the viewer.
+</p>
+
+<p>
+See what it produces by default. Observe before connecting anything.
+</p>
+
+<p>
+Next, inspect the parameters.
+</p>
+
+<p>
+Change one value at a time.
+</p>
+
+<p>
+Watch how the output reacts.
+</p>
+
+<p>
+Avoid connecting it to a large network immediately.
+</p>
+
+<p>
+Test it in isolation.
+</p>
+
+<p>
+Create a minimal setup where only that operator and a basic source are involved.
+</p>
+
+<p>
+When testing unfamiliar nodes safely:
+</p>
+
+<ul>
+<li>Use simple inputs like Constant or Noise</li>
+<li>Avoid feedback loops at first</li>
+<li>Reduce ranges to small values</li>
+<li>Disconnect easily if instability appears</li>
+</ul>
+
+<p>
+Once behavior is predictable, integrate it into a larger chain.
+</p>
+
+<p>
+If something unexpected happens, trace upstream.
+</p>
+
+<p>
+Most confusion comes from misunderstanding input expectations.
+</p>
+
+<p>
+Learning operator behavior quickly comes from repetition in small controlled contexts.
+</p>
+
+<p>
+Operators are not mysterious.
+</p>
+
+<p>
+They perform one function consistently.
+</p>
+
+<p>
+Your job is to discover what conditions they expect and what form their output takes.
+</p>
+
+<p>
+Approach each one as a tool with a narrow responsibility.
+</p>
+
+<p>
+Once you recognize its role, integration becomes straightforward.
+</p>
+
+</article>
+
+<section class="blog-faq" aria-labelledby="faq-heading">
+<h2 id="faq-heading">FAQ</h2>
+
+<div class="faq-item">
+<h3>What should I do first when I open a new operator?</h3>
+<p>Open the viewer, observe default behavior, and adjust one parameter at a time to see how the output changes.</p>
+</div>
+
+<div class="faq-item">
+<h3>How can I test an unfamiliar node safely?</h3>
+<p>Use simple inputs, avoid feedback loops, reduce parameter ranges, and experiment in a small isolated network.</p>
+</div>
+
+<div class="faq-item">
+<h3>How do I learn operator behavior quickly?</h3>
+<p>Test operators in minimal setups, change one variable at a time, and observe how input type affects output type.</p>
+</div>
+
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What should I do first when I open a new operator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Open the viewer, observe default behavior, and adjust one parameter at a time to see how the output changes."
       }
-
-      :root {
-        --bg: #0b0b0f;
-        --fg: #f2f2f5;
-        --muted: #b9b9c6;
-        --line: rgba(242, 242, 245, 0.14);
+    },
+    {
+      "@type": "Question",
+      "name": "How can I test an unfamiliar node safely?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use simple inputs, avoid feedback loops, reduce parameter ranges, and experiment in a small isolated network."
       }
-
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
-
-      body {
-        margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
-        background: var(--bg);
-        color: var(--fg);
+    },
+    {
+      "@type": "Question",
+      "name": "How do I learn operator behavior quickly?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Test operators in minimal setups, change one variable at a time, and observe how input type affects output type."
       }
+    }
+  ]
+}
+</script>
 
-      .wrap {
-        max-width: 860px;
-        margin: 0 auto;
-        padding: 64px 20px 96px;
-      }
+<div class="page-image">
+<img src="v2b12.png" alt="Volume 2 page 12" />
+</div>
 
-      header { margin-bottom: 36px; }
+<div class="nav">
+<a href="../index.html" aria-label="Back to index">Index</a>
+</div>
 
-      h1 {
-        font-size: clamp(40px, 5vw, 72px);
-        letter-spacing: -0.02em;
-
-      .page-image {
-        margin: 56px 0 28px;
-        border-top: 1px solid var(--line);
-        padding-top: 28px;
-      }
-
-      .page-image img {
-        display: block;
-        width: min(100%, 640px);
-        height: auto;
-        margin: 0 auto;
-      }
-
-      .nav {
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      .nav a {
-        color: var(--fg);
-        text-decoration: none;
-        border: 1px solid var(--line);
-        padding: 10px 16px;
-        border-radius: 999px;
-        font-size: 14px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-
-      .nav a:hover {
-        border-color: var(--fg);
-      }
-        margin: 0 0 10px;
-      }
-
-      .num {
-        color: var(--muted);
-        font-size: 14px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      article { font-size: 45px; line-height: 1.7; }
-
-      p { margin: 0 0 22px; }
-
-      .do {
-        border-left: 3px solid var(--line);
-        padding-left: 18px;
-        margin: 28px 0;
-      }
-
-      ul { margin: 10px 0 0 20px; }
-      li { margin-bottom: 6px; }
-
-      code {
-        background: rgba(255,255,255,0.05);
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 0.9em;
-      }
-
-      .note { color: var(--muted); margin-top: 6px; }
-    </style>
-  </head>
-
-  <body>
-    <div class="wrap">
-      <header>
-        <div class="num">Volume 2 · 12</div>
-        <h1>How the system talks back</h1>
-      </header>
-
-      <article>
-        <p>
-          Until now, everything has stayed inside.
-        </p>
-
-        <p>
-          Images appeared in viewers. Numbers moved through wires. Sound pushed on visuals.
-          Control came from hands on sliders and keys. All of it lived inside the same room.
-        </p>
-
-        <p>
-          Systems rarely stay contained.
-        </p>
-
-        <p>
-          Eventually something needs to leave. A signal gets recorded. A value gets sent.
-          A decision gets exposed to another machine.
-        </p>
-
-        <div class="do">
-          <p>
-            Start from a network where something meaningful is already happening.
-          </p>
-          <p>
-            Pick one signal you care about.
-          </p>
-        </div>
-
-        <p>
-          Output does not mean display.
-          It means declaration.
-        </p>
-
-        <div class="do">
-          <p>
-            Move your mouse to an empty area to the right of your network.
-          </p>
-          <p>
-            Press <code>Tab</code>.
-          </p>
-          <p>
-            Type one of the following and place it there:
-          </p>
-          <ul>
-            <li><code>Out</code> (TOP, CHOP, or SOP)</li>
-            <li><code>Record</code></li>
-            <li><code>OSC Out</code></li>
-            <li><code>MIDI Out</code></li>
-          </ul>
-          <p class="note">
-            Pick one that matches the kind of signal you want to send.
-          </p>
-        </div>
-
-        <p>
-          These nodes do not change the system.
-          They expose it.
-        </p>
-
-        <div class="do">
-          <p>
-            Wire the signal you chose into the output node.
-          </p>
-        </div>
-
-        <p>
-          Something subtle happens here.
-        </p>
-
-        <p>
-          The network does not behave differently,
-          but its role changes.
-        </p>
-
-        <p>
-          It is no longer just reacting.
-          It is announcing.
-        </p>
-
-        <div class="do">
-          <p>
-            If you chose a recorder, let it run for a moment.
-          </p>
-          <p>
-            If you chose a network output, watch the activity indicators.
-          </p>
-        </div>
-
-        <p>
-          The system is now accountable.
-        </p>
-
-        <p>
-          Output nodes enforce consistency.
-          They demand valid ranges, stable formats, and regular timing.
-        </p>
-
-        <p>
-          Anything sloppy upstream becomes obvious once it has to leave the room.
-        </p>
-
-        <p>
-          This is why output is never an afterthought.
-        </p>
-
-        <p>
-          Sending something outward forces the system to explain itself
-          in a way viewers never require.
-        </p>
-
-        <p>
-          Many networks become simpler at this stage.
-          Not because features are removed,
-          but because only the parts that survive exposure matter.
-        </p>
-
-        <p>
-          The system is no longer just running.
-          It is communicating.
-        </p>
-
-        <p>
-          What it says is exactly what you wired it to say.
-        </p>
-      </article>
-
-      <div class="page-image">
-        <img src="v2b12.png" alt="Volume 2 page 12" />
-      </div>
-
-      <div class="nav">
-        <a href="../index.html" aria-label="Back to index">Index</a>
-        <a href="v2b13.html" aria-label="Go to page 13">Next page</a>
-      </div>
-    </div>
-  </body>
+</div>
+</body>
 </html>
-
