@@ -3,17 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>05 — The system does not care about order</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
-      }
+    <meta name="description" content="Guide to TouchDesigner cooking explained simply. Learn core ideas, common mistakes, and simple checks for building more reliable TouchDesigner networks.">
+    <title>TouchDesigner cooking explained simply</title>
 
+    <style>
       :root {
         --bg: #0b0b0f;
         --fg: #f2f2f5;
@@ -21,12 +14,14 @@
         --line: rgba(242, 242, 245, 0.14);
       }
 
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
+      * {
+        box-sizing: border-box;
+        font-family: Garamond, "Times New Roman", serif;
+        font-size: 14pt;
+      }
 
       body {
         margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
         background: var(--bg);
         color: var(--fg);
       }
@@ -55,28 +50,48 @@
       }
 
       article {
-        font-size: 45px;
         line-height: 1.7;
       }
 
       p {
         margin: 0 0 22px;
       }
+
+      .blog-faq {
+        margin-top: 60px;
+        border-top: 1px solid var(--line);
+        padding-top: 40px;
+      }
+
+      .blog-faq h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+
+      .blog-faq h3 {
+        font-size: 20px;
+        margin: 20px 0 8px;
+      }
+
       .page-image {
         margin: 56px 0 28px;
         border-top: 1px solid var(--line);
         padding-top: 28px;
       }
+
       .page-image img {
         display: block;
         width: min(100%, 640px);
         height: auto;
         margin: 0 auto;
       }
+
       .nav {
         display: flex;
         justify-content: flex-end;
+        gap: 12px;
       }
+
       .nav a {
         color: var(--fg);
         text-decoration: none;
@@ -87,6 +102,7 @@
         letter-spacing: 0.06em;
         text-transform: uppercase;
       }
+
       .nav a:hover {
         border-color: var(--fg);
       }
@@ -98,64 +114,90 @@
       <header>
         <div class="num">05</div>
         <h1>The system does not care about order</h1>
+        <p>This guide explains TouchDesigner cooking explained simply in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
       </header>
 
       <article>
-        <p>
-          The instinct to look for order shows up fast.
-        </p>
+        <p>The instinct to look for order shows up fast.</p>
 
-        <p>
-          Top left to bottom right. First this, then that. A sequence you can read like a sentence and trust like instructions. Most software rewards that instinct. It behaves as though it is listening to you narrate your intentions one step at a time.
-        </p>
+        <p>Top left to bottom right. First this, then that. A sequence you can read like a sentence and trust like instructions. Most software rewards that instinct. It behaves as though it is listening to you narrate your intentions one step at a time.</p>
 
-        <p>
-          This environment ignores that narration.
-        </p>
+        <p>This environment ignores that narration.</p>
 
-        <p>
-          Connections do not imply sequence. A wire does not mean “next.” It means “in relation to.” When multiple paths exist, they do not queue politely. They are evaluated as conditions that exist at the same time.
-        </p>
+        <p>Connections do not imply sequence. A wire does not mean “next.” It means “in relation to.” When multiple paths exist, they are evaluated as conditions that exist at the same time.</p>
 
-        <p>
-          This is why rearranging nodes visually does nothing. You can stack them, align them, draw a pleasing path for your own sense of progress. The system does not read diagrams. It responds to dependencies.
-        </p>
+        <p>This is why rearranging nodes visually does nothing. You can stack them, align them, draw a pleasing path for your own sense of progress. The system does not read diagrams. It responds to dependencies.</p>
 
-        <p>
-          People ask which node runs first. That question assumes a single timeline with a beginning. What exists instead is a web of checks. Each container looks upstream and asks whether its inputs are valid right now. If they are, it proceeds. If not, it waits without resentment.
-        </p>
+        <p>People ask which node runs first. That question assumes a single timeline with a beginning. What exists instead is a web of checks. Each container looks upstream and asks whether its inputs are valid right now. If they are, it proceeds. If not, it waits.</p>
 
-        <p>
-          Multiple things can be true at once. A signal can be steady in one branch and volatile in another. A value can be transformed, delayed, duplicated, and combined without choosing a favorite path. Nothing steps aside so something else can have a turn.
-        </p>
+        <p>Multiple things can be true at once. A signal can be steady in one branch and volatile in another. A value can be transformed, delayed, duplicated, and combined without choosing a favorite path.</p>
 
-        <p>
+        <p>This breaks the mental model of progress as a march forward. There is no arrow of advancement through the network. There are only relationships being maintained from moment to moment.</p>
+
+        <p>Loops stop feeling dangerous once order loses its grip. Feedback does not mean contradiction. It means influence traveling in a circle. The system expects influence to come back around.</p>
+
+        <p>Attempts to force order often show up as control nodes sprinkled everywhere, trying to dictate timing through authority rather than dependency. The result feels brittle because the structure does not match how evaluation works.</p>
+
+        <p>When order is replaced with dependency, networks become readable in a different way. You stop asking what comes next and start asking what relies on what.</p>
+
+        <p>The system behaves like a set of conditions that must all be satisfied at once, over and over, as long as time keeps moving.</p>
+      </article>
+
+      <section class="blog-faq" aria-labelledby="faq-heading">
+        <h2 id="faq-heading">FAQ</h2>
+
+        <h3>What does cooking mean in TouchDesigner?</h3>
+        <p>Cooking refers to an operator evaluating its inputs and producing an updated output. It happens when dependencies change or when a frame advances.</p>
+
+        <h3>Why is my node not updating every frame?</h3>
+        <p>If nothing upstream changes, the operator may not need to cook again. Check time dependencies and input changes to confirm.</p>
+
+        <h3>How can I force an operator to cook?</h3>
+        <p>You can trigger a cook by changing a parameter, modifying an input, or using components that depend on frame updates.</p>
+      </section>
+
       <div class="page-image">
         <img src="v1b5.png" alt="Manual page 05" />
       </div>
+
       <div class="nav">
         <a href="../index.html" aria-label="Back to index">Index</a>
         <a href="v1b6.html" aria-label="Go to page 06">Next page</a>
       </div>
-          This breaks the mental model of progress as a march forward. There is no arrow of advancement through the network. There are only relationships being maintained from moment to moment.
-        </p>
-
-        <p>
-          Loops stop feeling dangerous once order loses its grip. Feedback does not mean contradiction. It means influence traveling in a circle. The system does not panic when it encounters this. It expects influence to come back around.
-        </p>
-
-        <p>
-          Attempts to force order often show up as control nodes sprinkled everywhere, trying to dictate timing through authority rather than dependency. The result feels brittle. Small changes ripple farther than expected because the structure does not match how evaluation works.
-        </p>
-
-        <p>
-          When order is replaced with dependency, networks become readable in a different way. You stop asking what comes next and start asking what relies on what. The shape of the problem becomes visible through connection rather than sequence.
-        </p>
-
-        <p>
-          The system never promised to behave like a list of steps. It behaves like a set of conditions that must all be satisfied at once, over and over, as long as time keeps moving.
-        </p>
-      </article>
     </div>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What does cooking mean in TouchDesigner?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cooking refers to an operator evaluating its inputs and producing an updated output. It happens when dependencies change or when a frame advances."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is my node not updating every frame?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If nothing upstream changes, the operator may not need to cook again. Check time dependencies and input changes to confirm."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I force an operator to cook?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can trigger a cook by changing a parameter, modifying an input, or using components that depend on frame updates."
+          }
+        }
+      ]
+    }
+    </script>
+
   </body>
 </html>
