@@ -1,170 +1,200 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>10 — What the interface is showing you</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
-      }
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Guide to TouchDesigner network as interface explained. Learn core ideas, common mistakes, and simple checks for building more reliable TouchDesigner networks.">
+  <title>TouchDesigner network as interface explained</title>
 
-      :root {
-        --bg: #0b0b0f;
-        --fg: #f2f2f5;
-        --muted: #b9b9c6;
-        --line: rgba(242, 242, 245, 0.14);
-      }
+  <style>
+    :root {
+      --bg: #0b0b0f;
+      --fg: #f2f2f5;
+      --muted: #b9b9c6;
+      --line: rgba(242,242,245,0.14);
+    }
 
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
+    * {
+      box-sizing: border-box;
+      font-family: Garamond, "Times New Roman", serif;
+      font-size: 14pt;
+    }
 
-      body {
-        margin: 0;
-      
-      .page-image {
-        margin: 56px 0 28px;
-        border-top: 1px solid var(--line);
-        padding-top: 28px;
-      }
-      
-      .page-image img {
-        display: block;
-        width: min(100%, 640px);
-        height: auto;
-        margin: 0 auto;
-      }
-      
-      .nav {
-        display: flex;
-        justify-content: flex-end;
-      }
-      
-      .nav a {
-        color: var(--fg);
-        text-decoration: none;
-        border: 1px solid var(--line);
-        padding: 10px 16px;
-        border-radius: 999px;
-        font-size: 14px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-      
-      .nav a:hover {
-        border-color: var(--fg);
-      }
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        background: var(--bg);
-        color: var(--fg);
-      }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+    }
 
-      .wrap {
-        max-width: 820px;
-        margin: 0 auto;
-        padding: 64px 20px 96px;
-      }
+    .wrap {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 64px 20px 96px;
+    }
 
-      header {
-        margin-bottom: 36px;
-      }
+    header {
+      margin-bottom: 36px;
+    }
 
-      h1 {
-        font-size: clamp(40px, 5vw, 72px);
-        letter-spacing: -0.02em;
-        margin: 0 0 10px;
-      }
+    h1 {
+      font-size: clamp(40px, 5vw, 72px);
+      letter-spacing: -0.02em;
+      margin: 0 0 10px;
+    }
 
-      .num {
-        color: var(--muted);
-        font-size: 14px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
+    .num {
+      color: var(--muted);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
 
-      article {
-        font-size: 45px;
-        line-height: 1.7;
-      }
+    article {
+      line-height: 1.7;
+    }
 
-      p {
-        margin: 0 0 22px;
-      }
-    </style>
-  </head>
+    p {
+      margin: 0 0 22px;
+    }
 
-  <body>
-    <div class="wrap">
-      <header>
-        <div class="num">10</div>
-        <h1>What the interface is showing you</h1>
-      </header>
+    .blog-faq {
+      margin-top: 60px;
+      border-top: 1px solid var(--line);
+      padding-top: 40px;
+    }
 
-      <article>
-        <p>
-          The interface is not trying to be friendly.
-        </p>
+    .blog-faq h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
 
-      <div class="page-image">
-        <img src="v1b10.png" alt="Manual page 10" />
-      </div>
-      
-      <div class="nav">
-        <a href="../index.html" aria-label="Back to index">Index</a>
-        <a href="v1b11.html" aria-label="Go to page 11">Next page</a>
-      </div>
-        <p>
-          It is trying to be truthful.
-        </p>
+    .blog-faq h3 {
+      font-size: 20px;
+      margin: 20px 0 8px;
+    }
 
-        <p>
-          Most software hides complexity behind a single surface. One window. One canvas. One place where things happen. Anything else is tucked away so you can feel oriented. That choice is comforting, but it comes with a cost: you only see the part of the system someone decided you should see.
-        </p>
+    .page-image {
+      margin: 56px 0 28px;
+      border-top: 1px solid var(--line);
+      padding-top: 28px;
+    }
 
-        <p>
-          This interface refuses that arrangement.
-        </p>
+    .page-image img {
+      display: block;
+      width: min(100%, 640px);
+      height: auto;
+      margin: 0 auto;
+    }
 
-        <p>
-          Multiple panes exist because multiple things are happening at once. Network view shows relationships. Parameter panes show conditions. Viewers show symptoms. Timelines show persistence. None of these replace the others, because none of them tell the whole story on their own.
-        </p>
+    .nav {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
 
-        <p>
-          Viewers cause the most confusion. They look authoritative. Bright. Immediate. Convincing. What they display is not truth; it is output at a particular moment under particular conditions. Treating them as ground truth leads to bad decisions fast.
-        </p>
+    .nav a {
+      color: var(--fg);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
 
-        <p>
-          Parameters feel overwhelming for the opposite reason. They expose everything. No opinionated defaults. No gentle slope from beginner to expert. Every lever that exists is visible, because the system does not know which ones matter to you.
-        </p>
+    .nav a:hover {
+      border-color: var(--fg);
+    }
+  </style>
+</head>
 
-        <p>
-          The network editor is not a workspace in the usual sense. It is a map of obligation. Each wire represents something that must be honored continuously. Each container represents a role that never stops performing.
-        </p>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="num">10</div>
+      <h1>What the interface is showing you</h1>
+      <p>This guide explains TouchDesigner network as interface explained in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+    </header>
 
-        <p>
-          This is why rearranging panes does not simplify the system. It only changes which part you are listening to more closely. Complexity does not disappear when you hide it. It continues operating off-screen.
-        </p>
+    <article>
+      <p>The interface is not trying to be friendly.</p>
+      <p>It is trying to be truthful.</p>
 
-        <p>
-          People often ask where to look when something feels wrong. The answer depends on what kind of wrong it is. Structural problems show up in the network. Behavioral problems show up in parameters. Perceptual problems show up in viewers. Time-related problems show up everywhere at once.
-        </p>
+      <p>Most software hides complexity behind a single surface. One window. One canvas. One place where things happen. That approach feels comfortable, but it limits what you see.</p>
 
-        <p>
-          The interface does not prioritize any of these perspectives because the system itself does not. It expects you to move between them, correlating behavior rather than trusting a single surface.
-        </p>
+      <p>This interface refuses that arrangement.</p>
 
-        <p>
-          Once this is accepted, the interface stops feeling busy and starts feeling honest. It is not presenting a simplified story. It is presenting multiple partial truths and letting you decide which one matters at the moment.
-        </p>
+      <p>Network view shows relationships. Parameter panes show conditions. Viewers show symptoms. Timelines show persistence. None replace the others.</p>
 
-        <p>
-          Nothing here is ornamental. Every pane exists because the system needs a place to reveal something it cannot compress into one view.
-        </p>
-      </article>
+      <p>Viewers look authoritative, but they only show output at a particular moment under particular conditions.</p>
+
+      <p>Parameters expose everything because the system does not know which controls matter to you.</p>
+
+      <p>The network editor is a map of obligation. Each wire represents something that must be honored continuously.</p>
+
+      <p>Rearranging panes does not reduce complexity. It only shifts attention.</p>
+
+      <p>Structural issues show up in the network. Behavioral issues show up in parameters. Perceptual issues show up in viewers. Timing issues can appear across all of them.</p>
+
+      <p>The interface presents multiple partial truths. You correlate them.</p>
+    </article>
+
+    <section class="blog-faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">FAQ</h2>
+
+      <h3>Why does network layout matter in TouchDesigner?</h3>
+      <p>Layout affects readability and debugging. Clear organization makes dependencies easier to trace.</p>
+
+      <h3>How should I organize nodes as a beginner?</h3>
+      <p>Group related operators, maintain directional flow, and keep signal types separated to reduce confusion.</p>
+
+      <h3>Is the node graph the actual interface in TouchDesigner?</h3>
+      <p>Yes. The network graph represents the real program structure. What you wire together defines system behavior.</p>
+    </section>
+
+    <div class="page-image">
+      <img src="v1b10.png" alt="Manual page 10">
     </div>
-  </body>
+
+    <div class="nav">
+      <a href="../index.html" aria-label="Back to index">Index</a>
+      <a href="v1b11.html" aria-label="Go to page 11">Next page</a>
+    </div>
+  </div>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Why does network layout matter in TouchDesigner?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Layout affects readability and debugging. Clear organization makes dependencies easier to trace."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How should I organize nodes as a beginner?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Group related operators, maintain directional flow, and keep signal types separated to reduce confusion."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is the node graph the actual interface in TouchDesigner?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The network graph represents the real program structure. What you wire together defines system behavior."
+        }
+      }
+    ]
+  }
+  </script>
+
+</body>
 </html>
