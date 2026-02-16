@@ -3,17 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>09 — The network is the program</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
-      }
+    <meta name="description" content="Guide to data vs image vs geometry in TouchDesigner. Learn core ideas, common mistakes, and simple checks for building more reliable TouchDesigner networks.">
+    <title>Data vs image vs geometry in TouchDesigner</title>
 
+    <style>
       :root {
         --bg: #0b0b0f;
         --fg: #f2f2f5;
@@ -21,12 +14,14 @@
         --line: rgba(242, 242, 245, 0.14);
       }
 
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
+      * {
+        box-sizing: border-box;
+        font-family: Garamond, "Times New Roman", serif;
+        font-size: 14pt;
+      }
 
       body {
         margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
         background: var(--bg);
         color: var(--fg);
       }
@@ -55,12 +50,27 @@
       }
 
       article {
-        font-size: 45px;
         line-height: 1.7;
       }
 
       p {
         margin: 0 0 22px;
+      }
+
+      .blog-faq {
+        margin-top: 60px;
+        border-top: 1px solid var(--line);
+        padding-top: 40px;
+      }
+
+      .blog-faq h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+
+      .blog-faq h3 {
+        font-size: 20px;
+        margin: 20px 0 8px;
       }
 
       .page-image {
@@ -79,6 +89,7 @@
       .nav {
         display: flex;
         justify-content: flex-end;
+        gap: 12px;
       }
 
       .nav a {
@@ -103,57 +114,45 @@
       <header>
         <div class="num">09</div>
         <h1>The network is the program</h1>
+        <p>This guide explains data vs image vs geometry in TouchDesigner in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
       </header>
 
       <article>
-        <p>
-          There is no hidden script running behind the scenes.
-        </p>
+        <p>There is no hidden script behind the scenes.</p>
 
-        <p>
-          No main function waiting to be revealed. No secret order of operations that will make everything make sense once you discover it. What you see wired together is not a representation of the program. It is the program.
-        </p>
+        <p>What you see wired together is not a representation of the program. It is the program.</p>
 
-        <p>
-          This catches people off guard because they are used to separation. Code over here. Interface over there. Logic somewhere beneath the surface. Here, structure and behavior live in the same place.
-        </p>
+        <p>Structure and behavior live in the same place.</p>
 
-        <p>
-          Each connection is not a step. It is a relationship that must be honored continuously. Remove it and the behavior changes immediately. Add one and the system reorganizes itself around that new obligation.
-        </p>
+        <p>Each connection is a relationship that must be honored continuously. Remove it and behavior changes immediately.</p>
 
-        <p>
-          This is why copying networks works better than explaining them. The explanation strips away structure. The copy preserves it. Meaning travels through shape more reliably than through description.
-        </p>
+        <p>Behavior emerges from arrangement, not from a single important node.</p>
 
-        <p>
-          People sometimes look for the part that does the work. The important node. The clever trick. That search misses the point. No single container carries authority. Behavior emerges from arrangement.
-        </p>
+        <p>Small structural changes can have larger effects than dramatic parameter tweaks.</p>
 
-        <p>
-          A small change in layout can have a larger effect than a dramatic change in parameters. That is not magic. It is dependency shifting. You changed who relies on whom, and the system responded.
-        </p>
+        <p>Refactoring feels physical because responsibilities shift while everything keeps running.</p>
 
-        <p>
-          This also explains why refactoring feels physical. You are not rewriting instructions. You are moving responsibilities around while everything keeps running. The system adapts in real time to the new shape you give it.
-        </p>
+        <p>The network is not documentation describing something else. It exists to be evaluated.</p>
 
-        <p>
-          Treating the network as documentation misses the mark. Documentation describes something else. The network does not point outward. It is self-contained. It exists to be evaluated, not read.
-        </p>
+        <p>Problems usually live in how influence travels across the structure, not inside one parameter.</p>
 
-        <p>
-          When problems appear, they rarely live in one node. They live in the way influence travels across the whole structure. Fixing them means changing paths, not hunting for a guilty parameter.
-        </p>
+        <p>Effort shifts from searching for the right setting to arranging flow correctly.</p>
 
-        <p>
-          This perspective changes how effort is spent. Less time is wasted searching for the right setting. More time goes into arranging flow so the system behaves the way it should under pressure.
-        </p>
-
-        <p>
-          The program is not hidden behind the network. It is spelled out in wires, dependencies, and persistence, repeating itself every frame without commentary.
-        </p>
+        <p>The program is spelled out in wires, dependencies, and repetition across frames.</p>
       </article>
+
+      <section class="blog-faq" aria-labelledby="faq-heading">
+        <h2 id="faq-heading">FAQ</h2>
+
+        <h3>What is the difference between data and image in TouchDesigner?</h3>
+        <p>Data refers to numeric or structured information (CHOPs and DATs). Images are pixel-based data processed in TOPs.</p>
+
+        <h3>Can I turn CHOP channels into geometry?</h3>
+        <p>Yes. CHOP data can drive SOP parameters or be converted into geometry using conversion operators.</p>
+
+        <h3>How do I convert a TOP to CHOP values?</h3>
+        <p>You can use a TOP to CHOP operator to extract pixel values into channels for further processing.</p>
+      </section>
 
       <div class="page-image">
         <img src="v1b9.png" alt="Manual page 09" />
@@ -164,5 +163,39 @@
         <a href="v1b10.html" aria-label="Go to page 10">Next page</a>
       </div>
     </div>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the difference between data and image in TouchDesigner?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Data refers to numeric or structured information (CHOPs and DATs). Images are pixel-based data processed in TOPs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I turn CHOP channels into geometry?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. CHOP data can drive SOP parameters or be converted into geometry using conversion operators."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I convert a TOP to CHOP values?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can use a TOP to CHOP operator to extract pixel values into channels for further processing."
+          }
+        }
+      ]
+    }
+    </script>
+
   </body>
 </html>
