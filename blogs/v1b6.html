@@ -3,17 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>06 — Time is present even when nothing changes</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
-      }
+    <meta name="description" content="Guide to TouchDesigner viewer vs output difference. Learn core ideas, common mistakes, and simple checks for building more reliable TouchDesigner networks.">
+    <title>TouchDesigner viewer vs output difference</title>
 
+    <style>
       :root {
         --bg: #0b0b0f;
         --fg: #f2f2f5;
@@ -21,12 +14,14 @@
         --line: rgba(242, 242, 245, 0.14);
       }
 
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
+      * {
+        box-sizing: border-box;
+        font-family: Garamond, "Times New Roman", serif;
+        font-size: 14pt;
+      }
 
       body {
         margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
         background: var(--bg);
         color: var(--fg);
       }
@@ -55,12 +50,27 @@
       }
 
       article {
-        font-size: 45px;
         line-height: 1.7;
       }
 
       p {
         margin: 0 0 22px;
+      }
+
+      .blog-faq {
+        margin-top: 60px;
+        border-top: 1px solid var(--line);
+        padding-top: 40px;
+      }
+
+      .blog-faq h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+
+      .blog-faq h3 {
+        font-size: 20px;
+        margin: 20px 0 8px;
       }
 
       .page-image {
@@ -79,6 +89,7 @@
       .nav {
         display: flex;
         justify-content: flex-end;
+        gap: 12px;
       }
 
       .nav a {
@@ -103,53 +114,45 @@
       <header>
         <div class="num">06</div>
         <h1>Time is present even when nothing changes</h1>
+        <p>This guide explains TouchDesigner viewer vs output difference in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
       </header>
 
       <article>
-        <p>
-          Time does not announce itself here.
-        </p>
+        <p>Time does not announce itself here.</p>
 
-        <p>
-          There is no switch for it, no permission slip, no moment where you decide to involve it. The system advances whether you acknowledge it or not. Frames pass. Evaluation repeats. The clock does not wait for agreement.
-        </p>
+        <p>There is no switch for it, no permission slip, no moment where you decide to involve it. The system advances whether you acknowledge it or not. Frames pass. Evaluation repeats.</p>
 
-        <p>
-          A value that stays the same is still being checked. A signal that looks flat is still being reaffirmed. The absence of visible motion does not mean absence of activity. It means the same decision keeps being made.
-        </p>
+        <p>A value that stays the same is still being checked. A signal that looks flat is still being reaffirmed. The absence of visible motion does not mean absence of activity.</p>
 
-        <p>
-          This breaks a familiar assumption. In many tools, time shows up only when you ask for animation or playback. Here, time is part of the ground rules. It applies to everything equally, including things that appear static.
-        </p>
+        <p>In many tools, time shows up only when you ask for animation. Here, time is part of the ground rules. It applies to everything equally, including things that appear static.</p>
 
-        <p>
-          That is why a single number can feel heavier than expected. It is not a choice you made once. It is a condition enforced again and again. Every frame agrees to it unless something upstream forces a disagreement.
-        </p>
+        <p>A number is not a choice you made once. It is a condition enforced again and again. Every frame agrees to it unless something upstream forces a disagreement.</p>
 
-        <p>
-          This is also why pauses feel strange. Stopping change does not stop time. It only stops variation. The system continues to evaluate the same relationships over and over, confirming that nothing new has been introduced.
-        </p>
+        <p>Stopping change does not stop time. It only stops variation. The system continues to evaluate the same relationships repeatedly.</p>
 
-        <p>
-          People often look for the moment where time begins. They expect a playhead, a start marker, a beginning they can point to. What exists instead is a continuous present that keeps renewing itself.
-        </p>
+        <p>People look for where time begins. What exists instead is a continuous present that keeps renewing itself.</p>
 
-        <p>
-          Feedback behaves differently once this is understood. A loop is not a delay waiting to happen. It is influence returning with every frame. The system does not remember the previous cycle as history. It treats it as the current state being fed back into itself.
-        </p>
+        <p>A loop is not a delay waiting to happen. It is influence returning with every frame. The system treats each cycle as current state, not memory.</p>
 
-        <p>
-          This explains why timing problems rarely announce themselves as errors. They show up as drift, accumulation, or saturation. Effects appear late, early, or never, not because something broke, but because time kept doing its job while expectations lagged behind.
-        </p>
+        <p>Timing problems rarely show up as errors. They appear as drift, accumulation, or saturation because time keeps advancing.</p>
 
-        <p>
-          Control based on single moments struggles here. Toggles feel blunt. Triggers feel fragile. Conditions based on duration, accumulation, or change over time fit better, because they speak the same language as the system.
-        </p>
+        <p>Control based on single moments struggles here. Conditions based on duration or accumulation align better with how evaluation works.</p>
 
-        <p>
-          Time is not a feature layered on top of the work. It is the medium everything passes through, whether it moves or not.
-        </p>
+        <p>Time is not layered on top of the work. It is the medium everything passes through, whether it moves or not.</p>
       </article>
+
+      <section class="blog-faq" aria-labelledby="faq-heading">
+        <h2 id="faq-heading">FAQ</h2>
+
+        <h3>Why does my viewer look right but output is wrong?</h3>
+        <p>The viewer shows a local preview of a node. The final output depends on how that node is connected and routed to a window or render component.</p>
+
+        <h3>Is the node viewer the same as final render?</h3>
+        <p>No. A node viewer shows that operator’s result. Final render depends on camera, render TOPs, window settings, and perform mode configuration.</p>
+
+        <h3>How do I send TouchDesigner to a second screen?</h3>
+        <p>Use a Window COMP or Perform Mode and assign the output to a specific monitor. The viewer panel alone does not control display routing.</p>
+      </section>
 
       <div class="page-image">
         <img src="v1b6.png" alt="Manual page 06" />
@@ -160,5 +163,39 @@
         <a href="v1b7.html" aria-label="Go to page 07">Next page</a>
       </div>
     </div>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why does my viewer look right but output is wrong?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The viewer shows a local preview of a node. The final output depends on how that node is connected and routed to a window or render component."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the node viewer the same as final render?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. A node viewer shows that operator’s result. Final render depends on camera, render TOPs, window settings, and perform mode configuration."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I send TouchDesigner to a second screen?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use a Window COMP or Perform Mode and assign the output to a specific monitor. The viewer panel alone does not control display routing."
+          }
+        }
+      ]
+    }
+    </script>
+
   </body>
 </html>
