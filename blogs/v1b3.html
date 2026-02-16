@@ -2,18 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="Learn TouchDesigner signal flow explained for beginners with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks.", />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>03 — Nothing here is an object</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
-      }
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Learn TouchDesigner signal flow explained for beginners with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks.">
+    <title>TouchDesigner signal flow explained for beginners</title>
 
+    <style>
       :root {
         --bg: #0b0b0f;
         --fg: #f2f2f5;
@@ -21,12 +14,14 @@
         --line: rgba(242, 242, 245, 0.14);
       }
 
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
+      * {
+        box-sizing: border-box;
+        font-family: Garamond, "Times New Roman", serif;
+        font-size: 14pt;
+      }
 
       body {
         margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
         background: var(--bg);
         color: var(--fg);
       }
@@ -55,12 +50,27 @@
       }
 
       article {
-        font-size: 45px;
         line-height: 1.7;
       }
 
       p {
         margin: 0 0 22px;
+      }
+
+      .blog-faq {
+        margin-top: 60px;
+        border-top: 1px solid var(--line);
+        padding-top: 40px;
+      }
+
+      .blog-faq h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+
+      .blog-faq h3 {
+        font-size: 20px;
+        margin: 20px 0 8px;
       }
 
       .page-image {
@@ -79,6 +89,7 @@
       .nav {
         display: flex;
         justify-content: flex-end;
+        gap: 12px;
       }
 
       .nav a {
@@ -103,61 +114,48 @@
       <header>
         <div class="num">03</div>
         <h1>Nothing here is an object</h1>
+        <p>This guide explains TouchDesigner signal flow explained for beginners in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
       </header>
-"This guide explains TouchDesigner signal flow explained for beginners in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.",
+
       <article>
-        <p>
-          The habit you bring in with you is object-thinking.
-        </p>
+        <p>The habit you bring in with you is object-thinking.</p>
 
-        <p>
-          Files, layers, images, clips, shapes. Things that sit there until you pick them up. Things with edges, names, and a sense of completion. Most software trains you to believe that work is about arranging objects into a satisfying arrangement and then stepping back.
-        </p>
+        <p>Files, layers, images, clips, shapes. Things that sit there until you pick them up. Things with edges, names, and a sense of completion. Most software trains you to believe that work is about arranging objects into a satisfying arrangement and then stepping back.</p>
 
-        <p>
-          That habit causes immediate confusion here.
-        </p>
+        <p>That habit causes immediate confusion here.</p>
 
-        <p>
-          What looks like an object is not a thing you possess. It is a container that keeps asking a question. Every box in the network is standing there saying, “If something arrives like this, I will respond like that.” Nothing asserts identity. Everything waits for context.
-        </p>
+        <p>What looks like an object is not a thing you possess. It is a container that keeps asking a question. Every box in the network is standing there saying, “If something arrives like this, I will respond like that.” Nothing asserts identity. Everything waits for context.</p>
 
-        <p>
-          An image node is not an image. It is a place where images pass through. A number is not a value you set once. It is a condition that keeps getting reasserted. A shape is not geometry in the way a file is geometry. It is a description that stays valid as long as nothing upstream contradicts it.
-        </p>
+        <p>An image node is not an image. It is a place where images pass through. A number is not a value you set once. It is a condition that keeps getting reasserted. A shape is not geometry in the way a file is geometry. It is a description that stays valid as long as nothing upstream contradicts it.</p>
 
-        <p>
-          This distinction matters because objects imply ownership. Containers imply obligation. Once you wire something in, the container must deal with it every frame. It does not remember how it felt when you created it. It only knows what it is receiving now.
-        </p>
+        <p>This distinction matters because objects imply ownership. Containers imply obligation. Once you wire something in, the container must deal with it every frame. It does not remember how it felt when you created it. It only knows what it is receiving now.</p>
 
-        <p>
-          That is why copying a node does not copy behavior the way people expect. You duplicated a question, not an answer. Without the same surroundings, the question produces a different outcome. Context is not decoration here. It is substance.
-        </p>
+        <p>That is why copying a node does not copy behavior the way people expect. You duplicated a question, not an answer. Without the same surroundings, the question produces a different outcome. Context is not decoration here. It is substance.</p>
 
-        <p>
-          Object-based thinking encourages accumulation. Add another layer. Duplicate another clip. Stack until it looks right. Container-based thinking punishes that instinct. Every addition introduces another obligation the system must honor, repeatedly, without complaint.
-        </p>
+        <p>Object-based thinking encourages accumulation. Add another layer. Duplicate another clip. Stack until it looks right. Container-based thinking punishes that instinct. Every addition introduces another obligation the system must honor, repeatedly, without complaint.</p>
 
-        <p>
-          People often ask where something lives. Where the image is stored. Where the motion exists. Those questions assume a thing sitting somewhere, waiting to be used. What exists instead is a path. Motion exists because something upstream keeps changing. Images exist because something keeps supplying pixels.
-        </p>
+        <p>People often ask where something lives. Where the image is stored. Where the motion exists. Those questions assume a thing sitting somewhere, waiting to be used. What exists instead is a path. Motion exists because something upstream keeps changing. Images exist because something keeps supplying pixels.</p>
 
-        <p>
-          This is also why deleting a node can feel disproportionate. You did not remove a thing; you removed a promise. Everything downstream reorganizes itself around that absence immediately. The system does not mourn. It reroutes.
-        </p>
+        <p>This is also why deleting a node can feel disproportionate. You did not remove a thing; you removed a promise. Everything downstream reorganizes itself around that absence immediately. The system does not mourn. It reroutes.</p>
 
-        <p>
-          Once you stop looking for objects, frustration drops. You stop hunting for the place where the result lives. You start watching how conditions propagate. The work shifts from collecting things to arranging responsibilities.
-        </p>
+        <p>Once you stop looking for objects, frustration drops. You stop hunting for the place where the result lives. You start watching how conditions propagate. The work shifts from collecting things to arranging responsibilities.</p>
 
-        <p>
-          Nothing here is an object because objects would slow the system down. What exists instead are agreements that stay active for as long as you keep them wired.
-        </p>
+        <p>Nothing here is an object because objects would slow the system down. What exists instead are agreements that stay active for as long as you keep them wired.</p>
       </article>
- [
-      "What is signal flow in TouchDesigner?",
-      "Why is my network not passing data forward?",
-      "How do I trace flow through connected operators?"
+
+      <section class="blog-faq" aria-labelledby="faq-heading">
+        <h2 id="faq-heading">FAQ</h2>
+
+        <h3>What is signal flow in TouchDesigner?</h3>
+        <p>Signal flow describes how data moves from one operator to another through connections. Each operator evaluates its inputs and updates its outputs continuously.</p>
+
+        <h3>Why is my network not passing data forward?</h3>
+        <p>If nothing appears downstream, check connections and data types. Signal flow stops when inputs do not match what the receiving operator expects.</p>
+
+        <h3>How do I trace flow through connected operators?</h3>
+        <p>Follow the wires from left to right and inspect intermediate operators. Viewing outputs step by step helps you understand how information propagates.</p>
+      </section>
+
       <div class="page-image">
         <img src="v1b3.png" alt="Manual page 03" />
       </div>
@@ -167,6 +165,39 @@
         <a href="v1b4.html" aria-label="Go to page 04">Next page</a>
       </div>
     </div>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is signal flow in TouchDesigner?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Signal flow describes how data moves from one operator to another through connections. Each operator evaluates its inputs and updates its outputs continuously."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is my network not passing data forward?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If nothing appears downstream, check connections and data types. Signal flow stops when inputs do not match what the receiving operator expects."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I trace flow through connected operators?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Follow the wires from left to right and inspect intermediate operators. Viewing outputs step by step helps you understand how information propagates."
+          }
+        }
+      ]
+    }
+    </script>
+
   </body>
 </html>
-
