@@ -1,282 +1,268 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>Volume 2 · 11 — What happens when everything is wired at once</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>What a working TouchDesigner network looks like</title>
+
+<meta name="description" content="Learn what a working TouchDesigner network looks like with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks." />
+
+<meta property="og:title" content="What a working TouchDesigner network looks like" />
+<meta property="og:description" content="Learn what a working TouchDesigner network looks like with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks." />
+<meta property="og:type" content="article" />
+
+<style>
+:root {
+  --bg: #0b0b0f;
+  --fg: #f2f2f5;
+  --muted: #b9b9c6;
+  --line: rgba(242,242,245,0.14);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Garamond, "Times New Roman", serif;
+  font-size: 14pt;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 64px 20px 96px;
+}
+
+header { margin-bottom: 36px; }
+
+h1 {
+  font-size: clamp(40px, 5vw, 72px);
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+
+.num {
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+article { line-height: 1.7; }
+
+p { margin: 0 0 22px; }
+
+.page-image {
+  margin: 56px 0 28px;
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+
+.page-image img {
+  display: block;
+  width: min(100%, 640px);
+  height: auto;
+  margin: 0 auto;
+}
+
+.nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nav a {
+  color: var(--fg);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nav a:hover { border-color: var(--fg); }
+
+.blog-faq {
+  margin-top: 60px;
+  border-top: 1px solid var(--line);
+  padding-top: 40px;
+}
+
+.blog-faq h2 {
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+.blog-faq h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<header>
+  <div class="num">Volume 2 · 11</div>
+  <h1>What happens when everything is wired at once</h1>
+  <p><strong>This guide explains what a working TouchDesigner network looks like in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</strong></p>
+</header>
+
+<article>
+
+<p>
+A working TouchDesigner network is not defined by size.
+</p>
+
+<p>
+It is defined by clarity of flow.
+</p>
+
+<p>
+Signals move in recognizable directions. Sources generate. Transformers modify. Switches decide. Feedback loops are controlled.
+</p>
+
+<p>
+Clusters form around purpose rather than accident.
+</p>
+
+<p>
+Long chains have clear beginnings and ends.
+</p>
+
+<p>
+Loops are intentional, not incidental.
+</p>
+
+<p>
+Control inputs are isolated from processing chains.
+</p>
+
+<p>
+A working patch usually includes:
+</p>
+
+<ul>
+<li>Clear signal sources</li>
+<li>Logical grouping of related operators</li>
+<li>Minimal unnecessary conversions between data types</li>
+<li>Controlled feedback paths</li>
+<li>Readable spacing in the network</li>
+</ul>
+
+<p>
+Well-structured networks are readable at a glance.
+</p>
+
+<p>
+When you zoom out, the shape communicates purpose.
+</p>
+
+<p>
+Beginner-friendly architecture often favors:
+</p>
+
+<ul>
+<li>Short linear chains</li>
+<li>Separated control areas</li>
+<li>Single-responsibility operator groups</li>
+<li>Clear upstream and downstream organization</li>
+</ul>
+
+<p>
+If removing one wire causes chaos everywhere, structure may be too tightly coupled.
+</p>
+
+<p>
+If removing a section has no visible effect, that section may be redundant.
+</p>
+
+<p>
+A working network tolerates small changes without collapsing.
+</p>
+
+<p>
+The goal is not minimal node count.
+</p>
+
+<p>
+The goal is coherence.
+</p>
+
+<p>
+When behavior is predictable, traceable, and modular, the system is working.
+</p>
+
+</article>
+
+<section class="blog-faq" aria-labelledby="faq-heading">
+<h2 id="faq-heading">FAQ</h2>
+
+<div class="faq-item">
+<h3>How can I tell if my TouchDesigner network is well-structured?</h3>
+<p>A well-structured network has clear signal flow, grouped functionality, readable spacing, and predictable behavior when individual parts are modified.</p>
+</div>
+
+<div class="faq-item">
+<h3>What does a working patch usually include?</h3>
+<p>A working patch includes signal sources, transformations, controlled feedback, organized control inputs, and minimal unnecessary conversions.</p>
+</div>
+
+<div class="faq-item">
+<h3>Which architecture patterns are beginner-friendly?</h3>
+<p>Short linear chains, separated control systems, single-purpose clusters, and clearly defined upstream and downstream sections are easiest to understand.</p>
+</div>
+
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How can I tell if my TouchDesigner network is well-structured?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A well-structured network has clear signal flow, grouped functionality, readable spacing, and predictable behavior when individual parts are modified."
       }
-
-      :root {
-        --bg: #0b0b0f;
-        --fg: #f2f2f5;
-        --muted: #b9b9c6;
-        --line: rgba(242, 242, 245, 0.14);
+    },
+    {
+      "@type": "Question",
+      "name": "What does a working patch usually include?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A working patch includes signal sources, transformations, controlled feedback, organized control inputs, and minimal unnecessary conversions."
       }
-
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
-
-      body {
-        margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
-        background: var(--bg);
-        color: var(--fg);
+    },
+    {
+      "@type": "Question",
+      "name": "Which architecture patterns are beginner-friendly?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Short linear chains, separated control systems, single-purpose clusters, and clearly defined upstream and downstream sections are easiest to understand."
       }
+    }
+  ]
+}
+</script>
 
-      .wrap {
-        max-width: 860px;
-        margin: 0 auto;
-        padding: 64px 20px 96px;
-      }
+<div class="page-image">
+<img src="v2b11.png" alt="Volume 2 page 11" />
+</div>
 
-      header { margin-bottom: 36px; }
+<div class="nav">
+<a href="../index.html" aria-label="Back to index">Index</a>
+<a href="v2b12.html" aria-label="Go to page 12">Next page</a>
+</div>
 
-      h1 {
-        font-size: clamp(40px, 5vw, 72px);
-        letter-spacing: -0.02em;
-
-      .page-image {
-        margin: 56px 0 28px;
-        border-top: 1px solid var(--line);
-        padding-top: 28px;
-      }
-
-      .page-image img {
-        display: block;
-        width: min(100%, 640px);
-        height: auto;
-        margin: 0 auto;
-      }
-
-      .nav {
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      .nav a {
-        color: var(--fg);
-        text-decoration: none;
-        border: 1px solid var(--line);
-        padding: 10px 16px;
-        border-radius: 999px;
-        font-size: 14px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-
-      .nav a:hover {
-        border-color: var(--fg);
-      }
-        margin: 0 0 10px;
-      }
-
-      .num {
-        color: var(--muted);
-        font-size: 14px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      article { font-size: 45px; line-height: 1.7; }
-
-      p { margin: 0 0 22px; }
-
-      .do {
-        border-left: 3px solid var(--line);
-        padding-left: 18px;
-        margin: 28px 0;
-      }
-
-      ul { margin: 10px 0 0 20px; }
-      li { margin-bottom: 6px; }
-
-      code {
-        background: rgba(255,255,255,0.05);
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 0.9em;
-      }
-
-      .note { color: var(--muted); margin-top: 6px; }
-    </style>
-  </head>
-
-  <body>
-    <div class="wrap">
-      <header>
-        <div class="num">Volume 2 · 11</div>
-        <h1>What happens when everything is wired at once</h1>
-      </header>
-
-      <article>
-        <p>
-          At this point, the system is crowded.
-        </p>
-
-        <p>
-          There is motion, space, images, sound, memory, switching, feedback, and control.
-          Nothing here is isolated anymore. Every part is aware that other parts exist,
-          even if they are not directly connected.
-        </p>
-
-        <p>
-          This page is not about adding something new.
-          It is about noticing what has already formed.
-        </p>
-
-        <div class="do">
-          <p>
-            Look at your network without touching anything.
-          </p>
-          <p>
-            Zoom out until you can see most of it at once.
-          </p>
-        </div>
-
-        <p>
-          The shape matters.
-        </p>
-
-        <p>
-          Clusters reveal purpose. Long chains reveal dependency.
-          Tight loops reveal sensitivity. Wide fans reveal choice.
-        </p>
-
-        <p>
-          None of this was planned.
-          It emerged from necessity.
-        </p>
-
-        <div class="do">
-          <p>
-            Pick one signal that moves through multiple parts of the system.
-          </p>
-          <p>
-            Follow it with your eyes from start to finish.
-          </p>
-        </div>
-
-        <p>
-          That signal has a life.
-        </p>
-
-        <p>
-          It is born somewhere. It is shaped. It is translated.
-          It is consulted. It is possibly allowed through.
-          It may even be asked to explain itself to itself.
-        </p>
-
-        <p>
-          No single operator owns that behavior.
-        </p>
-
-        <div class="do">
-          <p>
-            Temporarily disconnect one wire in the middle of that path.
-          </p>
-        </div>
-
-        <p>
-          The system adapts instantly.
-        </p>
-
-        <p>
-          Something goes quiet. Something freezes.
-          Something downstream becomes irrelevant.
-        </p>
-
-        <p>
-          Reconnect the wire.
-        </p>
-
-        <p>
-          The behavior returns without ceremony.
-        </p>
-
-        <p>
-          This is the clearest proof that the system is not a stack of effects.
-          It is a set of agreements.
-        </p>
-
-        <p>
-          Each operator agrees to do one thing if certain conditions are met.
-          The network exists to meet those conditions repeatedly.
-        </p>
-
-        <div class="do">
-          <p>
-            Move one group of nodes farther away from the others.
-          </p>
-          <p>
-            Do not change the wiring.
-          </p>
-        </div>
-
-        <p>
-          Nothing changes.
-        </p>
-
-        <p>
-          Meaning does not live in proximity.
-          It lives in connection.
-        </p>
-
-        <p>
-          This is the moment where memorization stops helping.
-        </p>
-
-        <p>
-          You no longer need to recall what each operator is called.
-          You recognize what role it is playing.
-        </p>
-
-        <p>
-          When something feels missing, you do not search menus.
-          You ask what role is absent.
-        </p>
-
-        <p>
-          When something feels excessive, you do not delete randomly.
-          You ask which agreement is redundant.
-        </p>
-
-        <p>
-          This is fluency.
-        </p>
-
-        <p>
-          The network is no longer a puzzle to solve.
-          It is a place you can walk around in without getting lost.
-        </p>
-
-        <p>
-          Nothing here is finished.
-          It does not need to be.
-        </p>
-
-        <p>
-          The system is running.
-          That is the only requirement it has ever enforced.
-        </p>
-      </article>
-
-      <div class="page-image">
-        <img src="v2b11.png" alt="Volume 2 page 11" />
-      </div>
-
-      <div class="nav">
-        <a href="../index.html" aria-label="Back to index">Index</a>
-        <a href="v2b12.html" aria-label="Go to page 12">Next page</a>
-      </div>
-    </div>
-  </body>
+</div>
+</body>
 </html>
-
