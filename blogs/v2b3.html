@@ -1,289 +1,270 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>Volume 2 · 03 — How numbers become space</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Stateful vs stateless operators TouchDesigner</title>
+
+<meta name="description" content="Guide to stateful vs stateless operators TouchDesigner. Learn core ideas, common mistakes, and practical checks for building reliable TouchDesigner networks." />
+
+<meta property="og:title" content="Stateful vs stateless operators TouchDesigner" />
+<meta property="og:description" content="Guide to stateful vs stateless operators TouchDesigner. Learn core ideas, common mistakes, and practical checks for building reliable TouchDesigner networks." />
+<meta property="og:type" content="article" />
+
+<style>
+:root {
+  --bg: #0b0b0f;
+  --fg: #f2f2f5;
+  --muted: #b9b9c6;
+  --line: rgba(242,242,245,0.14);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Garamond, "Times New Roman", serif;
+  font-size: 14pt;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 64px 20px 96px;
+}
+
+header {
+  margin-bottom: 36px;
+}
+
+h1 {
+  font-size: clamp(40px, 5vw, 72px);
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+
+.num {
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+article {
+  line-height: 1.7;
+}
+
+p {
+  margin: 0 0 22px;
+}
+
+.do {
+  border-left: 3px solid var(--line);
+  padding-left: 18px;
+  margin: 28px 0;
+}
+
+ul {
+  margin: 10px 0 0 20px;
+}
+
+li {
+  margin-bottom: 6px;
+}
+
+code {
+  background: rgba(255,255,255,0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.note {
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.page-image {
+  margin: 56px 0 28px;
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+
+.page-image img {
+  display: block;
+  width: min(100%, 640px);
+  height: auto;
+  margin: 0 auto;
+}
+
+.nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nav a {
+  color: var(--fg);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nav a:hover {
+  border-color: var(--fg);
+}
+
+.blog-faq {
+  margin-top: 60px;
+  border-top: 1px solid var(--line);
+  padding-top: 40px;
+}
+
+.blog-faq h2 {
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+.blog-faq h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<header>
+  <div class="num">Volume 2 · 03</div>
+  <h1>How numbers become space</h1>
+  <p><strong>This guide explains stateful vs stateless operators TouchDesigner in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</strong></p>
+</header>
+
+<article>
+
+<p>
+Some operators only care about what arrives this frame.
+</p>
+
+<p>
+Others remember what happened before.
+</p>
+
+<p>
+That difference changes everything.
+</p>
+
+<p>
+A stateless operator evaluates its input and produces an output based only on the current moment. It has no memory. If the same input arrives again, the same output is produced.
+</p>
+
+<p>
+A stateful operator carries history forward. It accumulates. It delays. It integrates. It compares now to before.
+</p>
+
+<p>
+Lag, Feedback, Trail, and certain CHOPs are stateful. A Math node performing simple scaling is not.
+</p>
+
+<p>
+This distinction explains why some nodes behave predictably and others drift, build up, or decay over time.
+</p>
+
+<p>
+When a node appears to “remember,” it is not thinking. It is storing previous values and using them in current evaluation.
+</p>
+
+<p>
+Statefulness introduces accumulation. Accumulation introduces instability if not controlled.
+</p>
+
+<p>
+That is why feedback networks can spiral, freeze, or saturate. The system is honoring past values repeatedly.
+</p>
+
+<p>
+Resetting a stateful system requires interrupting its memory. That might mean toggling a Reset parameter, clearing a buffer, or briefly breaking a feedback connection.
+</p>
+
+<p>
+Stateless systems are easier to reason about because they do not depend on history. Stateful systems are powerful because they create continuity.
+</p>
+
+<p>
+Choosing between them is not about difficulty. It is about whether your design depends on persistence.
+</p>
+
+</article>
+
+<section class="blog-faq" aria-labelledby="faq-heading">
+<h2 id="faq-heading">FAQ</h2>
+
+<div class="faq-item">
+<h3>What is a stateful operator in TouchDesigner?</h3>
+<p>A stateful operator stores and uses information from previous frames, allowing accumulation, delay, or feedback-based behavior.</p>
+</div>
+
+<div class="faq-item">
+<h3>Why does this node remember previous frames?</h3>
+<p>Because it maintains internal buffers or feedback loops that carry past values forward into current evaluation.</p>
+</div>
+
+<div class="faq-item">
+<h3>How do I reset a stateful network?</h3>
+<p>Use Reset parameters, clear buffers, or temporarily break feedback connections to remove stored history.</p>
+</div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a stateful operator in TouchDesigner?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A stateful operator stores and uses information from previous frames, allowing accumulation, delay, or feedback-based behavior."
       }
-
-      :root {
-        --bg: #0b0b0f;
-        --fg: #f2f2f5;
-        --muted: #b9b9c6;
-        --line: rgba(242, 242, 245, 0.14);
+    },
+    {
+      "@type": "Question",
+      "name": "Why does this node remember previous frames?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because it maintains internal buffers or feedback loops that carry past values forward into current evaluation."
       }
-
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
-
-      body {
-        margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
-        background: var(--bg);
-        color: var(--fg);
+    },
+    {
+      "@type": "Question",
+      "name": "How do I reset a stateful network?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use Reset parameters, clear buffers, or temporarily break feedback connections to remove stored history."
       }
+    }
+  ]
+}
+</script>
 
-      .wrap {
-        max-width: 860px;
-        margin: 0 auto;
-        padding: 64px 20px 96px;
-      }
+<div class="page-image">
+<img src="v2b3.png" alt="Volume 2 page 03" />
+</div>
 
-      header {
-        margin-bottom: 36px;
-      }
+<div class="nav">
+<a href="../index.html" aria-label="Back to index">Index</a>
+<a href="v2b4.html" aria-label="Go to page 04">Next page</a>
+</div>
 
-      h1 {
-        font-size: clamp(40px, 5vw, 72px);
-        letter-spacing: -0.02em;
-        margin: 0 0 10px;
-      }
-
-      .num {
-        color: var(--muted);
-        font-size: 14px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      article {
-        font-size: 45px;
-        line-height: 1.7;
-      }
-
-      p {
-        margin: 0 0 22px;
-      }
-
-      .page-image {
-        margin: 56px 0 28px;
-        border-top: 1px solid var(--line);
-        padding-top: 28px;
-      }
-
-      .page-image img {
-        display: block;
-        width: min(100%, 640px);
-        height: auto;
-        margin: 0 auto;
-      }
-
-      .nav {
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      .nav a {
-        color: var(--fg);
-        text-decoration: none;
-        border: 1px solid var(--line);
-        padding: 10px 16px;
-        border-radius: 999px;
-        font-size: 14px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-
-      .nav a:hover {
-        border-color: var(--fg);
-      }
-
-      .do {
-        border-left: 3px solid var(--line);
-        padding-left: 18px;
-        margin: 28px 0;
-      }
-
-      ul {
-        margin: 10px 0 0 20px;
-      }
-
-      li {
-        margin-bottom: 6px;
-      }
-
-      code {
-        background: rgba(255,255,255,0.05);
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 0.9em;
-      }
-
-      .note {
-        color: var(--muted);
-        margin-top: 6px;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="wrap">
-      <header>
-        <div class="num">Volume 2 · 03</div>
-        <h1>How numbers become space</h1>
-      </header>
-
-      <article>
-        <p>
-          Right now you have numbers that move.
-        </p>
-
-        <p>
-          They rise, fall, repeat, or drift. They are useful, but they have no location.
-          They do not occupy space. They describe possibility without embodiment.
-        </p>
-
-        <p>
-          Space begins the moment numbers are treated as instructions instead of values.
-        </p>
-
-        <div class="do">
-          <p>
-            Start from the network you already have.
-          </p>
-          <p>
-            There should be a chain that begins with a number-producing node and ends
-            with something that already crossed into another data type.
-          </p>
-        </div>
-
-        <p>
-          The next step does not add detail. It adds dimension.
-        </p>
-
-        <div class="do">
-          <p>
-            Move your mouse to an empty area below your existing nodes.
-          </p>
-          <p>
-            Press <code>Tab</code>.
-          </p>
-          <p>
-            Type one of the following and place it below:
-          </p>
-          <ul>
-            <li><code>Circle</code></li>
-            <li><code>Line</code></li>
-            <li><code>Grid</code></li>
-          </ul>
-          <p class="note">
-            These nodes create geometry. Pick one.
-          </p>
-        </div>
-
-        <p>
-          What you added does not move yet. It exists in space, but it is indifferent to time.
-        </p>
-
-        <div class="do">
-          <p>
-            Press <code>Tab</code> again.
-          </p>
-          <p>
-            Type <code>Transform</code> and place it to the right of the geometry node.
-          </p>
-        </div>
-
-        <p>
-          This node understands space. It listens for instructions about position,
-          rotation, and size.
-        </p>
-
-        <div class="do">
-          <p>
-            Wire the geometry node into the Transform node.
-          </p>
-        </div>
-
-        <p>
-          Nothing dramatic happens yet. That is expected.
-        </p>
-
-        <p>
-          The Transform node is waiting for numbers.
-        </p>
-
-        <div class="do">
-          <p>
-            Take the moving number output you already have.
-          </p>
-          <p>
-            Drag a wire from it into one of the parameter inputs on the Transform node:
-          </p>
-          <ul>
-            <li>Translate X</li>
-            <li>Scale X</li>
-            <li>Rotate Z</li>
-          </ul>
-          <p class="note">
-            Any one of these is fine.
-          </p>
-        </div>
-
-        <p>
-          Space just accepted instruction.
-        </p>
-
-        <p>
-          The geometry is no longer fixed. It responds frame by frame to a value
-          that has no awareness of shape, size, or direction.
-        </p>
-
-        <p>
-          This is the conversion.
-        </p>
-
-        <p>
-          Numbers did not turn into objects. They turned into influence.
-          The geometry still knows how to be geometry. The numbers only tell it
-          how to behave.
-        </p>
-
-        <div class="do">
-          <p>
-            Change which parameter the wire feeds.
-          </p>
-          <p>
-            Move it from position to scale, or from scale to rotation.
-          </p>
-        </div>
-
-        <p>
-          The same numbers produce a different spatial result.
-        </p>
-
-        <p>
-          This is not because the numbers changed.
-          It is because the role they were allowed to play changed.
-        </p>
-
-        <p>
-          Space here is obedient, not expressive.
-          It does exactly what it is told, every frame, without memory or intent.
-        </p>
-
-        <p>
-          This pattern repeats everywhere in the system.
-          Values do not need to understand form to control it.
-        </p>
-      </article>
-
-      <div class="page-image">
-        <img src="v2b3.png" alt="Volume 2 page 03" />
-      </div>
-
-      <div class="nav">
-        <a href="../index.html" aria-label="Back to index">Index</a>
-        <a href="v2b4.html" aria-label="Go to page 04">Next page</a>
-      </div>
-    </div>
-  </body>
+</div>
+</body>
 </html>
