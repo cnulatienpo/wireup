@@ -1,251 +1,253 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>Volume 2 · 10 — How control enters the system</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TouchDesigner failure modes as debugging clues</title>
+
+<meta name="description" content="Guide to TouchDesigner failure modes as debugging clues. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+
+<meta property="og:title" content="TouchDesigner failure modes as debugging clues" />
+<meta property="og:description" content="Guide to TouchDesigner failure modes as debugging clues. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+<meta property="og:type" content="article" />
+
+<style>
+:root {
+  --bg: #0b0b0f;
+  --fg: #f2f2f5;
+  --muted: #b9b9c6;
+  --line: rgba(242,242,245,0.14);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Garamond, "Times New Roman", serif;
+  font-size: 14pt;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 64px 20px 96px;
+}
+
+header { margin-bottom: 36px; }
+
+h1 {
+  font-size: clamp(40px, 5vw, 72px);
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+
+.num {
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+article { line-height: 1.7; }
+
+p { margin: 0 0 22px; }
+
+.page-image {
+  margin: 56px 0 28px;
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+
+.page-image img {
+  display: block;
+  width: min(100%, 640px);
+  height: auto;
+  margin: 0 auto;
+}
+
+.nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nav a {
+  color: var(--fg);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nav a:hover { border-color: var(--fg); }
+
+.blog-faq {
+  margin-top: 60px;
+  border-top: 1px solid var(--line);
+  padding-top: 40px;
+}
+
+.blog-faq h2 {
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+.blog-faq h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<header>
+  <div class="num">Volume 2 · 10</div>
+  <h1>How control enters the system</h1>
+  <p><strong>This guide explains TouchDesigner failure modes as debugging clues in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</strong></p>
+</header>
+
+<article>
+
+<p>
+Failure in TouchDesigner is rarely random.
+</p>
+
+<p>
+Most glitches, frozen outputs, or black viewers are symptoms of specific structural problems.
+</p>
+
+<p>
+Common failure modes include missing inputs, incorrect data types, values stuck at zero, and feedback loops without damping.
+</p>
+
+<p>
+A black output usually means no signal is arriving or opacity is set to zero.
+</p>
+
+<p>
+A node showing an error flag typically indicates a missing dependency or incompatible input.
+</p>
+
+<p>
+If something flickers or explodes, amplification is likely happening in a loop.
+</p>
+
+<p>
+When a parameter refuses to update, check whether it is being overridden by an export or expression.
+</p>
+
+<p>
+If performance drops unexpectedly, examine resolution, feedback accumulation, or unnecessary conversions.
+</p>
+
+<p>
+Debugging begins upstream.
+</p>
+
+<p>
+Trace the signal backward from the symptom.
+</p>
+
+<p>
+Open viewers on intermediate nodes.
+</p>
+
+<p>
+Confirm where the behavior changes.
+</p>
+
+<p>
+Most real problems are one or two nodes earlier than expected.
+</p>
+
+<p>
+Treat every visible glitch as a clue rather than a catastrophe.
+</p>
+
+<p>
+Systems reveal their structure most clearly when they break.
+</p>
+
+<p>
+Failure modes are maps of the network’s assumptions.
+</p>
+
+<p>
+Learn the patterns once, and future debugging becomes recognition rather than guesswork.
+</p>
+
+</article>
+
+<section class="blog-faq" aria-labelledby="faq-heading">
+<h2 id="faq-heading">FAQ</h2>
+
+<div class="faq-item">
+<h3>What are common failure modes in TouchDesigner?</h3>
+<p>Common issues include missing inputs, mismatched data types, parameters stuck at zero, feedback instability, and export conflicts.</p>
+</div>
+
+<div class="faq-item">
+<h3>How do I use errors to find the real problem?</h3>
+<p>Trace the signal upstream, inspect intermediate nodes, and identify where behavior changes or stops.</p>
+</div>
+
+<div class="faq-item">
+<h3>Why does this specific glitch keep happening?</h3>
+<p>Recurring glitches usually indicate structural issues such as feedback amplification, resolution overload, or conflicting parameter control.</p>
+</div>
+
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What are common failure modes in TouchDesigner?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Common issues include missing inputs, mismatched data types, parameters stuck at zero, feedback instability, and export conflicts."
       }
-
-      :root {
-        --bg: #0b0b0f;
-        --fg: #f2f2f5;
-        --muted: #b9b9c6;
-        --line: rgba(242, 242, 245, 0.14);
+    },
+    {
+      "@type": "Question",
+      "name": "How do I use errors to find the real problem?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Trace the signal upstream, inspect intermediate nodes, and identify where behavior changes or stops."
       }
-
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
-
-      body {
-        margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
-        background: var(--bg);
-        color: var(--fg);
+    },
+    {
+      "@type": "Question",
+      "name": "Why does this specific glitch keep happening?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Recurring glitches usually indicate structural issues such as feedback amplification, resolution overload, or conflicting parameter control."
       }
+    }
+  ]
+}
+</script>
 
-      .wrap {
-        max-width: 860px;
-        margin: 0 auto;
-        padding: 64px 20px 96px;
-      }
+<div class="page-image">
+<img src="v2b10.png" alt="Volume 2 page 10" />
+</div>
 
-      header { margin-bottom: 36px; }
+<div class="nav">
+<a href="../index.html" aria-label="Back to index">Index</a>
+<a href="v2b11.html" aria-label="Go to page 11">Next page</a>
+</div>
 
-      h1 {
-        font-size: clamp(40px, 5vw, 72px);
-        letter-spacing: -0.02em;
-
-      .page-image {
-        margin: 56px 0 28px;
-        border-top: 1px solid var(--line);
-        padding-top: 28px;
-      }
-
-      .page-image img {
-        display: block;
-        width: min(100%, 640px);
-        height: auto;
-        margin: 0 auto;
-      }
-
-      .nav {
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      .nav a {
-        color: var(--fg);
-        text-decoration: none;
-        border: 1px solid var(--line);
-        padding: 10px 16px;
-        border-radius: 999px;
-        font-size: 14px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-
-      .nav a:hover {
-        border-color: var(--fg);
-      }
-        margin: 0 0 10px;
-      }
-
-      .num {
-        color: var(--muted);
-        font-size: 14px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      article { font-size: 45px; line-height: 1.7; }
-
-      p { margin: 0 0 22px; }
-
-      .do {
-        border-left: 3px solid var(--line);
-        padding-left: 18px;
-        margin: 28px 0;
-      }
-
-      ul { margin: 10px 0 0 20px; }
-      li { margin-bottom: 6px; }
-
-      code {
-        background: rgba(255,255,255,0.05);
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 0.9em;
-      }
-
-      .note { color: var(--muted); margin-top: 6px; }
-    </style>
-  </head>
-
-  <body>
-    <div class="wrap">
-      <header>
-        <div class="num">Volume 2 · 10</div>
-        <h1>How control enters the system</h1>
-      </header>
-
-      <article>
-        <p>
-          Everything so far has decided things for itself.
-        </p>
-
-        <p>
-          Numbers moved because time moved. Images changed because values changed.
-          Even feedback reacted according to rules already in place.
-        </p>
-
-        <p>
-          Control begins when something outside the system is allowed to speak.
-        </p>
-
-        <div class="do">
-          <p>
-            Start from a network where something visible is already happening.
-          </p>
-          <p>
-            Leave it running.
-          </p>
-        </div>
-
-        <p>
-          You are going to introduce intention.
-        </p>
-
-        <div class="do">
-          <p>
-            Move your mouse to an empty area below the network.
-          </p>
-          <p>
-            Press <code>Tab</code>.
-          </p>
-          <p>
-            Type one of the following and place it there:
-          </p>
-          <ul>
-            <li><code>Slider</code> (CHOP)</li>
-            <li><code>Button</code> (CHOP)</li>
-            <li><code>Keyboard In</code></li>
-            <li><code>Mouse In</code></li>
-          </ul>
-          <p class="note">
-            Pick something you can physically manipulate.
-          </p>
-        </div>
-
-        <p>
-          Open the viewer.
-        </p>
-
-        <p>
-          This node does nothing by itself.
-          It waits for you.
-        </p>
-
-        <p>
-          That waiting is different from everything else you have added so far.
-        </p>
-
-        <div class="do">
-          <p>
-            Interact with the control.
-          </p>
-          <p>
-            Drag the slider, click the button, move the mouse, press a key.
-          </p>
-        </div>
-
-        <p>
-          A value changes only when you act.
-        </p>
-
-        <p>
-          This is not time. This is choice.
-        </p>
-
-        <div class="do">
-          <p>
-            Take the output of the control node.
-          </p>
-          <p>
-            Wire it into something that already exists:
-          </p>
-          <ul>
-            <li>a Switch index</li>
-            <li>a Transform parameter</li>
-            <li>a Level brightness</li>
-            <li>a Noise amplitude</li>
-          </ul>
-        </div>
-
-        <p>
-          The system now waits for instruction.
-        </p>
-
-        <p>
-          When you move, it responds.
-          When you stop, it freezes in its last decision.
-        </p>
-
-        <p>
-          This is the first time the system defers.
-        </p>
-
-        <p>
-          Control nodes do not generate content.
-          They authorize it.
-        </p>
-
-        <p>
-          Most interactive systems are not reactive because of complexity.
-          They are reactive because someone, somewhere, is allowed to say “now.”
-        </p>
-
-        <p>
-          From here on, any time you want meaning to change without randomness,
-          control is the door it enters through.
-        </p>
-      </article>
-
-      <div class="page-image">
-        <img src="v2b10.png" alt="Volume 2 page 10" />
-      </div>
-
-      <div class="nav">
-        <a href="../index.html" aria-label="Back to index">Index</a>
-        <a href="v2b11.html" aria-label="Go to page 11">Next page</a>
-      </div>
-    </div>
-  </body>
+</div>
+</body>
 </html>
