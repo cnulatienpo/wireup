@@ -2,9 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="Guide to TouchDesigner operators vs objects explained. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks.", />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>02 — Why this isn’t a normal Photoshop or Windows-style program</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Guide to TouchDesigner operators vs objects explained. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks.">
+    <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
+    <title>TouchDesigner operators vs objects explained</title>
+
     <style>
       @font-face {
         font-family: "La Nu Tienpo";
@@ -63,6 +65,22 @@
         margin: 0 0 22px;
       }
 
+      .blog-faq {
+        margin-top: 60px;
+        border-top: 1px solid var(--line);
+        padding-top: 40px;
+      }
+
+      .blog-faq h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+
+      .blog-faq h3 {
+        font-size: 20px;
+        margin: 20px 0 8px;
+      }
+
       .page-image {
         margin: 56px 0 28px;
         border-top: 1px solid var(--line);
@@ -79,6 +97,7 @@
       .nav {
         display: flex;
         justify-content: flex-end;
+        gap: 12px;
       }
 
       .nav a {
@@ -103,61 +122,48 @@
       <header>
         <div class="num">02</div>
         <h1>Why this isn’t a normal Photoshop or Windows-style program</h1>
+        <p>This guide explains TouchDesigner operators vs objects explained in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
       </header>
-"This guide explains TouchDesigner operators vs objects explained in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.
+
       <article>
-        <p>
-          Most software waits.
-        </p>
+        <p>Most software waits.</p>
 
-        <p>
-          You open it, it presents an empty state, and it stands back until you decide what should happen next. Menus exist to offer actions. Files exist to be modified. Progress happens in a straight line from intention to result. When you stop touching it, it stops responding.
-        </p>
+        <p>You open it, it presents an empty state, and it stands back until you decide what should happen next. Menus exist to offer actions. Files exist to be modified. Progress happens in a straight line from intention to result. When you stop touching it, it stops responding.</p>
 
-        <p>
-          That pattern trains a certain posture. You are in charge. The software is a tool. Nothing moves unless you say so. Every change has a clear before and after. Save marks the moment where effort becomes a thing you can point to.
-        </p>
+        <p>That pattern trains a certain posture. You are in charge. The software is a tool. Nothing moves unless you say so. Every change has a clear before and after. Save marks the moment where effort becomes a thing you can point to.</p>
 
-        <p>
-          This environment does not behave that way.
-        </p>
+        <p>This environment does not behave that way.</p>
 
-        <p>
-          It does not wait for instructions. It reacts to conditions. Inputs arrive whether you care or not. Time advances without asking permission. Output exists because something upstream keeps insisting on being processed.
-        </p>
+        <p>It does not wait for instructions. It reacts to conditions. Inputs arrive whether you care or not. Time advances without asking permission. Output exists because something upstream keeps insisting on being processed.</p>
 
-        <p>
-          In a Photoshop-style program, you make a decision and the system records it. In this one, you arrange relationships and the system keeps negotiating them. You are not issuing commands; you are setting terms and watching how they play out over time.
-        </p>
+        <p>In a Photoshop-style program, you make a decision and the system records it. In this one, you arrange relationships and the system keeps negotiating them. You are not issuing commands; you are setting terms and watching how they play out over time.</p>
 
-        <p>
-          Windows-style programs treat state as something temporary. Open, edit, close. Here, state is the whole point. Values persist. Connections stay live. A number does not represent a choice you made once; it represents a condition that keeps being enforced.
-        </p>
+        <p>Windows-style programs treat state as something temporary. Open, edit, close. Here, state is the whole point. Values persist. Connections stay live. A number does not represent a choice you made once; it represents a condition that keeps being enforced.</p>
 
-        <p>
-          This difference explains a lot of frustration. People keep looking for a moment where the program is ready. A blank document. A neutral starting point. That moment never arrives, because nothing ever resets itself to zero. Even an empty network carries time, evaluation, and expectation.
-        </p>
+        <p>This difference explains a lot of frustration. People keep looking for a moment where the program is ready. A blank document. A neutral starting point. That moment never arrives, because nothing ever resets itself to zero. Even an empty network carries time, evaluation, and expectation.</p>
 
-        <p>
-          Tools like Photoshop are about arranging pixels into a finished image. This environment is about arranging behaviors so that images keep being produced. The former rewards certainty. The latter rewards adjustment.
-        </p>
+        <p>Tools like Photoshop are about arranging pixels into a finished image. This environment is about arranging behaviors so that images keep being produced. The former rewards certainty. The latter rewards adjustment.</p>
 
-        <p>
-          That also explains why undo feels strange here. You are not stepping backward through decisions. You are rewiring a system that is still running. Removing a connection does not revert history; it changes how the present keeps unfolding.
-        </p>
+        <p>That also explains why undo feels strange here. You are not stepping backward through decisions. You are rewiring a system that is still running. Removing a connection does not revert history; it changes how the present keeps unfolding.</p>
 
-        <p>
-          When people say this software feels hostile, what they often mean is that it refuses to pretend it is obedient. It does not disguise the fact that it is built around continuous reaction instead of discrete actions.
-        </p>
+        <p>When people say this software feels hostile, what they often mean is that it refuses to pretend it is obedient. It does not disguise the fact that it is built around continuous reaction instead of discrete actions.</p>
 
-        <p>
-          Once that expectation drops, comparisons stop being useful. This is not a canvas waiting to be filled. It is a setup that keeps responding to whatever you connect to it, whether that connection was thoughtful or not.
-        </p>
+        <p>Once that expectation drops, comparisons stop being useful. This is not a canvas waiting to be filled. It is a setup that keeps responding to whatever you connect to it, whether that connection was thoughtful or not.</p>
       </article>
- [
-      "Are TouchDesigner operators the same as objects?",
-      "Why does TouchDesigner call things operators?",
-      "How should beginners think about OPs?"
+
+      <section class="blog-faq" aria-labelledby="faq-heading">
+        <h2 id="faq-heading">FAQ</h2>
+
+        <h3>Are TouchDesigner operators the same as objects?</h3>
+        <p>No. Operators are functional units that process data continuously, not static objects that wait for commands.</p>
+
+        <h3>Why does TouchDesigner call things operators?</h3>
+        <p>The term reflects that each unit performs an operation on incoming data, rather than behaving like a passive container.</p>
+
+        <h3>How should beginners think about OPs?</h3>
+        <p>Think of operators as small processing engines that stay active over time, not as tools you “use once” and move on from.</p>
+      </section>
+
       <div class="page-image">
         <img src="v1b2.png" alt="Manual page 02" />
       </div>
@@ -167,6 +173,39 @@
         <a href="v1b3.html" aria-label="Go to page 03">Next page</a>
       </div>
     </div>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Are TouchDesigner operators the same as objects?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Operators are functional units that process data continuously, not static objects that wait for commands."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does TouchDesigner call things operators?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The term reflects that each unit performs an operation on incoming data, rather than behaving like a passive container."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How should beginners think about OPs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Think of operators as small processing engines that stay active over time, not as tools you “use once” and move on from."
+          }
+        }
+      ]
+    }
+    </script>
+
   </body>
 </html>
-
