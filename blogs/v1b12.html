@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Guide to how to read TouchDesigner UI for beginners. Learn core ideas, common mistakes, and simple checks for building reliable TouchDesigner networks.">
+  <title>How to read TouchDesigner UI for beginners</title>
+
+  <style>
+    :root {
+      --bg: #0b0b0f;
+      --fg: #f2f2f5;
+      --muted: #b9b9c6;
+      --line: rgba(242,242,245,0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: Garamond, "Times New Roman", serif;
+      font-size: 14pt;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+    }
+
+    .wrap {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 64px 20px 96px;
+    }
+
+    header {
+      margin-bottom: 36px;
+    }
+
+    h1 {
+      font-size: clamp(40px, 5vw, 72px);
+      letter-spacing: -0.02em;
+      margin: 0 0 10px;
+    }
+
+    .num {
+      color: var(--muted);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    article {
+      line-height: 1.7;
+    }
+
+    p {
+      margin: 0 0 22px;
+    }
+
+    .blog-faq {
+      margin-top: 60px;
+      border-top: 1px solid var(--line);
+      padding-top: 40px;
+    }
+
+    .blog-faq h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .blog-faq h3 {
+      font-size: 20px;
+      margin: 20px 0 8px;
+    }
+
+    .page-image {
+      margin: 56px 0 28px;
+      border-top: 1px solid var(--line);
+      padding-top: 28px;
+    }
+
+    .page-image img {
+      display: block;
+      width: min(100%, 640px);
+      height: auto;
+      margin: 0 auto;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .nav a {
+      color: var(--fg);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .nav a:hover {
+      border-color: var(--fg);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="num">12</div>
+      <h1>How to read TouchDesigner UI for beginners</h1>
+      <p>This guide explains how to read TouchDesigner UI for beginners in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+    </header>
+
+    <article>
+      <p>
+        The interface is not decorative.
+      </p>
+
+      <p>
+        It is diagnostic.
+      </p>
+
+      <p>
+        Most programs try to reduce what you see to a single surface. A canvas. A timeline. A document. Anything that does not fit that surface is tucked away behind menus so the environment feels calm.
+      </p>
+
+      <p>
+        This one refuses to compress itself.
+      </p>
+
+      <p>
+        The network view shows relationships. The parameter pane shows conditions. The viewer shows current output. The timeline shows persistence. Each pane reveals a different layer of truth, and none of them cancel the others.
+      </p>
+
+      <p>
+        Beginners often stare at the viewer first. It looks authoritative. Bright image, immediate feedback. When something feels wrong, the instinct is to keep watching it.
+      </p>
+
+      <p>
+        The viewer is only a symptom. It shows what survived the trip through the network. If something upstream is misaligned, the viewer will faithfully display the result of that misalignment.
+      </p>
+
+      <p>
+        The parameter pane is quieter but more revealing. Numbers that are not changing. Toggles that are stuck. Inputs that are missing. Reading this pane tells you what the container believes right now.
+      </p>
+
+      <p>
+        The network editor reveals dependency. Which containers rely on which others. Where signals split. Where they combine. When something fails, the shape of that dependency often explains the failure faster than any individual value.
+      </p>
+
+      <p>
+        Status indicators matter. Flags. Warning colors. Cook times. These are not decoration. They are the system telling you where evaluation is happening and where it is not.
+      </p>
+
+      <p>
+        Reading the interface means correlating panes. If the viewer looks wrong, check the parameters. If parameters look correct, trace upstream connections. If connections look correct, confirm time is advancing. No single pane tells the whole story.
+      </p>
+
+      <p>
+        Once you stop asking which panel is the “main” one, the interface becomes coherent. It is not fragmented. It is layered.
+      </p>
+
+      <p>
+        The UI is not trying to simplify the system. It is trying to show you exactly what it is doing from multiple angles at once.
+      </p>
+    </article>
+
+    <section class="blog-faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">FAQ</h2>
+
+      <h3>How do I read the TouchDesigner interface quickly?</h3>
+      <p>Start with the network to understand structure, then inspect parameters to confirm current conditions, and use viewers to verify output.</p>
+
+      <h3>What do all these panels mean in TouchDesigner?</h3>
+      <p>Each panel shows a different layer of the system: structure, values, output, and timing. None of them replace the others.</p>
+
+      <h3>Where do I find important status info in the UI?</h3>
+      <p>Look for cook indicators, warning flags, and parameter changes. These reveal whether containers are evaluating and receiving valid input.</p>
+    </section>
+
+    <div class="page-image">
+      <img src="v1b12.png" alt="Manual page 12">
+    </div>
+
+    <div class="nav">
+      <a href="../index.html" aria-label="Back to index">Index</a>
+      <a href="v2b1.html" aria-label="Go to volume 2">Go to volume 2</a>
+    </div>
+  </div>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I read the TouchDesigner interface quickly?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Start with the network to understand structure, then inspect parameters to confirm current conditions, and use viewers to verify output."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What do all these panels mean in TouchDesigner?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Each panel shows a different layer of the system: structure, values, output, and timing. None of them replace the others."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where do I find important status info in the UI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Look for cook indicators, warning flags, and parameter changes. These reveal whether containers are evaluating and receiving valid input."
+        }
+      }
+    ]
+  }
+  </script>
+
+</body>
+</html>
