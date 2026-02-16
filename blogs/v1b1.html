@@ -62,6 +62,11 @@
         margin: 0 0 22px;
       }
 
+      h2 {
+        font-size: 28px;
+        margin: 48px 0 16px;
+      }
+
       .blog-faq {
         margin-top: 60px;
         border-top: 1px solid var(--line);
@@ -118,6 +123,7 @@
     <meta property="og:title" content="What is TouchDesigner for complete beginners" />
     <meta property="og:description" content="Guide to what is TouchDesigner for complete beginners. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
     <link rel="canonical" href="https://wireup.onrender.com/blogs/v1b1.html" />
+
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -128,7 +134,7 @@
           "name": "why does touchdesigner keep running when i am not clicking anything",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "TouchDesigner cooks continuously because operators evaluate on frame updates, not only on user actions. Even a stable value is being re-checked over time. The official docs on cooking and timelines explain this always-on execution model."
+            "text": "TouchDesigner is built for live, always-on work. It keeps checking its connections and updating what depends on them, even if you do nothing. That is why the app can look busy even when the picture is not changing."
           }
         },
         {
@@ -136,7 +142,7 @@
           "name": "where does execution start in touchdesigner",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "There is rarely a single start line in a networked project. Evaluation emerges from dependencies, time, and active viewers. Read the official documentation on dependency, cook order, and time components for the mental model."
+            "text": "There usually is not one start button inside a TouchDesigner project. Anything that is being viewed, recorded, or sent out will cause the parts it depends on to run. Thinking in terms of \"what is being asked for right now\" is more useful than looking for a single first step."
           }
         },
         {
@@ -144,7 +150,7 @@
           "name": "why does nothing happen but cpu is still active in touchdesigner",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "A quiet output does not mean the network is idle. Operators can keep cooking to maintain state and confirm inputs every frame. The docs describe this as continuous evaluation rather than event-only processing."
+            "text": "A still picture does not mean the project is idle. TouchDesigner can keep updating timing, checking inputs, and maintaining internal behavior. CPU activity often means the project is staying ready, not that it is failing."
           }
         },
         {
@@ -152,7 +158,7 @@
           "name": "is touchdesigner event based or real time",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "It is primarily real-time and frame-driven, with events layered on top. That is why systems keep updating even between interactions. The official docs separate timeline-driven cooking from callback/event mechanisms."
+            "text": "It is mainly real-time and time-driven, like a video system that advances moment by moment. Button presses and keyboard actions can also trigger things, but the core idea is continuous motion, not \"only runs when you click.\""
           }
         }
       ]
@@ -172,64 +178,132 @@
         <!-- SEO-INTRO-START -->
         <p>This guide explains what is TouchDesigner for complete beginners in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
         <!-- SEO-INTRO-END -->
+
         <p>The screen is not waiting for you.</p>
 
-        <p>That detail explains the strange unease people feel when this software opens and nothing acknowledges their presence. No blinking cursor asking for direction. No empty canvas suggesting intention. No pause while you decide what kind of person you plan to be today. Activity is already underway, even if you cannot name it yet.</p>
+        <p>
+          That detail explains the strange unease people feel when this software opens and nothing acknowledges their presence.
+          No blinking cursor asking for direction. No empty canvas suggesting intention.
+          Activity is already underway, even if you cannot name it yet.
+        </p>
 
-        <p>This software runs the way a room runs. Power hums through it. Time advances. State is maintained. Opening a file does not initiate motion; it places you inside a system that never stopped. What looks like stillness is a loop doing its job over and over without commentary.</p>
+        <p>
+          TouchDesigner runs like a powered rig. Time advances. Things keep checking their relationships.
+          Opening a file does not “begin” the project. It drops you into something that is already alive.
+        </p>
 
-        <p>Most programs behave transactionally. You act, they respond. You stop, they freeze politely. This one behaves more like a rig left powered overnight. Values refresh. Conditions are checked. Signals circulate through agreements that were made long before you arrived.</p>
+        <p>
+          Most programs are transactional: you act, they respond, you stop, they freeze politely.
+          This one keeps its posture even when you are hands-off.
+        </p>
 
-        <p>Nothing happening feels uncomfortable here because nothing happening does not mean rest. It means repetition. A value holding steady across frames is still being reaffirmed frame after frame. Stability is not the absence of change; it is a condition that keeps getting approved.</p>
+        <p>
+          “Nothing happening” feels uncomfortable here because “nothing happening” usually means “holding steady.”
+          Holding steady still requires constant checking. The system keeps reaffirming what depends on what.
+        </p>
 
-        <p>Time is not something you enable later. You inherit it the moment the project opens. Every number exists inside before and after, even when it never moves. The system does not ask whether you intend to animate. It assumes time applies regardless.</p>
+        <p>
+          Screenshots cause confusion for the same reason. A frozen view looks like a diagram, but the project behaves like a running setup.
+          Resume it and it continues without caring what you expected.
+        </p>
 
-        <p>Screenshots cause trouble for this reason. A paused network looks like a diagram, but it behaves more like surveillance footage. Resume it and the activity continues without consulting your expectations. Nothing inside the network knows you are observing it. Nothing adjusts itself for explanation.</p>
+        <p>
+          Questions like “where does it start?” come from software that behaves like a sentence: first word, last word.
+          This behaves more like a room with multiple lights and switches. Different parts become active when something asks for them.
+        </p>
 
-        <p>Questions about where execution begins come from software that behaves like a sentence. Start here. End there. This environment behaves more like weather. Pressure builds. Patterns repeat. Events overlap. Asking where it starts misunderstands the shape of the thing.</p>
+        <p>
+          When you understand that, the urge to “add more stuff until it wakes up” weakens.
+          If nothing reacts, the project is usually not asleep. It is running and ignoring whatever is irrelevant.
+        </p>
 
-        <p>What runs is not the network as a story. What runs is the agreement that each container keeps checking its inputs and updating its outputs as long as time advances. That agreement is not optional. Closing the file is the only way to interrupt it.</p>
-
-        <p>This explains the familiar urge to add more pieces when nothing responds. That impulse makes sense in software that waits. Here it only feeds the system more material to disregard. If nothing reacts, it is not asleep. It is active and unconvinced.</p>
-
-        <p>Attention shifts once this is understood. Effort moves away from trying to wake things up and toward noticing what they are already doing. Patterns become audible. Dropouts become obvious. The system communicates through behavior rather than messages.</p>
-
-        <p>This software does not announce that it is running. It assumes that part is understood.</p>
+        <p>
+          The skill is noticing what is already moving, what is holding, and what is being asked for right now.
+          That is where debugging starts in this world.
+        </p>
 
         <!-- SEO-QUESTIONS-START -->
         <h2>What is TouchDesigner actually used for?</h2>
-        <p>This section explores what is touchdesigner actually used for with practical guidance you can apply while building TouchDesigner networks.</p>
+        <p>
+          TouchDesigner is used to build real-time systems: visuals that react to music, interactive installations,
+          live show graphics, projection mapping, camera-based effects, sensor-driven pieces, and control rigs for lighting or media servers.
+        </p>
+        <p>
+          The common thread is not “making a picture.” The common thread is “keeping a behavior running” while inputs change:
+          audio, time, controllers, cameras, data feeds, or human interaction.
+        </p>
+        <p>
+          If you have ever wanted a thing to respond while it is happening, not after you export it, this is the lane.
+        </p>
 
         <h2>Is TouchDesigner hard for beginners to learn?</h2>
-        <p>This section explores is touchdesigner hard for beginners to learn with practical guidance you can apply while building TouchDesigner networks.</p>
+        <p>
+          The hard part is not a hidden trick. The hard part is the mental switch:
+          you stop thinking “I click a tool, then I draw.”
+          You start thinking “signals flow, parts influence other parts, the whole keeps running.”
+        </p>
+        <p>
+          Beginners usually get stuck for three reasons:
+        </p>
+        <p>
+          One: they expect the screen to wait.
+          Two: they expect one obvious “start point.”
+          Three: they treat every new box as a feature instead of a role.
+        </p>
+        <p>
+          Learning speeds up when you build tiny chains on purpose and watch what changes when you change one thing.
+        </p>
 
         <h2>Do I need to code to use TouchDesigner?</h2>
-        <p>This section explores do i need to code to use touchdesigner with practical guidance you can apply while building TouchDesigner networks.</p>
-
+        <p>
+          No. You can get very far by wiring parts together and linking controls to behaviors.
+          Many TouchDesigner projects are built entirely without writing code.
+        </p>
+        <p>
+          Code becomes useful when you want rules, automation, file handling, custom tools, or bigger coordination.
+          It is optional at the start. It becomes a power-up later.
+        </p>
         <!-- SEO-QUESTIONS-END -->
 
         <!-- SEO-FAQ-START -->
         <section class="blog-faq" aria-labelledby="faq-heading">
           <h2 id="faq-heading">FAQ</h2>
+
           <div class="faq-item">
             <h3>why does touchdesigner keep running when i am not clicking anything</h3>
-            <p>TouchDesigner cooks continuously because operators evaluate on frame updates, not only on user actions. Even a stable value is being re-checked over time. The official docs on cooking and timelines explain this always-on execution model.</p>
+            <p>
+              TouchDesigner is designed for live systems. It keeps updating time and checking how things are connected,
+              even if you do nothing. A still picture can still be part of a running setup.
+            </p>
           </div>
+
           <div class="faq-item">
             <h3>where does execution start in touchdesigner</h3>
-            <p>There is rarely a single start line in a networked project. Evaluation emerges from dependencies, time, and active viewers. Read the official documentation on dependency, cook order, and time components for the mental model.</p>
+            <p>
+              There usually is not one start point. Parts run because something is using them right now
+              (a viewer, a recorder, an output, or another part downstream). The useful question is:
+              “What am I asking the project to show or send right now?”
+            </p>
           </div>
+
           <div class="faq-item">
             <h3>why does nothing happen but cpu is still active in touchdesigner</h3>
-            <p>A quiet output does not mean the network is idle. Operators can keep cooking to maintain state and confirm inputs every frame. The docs describe this as continuous evaluation rather than event-only processing.</p>
+            <p>
+              “Nothing happening” often means “holding steady.” The project can still be updating timing,
+              checking inputs, and maintaining behavior. CPU activity often means the project is staying ready.
+            </p>
           </div>
+
           <div class="faq-item">
             <h3>is touchdesigner event based or real time</h3>
-            <p>It is primarily real-time and frame-driven, with events layered on top. That is why systems keep updating even between interactions. The official docs separate timeline-driven cooking from callback/event mechanisms.</p>
+            <p>
+              It is mainly real-time: it keeps moving forward moment by moment.
+              Button presses and keyboard actions can trigger changes too, but the default mode is continuous motion.
+            </p>
           </div>
         </section>
         <!-- SEO-FAQ-END -->
-</article>
+      </article>
 
       <div class="page-image">
         <img src="v1b1.png" alt="Manual page 01" />
@@ -240,7 +314,5 @@
         <a href="v1b2.html" aria-label="Go to page 02">Next page</a>
       </div>
     </div>
-</body>
+  </body>
 </html>
-
-
