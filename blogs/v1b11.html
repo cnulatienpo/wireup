@@ -1,172 +1,203 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>11 — Why operators feel wrong when you meet them too early</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
-      }
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Learn TouchDesigner nothing is working beginner guide with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks.">
+  <title>TouchDesigner nothing is working beginner guide</title>
 
-      :root {
-        --bg: #0b0b0f;
-        --fg: #f2f2f5;
-        --muted: #b9b9c6;
-        --line: rgba(242, 242, 245, 0.14);
-      }
+  <style>
+    :root {
+      --bg: #0b0b0f;
+      --fg: #f2f2f5;
+      --muted: #b9b9c6;
+      --line: rgba(242,242,245,0.14);
+    }
 
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
+    * {
+      box-sizing: border-box;
+      font-family: Garamond, "Times New Roman", serif;
+      font-size: 14pt;
+    }
 
-      body {
-        margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
-        background: var(--bg);
-        color: var(--fg);
-      }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+    }
 
-      .wrap {
-        max-width: 820px;
-        margin: 0 auto;
-        padding: 64px 20px 96px;
-      }
+    .wrap {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 64px 20px 96px;
+    }
 
-      header {
-        margin-bottom: 36px;
-      }
+    header {
+      margin-bottom: 36px;
+    }
 
-      h1 {
-        font-size: clamp(40px, 5vw, 72px);
-        letter-spacing: -0.02em;
-        margin: 0 0 10px;
-      }
+    h1 {
+      font-size: clamp(40px, 5vw, 72px);
+      letter-spacing: -0.02em;
+      margin: 0 0 10px;
+    }
 
-      .num {
-        color: var(--muted);
-        font-size: 14px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
+    .num {
+      color: var(--muted);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
 
-      article {
-        font-size: 45px;
-        line-height: 1.7;
-      }
+    article {
+      line-height: 1.7;
+    }
 
-      p {
-        margin: 0 0 22px;
-      }
+    p {
+      margin: 0 0 22px;
+    }
 
-      .page-image {
-        margin: 56px 0 28px;
-        border-top: 1px solid var(--line);
-        padding-top: 28px;
-      }
+    .blog-faq {
+      margin-top: 60px;
+      border-top: 1px solid var(--line);
+      padding-top: 40px;
+    }
 
-      .page-image img {
-        display: block;
-        width: min(100%, 640px);
-        height: auto;
-        margin: 0 auto;
-      }
+    .blog-faq h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
 
-      .nav {
-        display: flex;
-        justify-content: flex-end;
-      }
+    .blog-faq h3 {
+      font-size: 20px;
+      margin: 20px 0 8px;
+    }
 
-      .nav a {
-        color: var(--fg);
-        text-decoration: none;
-        border: 1px solid var(--line);
-        padding: 10px 16px;
-        border-radius: 999px;
-        font-size: 14px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
+    .page-image {
+      margin: 56px 0 28px;
+      border-top: 1px solid var(--line);
+      padding-top: 28px;
+    }
 
-      .nav a:hover {
-        border-color: var(--fg);
-      }
-    </style>
-  </head>
+    .page-image img {
+      display: block;
+      width: min(100%, 640px);
+      height: auto;
+      margin: 0 auto;
+    }
 
-  <body>
-    <div class="wrap">
-      <header>
-        <div class="num">11</div>
-        <h1>Why operators feel wrong when you meet them too early</h1>
-      </header>
+    .nav {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
 
-      <article>
-        <p>
-          Operators arrive with too much confidence.
-        </p>
+    .nav a {
+      color: var(--fg);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
 
-        <p>
-          They have names. Icons. Menus. Parameters stacked ten deep. They look like the place where work is supposed to happen. Meeting them before understanding the system turns that confidence into pressure.
-        </p>
+    .nav a:hover {
+      border-color: var(--fg);
+    }
+  </style>
+</head>
 
-        <p>
-          The expectation forms fast: this box should do something. Adjusting it should produce results. Learning enough of them should unlock progress. When that does not happen, frustration feels personal.
-        </p>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="num">11</div>
+      <h1>Why operators feel wrong when you meet them too early</h1>
+      <p>This guide explains TouchDesigner nothing is working beginner guide in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+    </header>
 
-        <p>
-          What is missing is not knowledge of operators. It is context for why they exist.
-        </p>
+    <article>
+      <p>Operators arrive with too much confidence.</p>
 
-        <p>
-          An operator is not a feature. It is a promise with narrow boundaries. If it receives a certain kind of signal, it will transform it in a specific way. That is the entire deal. No awareness of the project. No sense of purpose. No concern for outcome.
-        </p>
+      <p>They have names. Icons. Menus. Parameters stacked deep. They look like the place where work is supposed to happen. Meeting them before understanding the system turns that confidence into pressure.</p>
 
-        <p>
-          Without understanding containers, flow, time, and dependency, that promise sounds incomplete. People keep waiting for the operator to fill in the gaps with intention. It never does.
-        </p>
+      <p>The expectation forms fast: this box should do something. Adjusting it should produce results. Learning enough of them should unlock progress. When that does not happen, frustration feels personal.</p>
 
-        <p>
-          Early exposure encourages superstition. Add one. Nothing happens. Add another. Still nothing. Eventually something changes and the association sticks, even if the relationship was incidental. This is how networks turn into rituals instead of systems.
-        </p>
+      <p>What is missing is not knowledge of operators. It is context for why they exist.</p>
 
-        <p>
-          Operators also arrive without hierarchy. A simple one sits beside a complicated one. A foundational transform lives next to an edge case. Without a sense of scale, everything looks equally important and equally opaque.
-        </p>
+      <p>An operator is not a feature. It is a promise with narrow boundaries. If it receives a certain kind of signal, it will transform it in a specific way.</p>
 
-        <p>
-          The feeling of wrongness comes from misplaced responsibility. People expect operators to supply motion, meaning, or structure. Those responsibilities belong elsewhere. Operators only modify what passes through them.
-        </p>
+      <p>Without understanding containers, flow, time, and dependency, that promise sounds incomplete.</p>
 
-        <p>
-          This explains why parameter tweaking feels endless. You are adjusting a promise without having arranged the conditions it depends on. The system is responding faithfully, just not in the way hoped for.
-        </p>
+      <p>Early exposure encourages superstition. Add one. Nothing happens. Add another. Still nothing. Eventually something changes and the association sticks.</p>
 
-        <p>
-          Once the surrounding ideas are in place, operators shrink. They stop feeling like obstacles and start feeling like vocabulary. Each one says a single sentence and then gets out of the way.
-        </p>
+      <p>Operators also arrive without hierarchy. A simple one sits beside a complicated one.</p>
 
-        <p>
-          Meeting them later changes the relationship. You no longer ask what they can do. You ask what kind of signal they expect and whether that expectation fits the situation.
-        </p>
+      <p>The feeling of wrongness comes from misplaced responsibility. Operators only modify what passes through them.</p>
 
-        <p>
-          The discomfort was never about difficulty. It was about being introduced to tools before being told what kind of room you were standing in.
-        </p>
-      </article>
+      <p>Parameter tweaking feels endless when surrounding conditions are not aligned.</p>
 
-      <div class="page-image">
-        <img src="v1b11.png" alt="Manual page 11" />
-      </div>
+      <p>Once the surrounding ideas are in place, operators shrink. They stop feeling like obstacles and start feeling like vocabulary.</p>
 
-      <div class="nav">
-        <a href="../index.html" aria-label="Back to index">Index</a>
-        <a href="v2b1.html" aria-label="Go to volume 2">Go to volume 2</a>
-      </div>
+      <p>The discomfort was never about difficulty. It was about being introduced to tools before understanding the environment.</p>
+    </article>
+
+    <section class="blog-faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">FAQ</h2>
+
+      <h3>Why is nothing working in my TouchDesigner file?</h3>
+      <p>Most failures come from missing input, incorrect signal type, or a dependency not being satisfied upstream.</p>
+
+      <h3>What should I check first when a network fails?</h3>
+      <p>Check whether data is arriving at the input, confirm types match, and verify that time-based evaluation is active.</p>
+
+      <h3>How do beginners debug TouchDesigner faster?</h3>
+      <p>Trace signals backward from the failure point, inspect upstream containers, and confirm that values are changing as expected.</p>
+    </section>
+
+    <div class="page-image">
+      <img src="v1b11.png" alt="Manual page 11">
     </div>
-  </body>
+
+    <div class="nav">
+      <a href="../index.html" aria-label="Back to index">Index</a>
+      <a href="v2b1.html" aria-label="Go to volume 2">Go to volume 2</a>
+    </div>
+  </div>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Why is nothing working in my TouchDesigner file?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most failures come from missing input, incorrect signal type, or a dependency not being satisfied upstream."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What should I check first when a network fails?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Check whether data is arriving at the input, confirm types match, and verify that time-based evaluation is active."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do beginners debug TouchDesigner faster?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Trace signals backward from the failure point, inspect upstream containers, and confirm that values are changing as expected."
+        }
+      }
+    ]
+  }
+  </script>
+
+</body>
 </html>
