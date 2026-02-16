@@ -1,286 +1,249 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>Volume 2 · 07 — How text and tables quietly run everything</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Upstream vs downstream thinking TouchDesigner</title>
+
+<meta name="description" content="Guide to upstream vs downstream thinking TouchDesigner. Learn core ideas, common mistakes, and practical checks for building reliable TouchDesigner networks." />
+
+<meta property="og:title" content="Upstream vs downstream thinking TouchDesigner" />
+<meta property="og:description" content="Guide to upstream vs downstream thinking TouchDesigner. Learn core ideas, common mistakes, and practical checks for building reliable TouchDesigner networks." />
+<meta property="og:type" content="article" />
+
+<style>
+:root {
+  --bg: #0b0b0f;
+  --fg: #f2f2f5;
+  --muted: #b9b9c6;
+  --line: rgba(242,242,245,0.14);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Garamond, "Times New Roman", serif;
+  font-size: 14pt;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 64px 20px 96px;
+}
+
+header { margin-bottom: 36px; }
+
+h1 {
+  font-size: clamp(40px, 5vw, 72px);
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+
+.num {
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+article { line-height: 1.7; }
+
+p { margin: 0 0 22px; }
+
+.page-image {
+  margin: 56px 0 28px;
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+
+.page-image img {
+  display: block;
+  width: min(100%, 640px);
+  height: auto;
+  margin: 0 auto;
+}
+
+.nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nav a {
+  color: var(--fg);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nav a:hover { border-color: var(--fg); }
+
+.blog-faq {
+  margin-top: 60px;
+  border-top: 1px solid var(--line);
+  padding-top: 40px;
+}
+
+.blog-faq h2 {
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+.blog-faq h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<header>
+  <div class="num">Volume 2 · 07</div>
+  <h1>How text and tables quietly run everything</h1>
+  <p><strong>This guide explains upstream vs downstream thinking TouchDesigner in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</strong></p>
+</header>
+
+<article>
+
+<p>
+Every signal has a direction.
+</p>
+
+<p>
+Upstream refers to anything feeding into a node. Downstream refers to anything receiving output from it.
+</p>
+
+<p>
+Most debugging mistakes happen because attention stays downstream.
+</p>
+
+<p>
+When something looks wrong on screen, the instinct is to tweak the final node. Adjust brightness. Change scale. Modify color. That treats symptoms instead of causes.
+</p>
+
+<p>
+Downstream nodes only react to what they are given.
+</p>
+
+<p>
+If the output looks wrong, move upstream.
+</p>
+
+<p>
+Follow the wire backward until you reach the first place where the value changes unexpectedly.
+</p>
+
+<p>
+Generators sit furthest upstream. Transformers sit between source and result. Renderers and outputs sit furthest downstream.
+</p>
+
+<p>
+Upstream thinking asks: where does this value originate?
+</p>
+
+<p>
+Downstream thinking asks: how does this value appear?
+</p>
+
+<p>
+Both are necessary. Only one solves structural problems.
+</p>
+
+<p>
+If a network feels unstable, trace the signal to its earliest generator.
+</p>
+
+<p>
+If a network feels visually incorrect but structurally sound, adjust downstream.
+</p>
+
+<p>
+The habit of tracing backward saves time.
+</p>
+
+<p>
+Wires tell a story. Read them from right to left when something fails.
+</p>
+
+<p>
+Outputs never invent problems. They reveal them.
+</p>
+
+</article>
+
+<section class="blog-faq" aria-labelledby="faq-heading">
+<h2 id="faq-heading">FAQ</h2>
+
+<div class="faq-item">
+<h3>What does upstream mean in TouchDesigner?</h3>
+<p>Upstream refers to nodes that feed data into another node. It is the earlier part of a signal chain.</p>
+</div>
+
+<div class="faq-item">
+<h3>Should I debug downstream or upstream first?</h3>
+<p>Begin downstream to identify where the problem appears, then move upstream to find the origin of the incorrect value.</p>
+</div>
+
+<div class="faq-item">
+<h3>How do I trace a bad output back to its source?</h3>
+<p>Follow the wire connections backward from the output node until you reach the first node where the signal differs from expectation.</p>
+</div>
+
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does upstream mean in TouchDesigner?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Upstream refers to nodes that feed data into another node. It is the earlier part of a signal chain."
       }
-
-      :root {
-        --bg: #0b0b0f;
-        --fg: #f2f2f5;
-        --muted: #b9b9c6;
-        --line: rgba(242, 242, 245, 0.14);
+    },
+    {
+      "@type": "Question",
+      "name": "Should I debug downstream or upstream first?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Begin downstream to identify where the problem appears, then move upstream to find the origin of the incorrect value."
       }
-
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
-
-      body {
-        margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
-        background: var(--bg);
-        color: var(--fg);
+    },
+    {
+      "@type": "Question",
+      "name": "How do I trace a bad output back to its source?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Follow the wire connections backward from the output node until you reach the first node where the signal differs from expectation."
       }
+    }
+  ]
+}
+</script>
 
-      .wrap {
-        max-width: 860px;
-        margin: 0 auto;
-        padding: 64px 20px 96px;
-      }
+<div class="page-image">
+<img src="v2b7.png" alt="Volume 2 page 07" />
+</div>
 
-      header { margin-bottom: 36px; }
+<div class="nav">
+<a href="../index.html" aria-label="Back to index">Index</a>
+<a href="v2b8.html" aria-label="Go to page 08">Next page</a>
+</div>
 
-      h1 {
-        font-size: clamp(40px, 5vw, 72px);
-        letter-spacing: -0.02em;
-
-      .page-image {
-        margin: 56px 0 28px;
-        border-top: 1px solid var(--line);
-        padding-top: 28px;
-      }
-
-      .page-image img {
-        display: block;
-        width: min(100%, 640px);
-        height: auto;
-        margin: 0 auto;
-      }
-
-      .nav {
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      .nav a {
-        color: var(--fg);
-        text-decoration: none;
-        border: 1px solid var(--line);
-        padding: 10px 16px;
-        border-radius: 999px;
-        font-size: 14px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-
-      .nav a:hover {
-        border-color: var(--fg);
-      }
-        margin: 0 0 10px;
-      }
-
-      .num {
-        color: var(--muted);
-        font-size: 14px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      article {
-        font-size: 45px;
-        line-height: 1.7;
-      }
-
-      p { margin: 0 0 22px; }
-
-      .do {
-        border-left: 3px solid var(--line);
-        padding-left: 18px;
-        margin: 28px 0;
-      }
-
-      ul { margin: 10px 0 0 20px; }
-      li { margin-bottom: 6px; }
-
-      code {
-        background: rgba(255,255,255,0.05);
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 0.9em;
-      }
-
-      .note {
-        color: var(--muted);
-        margin-top: 6px;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="wrap">
-      <header>
-        <div class="num">Volume 2 · 07</div>
-        <h1>How text and tables quietly run everything</h1>
-      </header>
-
-      <article>
-        <p>
-          So far, everything has moved because numbers pushed it.
-        </p>
-
-        <p>
-          Numbers feel powerful, but they are forgetful. They exist for a moment, do their job,
-          then vanish into the next frame.
-        </p>
-
-        <p>
-          Something else is happening underneath.
-        </p>
-
-        <p>
-          Decisions are being stored. Names are being remembered. Relationships are being held
-          in place. That work is not done by images or sound.
-        </p>
-
-        <p>
-          It is done by text and tables.
-        </p>
-
-        <div class="do">
-          <p>
-            Move your mouse to an empty area to the left of your existing network.
-          </p>
-          <p>
-            Press <code>Tab</code>.
-          </p>
-          <p>
-            Type one of the following and place it there:
-          </p>
-          <ul>
-            <li><code>Table</code></li>
-            <li><code>Text</code></li>
-            <li><code>Constant</code> (DAT)</li>
-          </ul>
-          <p class="note">
-            Any of these creates stored information. Pick one.
-          </p>
-        </div>
-
-        <p>
-          Open the viewer.
-        </p>
-
-        <p>
-          This node is not reacting to time. It is waiting.
-          Nothing changes unless something tells it to.
-        </p>
-
-        <p>
-          That waiting is the point.
-        </p>
-
-        <div class="do">
-          <p>
-            If you chose a <code>Table</code>, add a few values by clicking into the cells.
-          </p>
-          <p>
-            If you chose <code>Text</code>, type a few words or numbers.
-          </p>
-          <p>
-            If you chose <code>Constant</code>, add a few named fields.
-          </p>
-        </div>
-
-        <p>
-          You just created memory.
-        </p>
-
-        <p>
-          This data does not care about frames, audio, or visuals.
-          It exists outside the flow and can be consulted at any time.
-        </p>
-
-        <div class="do">
-          <p>
-            Press <code>Tab</code>.
-          </p>
-          <p>
-            Add one of the following to the right:
-          </p>
-          <ul>
-            <li><code>DAT to CHOP</code></li>
-            <li><code>DAT to SOP</code></li>
-            <li><code>DAT to TOP</code></li>
-          </ul>
-          <p class="note">
-            This is another border crossing. Pick any.
-          </p>
-        </div>
-
-        <p>
-          Wire the text or table into the new node.
-        </p>
-
-        <p>
-          Stored information has entered the moving system.
-        </p>
-
-        <div class="do">
-          <p>
-            Take the output and wire it into something you already built:
-          </p>
-          <ul>
-            <li>a Transform parameter</li>
-            <li>a Level or Color parameter</li>
-            <li>a Switch index</li>
-          </ul>
-        </div>
-
-        <p>
-          The system now responds to decisions instead of impulses.
-        </p>
-
-        <p>
-          Change a value in the table or text.
-          Everything downstream updates immediately.
-        </p>
-
-        <p>
-          Nothing animated the change.
-          Nothing eased it.
-          The update happened because memory changed.
-        </p>
-
-        <p>
-          This is how logic enters the system.
-        </p>
-
-        <p>
-          Images persuade the eye.
-          Sound persuades the body.
-          Tables persuade the structure.
-        </p>
-
-        <p>
-          Most large networks are not driven by noise or audio.
-          They are driven by quiet collections of values that decide
-          what is allowed to happen.
-        </p>
-
-        <p>
-          When something feels impossible to coordinate,
-          the missing piece is often not a clever node,
-          but a place to write something down and reuse it.
-        </p>
-      </article>
-
-      <div class="page-image">
-        <img src="v2b7.png" alt="Volume 2 page 07" />
-      </div>
-
-      <div class="nav">
-        <a href="../index.html" aria-label="Back to index">Index</a>
-        <a href="v2b8.html" aria-label="Go to page 08">Next page</a>
-      </div>
-    </div>
-  </body>
+</div>
+</body>
 </html>
