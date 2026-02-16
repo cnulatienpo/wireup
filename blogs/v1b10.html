@@ -3,9 +3,6 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Guide to TouchDesigner network as interface explained. Learn core ideas, common mistakes, and simple checks for building more reliable TouchDesigner networks.">
-  <title>TouchDesigner network as interface explained</title>
-
   <style>
     :root {
       --bg: #0b0b0f;
@@ -107,7 +104,53 @@
       border-color: var(--fg);
     }
   </style>
-</head>
+
+    <title>TouchDesigner network as interface explained</title>
+    <meta name="description" content="Guide to TouchDesigner network as interface explained. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <meta property="og:title" content="TouchDesigner network as interface explained" />
+    <meta property="og:description" content="Guide to TouchDesigner network as interface explained. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <link rel="canonical" href="https://wireup.onrender.com/blogs/v1b10.html" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "why touchdesigner interface shows so many panes",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The interface exposes different perspectives on the same running system: network, parameters, viewers, and data tables. Multiple panes reduce hidden state while you iterate. The official UI overview docs explain each editor role."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "what am i supposed to watch in touchdesigner ui",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Watch outputs, parameter changes, cook indicators, and timing context together. No single pane tells the full story in real-time systems. The docs on viewers, info channels, and monitors describe what each view contributes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "is viewer output the final truth in touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Viewer output is important but not complete by itself. Performance state, references, and downstream usage can change interpretation. The official docs encourage pairing viewers with info and probe tools."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "why ui feels overwhelming when learning touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The UI is dense because it surfaces many system layers at once. It becomes manageable when you map each pane to a specific question. The beginner documentation is organized to build that mapping gradually."
+          }
+        }
+      ]
+    }
+    </script>
+  </head>
 
 <body>
   <div class="wrap">
@@ -118,6 +161,9 @@
     </header>
 
     <article>
+        <!-- SEO-INTRO-START -->
+        <p>This guide explains TouchDesigner network as interface explained in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+        <!-- SEO-INTRO-END -->
       <p>The interface is not trying to be friendly.</p>
       <p>It is trying to be truthful.</p>
 
@@ -138,22 +184,43 @@
       <p>Structural issues show up in the network. Behavioral issues show up in parameters. Perceptual issues show up in viewers. Timing issues can appear across all of them.</p>
 
       <p>The interface presents multiple partial truths. You correlate them.</p>
-    </article>
 
-    <section class="blog-faq" aria-labelledby="faq-heading">
-      <h2 id="faq-heading">FAQ</h2>
+        <!-- SEO-QUESTIONS-START -->
+        <h2>Why does network layout matter in TouchDesigner?</h2>
+        <p>This section explores why does network layout matter in touchdesigner with practical guidance you can apply while building TouchDesigner networks.</p>
 
-      <h3>Why does network layout matter in TouchDesigner?</h3>
-      <p>Layout affects readability and debugging. Clear organization makes dependencies easier to trace.</p>
+        <h2>How should I organize nodes as a beginner?</h2>
+        <p>This section explores how should i organize nodes as a beginner with practical guidance you can apply while building TouchDesigner networks.</p>
 
-      <h3>How should I organize nodes as a beginner?</h3>
-      <p>Group related operators, maintain directional flow, and keep signal types separated to reduce confusion.</p>
+        <h2>Is the node graph the actual interface in TouchDesigner?</h2>
+        <p>This section explores is the node graph the actual interface in touchdesigner with practical guidance you can apply while building TouchDesigner networks.</p>
 
-      <h3>Is the node graph the actual interface in TouchDesigner?</h3>
-      <p>Yes. The network graph represents the real program structure. What you wire together defines system behavior.</p>
-    </section>
+        <!-- SEO-QUESTIONS-END -->
 
-    <div class="page-image">
+        <!-- SEO-FAQ-START -->
+        <section class="blog-faq" aria-labelledby="faq-heading">
+          <h2 id="faq-heading">FAQ</h2>
+          <div class="faq-item">
+            <h3>why touchdesigner interface shows so many panes</h3>
+            <p>The interface exposes different perspectives on the same running system: network, parameters, viewers, and data tables. Multiple panes reduce hidden state while you iterate. The official UI overview docs explain each editor role.</p>
+          </div>
+          <div class="faq-item">
+            <h3>what am i supposed to watch in touchdesigner ui</h3>
+            <p>Watch outputs, parameter changes, cook indicators, and timing context together. No single pane tells the full story in real-time systems. The docs on viewers, info channels, and monitors describe what each view contributes.</p>
+          </div>
+          <div class="faq-item">
+            <h3>is viewer output the final truth in touchdesigner</h3>
+            <p>Viewer output is important but not complete by itself. Performance state, references, and downstream usage can change interpretation. The official docs encourage pairing viewers with info and probe tools.</p>
+          </div>
+          <div class="faq-item">
+            <h3>why ui feels overwhelming when learning touchdesigner</h3>
+            <p>The UI is dense because it surfaces many system layers at once. It becomes manageable when you map each pane to a specific question. The beginner documentation is organized to build that mapping gradually.</p>
+          </div>
+        </section>
+        <!-- SEO-FAQ-END -->
+</article>
+
+      <div class="page-image">
       <img src="v1b10.png" alt="Manual page 10">
     </div>
 
@@ -162,39 +229,5 @@
       <a href="v1b11.html" aria-label="Go to page 11">Next page</a>
     </div>
   </div>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Why does network layout matter in TouchDesigner?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Layout affects readability and debugging. Clear organization makes dependencies easier to trace."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How should I organize nodes as a beginner?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Group related operators, maintain directional flow, and keep signal types separated to reduce confusion."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Is the node graph the actual interface in TouchDesigner?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. The network graph represents the real program structure. What you wire together defines system behavior."
-        }
-      }
-    ]
-  }
-  </script>
-
 </body>
 </html>

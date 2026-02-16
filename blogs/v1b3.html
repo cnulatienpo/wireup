@@ -3,9 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Learn TouchDesigner signal flow explained for beginners with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks.">
-    <title>TouchDesigner signal flow explained for beginners</title>
-
     <style>
       :root {
         --bg: #0b0b0f;
@@ -107,6 +104,52 @@
         border-color: var(--fg);
       }
     </style>
+
+    <title>TouchDesigner signal flow explained for beginners</title>
+    <meta name="description" content="Learn TouchDesigner signal flow explained for beginners with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks." />
+    <meta property="og:title" content="TouchDesigner signal flow explained for beginners" />
+    <meta property="og:description" content="Learn TouchDesigner signal flow explained for beginners with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks." />
+    <link rel="canonical" href="https://wireup.onrender.com/blogs/v1b3.html" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "is every node in touchdesigner an object",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Operators behave more like processes with inputs, outputs, and parameters than self-contained objects. Their meaning comes from context in the network. The official docs on OP classes and dependency clarify this."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "why does deleting one node change unrelated results",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "What seems unrelated is often connected through shared dependencies or viewers. Networks propagate consequences through signal relationships, not object ownership trees. The docs on cooking and references explain these side effects."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "touchdesigner oop vs node based thinking",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Object-oriented habits can help naming and structure, but execution is dataflow-first. Operators evaluate based on upstream conditions and time, not method calls. Read the docs on network execution and component organization."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "how to think about identity in touchdesigner operators",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Identity is functional: what signal enters, what transformation occurs, and what leaves. Stable behavior matters more than class-style identity semantics. The docs emphasize operator role and parameter state over object metaphors."
+          }
+        }
+      ]
+    }
+    </script>
   </head>
 
   <body>
@@ -118,6 +161,9 @@
       </header>
 
       <article>
+        <!-- SEO-INTRO-START -->
+        <p>This guide explains TouchDesigner signal flow explained for beginners in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+        <!-- SEO-INTRO-END -->
         <p>The habit you bring in with you is object-thinking.</p>
 
         <p>Files, layers, images, clips, shapes. Things that sit there until you pick them up. Things with edges, names, and a sense of completion. Most software trains you to believe that work is about arranging objects into a satisfying arrangement and then stepping back.</p>
@@ -141,20 +187,41 @@
         <p>Once you stop looking for objects, frustration drops. You stop hunting for the place where the result lives. You start watching how conditions propagate. The work shifts from collecting things to arranging responsibilities.</p>
 
         <p>Nothing here is an object because objects would slow the system down. What exists instead are agreements that stay active for as long as you keep them wired.</p>
-      </article>
 
-      <section class="blog-faq" aria-labelledby="faq-heading">
-        <h2 id="faq-heading">FAQ</h2>
+        <!-- SEO-QUESTIONS-START -->
+        <h2>What is signal flow in TouchDesigner?</h2>
+        <p>This section explores what is signal flow in touchdesigner with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>What is signal flow in TouchDesigner?</h3>
-        <p>Signal flow describes how data moves from one operator to another through connections. Each operator evaluates its inputs and updates its outputs continuously.</p>
+        <h2>Why is my network not passing data forward?</h2>
+        <p>This section explores why is my network not passing data forward with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>Why is my network not passing data forward?</h3>
-        <p>If nothing appears downstream, check connections and data types. Signal flow stops when inputs do not match what the receiving operator expects.</p>
+        <h2>How do I trace flow through connected operators?</h2>
+        <p>This section explores how do i trace flow through connected operators with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>How do I trace flow through connected operators?</h3>
-        <p>Follow the wires from left to right and inspect intermediate operators. Viewing outputs step by step helps you understand how information propagates.</p>
-      </section>
+        <!-- SEO-QUESTIONS-END -->
+
+        <!-- SEO-FAQ-START -->
+        <section class="blog-faq" aria-labelledby="faq-heading">
+          <h2 id="faq-heading">FAQ</h2>
+          <div class="faq-item">
+            <h3>is every node in touchdesigner an object</h3>
+            <p>Operators behave more like processes with inputs, outputs, and parameters than self-contained objects. Their meaning comes from context in the network. The official docs on OP classes and dependency clarify this.</p>
+          </div>
+          <div class="faq-item">
+            <h3>why does deleting one node change unrelated results</h3>
+            <p>What seems unrelated is often connected through shared dependencies or viewers. Networks propagate consequences through signal relationships, not object ownership trees. The docs on cooking and references explain these side effects.</p>
+          </div>
+          <div class="faq-item">
+            <h3>touchdesigner oop vs node based thinking</h3>
+            <p>Object-oriented habits can help naming and structure, but execution is dataflow-first. Operators evaluate based on upstream conditions and time, not method calls. Read the docs on network execution and component organization.</p>
+          </div>
+          <div class="faq-item">
+            <h3>how to think about identity in touchdesigner operators</h3>
+            <p>Identity is functional: what signal enters, what transformation occurs, and what leaves. Stable behavior matters more than class-style identity semantics. The docs emphasize operator role and parameter state over object metaphors.</p>
+          </div>
+        </section>
+        <!-- SEO-FAQ-END -->
+</article>
 
       <div class="page-image">
         <img src="v1b3.png" alt="Manual page 03" />
@@ -165,39 +232,5 @@
         <a href="v1b4.html" aria-label="Go to page 04">Next page</a>
       </div>
     </div>
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What is signal flow in TouchDesigner?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Signal flow describes how data moves from one operator to another through connections. Each operator evaluates its inputs and updates its outputs continuously."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why is my network not passing data forward?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "If nothing appears downstream, check connections and data types. Signal flow stops when inputs do not match what the receiving operator expects."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do I trace flow through connected operators?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Follow the wires from left to right and inspect intermediate operators. Viewing outputs step by step helps you understand how information propagates."
-          }
-        }
-      ]
-    }
-    </script>
-
-  </body>
+</body>
 </html>

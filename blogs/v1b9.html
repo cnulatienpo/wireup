@@ -3,9 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Guide to data vs image vs geometry in TouchDesigner. Learn core ideas, common mistakes, and simple checks for building more reliable TouchDesigner networks.">
-    <title>Data vs image vs geometry in TouchDesigner</title>
-
     <style>
       :root {
         --bg: #0b0b0f;
@@ -107,6 +104,52 @@
         border-color: var(--fg);
       }
     </style>
+
+    <title>Data vs image vs geometry in TouchDesigner</title>
+    <meta name="description" content="Guide to data vs image vs geometry in TouchDesigner. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <meta property="og:title" content="Data vs image vs geometry in TouchDesigner" />
+    <meta property="og:description" content="Guide to data vs image vs geometry in TouchDesigner. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <link rel="canonical" href="https://wireup.onrender.com/blogs/v1b9.html" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "is the network itself the program in touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, the connected operator graph is the executable structure. Scripts and parameters modify behavior, but the network defines ongoing evaluation. The official docs frame projects as operator networks rather than code files."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "where is main function in touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "There usually is no single main function equivalent. Behavior emerges from active components, timelines, and dependency graphs. The docs on project structure and components provide the right analogy."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "can i treat touchdesigner like a script runner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can run scripts, but the primary runtime is still the network. Python is often orchestration around persistent operator systems. Official docs on Python in TouchDesigner explain this relationship."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "what does program mean in visual dataflow tools",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It means a living arrangement of connected processes and their state over time. Structure, timing, and references collectively define logic. The documentation for operators and components supports this systems-level definition."
+          }
+        }
+      ]
+    }
+    </script>
   </head>
 
   <body>
@@ -118,6 +161,9 @@
       </header>
 
       <article>
+        <!-- SEO-INTRO-START -->
+        <p>This guide explains data vs image vs geometry in TouchDesigner in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+        <!-- SEO-INTRO-END -->
         <p>There is no hidden script behind the scenes.</p>
 
         <p>What you see wired together is not a representation of the program. It is the program.</p>
@@ -139,20 +185,41 @@
         <p>Effort shifts from searching for the right setting to arranging flow correctly.</p>
 
         <p>The program is spelled out in wires, dependencies, and repetition across frames.</p>
-      </article>
 
-      <section class="blog-faq" aria-labelledby="faq-heading">
-        <h2 id="faq-heading">FAQ</h2>
+        <!-- SEO-QUESTIONS-START -->
+        <h2>What is the difference between data and image in TouchDesigner?</h2>
+        <p>This section explores what is the difference between data and image in touchdesigner with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>What is the difference between data and image in TouchDesigner?</h3>
-        <p>Data refers to numeric or structured information (CHOPs and DATs). Images are pixel-based data processed in TOPs.</p>
+        <h2>Can I turn CHOP channels into geometry?</h2>
+        <p>This section explores can i turn chop channels into geometry with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>Can I turn CHOP channels into geometry?</h3>
-        <p>Yes. CHOP data can drive SOP parameters or be converted into geometry using conversion operators.</p>
+        <h2>How do I convert a TOP to CHOP values?</h2>
+        <p>This section explores how do i convert a top to chop values with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>How do I convert a TOP to CHOP values?</h3>
-        <p>You can use a TOP to CHOP operator to extract pixel values into channels for further processing.</p>
-      </section>
+        <!-- SEO-QUESTIONS-END -->
+
+        <!-- SEO-FAQ-START -->
+        <section class="blog-faq" aria-labelledby="faq-heading">
+          <h2 id="faq-heading">FAQ</h2>
+          <div class="faq-item">
+            <h3>is the network itself the program in touchdesigner</h3>
+            <p>Yes, the connected operator graph is the executable structure. Scripts and parameters modify behavior, but the network defines ongoing evaluation. The official docs frame projects as operator networks rather than code files.</p>
+          </div>
+          <div class="faq-item">
+            <h3>where is main function in touchdesigner</h3>
+            <p>There usually is no single main function equivalent. Behavior emerges from active components, timelines, and dependency graphs. The docs on project structure and components provide the right analogy.</p>
+          </div>
+          <div class="faq-item">
+            <h3>can i treat touchdesigner like a script runner</h3>
+            <p>You can run scripts, but the primary runtime is still the network. Python is often orchestration around persistent operator systems. Official docs on Python in TouchDesigner explain this relationship.</p>
+          </div>
+          <div class="faq-item">
+            <h3>what does program mean in visual dataflow tools</h3>
+            <p>It means a living arrangement of connected processes and their state over time. Structure, timing, and references collectively define logic. The documentation for operators and components supports this systems-level definition.</p>
+          </div>
+        </section>
+        <!-- SEO-FAQ-END -->
+</article>
 
       <div class="page-image">
         <img src="v1b9.png" alt="Manual page 09" />
@@ -163,39 +230,5 @@
         <a href="v1b10.html" aria-label="Go to page 10">Next page</a>
       </div>
     </div>
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What is the difference between data and image in TouchDesigner?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Data refers to numeric or structured information (CHOPs and DATs). Images are pixel-based data processed in TOPs."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I turn CHOP channels into geometry?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. CHOP data can drive SOP parameters or be converted into geometry using conversion operators."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do I convert a TOP to CHOP values?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "You can use a TOP to CHOP operator to extract pixel values into channels for further processing."
-          }
-        }
-      ]
-    }
-    </script>
-
-  </body>
+</body>
 </html>

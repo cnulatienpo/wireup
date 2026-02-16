@@ -3,14 +3,6 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>TouchDesigner parameters as interfaces explained</title>
-
-<meta name="description" content="Learn TouchDesigner parameters as interfaces explained with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks." />
-
-<meta property="og:title" content="TouchDesigner parameters as interfaces explained" />
-<meta property="og:description" content="Learn TouchDesigner parameters as interfaces explained with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks." />
-<meta property="og:type" content="article" />
-
 <style>
 :root {
   --bg: #0b0b0f;
@@ -137,7 +129,53 @@ code {
   margin-bottom: 8px;
 }
 </style>
-</head>
+
+    <title>TouchDesigner parameters as interfaces explained</title>
+    <meta name="description" content="Learn TouchDesigner parameters as interfaces explained with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks." />
+    <meta property="og:title" content="TouchDesigner parameters as interfaces explained" />
+    <meta property="og:description" content="Learn TouchDesigner parameters as interfaces explained with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks." />
+    <link rel="canonical" href="https://wireup.onrender.com/blogs/v2b2.html" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "how do different data types interact in touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Data types cross boundaries through explicit conversion and interpretation layers. Problems happen when semantic meaning is assumed instead of declared. The official docs on CHOP/TOP/SOP/DAT conversion operators are essential reading."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "why converting chop to top changes behavior",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Conversion preserves values but changes context such as sampling, dimensionality, and downstream expectations. So behavior can shift even when data looks similar. The docs for conversion OPs explain these context shifts."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "best way to think about data borders in touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Treat each family boundary as a contract change, not a trivial cast. Ask what representation and timing assumptions you gain or lose. Official operator docs describe family-specific semantics and limits."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "touchdesigner type mismatch symptoms",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Common symptoms are unexpected ranges, resolution artifacts, timing drift, or silent reinterpretation. These usually indicate boundary assumptions were implicit. The docs and wiki examples on data conversion help diagnose them."
+          }
+        }
+      ]
+    }
+    </script>
+  </head>
 
 <body>
 <div class="wrap">
@@ -149,7 +187,9 @@ code {
 </header>
 
 <article>
-
+        <!-- SEO-INTRO-START -->
+        <p>This guide explains TouchDesigner parameters as interfaces explained in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+        <!-- SEO-INTRO-END -->
 <p>
 Parameters are not decorations. They are interfaces.
 </p>
@@ -203,61 +243,42 @@ Parameters are not meant to be memorized. They are meant to be read in context. 
 Once you see parameters as interfaces rather than options, the pane stops feeling crowded. It becomes a control surface attached directly to flow.
 </p>
 
+        <!-- SEO-QUESTIONS-START -->
+        <h2>What do parameters actually do in TouchDesigner?</h2>
+        <p>This section explores what do parameters actually do in touchdesigner with practical guidance you can apply while building TouchDesigner networks.</p>
+
+        <h2>Why does changing one parameter affect others?</h2>
+        <p>This section explores why does changing one parameter affect others with practical guidance you can apply while building TouchDesigner networks.</p>
+
+        <h2>How do I know which parameter to tweak first?</h2>
+        <p>This section explores how do i know which parameter to tweak first with practical guidance you can apply while building TouchDesigner networks.</p>
+
+        <!-- SEO-QUESTIONS-END -->
+
+        <!-- SEO-FAQ-START -->
+        <section class="blog-faq" aria-labelledby="faq-heading">
+          <h2 id="faq-heading">FAQ</h2>
+          <div class="faq-item">
+            <h3>how do different data types interact in touchdesigner</h3>
+            <p>Data types cross boundaries through explicit conversion and interpretation layers. Problems happen when semantic meaning is assumed instead of declared. The official docs on CHOP/TOP/SOP/DAT conversion operators are essential reading.</p>
+          </div>
+          <div class="faq-item">
+            <h3>why converting chop to top changes behavior</h3>
+            <p>Conversion preserves values but changes context such as sampling, dimensionality, and downstream expectations. So behavior can shift even when data looks similar. The docs for conversion OPs explain these context shifts.</p>
+          </div>
+          <div class="faq-item">
+            <h3>best way to think about data borders in touchdesigner</h3>
+            <p>Treat each family boundary as a contract change, not a trivial cast. Ask what representation and timing assumptions you gain or lose. Official operator docs describe family-specific semantics and limits.</p>
+          </div>
+          <div class="faq-item">
+            <h3>touchdesigner type mismatch symptoms</h3>
+            <p>Common symptoms are unexpected ranges, resolution artifacts, timing drift, or silent reinterpretation. These usually indicate boundary assumptions were implicit. The docs and wiki examples on data conversion help diagnose them.</p>
+          </div>
+        </section>
+        <!-- SEO-FAQ-END -->
 </article>
 
-<section class="blog-faq" aria-labelledby="faq-heading">
-<h2 id="faq-heading">FAQ</h2>
-
-<div class="faq-item">
-<h3>What do parameters actually do in TouchDesigner?</h3>
-<p>Parameters define how an operator behaves each frame. They adjust transformation, timing, scaling, and interpretation of incoming signals.</p>
-</div>
-
-<div class="faq-item">
-<h3>Why does changing one parameter affect others?</h3>
-<p>Because operators exist in dependency chains. A parameter change alters behavior, which alters outputs, which influence downstream nodes.</p>
-</div>
-
-<div class="faq-item">
-<h3>How do I know which parameter to tweak first?</h3>
-<p>Adjust structural parameters first such as input source, resolution, or mode. After structure is correct, refine smaller behavioral values.</p>
-</div>
-</section>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "What do parameters actually do in TouchDesigner?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Parameters define how an operator behaves each frame. They adjust transformation, timing, scaling, and interpretation of incoming signals."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Why does changing one parameter affect others?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Because operators exist in dependency chains. A parameter change alters behavior, which alters outputs, which influence downstream nodes."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How do I know which parameter to tweak first?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Adjust structural parameters first such as input source, resolution, or mode. After structure is correct, refine smaller behavioral values."
-      }
-    }
-  ]
-}
-</script>
-
-<div class="page-image">
+      <div class="page-image">
 <img src="v2b2.png" alt="Volume 2 page 02" />
 </div>
 

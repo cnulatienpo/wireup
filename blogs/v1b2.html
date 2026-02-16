@@ -3,10 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Guide to TouchDesigner operators vs objects explained. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks.">
     <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-    <title>TouchDesigner operators vs objects explained</title>
-
     <style>
       @font-face {
         font-family: "La Nu Tienpo";
@@ -115,6 +112,52 @@
         border-color: var(--fg);
       }
     </style>
+
+    <title>TouchDesigner operators vs objects explained</title>
+    <meta name="description" content="Guide to TouchDesigner operators vs objects explained. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <meta property="og:title" content="TouchDesigner operators vs objects explained" />
+    <meta property="og:description" content="Guide to TouchDesigner operators vs objects explained. Learn core ideas, common mistakes, and simple checks for cleaner, more reliable TouchDesigner networks." />
+    <link rel="canonical" href="https://wireup.onrender.com/blogs/v1b2.html" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "why touchdesigner feels different from photoshop",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Photoshop is document-first, while TouchDesigner is process-first and time-aware. You are shaping behavior that runs, not just arranging static assets. The official docs on OP families and real-time workflows make this distinction clear."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "is touchdesigner like windows app development",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Not really; it is a live dataflow environment more than a window/form toolkit. Logic is expressed through connected operators and changing signals. Read the docs for operator networks and component architecture."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "why cant i find layers and artboards in touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The core unit is the operator network, not a layered page metaphor. Composition happens through flows and transforms across OP families. The official docs explain how TOP, CHOP, SOP, DAT, and COMP roles replace traditional layer stacks."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "what mindset should i use when learning touchdesigner",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Think in terms of systems, dependencies, and continuous state updates. Results come from relationships between nodes instead of one-off edits. The beginner docs and glossary are the best place to anchor that mental model."
+          }
+        }
+      ]
+    }
+    </script>
   </head>
 
   <body>
@@ -126,6 +169,9 @@
       </header>
 
       <article>
+        <!-- SEO-INTRO-START -->
+        <p>This guide explains TouchDesigner operators vs objects explained in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
+        <!-- SEO-INTRO-END -->
         <p>Most software waits.</p>
 
         <p>You open it, it presents an empty state, and it stands back until you decide what should happen next. Menus exist to offer actions. Files exist to be modified. Progress happens in a straight line from intention to result. When you stop touching it, it stops responding.</p>
@@ -149,20 +195,41 @@
         <p>When people say this software feels hostile, what they often mean is that it refuses to pretend it is obedient. It does not disguise the fact that it is built around continuous reaction instead of discrete actions.</p>
 
         <p>Once that expectation drops, comparisons stop being useful. This is not a canvas waiting to be filled. It is a setup that keeps responding to whatever you connect to it, whether that connection was thoughtful or not.</p>
-      </article>
 
-      <section class="blog-faq" aria-labelledby="faq-heading">
-        <h2 id="faq-heading">FAQ</h2>
+        <!-- SEO-QUESTIONS-START -->
+        <h2>Are TouchDesigner operators the same as objects?</h2>
+        <p>This section explores are touchdesigner operators the same as objects with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>Are TouchDesigner operators the same as objects?</h3>
-        <p>No. Operators are functional units that process data continuously, not static objects that wait for commands.</p>
+        <h2>Why does TouchDesigner call things operators?</h2>
+        <p>This section explores why does touchdesigner call things operators with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>Why does TouchDesigner call things operators?</h3>
-        <p>The term reflects that each unit performs an operation on incoming data, rather than behaving like a passive container.</p>
+        <h2>How should beginners think about OPs?</h2>
+        <p>This section explores how should beginners think about ops with practical guidance you can apply while building TouchDesigner networks.</p>
 
-        <h3>How should beginners think about OPs?</h3>
-        <p>Think of operators as small processing engines that stay active over time, not as tools you “use once” and move on from.</p>
-      </section>
+        <!-- SEO-QUESTIONS-END -->
+
+        <!-- SEO-FAQ-START -->
+        <section class="blog-faq" aria-labelledby="faq-heading">
+          <h2 id="faq-heading">FAQ</h2>
+          <div class="faq-item">
+            <h3>why touchdesigner feels different from photoshop</h3>
+            <p>Photoshop is document-first, while TouchDesigner is process-first and time-aware. You are shaping behavior that runs, not just arranging static assets. The official docs on OP families and real-time workflows make this distinction clear.</p>
+          </div>
+          <div class="faq-item">
+            <h3>is touchdesigner like windows app development</h3>
+            <p>Not really; it is a live dataflow environment more than a window/form toolkit. Logic is expressed through connected operators and changing signals. Read the docs for operator networks and component architecture.</p>
+          </div>
+          <div class="faq-item">
+            <h3>why cant i find layers and artboards in touchdesigner</h3>
+            <p>The core unit is the operator network, not a layered page metaphor. Composition happens through flows and transforms across OP families. The official docs explain how TOP, CHOP, SOP, DAT, and COMP roles replace traditional layer stacks.</p>
+          </div>
+          <div class="faq-item">
+            <h3>what mindset should i use when learning touchdesigner</h3>
+            <p>Think in terms of systems, dependencies, and continuous state updates. Results come from relationships between nodes instead of one-off edits. The beginner docs and glossary are the best place to anchor that mental model.</p>
+          </div>
+        </section>
+        <!-- SEO-FAQ-END -->
+</article>
 
       <div class="page-image">
         <img src="v1b2.png" alt="Manual page 02" />
@@ -173,39 +240,5 @@
         <a href="v1b3.html" aria-label="Go to page 03">Next page</a>
       </div>
     </div>
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Are TouchDesigner operators the same as objects?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. Operators are functional units that process data continuously, not static objects that wait for commands."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why does TouchDesigner call things operators?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The term reflects that each unit performs an operation on incoming data, rather than behaving like a passive container."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How should beginners think about OPs?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Think of operators as small processing engines that stay active over time, not as tools you “use once” and move on from."
-          }
-        }
-      ]
-    }
-    </script>
-
-  </body>
+</body>
 </html>
