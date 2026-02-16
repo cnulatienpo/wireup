@@ -1,267 +1,261 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>Volume 2 · 08 — How switching changes meaning without changing data</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Why you do not need more nodes in TouchDesigner</title>
+
+<meta name="description" content="Learn why you do not need more nodes in TouchDesigner with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks." />
+
+<meta property="og:title" content="Why you do not need more nodes in TouchDesigner" />
+<meta property="og:description" content="Learn why you do not need more nodes in TouchDesigner with clear examples, common pitfalls, and practical checks for building reliable TouchDesigner networks." />
+<meta property="og:type" content="article" />
+
+<style>
+:root {
+  --bg: #0b0b0f;
+  --fg: #f2f2f5;
+  --muted: #b9b9c6;
+  --line: rgba(242,242,245,0.14);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Garamond, "Times New Roman", serif;
+  font-size: 14pt;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 64px 20px 96px;
+}
+
+header { margin-bottom: 36px; }
+
+h1 {
+  font-size: clamp(40px, 5vw, 72px);
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+
+.num {
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+article { line-height: 1.7; }
+
+p { margin: 0 0 22px; }
+
+.page-image {
+  margin: 56px 0 28px;
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+
+.page-image img {
+  display: block;
+  width: min(100%, 640px);
+  height: auto;
+  margin: 0 auto;
+}
+
+.nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nav a {
+  color: var(--fg);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nav a:hover { border-color: var(--fg); }
+
+.blog-faq {
+  margin-top: 60px;
+  border-top: 1px solid var(--line);
+  padding-top: 40px;
+}
+
+.blog-faq h2 {
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+.blog-faq h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<header>
+  <div class="num">Volume 2 · 08</div>
+  <h1>How switching changes meaning without changing data</h1>
+  <p><strong>This guide explains why you do not need more nodes in TouchDesigner in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</strong></p>
+</header>
+
+<article>
+
+<p>
+More nodes feel like progress.
+</p>
+
+<p>
+When something does not work, the instinct is to add another operator. Another transform. Another conversion. Another layer of logic.
+</p>
+
+<p>
+Most of the time, the issue is not missing functionality.
+</p>
+
+<p>
+It is misaligned responsibility.
+</p>
+
+<p>
+Every additional node introduces another dependency. More evaluation. More opportunity for unexpected state.
+</p>
+
+<p>
+Switch nodes reveal this clearly.
+</p>
+
+<p>
+A Switch does not modify data. It chooses which existing data is allowed through.
+</p>
+
+<p>
+Nothing new is created. No heavy processing is introduced.
+</p>
+
+<p>
+Meaning changes because selection changes.
+</p>
+
+<p>
+Instead of stacking more transformations, consider whether existing outputs simply need governance.
+</p>
+
+<p>
+Often the correct move is subtraction.
+</p>
+
+<p>
+Remove redundant transforms. Remove duplicate conversions. Remove nodes that compensate for earlier structural mistakes.
+</p>
+
+<p>
+Networks become easier to read when each node has one responsibility.
+</p>
+
+<p>
+If a node is performing two conceptual tasks, the structure is unclear.
+</p>
+
+<p>
+Fewer operators reduce ambiguity.
+</p>
+
+<p>
+Performance improves not because the system is fragile, but because evaluation paths are shorter.
+</p>
+
+<p>
+Clarity emerges from intention, not accumulation.
+</p>
+
+<p>
+Before adding a node, ask what dependency truly needs adjustment.
+</p>
+
+<p>
+Most complex systems fail from excess, not absence.
+</p>
+
+</article>
+
+<section class="blog-faq" aria-labelledby="faq-heading">
+<h2 id="faq-heading">FAQ</h2>
+
+<div class="faq-item">
+<h3>How do I know if I have too many nodes?</h3>
+<p>If multiple nodes are compensating for each other or repeating similar transformations, the network likely has unnecessary structure.</p>
+</div>
+
+<div class="faq-item">
+<h3>Can fewer operators make TouchDesigner faster?</h3>
+<p>Yes. Reducing redundant operators shortens evaluation paths and lowers processing overhead.</p>
+</div>
+
+<div class="faq-item">
+<h3>Which nodes are usually unnecessary for beginners?</h3>
+<p>Beginners often overuse multiple Math, Level, or Transform nodes when a single properly configured node would suffice.</p>
+</div>
+
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I know if I have too many nodes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If multiple nodes are compensating for each other or repeating similar transformations, the network likely has unnecessary structure."
       }
-
-      :root {
-        --bg: #0b0b0f;
-        --fg: #f2f2f5;
-        --muted: #b9b9c6;
-        --line: rgba(242, 242, 245, 0.14);
+    },
+    {
+      "@type": "Question",
+      "name": "Can fewer operators make TouchDesigner faster?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Reducing redundant operators shortens evaluation paths and lowers processing overhead."
       }
-
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
-
-      body {
-        margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
-        background: var(--bg);
-        color: var(--fg);
+    },
+    {
+      "@type": "Question",
+      "name": "Which nodes are usually unnecessary for beginners?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Beginners often overuse multiple Math, Level, or Transform nodes when a single properly configured node would suffice."
       }
+    }
+  ]
+}
+</script>
 
-      .wrap {
-        max-width: 860px;
-        margin: 0 auto;
-        padding: 64px 20px 96px;
-      }
+<div class="page-image">
+<img src="v2b8.png" alt="Volume 2 page 08" />
+</div>
 
-      header { margin-bottom: 36px; }
+<div class="nav">
+<a href="../index.html" aria-label="Back to index">Index</a>
+<a href="v2b9.html" aria-label="Go to page 09">Next page</a>
+</div>
 
-      h1 {
-        font-size: clamp(40px, 5vw, 72px);
-        letter-spacing: -0.02em;
-
-      .page-image {
-        margin: 56px 0 28px;
-        border-top: 1px solid var(--line);
-        padding-top: 28px;
-      }
-
-      .page-image img {
-        display: block;
-        width: min(100%, 640px);
-        height: auto;
-        margin: 0 auto;
-      }
-
-      .nav {
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      .nav a {
-        color: var(--fg);
-        text-decoration: none;
-        border: 1px solid var(--line);
-        padding: 10px 16px;
-        border-radius: 999px;
-        font-size: 14px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-
-      .nav a:hover {
-        border-color: var(--fg);
-      }
-        margin: 0 0 10px;
-      }
-
-      .num {
-        color: var(--muted);
-        font-size: 14px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      article { font-size: 45px; line-height: 1.7; }
-
-      p { margin: 0 0 22px; }
-
-      .do {
-        border-left: 3px solid var(--line);
-        padding-left: 18px;
-        margin: 28px 0;
-      }
-
-      ul { margin: 10px 0 0 20px; }
-      li { margin-bottom: 6px; }
-
-      code {
-        background: rgba(255,255,255,0.05);
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 0.9em;
-      }
-
-      .note { color: var(--muted); margin-top: 6px; }
-    </style>
-  </head>
-
-  <body>
-    <div class="wrap">
-      <header>
-        <div class="num">Volume 2 · 08</div>
-        <h1>How switching changes meaning without changing data</h1>
-      </header>
-
-      <article>
-        <p>
-          Up to now, data has flowed in straight lines.
-        </p>
-
-        <p>
-          One thing feeds the next. Pressure moves forward. Behavior emerges from continuity.
-          That model works until you want choice.
-        </p>
-
-        <p>
-          Choice does not come from better data.
-          It comes from deciding which data is allowed through.
-        </p>
-
-        <div class="do">
-          <p>
-            Start from a network where you already have something visible.
-          </p>
-          <p>
-            You should have at least one image or rendered scene appearing in a viewer.
-          </p>
-        </div>
-
-        <p>
-          You are going to duplicate meaning without duplicating logic.
-        </p>
-
-        <div class="do">
-          <p>
-            Select one node that produces something visible.
-          </p>
-          <p>
-            Copy it and paste it so you have two similar outputs.
-          </p>
-          <p class="note">
-            They can be identical or slightly different. Either works.
-          </p>
-        </div>
-
-        <p>
-          Both of these exist at the same time.
-          Nothing about the system prefers one over the other yet.
-        </p>
-
-        <div class="do">
-          <p>
-            Move your mouse to an empty space to the right of both.
-          </p>
-          <p>
-            Press <code>Tab</code>.
-          </p>
-          <p>
-            Type one of the following and place it to the right:
-          </p>
-          <ul>
-            <li><code>Switch</code> (TOP, CHOP, or SOP — match what you are switching)</li>
-          </ul>
-        </div>
-
-        <p>
-          This node does not change data.
-          It changes relevance.
-        </p>
-
-        <div class="do">
-          <p>
-            Wire both outputs into the Switch node.
-          </p>
-        </div>
-
-        <p>
-          Only one input is allowed through at a time.
-          The others still exist, but they no longer matter.
-        </p>
-
-        <div class="do">
-          <p>
-            Open the parameters for the Switch node.
-          </p>
-          <p>
-            Change the <code>Index</code> value.
-          </p>
-        </div>
-
-        <p>
-          The output jumps instantly.
-        </p>
-
-        <p>
-          Nothing fades. Nothing interpolates.
-          Meaning changes because attention changes.
-        </p>
-
-        <p>
-          The system did not rewire itself.
-          It simply decided what to listen to.
-        </p>
-
-        <div class="do">
-          <p>
-            Take a number you already have in the system.
-          </p>
-          <p>
-            Wire it into the <code>Index</code> parameter on the Switch.
-          </p>
-        </div>
-
-        <p>
-          Now the decision is automated.
-        </p>
-
-        <p>
-          A threshold, a pulse, or a stored value determines which world is visible.
-          The worlds themselves remain intact.
-        </p>
-
-        <p>
-          This is not an effect.
-          It is governance.
-        </p>
-
-        <p>
-          Switches appear simple.
-          They are where logic hides.
-        </p>
-
-        <p>
-          Most complex networks do not grow by adding new content.
-          They grow by deciding when existing content is allowed to speak.
-        </p>
-
-        <p>
-          When something feels overbuilt, the missing move is often not another node,
-          but a place where attention can be redirected.
-        </p>
-      </article>
-
-      <div class="page-image">
-        <img src="v2b8.png" alt="Volume 2 page 08" />
-      </div>
-
-      <div class="nav">
-        <a href="../index.html" aria-label="Back to index">Index</a>
-        <a href="v2b9.html" aria-label="Go to page 09">Next page</a>
-      </div>
-    </div>
-  </body>
+</div>
+</body>
 </html>
