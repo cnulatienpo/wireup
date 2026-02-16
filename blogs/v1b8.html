@@ -3,17 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>08 — Local truth beats global intention</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
-      }
+    <meta name="description" content="Guide to time as a signal in TouchDesigner. Learn core ideas, common mistakes, and simple checks for building more reliable TouchDesigner networks.">
+    <title>Time as a signal in TouchDesigner</title>
 
+    <style>
       :root {
         --bg: #0b0b0f;
         --fg: #f2f2f5;
@@ -21,12 +14,14 @@
         --line: rgba(242, 242, 245, 0.14);
       }
 
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
+      * {
+        box-sizing: border-box;
+        font-family: Garamond, "Times New Roman", serif;
+        font-size: 14pt;
+      }
 
       body {
         margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
         background: var(--bg);
         color: var(--fg);
       }
@@ -55,12 +50,27 @@
       }
 
       article {
-        font-size: 45px;
         line-height: 1.7;
       }
 
       p {
         margin: 0 0 22px;
+      }
+
+      .blog-faq {
+        margin-top: 60px;
+        border-top: 1px solid var(--line);
+        padding-top: 40px;
+      }
+
+      .blog-faq h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+
+      .blog-faq h3 {
+        font-size: 20px;
+        margin: 20px 0 8px;
       }
 
       .page-image {
@@ -79,6 +89,7 @@
       .nav {
         display: flex;
         justify-content: flex-end;
+        gap: 12px;
       }
 
       .nav a {
@@ -103,57 +114,47 @@
       <header>
         <div class="num">08</div>
         <h1>Local truth beats global intention</h1>
+        <p>This guide explains time as a signal in TouchDesigner in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
       </header>
 
       <article>
-        <p>
-          Intention is invisible to the system.
-        </p>
+        <p>Intention is invisible to the system.</p>
 
-        <p>
-          You can want a network to do something with every ounce of sincerity available, and none of that desire reaches the containers. They do not know your goal. They do not know the shape you are aiming for. They only know what arrives at their inputs this frame.
-        </p>
+        <p>You can want a network to behave a certain way, but containers only know what arrives at their inputs this frame.</p>
 
-        <p>
-          This creates a gap that feels personal at first.
-        </p>
+        <p>This creates a gap that feels personal at first.</p>
 
-        <p>
-          People say things like “it knows what I mean” or “it should understand this.” That language assumes a shared context. What exists instead is a collection of local agreements. Each container responds to the immediate situation touching it and nothing beyond that boundary.
-        </p>
+        <p>Each container responds to the immediate situation touching it and nothing beyond that boundary.</p>
 
-        <p>
-          A node does not know it is part of a larger plan. It does not know it sits inside a performance, an installation, or a concept deck. It knows the type, structure, and timing of the signal it receives. That knowledge resets every frame.
-        </p>
+        <p>A node does not know it is part of a larger plan. It knows the type, structure, and timing of the signal it receives.</p>
 
-        <p>
-          This is why fixing problems at the wrong scale never works. Adjusting something downstream to satisfy an upstream wish only hides the disagreement. The container will keep doing what it is built to do with whatever it receives, even if the result contradicts your story.
-        </p>
+        <p>Adjusting something downstream to satisfy an upstream wish only hides the disagreement. Containers respond to actual inputs, not intention.</p>
 
-        <p>
-          Global intention lives in your head. Local truth lives in the wires.
-        </p>
+        <p>Global intention lives in your head. Local truth lives in the wires.</p>
 
-        <p>
-          When a result surprises you, it is not being clever. It is being faithful. The system is honoring the exact conditions presented to it, not the conditions you thought you were presenting.
-        </p>
+        <p>When a result surprises you, it is honoring the exact conditions presented to it.</p>
 
-        <p>
-          This is also why explanations that rely on meaning fall apart. “This represents motion” or “this stands for energy” carries no weight inside the network. Representation is a human overlay applied after the fact. The containers only care whether a value changes, repeats, arrives late, or arrives malformed.
-        </p>
+        <p>Representation is human interpretation. Containers only care whether a value changes, repeats, arrives late, or arrives malformed.</p>
 
-        <p>
-          Debugging becomes less emotional once this is accepted. The question shifts from “why is it doing this” to “what does this container see right now.” Answers show up faster when they are grounded in immediate inputs rather than hoped-for outcomes.
-        </p>
+        <p>Debugging improves when you ask what this container sees right now.</p>
 
-        <p>
-          This local focus is not a limitation. It is what allows systems to stay stable under pressure. Each part does its job without negotiating meaning. The result emerges from alignment, not interpretation.
-        </p>
+        <p>Each part does its job without negotiating meaning. Results emerge from alignment, not interpretation.</p>
 
-        <p>
-          Intention still matters, just not where people expect. It belongs in how you arrange responsibilities, not in what you wish the system would infer.
-        </p>
+        <p>Intention belongs in how responsibilities are arranged, not in what you expect the system to infer.</p>
       </article>
+
+      <section class="blog-faq" aria-labelledby="faq-heading">
+        <h2 id="faq-heading">FAQ</h2>
+
+        <h3>How is time treated as data in TouchDesigner?</h3>
+        <p>Time is available as a signal through timeline components and CHOPs. It can be referenced, modified, and routed like other data streams.</p>
+
+        <h3>Why does my animation depend on frame rate?</h3>
+        <p>If calculations are tied directly to frames rather than time values, changes in frame rate can alter behavior. Using time-based logic helps stabilize motion.</p>
+
+        <h3>What is time slicing in TouchDesigner?</h3>
+        <p>Time slicing allows operators to process multiple samples per frame, improving responsiveness for time-dependent data.</p>
+      </section>
 
       <div class="page-image">
         <img src="v1b8.png" alt="Manual page 08" />
@@ -164,5 +165,39 @@
         <a href="v1b9.html" aria-label="Go to page 09">Next page</a>
       </div>
     </div>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How is time treated as data in TouchDesigner?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Time is available as a signal through timeline components and CHOPs. It can be referenced, modified, and routed like other data streams."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does my animation depend on frame rate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If calculations are tied directly to frames rather than time values, changes in frame rate can alter behavior. Using time-based logic helps stabilize motion."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is time slicing in TouchDesigner?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Time slicing allows operators to process multiple samples per frame, improving responsiveness for time-dependent data."
+          }
+        }
+      ]
+    }
+    </script>
+
   </body>
 </html>
