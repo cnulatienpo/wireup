@@ -120,7 +120,7 @@
           "name": "is every node in touchdesigner an object",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Operators behave more like processes with inputs, outputs, and parameters than self-contained objects. Their meaning comes from context in the network. The official docs on OP classes and dependency clarify this."
+            "text": "In TouchDesigner, a node is an operator (a little machine). It is not an object (a thing that sits there). It keeps doing its job as time moves, based on what you wire into it."
           }
         },
         {
@@ -128,7 +128,7 @@
           "name": "why does deleting one node change unrelated results",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "What seems unrelated is often connected through shared dependencies or viewers. Networks propagate consequences through signal relationships, not object ownership trees. The docs on cooking and references explain these side effects."
+            "text": "Because the network is a chain of cause and effect. A wire is a dependency (a ‘needs-this-first’ link). Remove one link and the stuff downstream loses what it was relying on, even if it looked far away."
           }
         },
         {
@@ -136,7 +136,7 @@
           "name": "touchdesigner oop vs node based thinking",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Object-oriented habits can help naming and structure, but execution is dataflow-first. Operators evaluate based on upstream conditions and time, not method calls. Read the docs on network execution and component organization."
+            "text": "OOP thinking is about objects calling methods. TouchDesigner thinking is about signals flowing through operators. Instead of “who owns what,” you focus on “what feeds what” and “what changes over time.”"
           }
         },
         {
@@ -144,7 +144,7 @@
           "name": "how to think about identity in touchdesigner operators",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Identity is functional: what signal enters, what transformation occurs, and what leaves. Stable behavior matters more than class-style identity semantics. The docs emphasize operator role and parameter state over object metaphors."
+            "text": "An operator’s identity is its job: what it takes in (input), what it does (transform), and what it sends out (output). It is less “this thing is a rectangle” and more “this machine turns A into B.”"
           }
         }
       ]
@@ -164,64 +164,179 @@
         <!-- SEO-INTRO-START -->
         <p>This guide explains TouchDesigner signal flow explained for beginners in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</p>
         <!-- SEO-INTRO-END -->
-        <p>The habit you bring in with you is object-thinking.</p>
 
-        <p>Files, layers, images, clips, shapes. Things that sit there until you pick them up. Things with edges, names, and a sense of completion. Most software trains you to believe that work is about arranging objects into a satisfying arrangement and then stepping back.</p>
+        <p>
+          Most programs teach you “object thinking” (toy thinking).
+        </p>
 
-        <p>That habit causes immediate confusion here.</p>
+        <p>
+          A toy is a thing you can point at.
+          A toy sits still until you pick it up.
+          A file, a layer, a picture, a shape — toy thinking says: “That’s my thing.”
+        </p>
 
-        <p>What looks like an object is not a thing you possess. It is a container that keeps asking a question. Every box in the network is standing there saying, “If something arrives like this, I will respond like that.” Nothing asserts identity. Everything waits for context.</p>
+        <p>
+          TouchDesigner is “operator thinking” (machine thinking).
+        </p>
 
-        <p>An image node is not an image. It is a place where images pass through. A number is not a value you set once. It is a condition that keeps getting reasserted. A shape is not geometry in the way a file is geometry. It is a description that stays valid as long as nothing upstream contradicts it.</p>
+        <p>
+          An operator (OP) is a little machine.
+          You do not “own” a machine the same way you own a toy.
+          You set up a machine, you feed it, and it keeps working.
+        </p>
 
-        <p>This distinction matters because objects imply ownership. Containers imply obligation. Once you wire something in, the container must deal with it every frame. It does not remember how it felt when you created it. It only knows what it is receiving now.</p>
+        <p>
+          A node is not “the picture.”
+          A node is a box that makes or changes pictures.
+          The picture is more like water running through a pipe.
+        </p>
 
-        <p>That is why copying a node does not copy behavior the way people expect. You duplicated a question, not an answer. Without the same surroundings, the question produces a different outcome. Context is not decoration here. It is substance.</p>
+        <p>
+          Signal (moving stuff) is what travels through the pipes.
+          A signal can be an image (moving pixels),
+          a number (a knob value),
+          sound (a wiggly line),
+          text (words in a table),
+          or geometry (a shape description).
+        </p>
 
-        <p>Object-based thinking encourages accumulation. Add another layer. Duplicate another clip. Stack until it looks right. Container-based thinking punishes that instinct. Every addition introduces another obligation the system must honor, repeatedly, without complaint.</p>
+        <p>
+          Signal flow (pipe flow) is just “what feeds what.”
+          This box feeds that box.
+          That box feeds the next one.
+        </p>
 
-        <p>People often ask where something lives. Where the image is stored. Where the motion exists. Those questions assume a thing sitting somewhere, waiting to be used. What exists instead is a path. Motion exists because something upstream keeps changing. Images exist because something keeps supplying pixels.</p>
+        <p>
+          Here is the part that feels weird at first:
+          time is always moving.
+          TouchDesigner updates in frames (flipbook pages).
+        </p>
 
-        <p>This is also why deleting a node can feel disproportionate. You did not remove a thing; you removed a promise. Everything downstream reorganizes itself around that absence immediately. The system does not mourn. It reroutes.</p>
+        <p>
+          Frame (flipbook page) means:
+          the system checks again.
+          The machine runs again.
+          The pipes keep moving.
+        </p>
 
-        <p>Once you stop looking for objects, frustration drops. You stop hunting for the place where the result lives. You start watching how conditions propagate. The work shifts from collecting things to arranging responsibilities.</p>
+        <p>
+          This is why “nothing happened” is confusing here.
+          The machines might still be working.
+          They might just be working on something boring.
+          Like a faucet running at the same speed.
+        </p>
 
-        <p>Nothing here is an object because objects would slow the system down. What exists instead are agreements that stay active for as long as you keep them wired.</p>
+        <p>
+          This is also why copying a node can surprise you.
+          You copied a machine, not a result.
+          Two machines can behave differently if their food (input) is different.
+        </p>
+
+        <p>
+          Input (what comes in) is the food.
+          Output (what goes out) is what the machine makes.
+          Parameters (knobs) are the settings.
+        </p>
+
+        <p>
+          The system cares about dependencies (needs-this-first links).
+        </p>
+
+        <p>
+          Dependency (needs-this-first) means:
+          “I cannot make my output until I get that input.”
+          It is like: you cannot make toast until you have bread.
+        </p>
+
+        <p>
+          So when you delete one node, stuff that looks “unrelated” can change.
+          It was related through pipes and needs-this-first links.
+          You pulled out a piece of plumbing.
+          Water stopped reaching rooms you forgot were connected.
+        </p>
+
+        <p>
+          This is the shift:
+          stop asking “Where is the thing?”
+          start asking “What is feeding what?”
+        </p>
+
+        <p>
+          Once you see flow, you can debug like this:
+          find where the water looks wrong,
+          then walk upstream (backward) until it stops being wrong.
+        </p>
+
+        <p>
+          Nothing here is an object (a toy).
+          Everything here is a running setup (machines + pipes + knobs).
+        </p>
 
         <!-- SEO-QUESTIONS-START -->
         <h2>What is signal flow in TouchDesigner?</h2>
-        <p>This section explores what is signal flow in touchdesigner with practical guidance you can apply while building TouchDesigner networks.</p>
+        <p>
+          Signal flow (pipe flow) is the path your signal (moving stuff) takes through operators (machines).
+          If you can point to what feeds what, you can understand most networks.
+        </p>
 
         <h2>Why is my network not passing data forward?</h2>
-        <p>This section explores why is my network not passing data forward with practical guidance you can apply while building TouchDesigner networks.</p>
+        <p>
+          Usually one of these is true:
+          the wire is missing (no pipe),
+          the source is off (no water),
+          or something upstream is blocked (a needs-this-first link is failing).
+        </p>
 
         <h2>How do I trace flow through connected operators?</h2>
-        <p>This section explores how do i trace flow through connected operators with practical guidance you can apply while building TouchDesigner networks.</p>
-
+        <p>
+          Start at the end (the result you can see).
+          Move one box left at a time.
+          Check each viewer (peephole) until you find the first place it looks wrong.
+          That first wrong place is usually the real problem.
+        </p>
         <!-- SEO-QUESTIONS-END -->
 
         <!-- SEO-FAQ-START -->
         <section class="blog-faq" aria-labelledby="faq-heading">
           <h2 id="faq-heading">FAQ</h2>
+
           <div class="faq-item">
             <h3>is every node in touchdesigner an object</h3>
-            <p>Operators behave more like processes with inputs, outputs, and parameters than self-contained objects. Their meaning comes from context in the network. The official docs on OP classes and dependency clarify this.</p>
+            <p>
+              No. A node is an operator (a little machine), not an object (a toy).
+              It keeps working as frames (flipbook pages) move forward, based on what you feed it.
+            </p>
           </div>
+
           <div class="faq-item">
             <h3>why does deleting one node change unrelated results</h3>
-            <p>What seems unrelated is often connected through shared dependencies or viewers. Networks propagate consequences through signal relationships, not object ownership trees. The docs on cooking and references explain these side effects.</p>
+            <p>
+              Because “unrelated” often means “connected by pipes you forgot.”
+              Deleting a node removes a dependency (needs-this-first link).
+              Stuff downstream was relying on it, so it changes immediately.
+            </p>
           </div>
+
           <div class="faq-item">
             <h3>touchdesigner oop vs node based thinking</h3>
-            <p>Object-oriented habits can help naming and structure, but execution is dataflow-first. Operators evaluate based on upstream conditions and time, not method calls. Read the docs on network execution and component organization.</p>
+            <p>
+              OOP is “objects calling each other.”
+              TouchDesigner is “signals flowing through operators.”
+              Think plumbing and machines, not ownership and class trees.
+            </p>
           </div>
+
           <div class="faq-item">
             <h3>how to think about identity in touchdesigner operators</h3>
-            <p>Identity is functional: what signal enters, what transformation occurs, and what leaves. Stable behavior matters more than class-style identity semantics. The docs emphasize operator role and parameter state over object metaphors.</p>
+            <p>
+              Identity is the job.
+              Input (food) comes in, knobs (parameters) set the behavior, output comes out.
+              The operator is “what it does,” not “what it is called.”
+            </p>
           </div>
         </section>
         <!-- SEO-FAQ-END -->
-</article>
+      </article>
 
       <div class="page-image">
         <img src="v1b3.png" alt="Manual page 03" />
@@ -232,5 +347,5 @@
         <a href="v1b4.html" aria-label="Go to page 04">Next page</a>
       </div>
     </div>
-</body>
+  </body>
 </html>
