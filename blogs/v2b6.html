@@ -1,276 +1,259 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preload" as="font" href="../La_Nu_Tienpo-Regular.woff" type="font/woff" crossorigin>
-<title>Volume 2 · 06 — How sound behaves differently than images</title>
-    <style>
-      @font-face {
-        font-family: "La Nu Tienpo";
-        src: url("../La_Nu_Tienpo-Regular.woff") format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: block;
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Generators vs transformers in TouchDesigner</title>
+
+<meta name="description" content="Guide to generators vs transformers in TouchDesigner. Learn core ideas, common mistakes, and practical checks for building reliable TouchDesigner networks." />
+
+<meta property="og:title" content="Generators vs transformers in TouchDesigner" />
+<meta property="og:description" content="Guide to generators vs transformers in TouchDesigner. Learn core ideas, common mistakes, and practical checks for building reliable TouchDesigner networks." />
+<meta property="og:type" content="article" />
+
+<style>
+:root {
+  --bg: #0b0b0f;
+  --fg: #f2f2f5;
+  --muted: #b9b9c6;
+  --line: rgba(242,242,245,0.14);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Garamond, "Times New Roman", serif;
+  font-size: 14pt;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 64px 20px 96px;
+}
+
+header { margin-bottom: 36px; }
+
+h1 {
+  font-size: clamp(40px, 5vw, 72px);
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+
+.num {
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+article { line-height: 1.7; }
+
+p { margin: 0 0 22px; }
+
+.do {
+  border-left: 3px solid var(--line);
+  padding-left: 18px;
+  margin: 28px 0;
+}
+
+ul { margin: 10px 0 0 20px; }
+li { margin-bottom: 6px; }
+
+code {
+  background: rgba(255,255,255,0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.note { color: var(--muted); margin-top: 6px; }
+
+.page-image {
+  margin: 56px 0 28px;
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+
+.page-image img {
+  display: block;
+  width: min(100%, 640px);
+  height: auto;
+  margin: 0 auto;
+}
+
+.nav {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nav a {
+  color: var(--fg);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nav a:hover { border-color: var(--fg); }
+
+.blog-faq {
+  margin-top: 60px;
+  border-top: 1px solid var(--line);
+  padding-top: 40px;
+}
+
+.blog-faq h2 {
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+.blog-faq h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<header>
+  <div class="num">Volume 2 · 06</div>
+  <h1>How sound behaves differently than images</h1>
+  <p><strong>This guide explains generators vs transformers in TouchDesigner in plain language. It focuses on practical decisions you can make while building and debugging TouchDesigner networks.</strong></p>
+</header>
+
+<article>
+
+<p>
+Some nodes create. Others modify.
+</p>
+
+<p>
+A generator produces data without needing input. A transformer waits for something to arrive before it does anything at all.
+</p>
+
+<p>
+Confusing the two leads to quiet networks.
+</p>
+
+<p>
+Nodes like <code>Noise</code>, <code>LFO</code>, <code>Timer</code>, or <code>Audio Device In</code> generate signals independently. They insist on being evaluated every frame.
+</p>
+
+<p>
+Nodes like <code>Math</code>, <code>Lag</code>, <code>Transform</code>, and <code>Level</code> depend on incoming data. Without input, they remain idle.
+</p>
+
+<p>
+The difference is not cosmetic. It determines where flow begins.
+</p>
+
+<p>
+If nothing moves, check whether the first node in your chain is actually a generator.
+</p>
+
+<p>
+A transformer placed at the beginning of a network cannot create motion. It only reacts.
+</p>
+
+<p>
+This pattern repeats across operator families.
+</p>
+
+<p>
+In TOPs, a <code>Movie File In</code> or <code>Noise</code> generates imagery. A <code>Blur</code> or <code>Level</code> transforms it.
+</p>
+
+<p>
+In CHOPs, an <code>LFO</code> generates movement. A <code>Filter</code> shapes it.
+</p>
+
+<p>
+When debugging, follow the chain backward until you find the first generator. If there isn’t one, nothing will originate.
+</p>
+
+<p>
+Knowing which nodes generate and which transform prevents unnecessary parameter tweaking.
+</p>
+
+<p>
+A transformer is not broken when nothing changes. It may simply be waiting.
+</p>
+
+</article>
+
+<section class="blog-faq" aria-labelledby="faq-heading">
+<h2 id="faq-heading">FAQ</h2>
+
+<div class="faq-item">
+<h3>What is the difference between generator and transformer nodes?</h3>
+<p>A generator produces data on its own. A transformer modifies incoming data but cannot create it from nothing.</p>
+</div>
+
+<div class="faq-item">
+<h3>Which operators create data from nothing?</h3>
+<p>Operators such as Noise, LFO, Timer, Movie File In, and Audio Device In generate signals independently.</p>
+</div>
+
+<div class="faq-item">
+<h3>How can I tell if a node needs input first?</h3>
+<p>If a node has no visible output until something is wired into it, it is a transformer. Generators show activity immediately after placement.</p>
+</div>
+
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the difference between generator and transformer nodes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A generator produces data on its own. A transformer modifies incoming data but cannot create it from nothing."
       }
-
-      :root {
-        --bg: #0b0b0f;
-        --fg: #f2f2f5;
-        --muted: #b9b9c6;
-        --line: rgba(242, 242, 245, 0.14);
+    },
+    {
+      "@type": "Question",
+      "name": "Which operators create data from nothing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Operators such as Noise, LFO, Timer, Movie File In, and Audio Device In generate signals independently."
       }
-
-      * { box-sizing: border-box; font-family: Garamond, "Times New Roman", serif !important; font-size: 14pt !important; }
-
-      body {
-        margin: 0;
-        font-family: "La Nu Tienpo", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        font-size: 45px;
-        background: var(--bg);
-        color: var(--fg);
+    },
+    {
+      "@type": "Question",
+      "name": "How can I tell if a node needs input first?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If a node has no visible output until something is wired into it, it is a transformer. Generators show activity immediately after placement."
       }
+    }
+  ]
+}
+</script>
 
-      .wrap {
-        max-width: 860px;
-        margin: 0 auto;
-        padding: 64px 20px 96px;
-      }
+<div class="page-image">
+<img src="v2b6.png" alt="Volume 2 page 06" />
+</div>
 
-      header { margin-bottom: 36px; }
+<div class="nav">
+<a href="../index.html" aria-label="Back to index">Index</a>
+<a href="v2b7.html" aria-label="Go to page 07">Next page</a>
+</div>
 
-      h1 {
-        font-size: clamp(40px, 5vw, 72px);
-        letter-spacing: -0.02em;
-
-      .page-image {
-        margin: 56px 0 28px;
-        border-top: 1px solid var(--line);
-        padding-top: 28px;
-      }
-
-      .page-image img {
-        display: block;
-        width: min(100%, 640px);
-        height: auto;
-        margin: 0 auto;
-      }
-
-      .nav {
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      .nav a {
-        color: var(--fg);
-        text-decoration: none;
-        border: 1px solid var(--line);
-        padding: 10px 16px;
-        border-radius: 999px;
-        font-size: 14px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-
-      .nav a:hover {
-        border-color: var(--fg);
-      }
-        margin: 0 0 10px;
-      }
-
-      .num {
-        color: var(--muted);
-        font-size: 14px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      article { font-size: 45px; line-height: 1.7; }
-
-      p { margin: 0 0 22px; }
-
-      .do {
-        border-left: 3px solid var(--line);
-        padding-left: 18px;
-        margin: 28px 0;
-      }
-
-      ul { margin: 10px 0 0 20px; }
-      li { margin-bottom: 6px; }
-
-      code {
-        background: rgba(255,255,255,0.05);
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 0.9em;
-      }
-
-      .note { color: var(--muted); margin-top: 6px; }
-    </style>
-  </head>
-
-  <body>
-    <div class="wrap">
-      <header>
-        <div class="num">Volume 2 · 06</div>
-        <h1>How sound behaves differently than images</h1>
-      </header>
-
-      <article>
-        <p>
-          Images arrive in chunks.
-        </p>
-
-        <p>
-          Frames show up, get replaced, then disappear. Even when they move, they move in slices.
-          Sound does not work that way here. Sound arrives as pressure that never pauses.
-        </p>
-
-        <p>
-          This difference matters because the system treats sound less like content
-          and more like force.
-        </p>
-
-        <div class="do">
-          <p>
-            Keep the network you already have.
-          </p>
-          <p>
-            Move your mouse to an empty area below everything else.
-          </p>
-          <p>
-            Press <code>Tab</code>.
-          </p>
-          <p>
-            Type one of the following and place it below:
-          </p>
-          <ul>
-            <li><code>Audio Device In</code></li>
-            <li><code>Audio File In</code></li>
-            <li><code>Noise</code> (if audio input is unavailable)</li>
-          </ul>
-          <p class="note">
-            Any of these produces a continuous signal. Pick one.
-          </p>
-        </div>
-
-        <p>
-          Open the viewer on this node.
-        </p>
-
-        <p>
-          What you see is not an image. It is not a picture of sound.
-          It is a trace of pressure over time.
-        </p>
-
-        <p>
-          Sound does not wait to be rendered. It pushes forward constantly.
-        </p>
-
-        <div class="do">
-          <p>
-            Press <code>Tab</code>.
-          </p>
-          <p>
-            Add one of the following to the right of the sound source:
-          </p>
-          <ul>
-            <li><code>Analyze</code></li>
-            <li><code>Math</code></li>
-            <li><code>Lag</code></li>
-          </ul>
-        </div>
-
-        <p>
-          Wire the sound source into this node.
-        </p>
-
-        <p>
-          These nodes do not shape sound as audio.
-          They shape pressure as numbers.
-        </p>
-
-        <div class="do">
-          <p>
-            Open the viewer on the new node.
-          </p>
-        </div>
-
-        <p>
-          Notice how fast the values move.
-          Even when the image-based systems earlier felt stable,
-          this one refuses to hold still.
-        </p>
-
-        <p>
-          Sound occupies time densely.
-          Every frame contains change.
-        </p>
-
-        <div class="do">
-          <p>
-            Take one channel from the sound analysis.
-          </p>
-          <p>
-            Wire it into something visual you already built:
-          </p>
-          <ul>
-            <li>Translate X on geometry</li>
-            <li>Scale on geometry</li>
-            <li>Brightness on an image</li>
-            <li>Amplitude on a noise node</li>
-          </ul>
-        </div>
-
-        <p>
-          The visual result jitters or pulses.
-        </p>
-
-        <p>
-          That reaction is honest.
-          Sound does not offer stable values unless forced to.
-        </p>
-
-        <div class="do">
-          <p>
-            Insert a <code>Lag</code> or <code>Filter</code> node
-            between the sound and the visual control.
-          </p>
-        </div>
-
-        <p>
-          The system begins to breathe instead of twitch.
-        </p>
-
-        <p>
-          This is the key difference.
-        </p>
-
-        <p>
-          Images tolerate being sampled.
-          Sound demands mediation.
-        </p>
-
-        <p>
-          Treat sound like a texture and it fights you.
-          Treat it like pressure and it cooperates.
-        </p>
-
-        <p>
-          From here on, whenever something feels too sharp,
-          too nervous, or too alive, the question is not
-          what node is wrong, but what pressure needs shaping.
-        </p>
-      </article>
-
-      <div class="page-image">
-        <img src="v2b6.png" alt="Volume 2 page 06" />
-      </div>
-
-      <div class="nav">
-        <a href="../index.html" aria-label="Back to index">Index</a>
-        <a href="v2b7.html" aria-label="Go to page 07">Next page</a>
-      </div>
-    </div>
-  </body>
+</div>
+</body>
 </html>
