@@ -6,6 +6,10 @@ function getElementOrThrow(id) {
   return element;
 }
 
+function getInventoryItemById(state, itemId) {
+  return state.inventory.find((item) => item.id === itemId) || null;
+}
+
 export function renderNarration(state) {
   const title = getElementOrThrow('narration-level-title');
   const lineText = getElementOrThrow('narration-line-text');
@@ -32,14 +36,48 @@ export function renderBreakRoom(state, actions) {
   const container = getElementOrThrow('break-room-content');
   container.innerHTML = '';
 
-  const list = document.createElement('div');
-  list.className = 'worker-list';
+  const supplySection = document.createElement('section');
+  supplySection.className = 'subpanel';
+
+  const supplyHeading = document.createElement('h3');
+  supplyHeading.className = 'subpanel-heading';
+  supplyHeading.textContent = 'Supply Room';
+
+  const supplyList = document.createElement('ul');
+  supplyList.className = 'inventory-list';
+
+  state.inventory.forEach((item) => {
+    const row = document.createElement('li');
+    row.className = 'inventory-item';
+
+    const label = document.createElement('span');
+    label.textContent = item.label;
+
+    const kind = document.createElement('span');
+    kind.className = 'inventory-kind';
+    kind.textContent = item.kind;
+
+    row.append(label, kind);
+    supplyList.appendChild(row);
+  });
+
+  supplySection.append(supplyHeading, supplyList);
+
+  const workersSection = document.createElement('section');
+  workersSection.className = 'subpanel';
+
+  const workersHeading = document.createElement('h3');
+  workersHeading.className = 'subpanel-heading';
+  workersHeading.textContent = 'Workers';
+
+  const workerList = document.createElement('div');
+  workerList.className = 'worker-list';
 
   state.breakRoomTypes.forEach((worker) => {
     const card = document.createElement('article');
     card.className = 'worker-card';
 
-    const heading = document.createElement('h3');
+    const heading = document.createElement('h4');
     heading.textContent = worker.displayName;
 
     const subtitle = document.createElement('p');
@@ -55,13 +93,15 @@ export function renderBreakRoom(state, actions) {
     });
 
     card.append(heading, subtitle, button);
-    list.appendChild(card);
+    workerList.appendChild(card);
   });
 
-  container.appendChild(list);
+  workersSection.append(workersHeading, workerList);
+
+  container.append(supplySection, workersSection);
 }
 
-export function renderFactoryFloor(state) {
+export function renderFactoryFloor(state, actions) {
   const container = getElementOrThrow('factory-floor-content');
   container.innerHTML = '';
 
@@ -80,7 +120,59 @@ export function renderFactoryFloor(state) {
     state.lineNodes.forEach((node, index) => {
       const box = document.createElement('div');
       box.className = 'line-node-box';
-      box.textContent = node.label;
+
+      const title = document.createElement('p');
+      title.className = 'line-node-label';
+      title.textContent = node.label;
+
+      box.appendChild(title);
+
+      if (index === 0) {
+        const inputId = node.inputs?.[0] || null;
+        const inputItem = inputId ? getInventoryItemById(state, inputId) : null;
+
+        const inputLine = document.createElement('p');
+        inputLine.className = 'line-node-input';
+        inputLine.textContent = `Input: ${inputItem ? inputItem.label : '(none)'}`;
+        box.appendChild(inputLine);
+
+        const controls = document.createElement('div');
+        controls.className = 'feed-controls';
+
+        const feedSelect = document.createElement('select');
+        feedSelect.className = 'feed-select';
+
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Select supply item';
+        defaultOption.selected = true;
+        feedSelect.appendChild(defaultOption);
+
+        const compatibleItems = actions.getCompatibleItemsForNode(node);
+        compatibleItems.forEach((item) => {
+          const option = document.createElement('option');
+          option.value = item.id;
+          option.textContent = item.label;
+          feedSelect.appendChild(option);
+        });
+
+        const feedButton = document.createElement('button');
+        feedButton.type = 'button';
+        feedButton.textContent = 'Feed';
+        feedButton.disabled = state.narration.mode !== 'none' || Boolean(inputItem) || compatibleItems.length === 0;
+        feedButton.addEventListener('click', () => {
+          if (!feedSelect.value) {
+            return;
+          }
+          actions.onFeedInput(feedSelect.value);
+        });
+
+        feedSelect.disabled = feedButton.disabled;
+
+        controls.append(feedSelect, feedButton);
+        box.appendChild(controls);
+      }
+
       chain.appendChild(box);
 
       if (index < state.connections.length) {
@@ -104,6 +196,7 @@ export function renderClipboard(state, actions) {
   const button = document.createElement('button');
   button.type = 'button';
   button.textContent = 'Press Status';
+  button.disabled = state.narration.mode !== 'none';
   button.addEventListener('click', () => {
     actions.onPressStatus();
   });
@@ -118,6 +211,6 @@ export function renderClipboard(state, actions) {
 export function renderAll(state, actions) {
   renderNarration(state);
   renderBreakRoom(state, actions);
-  renderFactoryFloor(state);
+  renderFactoryFloor(state, actions);
   renderClipboard(state, actions);
 }

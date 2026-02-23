@@ -1,5 +1,13 @@
+import {
+  addNodeToLine,
+  advanceNarration,
+  createInitialState,
+  feedInput,
+  getCompatibleInventoryForNode,
+  loadLevel,
+  pressStatus
+} from './state.js';
 import { LEVELS } from './levels/index.js';
-import { addNodeToLine, advanceNarration, createInitialState, loadLevel, pressStatus } from './state.js';
 import { renderAll } from './ui.js';
 
 function setupControls(getState, setStateAndRender) {
@@ -34,10 +42,24 @@ function initializeApp() {
 
   const actions = {
     onSendToLine: (workerTypeId) => {
+      if (state.narration.mode !== 'none') {
+        return;
+      }
       const nextState = addNodeToLine(state, workerTypeId);
       setStateAndRender(nextState);
     },
+    onFeedInput: (itemId) => {
+      if (state.narration.mode !== 'none') {
+        return;
+      }
+      const nextState = feedInput(state, itemId);
+      setStateAndRender(nextState);
+    },
+    getCompatibleItemsForNode: (node) => getCompatibleInventoryForNode(state, node),
     onPressStatus: () => {
+      if (state.narration.mode !== 'none') {
+        return;
+      }
       const nextState = pressStatus(state);
       setStateAndRender(nextState);
     }

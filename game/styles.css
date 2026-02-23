@@ -81,7 +81,8 @@ body {
   padding: 0.6rem 0 0.75rem;
 }
 
-button {
+button,
+select {
   border: 1px solid var(--line);
   background: transparent;
   color: var(--fg);
@@ -89,7 +90,12 @@ button {
   font-size: 0.95rem;
 }
 
-button:disabled {
+select {
+  background: var(--panel-alt);
+}
+
+button:disabled,
+select:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -113,6 +119,42 @@ button:disabled {
   margin-bottom: 1rem;
 }
 
+.subpanel {
+  border: 1px solid var(--line);
+  background: var(--panel-alt);
+  padding: 0.75rem;
+}
+
+.subpanel + .subpanel {
+  margin-top: 0.75rem;
+}
+
+.subpanel-heading {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.inventory-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.inventory-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--line);
+}
+
+.inventory-kind {
+  color: var(--muted);
+  font-family: monospace;
+}
+
 .worker-list {
   display: grid;
   gap: 0.75rem;
@@ -120,11 +162,11 @@ button:disabled {
 
 .worker-card {
   border: 1px solid var(--line);
-  background: var(--panel-alt);
+  background: rgba(255, 255, 255, 0.02);
   padding: 0.75rem;
 }
 
-.worker-card h3 {
+.worker-card h4 {
   margin: 0;
   font-size: 1rem;
 }
@@ -157,8 +199,27 @@ button:disabled {
   background: rgba(124, 163, 255, 0.12);
   border-radius: 6px;
   padding: 0.45rem 0.65rem;
-  font-weight: 700;
   white-space: nowrap;
+}
+
+.line-node-label {
+  margin: 0;
+  font-weight: 700;
+}
+
+.line-node-input {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+}
+
+.feed-controls {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.feed-select {
+  max-width: 11rem;
 }
 
 .line-arrow {
@@ -205,5 +266,13 @@ button:disabled {
 
   .panel {
     min-height: auto;
+  }
+
+  .feed-controls {
+    flex-direction: column;
+  }
+
+  .feed-select {
+    max-width: none;
   }
 }
