@@ -365,6 +365,63 @@ select:disabled {
   border-color: #ffffff;
 }
 
+
+.narration-strip,
+.inventory-item,
+.status-report {
+  position: relative;
+  border: none;
+  overflow: visible;
+}
+
+.narration-strip::before,
+.narration-strip::after,
+.inventory-item::before,
+.inventory-item::after,
+.status-report::before,
+.status-report::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  inset: 0;
+}
+
+.narration-strip::before {
+  border: 3px solid #000000;
+  clip-path: polygon(1% 2%, 98% 0, 100% 95%, 96% 100%, 3% 99%, 0 8%);
+}
+
+.narration-strip::after {
+  inset: -3px 2px 2px -1px;
+  border: 1px solid #000000;
+  transform: rotate(-0.45deg);
+  clip-path: polygon(2% 0, 99% 2%, 98% 98%, 95% 100%, 1% 97%, 0 6%);
+}
+
+.inventory-item::before {
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  clip-path: polygon(2% 2%, 99% 0, 100% 93%, 94% 100%, 2% 98%, 0 11%);
+}
+
+.inventory-item::after {
+  inset: -2px 1px 1px -1px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  transform: rotate(-0.6deg);
+  clip-path: polygon(1% 4%, 98% 1%, 99% 95%, 96% 100%, 2% 97%, 0 9%);
+}
+
+.status-report::before {
+  border: 3px solid rgba(255, 255, 255, 0.95);
+  clip-path: polygon(1% 2%, 99% 1%, 100% 96%, 96% 100%, 2% 98%, 0 9%);
+}
+
+.status-report::after {
+  inset: -3px 3px 1px -2px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  transform: rotate(-0.35deg);
+  clip-path: polygon(2% 1%, 99% 3%, 98% 97%, 95% 100%, 1% 98%, 0 8%);
+}
+
 @media (max-width: 900px) {
   .narration-strip {
     grid-template-columns: 1fr;
