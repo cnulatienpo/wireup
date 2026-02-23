@@ -45,7 +45,16 @@ const WORKER_TYPES = [
 
 export function createInitialState() {
   return {
-    levelId: 'level01',
+    levelId: '',
+    levelMeta: {
+      title: ''
+    },
+    activeLevelDef: null,
+    narration: {
+      lines: [],
+      index: 0,
+      mode: 'none'
+    },
     breakRoomTypes: WORKER_TYPES.map((worker) => ({ ...worker })),
     lineNodes: [],
     connections: [],
@@ -55,5 +64,60 @@ export function createInitialState() {
     },
     inventory: [],
     flags: {}
+  };
+}
+
+export function loadLevel(state, levelDef) {
+  return {
+    ...state,
+    levelId: levelDef.id,
+    levelMeta: {
+      title: levelDef.title
+    },
+    activeLevelDef: levelDef,
+    narration: {
+      lines: [...levelDef.introLines],
+      index: 0,
+      mode: 'intro'
+    }
+  };
+}
+
+export function advanceNarration(state) {
+  const { narration, activeLevelDef } = state;
+
+  if (narration.mode === 'none' || !activeLevelDef) {
+    return state;
+  }
+
+  const nextIndex = narration.index + 1;
+  if (nextIndex < narration.lines.length) {
+    return {
+      ...state,
+      narration: {
+        ...narration,
+        index: nextIndex
+      }
+    };
+  }
+
+  if (narration.mode === 'intro') {
+    return {
+      ...state,
+      narration: {
+        lines: [...activeLevelDef.goalLines],
+        index: 0,
+        mode: 'goals'
+      }
+    };
+  }
+
+  return {
+    ...state,
+    narration: {
+      lines: [],
+      index: 0,
+      mode: 'none'
+    }
   };
 }
