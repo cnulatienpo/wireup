@@ -43,8 +43,30 @@ const WORKER_TYPES = [
   }
 ];
 
+const INPUT_COMPATIBILITY = {
+  'top-mr-draw': ['video'],
+  'chop-mr-volume': ['numbers'],
+  'sop-mr-bones': ['geometry'],
+  'dat-mr-plan': ['text'],
+  'comp-mr-box': ['*'],
+  'pop-mr-move': ['numbers', 'geometry']
+};
+
 function toNodeId(index) {
   return `node_${String(index).padStart(3, '0')}`;
+}
+
+function getItemById(state, itemId) {
+  return state.inventory.find((item) => item.id === itemId) || null;
+}
+
+export function canWorkerAcceptItem(workerTypeId, itemKind) {
+  const allowedKinds = INPUT_COMPATIBILITY[workerTypeId] || [];
+  return allowedKinds.includes('*') || allowedKinds.includes(itemKind);
+}
+
+export function getCompatibleInventoryForNode(state, node) {
+  return state.inventory.filter((item) => canWorkerAcceptItem(node.typeId, item.kind));
 }
 
 export function createInitialState() {
@@ -66,7 +88,12 @@ export function createInitialState() {
       mode: 'manual',
       lastReport: ''
     },
-    inventory: [],
+    inventory: [
+      { id: 'inv_video_clip', kind: 'video', label: 'Stock Footage Clip' },
+      { id: 'inv_beat_meter', kind: 'numbers', label: 'Beat Meter' },
+      { id: 'inv_tube_shape', kind: 'geometry', label: 'Tube Shape' },
+      { id: 'inv_checklist_note', kind: 'text', label: 'Checklist Note' }
+    ],
     flags: {}
   };
 }
@@ -136,7 +163,8 @@ export function addNodeToLine(state, workerTypeId) {
     id: toNodeId(state.lineNodes.length + 1),
     typeId: workerType.id,
     label: workerType.displayName,
-    params: {}
+    params: {},
+    inputs: []
   };
 
   const previousNode = state.lineNodes[state.lineNodes.length - 1];
@@ -154,20 +182,56 @@ export function addNodeToLine(state, workerTypeId) {
   };
 }
 
+export function feedInput(state, itemId) {
+  if (state.lineNodes.length === 0) {
+    return state;
+  }
+
+  const firstNode = state.lineNodes[0];
+  const existingInput = firstNode.inputs?.[0];
+  if (existingInput) {
+    return state;
+  }
+
+  const item = getItemById(state, itemId);
+  if (!item || !canWorkerAcceptItem(firstNode.typeId, item.kind)) {
+    return state;
+  }
+
+  const updatedFirstNode = {
+    ...firstNode,
+    inputs: [item.id]
+  };
+
+  return {
+    ...state,
+    lineNodes: [updatedFirstNode, ...state.lineNodes.slice(1)]
+  };
+}
+
 export function pressStatus(state) {
   const labels = state.lineNodes.map((node) => node.label);
   const lineText = labels.length > 0 ? labels.join(' -> ') : '(empty)';
-  const report = [
+  const firstInputId = state.lineNodes[0]?.inputs?.[0] || null;
+  const firstInput = firstInputId ? getItemById(state, firstInputId) : null;
+  const inputText = firstInput ? firstInput.label : '(none)';
+
+  const reportLines = [
     `Line: ${lineText}`,
     `Nodes: ${state.lineNodes.length}`,
-    `Connections: ${state.connections.length}`
-  ].join('\n');
+    `Connections: ${state.connections.length}`,
+    `Input: ${inputText}`
+  ];
+
+  if (!firstInput) {
+    reportLines.push('The machine has nothing to work on.');
+  }
 
   return {
     ...state,
     clipboard: {
       ...state.clipboard,
-      lastReport: report
+      lastReport: reportLines.join('\n')
     }
   };
 }
