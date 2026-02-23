@@ -12,6 +12,7 @@ export const level05 = {
     'Press status and confirm Deep Room text preview appears.'
   ],
   allowedWorkers: ['sop-mr-bones'],
+  showTranslations: true,
   wrongHintLines: ['Worker note: “Clipboard only understands flat video lines, not deep room jobs.”'],
   rayRayTruthLines: [
     'Clipboard can report any cooked branch result text. (Viewer/status output can summarize SOP pipeline state.)'

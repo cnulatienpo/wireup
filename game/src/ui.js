@@ -10,8 +10,12 @@ function getInventoryItemById(state, itemId) {
   return state.inventory.find((item) => item.id === itemId) || null;
 }
 
-function withTd(eli5, td) {
-  return `${eli5} (${td})`;
+function withTd(state, eli5, td) {
+  return state.showTranslations ? `${eli5} (${td})` : eli5;
+}
+
+function getWorkerLabel(state, worker) {
+  return state.showTranslations ? worker.tdFamilyLabel : '';
 }
 
 function hasUnusedBranch(state) {
@@ -46,7 +50,7 @@ function renderHowCard(state, node, actions, parent) {
 
   const title = document.createElement('p');
   title.className = 'how-card-title';
-  title.textContent = withTd('How card', 'Parameters');
+  title.textContent = withTd(state, 'How card', 'Parameters');
   howCard.appendChild(title);
 
   if (node.typeId === 'chop-mr-volume') {
@@ -62,7 +66,7 @@ function renderHowCard(state, node, actions, parent) {
     });
 
     const text = document.createElement('span');
-    text.textContent = 'Pulse (CHOP signal toggle)';
+    text.textContent = withTd(state, 'Pulse', 'CHOP signal toggle');
 
     pulseLabel.append(pulseCheckbox, text);
     howCard.appendChild(pulseLabel);
@@ -81,7 +85,7 @@ function renderHowCard(state, node, actions, parent) {
     });
 
     const text = document.createElement('span');
-    text.textContent = 'Remember (history buffer)';
+    text.textContent = withTd(state, 'Remember', 'history buffer');
 
     rememberLabel.append(rememberCheckbox, text);
     howCard.append(rememberLabel);
@@ -125,7 +129,7 @@ export function renderBreakRoom(state, actions) {
 
   const supplyHeading = document.createElement('h3');
   supplyHeading.className = 'subpanel-heading';
-  supplyHeading.textContent = withTd('Supply Room', 'Input Inventory');
+  supplyHeading.textContent = withTd(state, 'Supply Room', 'Input Inventory');
 
   const supplyList = document.createElement('ul');
   supplyList.className = 'inventory-list';
@@ -139,7 +143,7 @@ export function renderBreakRoom(state, actions) {
 
     const kind = document.createElement('span');
     kind.className = 'inventory-kind';
-    kind.textContent = `${item.kind} ${withTd('item kind', 'input type')}`;
+    kind.textContent = `${item.kind} ${withTd(state, 'item kind', 'input type')}`;
 
     row.append(label, kind);
     supplyList.appendChild(row);
@@ -152,7 +156,7 @@ export function renderBreakRoom(state, actions) {
 
   const workersHeading = document.createElement('h3');
   workersHeading.className = 'subpanel-heading';
-  workersHeading.textContent = withTd('Workers', 'Operators');
+  workersHeading.textContent = withTd(state, 'Workers', 'Operators');
 
   const workerList = document.createElement('div');
   workerList.className = 'worker-list';
@@ -166,11 +170,11 @@ export function renderBreakRoom(state, actions) {
 
     const subtitle = document.createElement('p');
     subtitle.className = 'worker-subtitle';
-    subtitle.textContent = worker.tdFamilyLabel;
+    subtitle.textContent = getWorkerLabel(state, worker);
 
     const button = document.createElement('button');
     button.type = 'button';
-    button.textContent = withTd('Send to line', 'instantiate operator node');
+    button.textContent = withTd(state, 'Send to line', 'instantiate operator node');
     button.disabled = state.narration.mode !== 'none';
     button.addEventListener('click', () => {
       actions.onSendToLine(worker.id);
@@ -227,7 +231,7 @@ export function renderFactoryFloor(state, actions) {
 
         const inputLine = document.createElement('p');
         inputLine.className = 'line-node-input';
-        inputLine.textContent = `${withTd('Input', 'source binding')}: ${inputItem ? inputItem.label : '(none)'}`;
+        inputLine.textContent = `${withTd(state, 'Input', 'source binding')}: ${inputItem ? inputItem.label : '(none)'}`;
         box.appendChild(inputLine);
 
         const controls = document.createElement('div');
@@ -238,7 +242,7 @@ export function renderFactoryFloor(state, actions) {
 
         const defaultOption = document.createElement('option');
         defaultOption.value = '';
-        defaultOption.textContent = withTd('Select supply item', 'choose input source');
+        defaultOption.textContent = withTd(state, 'Select supply item', 'choose input source');
         defaultOption.selected = true;
         feedSelect.appendChild(defaultOption);
 
@@ -251,7 +255,7 @@ export function renderFactoryFloor(state, actions) {
 
         const feedButton = document.createElement('button');
         feedButton.type = 'button';
-        feedButton.textContent = withTd('Feed', 'connect input');
+        feedButton.textContent = withTd(state, 'Feed', 'connect input');
         feedButton.disabled = state.narration.mode !== 'none' || Boolean(inputItem);
         feedButton.addEventListener('click', () => {
           if (!feedSelect.value) {
@@ -271,7 +275,7 @@ export function renderFactoryFloor(state, actions) {
       const splitButton = document.createElement('button');
       splitButton.type = 'button';
       splitButton.className = 'split-button';
-      splitButton.textContent = withTd('Split output', 'branch link');
+      splitButton.textContent = withTd(state, 'Split output', 'branch link');
       splitButton.disabled =
         state.narration.mode !== 'none' ||
         !state.connections.some((connection) => connection.fromNodeId === node.id);
@@ -290,7 +294,7 @@ export function renderFactoryFloor(state, actions) {
 
     const heading = document.createElement('p');
     heading.className = 'connections-heading';
-    heading.textContent = withTd('Connections', 'Links');
+    heading.textContent = withTd(state, 'Connections', 'Links');
     connections.appendChild(heading);
 
     if (state.connections.length === 0) {
@@ -322,7 +326,7 @@ export function renderClipboard(state, actions) {
 
   const button = document.createElement('button');
   button.type = 'button';
-  button.textContent = withTd('Press status', 'trigger viewer cook');
+  button.textContent = withTd(state, 'Press status', 'trigger viewer cook');
   button.disabled = state.narration.mode !== 'none';
   button.addEventListener('click', () => {
     actions.onPressStatus();
@@ -330,7 +334,7 @@ export function renderClipboard(state, actions) {
 
   const runButton = document.createElement('button');
   runButton.type = 'button';
-  runButton.textContent = withTd('Let it run', 'switch to auto cook');
+  runButton.textContent = withTd(state, 'Let it run', 'switch to auto cook');
   runButton.disabled = state.narration.mode !== 'none' || state.clipboard.mode === 'auto';
   runButton.addEventListener('click', () => {
     actions.onLetItRun();
@@ -356,17 +360,17 @@ export function renderClipboard(state, actions) {
 
   const modeText = document.createElement('p');
   modeText.className = 'clipboard-mode';
-  modeText.textContent = `${withTd('Mode', 'viewer mode')}: ${state.clipboard.mode} | ${withTd('Tick', 'time step')}: ${state.time.dt}ms | ${withTd('Clock', 'timeline')}: ${state.time.t.toFixed(2)}s`;
+  modeText.textContent = `${withTd(state, 'Mode', 'viewer mode')}: ${state.clipboard.mode} | ${withTd(state, 'Tick', 'time step')}: ${state.time.dt}ms | ${withTd(state, 'Clock', 'timeline')}: ${state.time.t.toFixed(2)}s`;
 
   controls.append(button, runButton, fasterButton, slowerButton);
 
   const report = document.createElement('pre');
   report.className = 'status-report';
-  report.textContent = state.clipboard.lastReport || `${withTd('Status Report', 'Viewer')}: (nothing yet)`;
+  report.textContent = state.clipboard.lastReport || `${withTd(state, 'Status Report', 'Viewer')}: (nothing yet)`;
 
   const wrongHeading = document.createElement('p');
   wrongHeading.className = 'connections-heading';
-  wrongHeading.textContent = withTd('Slightly wrong worker instructions', 'misleading production notes');
+  wrongHeading.textContent = withTd(state, 'Slightly wrong worker instructions', 'misleading production notes');
 
   const wrongList = document.createElement('ul');
   wrongList.className = 'inventory-list';
@@ -379,7 +383,7 @@ export function renderClipboard(state, actions) {
 
   const truthHeading = document.createElement('p');
   truthHeading.className = 'connections-heading';
-  truthHeading.textContent = withTd('Ray Ray translation', 'technical correction');
+  truthHeading.textContent = withTd(state, 'Ray Ray translation', 'technical correction');
 
   const truthList = document.createElement('ul');
   truthList.className = 'inventory-list';
