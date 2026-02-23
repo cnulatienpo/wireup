@@ -10,6 +10,28 @@ function getInventoryItemById(state, itemId) {
   return state.inventory.find((item) => item.id === itemId) || null;
 }
 
+function hasUnusedBranch(state) {
+  const mainLineSet = new Set(state.mainLineNodeIds || []);
+  return state.connections.some(
+    (connection) => mainLineSet.has(connection.fromNodeId) && !mainLineSet.has(connection.toNodeId)
+  );
+}
+
+function getRayRayHint(state) {
+  const firstNodeId = state.mainLineNodeIds?.[0] || null;
+  const firstNode = state.lineNodes.find((node) => node.id === firstNodeId) || null;
+
+  if (firstNode && !firstNode.inputs?.[0]) {
+    return "You didn't give the machine the thing to work on.";
+  }
+
+  if (hasUnusedBranch(state)) {
+    return 'That side line is idle. Nobody is asking it to work.';
+  }
+
+  return '';
+}
+
 export function renderNarration(state) {
   const title = getElementOrThrow('narration-level-title');
   const lineText = getElementOrThrow('narration-line-text');
@@ -117,17 +139,27 @@ export function renderFactoryFloor(state, actions) {
     const chain = document.createElement('div');
     chain.className = 'line-chain';
 
-    state.lineNodes.forEach((node, index) => {
+    const firstNodeId = state.mainLineNodeIds?.[0] || null;
+    const cookedNodeSet = new Set(state.runtime?.lastCookedNodeIds || []);
+
+    state.lineNodes.forEach((node) => {
       const box = document.createElement('div');
       box.className = 'line-node-box';
+      if (cookedNodeSet.has(node.id)) {
+        box.classList.add('cooking');
+      }
 
       const title = document.createElement('p');
       title.className = 'line-node-label';
       title.textContent = node.label;
 
-      box.appendChild(title);
+      const nodeIdLabel = document.createElement('p');
+      nodeIdLabel.className = 'line-node-id';
+      nodeIdLabel.textContent = node.id;
 
-      if (index === 0) {
+      box.append(title, nodeIdLabel);
+
+      if (node.id === firstNodeId) {
         const inputId = node.inputs?.[0] || null;
         const inputItem = inputId ? getInventoryItemById(state, inputId) : null;
 
@@ -173,17 +205,46 @@ export function renderFactoryFloor(state, actions) {
         box.appendChild(controls);
       }
 
-      chain.appendChild(box);
+      const splitButton = document.createElement('button');
+      splitButton.type = 'button';
+      splitButton.className = 'split-button';
+      splitButton.textContent = 'Split Output';
+      splitButton.disabled =
+        state.narration.mode !== 'none' ||
+        !state.connections.some((connection) => connection.fromNodeId === node.id);
+      splitButton.addEventListener('click', () => {
+        actions.onSplitOutput(node.id);
+      });
+      box.appendChild(splitButton);
 
-      if (index < state.connections.length) {
-        const arrow = document.createElement('span');
-        arrow.className = 'line-arrow';
-        arrow.textContent = ' ---> ';
-        chain.appendChild(arrow);
-      }
+      chain.appendChild(box);
     });
 
     line.appendChild(chain);
+
+    const connections = document.createElement('div');
+    connections.className = 'connections-list';
+
+    const heading = document.createElement('p');
+    heading.className = 'connections-heading';
+    heading.textContent = 'Connections';
+    connections.appendChild(heading);
+
+    if (state.connections.length === 0) {
+      const empty = document.createElement('p');
+      empty.className = 'placeholder';
+      empty.textContent = '(none)';
+      connections.appendChild(empty);
+    } else {
+      state.connections.forEach((connection) => {
+        const row = document.createElement('p');
+        row.className = 'connection-row';
+        row.textContent = `${connection.fromNodeId} -> ${connection.toNodeId}`;
+        connections.appendChild(row);
+      });
+    }
+
+    line.appendChild(connections);
   }
 
   container.appendChild(line);
@@ -205,7 +266,11 @@ export function renderClipboard(state, actions) {
   report.className = 'status-report';
   report.textContent = state.clipboard.lastReport || 'Status Report: (nothing yet)';
 
-  container.append(button, report);
+  const hint = document.createElement('p');
+  hint.className = 'ray-ray-hint';
+  hint.textContent = getRayRayHint(state) || 'Ray Ray: ✅';
+
+  container.append(button, report, hint);
 }
 
 export function renderAll(state, actions) {
