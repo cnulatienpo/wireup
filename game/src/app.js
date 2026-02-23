@@ -1,12 +1,16 @@
 import {
   addNodeToLine,
+  adjustTimeInterval,
   advanceNarration,
   createInitialState,
   feedInput,
   getCompatibleInventoryForNode,
   loadLevel,
   pressStatus,
-  splitOutput
+  setClipboardAutoMode,
+  setNodeParam,
+  splitOutput,
+  tickTime
 } from './state.js';
 import { LEVELS } from './levels/index.js';
 import { renderAll } from './ui.js';
@@ -40,6 +44,32 @@ function setupControls(getState, setStateAndRender) {
 
 function initializeApp() {
   let state = loadLevel(createInitialState(), LEVELS[0]);
+  let autoTickHandle = null;
+
+  const stopAutoTicker = () => {
+    if (autoTickHandle !== null) {
+      window.clearInterval(autoTickHandle);
+      autoTickHandle = null;
+    }
+  };
+
+  const runAutoCycle = () => {
+    if (state.clipboard.mode !== 'auto' || !state.time.running || state.narration.mode !== 'none') {
+      return;
+    }
+
+    const advanced = tickTime(state);
+    const evaluated = pressStatus(advanced);
+    setStateAndRender(evaluated);
+  };
+
+  const syncAutoTicker = () => {
+    stopAutoTicker();
+
+    if (state.clipboard.mode === 'auto' && state.time.running && state.narration.mode === 'none') {
+      autoTickHandle = window.setInterval(runAutoCycle, state.time.dt);
+    }
+  };
 
   const actions = {
     onSendToLine: (workerTypeId) => {
@@ -64,11 +94,33 @@ function initializeApp() {
       const nextState = splitOutput(state, nodeId);
       setStateAndRender(nextState);
     },
+    onSetNodeParam: (nodeId, key, value) => {
+      if (state.narration.mode !== 'none') {
+        return;
+      }
+      const nextState = setNodeParam(state, nodeId, key, value);
+      setStateAndRender(nextState);
+    },
     onPressStatus: () => {
       if (state.narration.mode !== 'none') {
         return;
       }
       const nextState = pressStatus(state);
+      setStateAndRender(nextState);
+    },
+    onLetItRun: () => {
+      if (state.narration.mode !== 'none') {
+        return;
+      }
+      const armedState = setClipboardAutoMode(state);
+      setStateAndRender(armedState);
+      runAutoCycle();
+    },
+    onAdjustSpeed: (direction) => {
+      if (state.narration.mode !== 'none' || state.clipboard.mode !== 'auto') {
+        return;
+      }
+      const nextState = adjustTimeInterval(state, direction);
       setStateAndRender(nextState);
     }
   };
@@ -76,10 +128,15 @@ function initializeApp() {
   const setStateAndRender = (nextState) => {
     state = nextState;
     renderAll(state, actions);
+    syncAutoTicker();
   };
 
   setupControls(() => state, setStateAndRender);
-  renderAll(state, actions);
+  setStateAndRender(state);
+
+  window.addEventListener('beforeunload', () => {
+    stopAutoTicker();
+  });
 }
 
 document.addEventListener('DOMContentLoaded', initializeApp);

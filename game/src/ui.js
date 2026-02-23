@@ -32,6 +32,58 @@ function getRayRayHint(state) {
   return '';
 }
 
+function renderHowCard(state, node, actions, parent) {
+  const howCard = document.createElement('div');
+  howCard.className = 'how-card';
+
+  const title = document.createElement('p');
+  title.className = 'how-card-title';
+  title.textContent = 'How';
+  howCard.appendChild(title);
+
+  if (node.typeId === 'chop-mr-volume') {
+    const pulseLabel = document.createElement('label');
+    pulseLabel.className = 'how-toggle';
+
+    const pulseCheckbox = document.createElement('input');
+    pulseCheckbox.type = 'checkbox';
+    pulseCheckbox.checked = Boolean(node.params?.pulse);
+    pulseCheckbox.disabled = state.narration.mode !== 'none';
+    pulseCheckbox.addEventListener('change', () => {
+      actions.onSetNodeParam(node.id, 'pulse', pulseCheckbox.checked);
+    });
+
+    const text = document.createElement('span');
+    text.textContent = 'Pulse';
+
+    pulseLabel.append(pulseCheckbox, text);
+    howCard.appendChild(pulseLabel);
+  }
+
+  if (node.typeId === 'sop-mr-bones') {
+    const rememberLabel = document.createElement('label');
+    rememberLabel.className = 'how-toggle';
+
+    const rememberCheckbox = document.createElement('input');
+    rememberCheckbox.type = 'checkbox';
+    rememberCheckbox.checked = Boolean(node.params?.remember);
+    rememberCheckbox.disabled = state.narration.mode !== 'none';
+    rememberCheckbox.addEventListener('change', () => {
+      actions.onSetNodeParam(node.id, 'remember', rememberCheckbox.checked);
+    });
+
+    const text = document.createElement('span');
+    text.textContent = 'Remember';
+
+    rememberLabel.append(rememberCheckbox, text);
+    howCard.append(rememberLabel);
+  }
+
+  if (howCard.children.length > 1) {
+    parent.appendChild(howCard);
+  }
+}
+
 export function renderNarration(state) {
   const title = getElementOrThrow('narration-level-title');
   const lineText = getElementOrThrow('narration-line-text');
@@ -205,6 +257,8 @@ export function renderFactoryFloor(state, actions) {
         box.appendChild(controls);
       }
 
+      renderHowCard(state, node, actions, box);
+
       const splitButton = document.createElement('button');
       splitButton.type = 'button';
       splitButton.className = 'split-button';
@@ -254,6 +308,9 @@ export function renderClipboard(state, actions) {
   const container = getElementOrThrow('clipboard-content');
   container.innerHTML = '';
 
+  const controls = document.createElement('div');
+  controls.className = 'clipboard-controls';
+
   const button = document.createElement('button');
   button.type = 'button';
   button.textContent = 'Press Status';
@@ -261,6 +318,38 @@ export function renderClipboard(state, actions) {
   button.addEventListener('click', () => {
     actions.onPressStatus();
   });
+
+  const runButton = document.createElement('button');
+  runButton.type = 'button';
+  runButton.textContent = 'Let it run';
+  runButton.disabled = state.narration.mode !== 'none' || state.clipboard.mode === 'auto';
+  runButton.addEventListener('click', () => {
+    actions.onLetItRun();
+  });
+
+  const fasterButton = document.createElement('button');
+  fasterButton.type = 'button';
+  fasterButton.textContent = 'Faster';
+  fasterButton.disabled =
+    state.narration.mode !== 'none' || state.clipboard.mode !== 'auto' || state.time.dt <= 16;
+  fasterButton.addEventListener('click', () => {
+    actions.onAdjustSpeed('faster');
+  });
+
+  const slowerButton = document.createElement('button');
+  slowerButton.type = 'button';
+  slowerButton.textContent = 'Slower';
+  slowerButton.disabled =
+    state.narration.mode !== 'none' || state.clipboard.mode !== 'auto' || state.time.dt >= 1000;
+  slowerButton.addEventListener('click', () => {
+    actions.onAdjustSpeed('slower');
+  });
+
+  const modeText = document.createElement('p');
+  modeText.className = 'clipboard-mode';
+  modeText.textContent = `Mode: ${state.clipboard.mode} | Tick: ${state.time.dt}ms | Clock: ${state.time.t.toFixed(2)}s`;
+
+  controls.append(button, runButton, fasterButton, slowerButton);
 
   const report = document.createElement('pre');
   report.className = 'status-report';
@@ -270,7 +359,7 @@ export function renderClipboard(state, actions) {
   hint.className = 'ray-ray-hint';
   hint.textContent = getRayRayHint(state) || 'Ray Ray: ✅';
 
-  container.append(button, report, hint);
+  container.append(controls, modeText, report, hint);
 }
 
 export function renderAll(state, actions) {
