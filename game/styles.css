@@ -143,20 +143,46 @@ button:disabled {
   border: 1px solid var(--line);
   min-height: 12rem;
   padding: 1rem;
-  position: relative;
 }
 
-.assembly-line::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 1rem;
-  right: 1rem;
-  border-top: 2px solid var(--line);
+.line-chain {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  row-gap: 0.6rem;
+}
+
+.line-node-box {
+  border: 1px solid var(--highlight);
+  background: rgba(124, 163, 255, 0.12);
+  border-radius: 6px;
+  padding: 0.45rem 0.65rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.line-arrow {
+  color: var(--muted);
+  font-family: monospace;
+  padding: 0 0.2rem;
 }
 
 .placeholder {
   color: var(--muted);
+}
+
+.empty-line-message {
+  font-style: italic;
+}
+
+.status-report {
+  margin-top: 0.75rem;
+  border: 1px solid var(--line);
+  background: var(--panel-alt);
+  padding: 0.6rem;
+  color: var(--fg);
+  min-height: 6rem;
+  white-space: pre-wrap;
 }
 
 .cooking {
