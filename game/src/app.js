@@ -5,7 +5,8 @@ import {
   feedInput,
   getCompatibleInventoryForNode,
   loadLevel,
-  pressStatus
+  pressStatus,
+  splitOutput
 } from './state.js';
 import { LEVELS } from './levels/index.js';
 import { renderAll } from './ui.js';
@@ -56,6 +57,13 @@ function initializeApp() {
       setStateAndRender(nextState);
     },
     getCompatibleItemsForNode: (node) => getCompatibleInventoryForNode(state, node),
+    onSplitOutput: (nodeId) => {
+      if (state.narration.mode !== 'none') {
+        return;
+      }
+      const nextState = splitOutput(state, nodeId);
+      setStateAndRender(nextState);
+    },
     onPressStatus: () => {
       if (state.narration.mode !== 'none') {
         return;

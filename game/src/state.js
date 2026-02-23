@@ -83,10 +83,14 @@ export function createInitialState() {
     },
     breakRoomTypes: WORKER_TYPES.map((worker) => ({ ...worker })),
     lineNodes: [],
+    mainLineNodeIds: [],
     connections: [],
     clipboard: {
       mode: 'manual',
       lastReport: ''
+    },
+    runtime: {
+      lastCookedNodeIds: []
     },
     inventory: [
       { id: 'inv_video_clip', kind: 'video', label: 'Stock Footage Clip' },
@@ -110,6 +114,16 @@ export function loadLevel(state, levelDef) {
       lines: [...levelDef.introLines],
       index: 0,
       mode: 'intro'
+    },
+    lineNodes: [],
+    mainLineNodeIds: [],
+    connections: [],
+    clipboard: {
+      ...state.clipboard,
+      lastReport: ''
+    },
+    runtime: {
+      lastCookedNodeIds: []
     }
   };
 }
@@ -178,8 +192,69 @@ export function addNodeToLine(state, workerTypeId) {
   return {
     ...state,
     lineNodes: [...state.lineNodes, nextNode],
+    mainLineNodeIds: [...state.mainLineNodeIds, nextNode.id],
     connections: nextConnection ? [...state.connections, nextConnection] : [...state.connections]
   };
+}
+
+export function splitOutput(state, nodeId) {
+  const outgoing = state.connections.find((connection) => connection.fromNodeId === nodeId);
+  if (!outgoing) {
+    return state;
+  }
+
+  const downstream = state.lineNodes.find((node) => node.id === outgoing.toNodeId);
+  if (!downstream) {
+    return state;
+  }
+
+  const clonedNode = {
+    ...downstream,
+    id: toNodeId(state.lineNodes.length + 1),
+    params: { ...downstream.params },
+    inputs: []
+  };
+
+  return {
+    ...state,
+    lineNodes: [...state.lineNodes, clonedNode],
+    connections: [
+      ...state.connections,
+      {
+        fromNodeId: nodeId,
+        toNodeId: clonedNode.id
+      }
+    ]
+  };
+}
+
+function getUpstreamNodeIds(state, startNodeId) {
+  if (!startNodeId) {
+    return [];
+  }
+
+  const incomingByNodeId = new Map();
+  state.connections.forEach((connection) => {
+    const incoming = incomingByNodeId.get(connection.toNodeId) || [];
+    incoming.push(connection.fromNodeId);
+    incomingByNodeId.set(connection.toNodeId, incoming);
+  });
+
+  const visited = new Set();
+  const stack = [startNodeId];
+
+  while (stack.length > 0) {
+    const currentNodeId = stack.pop();
+    if (!currentNodeId || visited.has(currentNodeId)) {
+      continue;
+    }
+    visited.add(currentNodeId);
+
+    const upstreamNodeIds = incomingByNodeId.get(currentNodeId) || [];
+    upstreamNodeIds.forEach((upstreamNodeId) => stack.push(upstreamNodeId));
+  }
+
+  return [...visited];
 }
 
 export function feedInput(state, itemId) {
@@ -187,7 +262,13 @@ export function feedInput(state, itemId) {
     return state;
   }
 
-  const firstNode = state.lineNodes[0];
+  const firstNodeId = state.mainLineNodeIds[0] || null;
+  const firstNodeIndex = state.lineNodes.findIndex((node) => node.id === firstNodeId);
+  const firstNode = firstNodeIndex >= 0 ? state.lineNodes[firstNodeIndex] : null;
+  if (!firstNode) {
+    return state;
+  }
+
   const existingInput = firstNode.inputs?.[0];
   if (existingInput) {
     return state;
@@ -203,22 +284,30 @@ export function feedInput(state, itemId) {
     inputs: [item.id]
   };
 
+  const nextLineNodes = [...state.lineNodes];
+  nextLineNodes[firstNodeIndex] = updatedFirstNode;
+
   return {
     ...state,
-    lineNodes: [updatedFirstNode, ...state.lineNodes.slice(1)]
+    lineNodes: nextLineNodes
   };
 }
 
 export function pressStatus(state) {
-  const labels = state.lineNodes.map((node) => node.label);
+  const clipboardTargetNodeId = state.mainLineNodeIds[state.mainLineNodeIds.length - 1] || null;
+  const cookedNodeIds = getUpstreamNodeIds(state, clipboardTargetNodeId);
+  const cookedNodeSet = new Set(cookedNodeIds);
+  const labels = state.lineNodes.filter((node) => cookedNodeSet.has(node.id)).map((node) => node.label);
   const lineText = labels.length > 0 ? labels.join(' -> ') : '(empty)';
-  const firstInputId = state.lineNodes[0]?.inputs?.[0] || null;
+  const firstNodeId = state.mainLineNodeIds[0] || null;
+  const firstNode = state.lineNodes.find((node) => node.id === firstNodeId) || null;
+  const firstInputId = firstNode?.inputs?.[0] || null;
   const firstInput = firstInputId ? getItemById(state, firstInputId) : null;
   const inputText = firstInput ? firstInput.label : '(none)';
 
   const reportLines = [
     `Line: ${lineText}`,
-    `Nodes: ${state.lineNodes.length}`,
+    `Nodes: ${cookedNodeIds.length}`,
     `Connections: ${state.connections.length}`,
     `Input: ${inputText}`
   ];
@@ -229,6 +318,10 @@ export function pressStatus(state) {
 
   return {
     ...state,
+    runtime: {
+      ...state.runtime,
+      lastCookedNodeIds: cookedNodeIds
+    },
     clipboard: {
       ...state.clipboard,
       lastReport: reportLines.join('\n')
