@@ -181,6 +181,7 @@ export function createInitialState() {
       title: ''
     },
     activeLevelDef: null,
+    showTranslations: false,
     narration: {
       lines: [],
       index: 0,
@@ -234,6 +235,7 @@ export function loadLevel(state, levelDef, levelIndex = 0, levelsTotal = 1) {
       title: levelDef.title
     },
     activeLevelDef: levelDef,
+    showTranslations: Boolean(levelDef.showTranslations),
     narration: {
       lines: [...levelDef.introLines],
       index: 0,
