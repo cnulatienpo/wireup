@@ -143,7 +143,7 @@ export function renderBreakRoom(state, actions) {
 
     const kind = document.createElement('span');
     kind.className = 'inventory-kind';
-    kind.textContent = `${item.kind} ${withTd(state, 'item kind', 'input type')}`;
+    kind.textContent = item.kind;
 
     row.append(label, kind);
     supplyList.appendChild(row);
