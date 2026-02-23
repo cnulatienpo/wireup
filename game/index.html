@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Factory Mode</title>
+    <link rel="stylesheet" href="/game/styles.css" />
+  </head>
+  <body>
+    <header class="top-bar">
+      <h1>Factory Mode</h1>
+      <div class="top-bar-actions">
+        <button type="button" id="next-button" disabled>Next</button>
+        <button type="button" id="reset-button">Reset</button>
+      </div>
+    </header>
+
+    <main class="layout" aria-label="Factory game layout">
+      <section class="panel" id="break-room-panel" aria-labelledby="break-room-heading">
+        <h2 id="break-room-heading">Break Room</h2>
+        <div id="break-room-content"></div>
+      </section>
+
+      <section class="panel" id="factory-floor-panel" aria-labelledby="factory-floor-heading">
+        <h2 id="factory-floor-heading">Factory Floor</h2>
+        <div id="factory-floor-content"></div>
+      </section>
+
+      <section class="panel" id="clipboard-panel" aria-labelledby="clipboard-heading">
+        <h2 id="clipboard-heading">Clipboard</h2>
+        <div id="clipboard-content"></div>
+      </section>
+    </main>
+
+    <script type="module" src="/game/src/app.js"></script>
+  </body>
+</html>
