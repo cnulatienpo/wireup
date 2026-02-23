@@ -139,7 +139,7 @@ export function renderBreakRoom(state, actions) {
 
     const kind = document.createElement('span');
     kind.className = 'inventory-kind';
-    kind.textContent = `${item.kind} (type)`;
+    kind.textContent = `${item.kind} ${withTd('item kind', 'input type')}`;
 
     row.append(label, kind);
     supplyList.appendChild(row);
@@ -170,7 +170,7 @@ export function renderBreakRoom(state, actions) {
 
     const button = document.createElement('button');
     button.type = 'button';
-    button.textContent = 'Send to Line';
+    button.textContent = withTd('Send to line', 'instantiate operator node');
     button.disabled = state.narration.mode !== 'none';
     button.addEventListener('click', () => {
       actions.onSendToLine(worker.id);
@@ -227,7 +227,7 @@ export function renderFactoryFloor(state, actions) {
 
         const inputLine = document.createElement('p');
         inputLine.className = 'line-node-input';
-        inputLine.textContent = `Input: ${inputItem ? inputItem.label : '(none)'}`;
+        inputLine.textContent = `${withTd('Input', 'source binding')}: ${inputItem ? inputItem.label : '(none)'}`;
         box.appendChild(inputLine);
 
         const controls = document.createElement('div');
@@ -238,7 +238,7 @@ export function renderFactoryFloor(state, actions) {
 
         const defaultOption = document.createElement('option');
         defaultOption.value = '';
-        defaultOption.textContent = 'Select supply item';
+        defaultOption.textContent = withTd('Select supply item', 'choose input source');
         defaultOption.selected = true;
         feedSelect.appendChild(defaultOption);
 
@@ -251,7 +251,7 @@ export function renderFactoryFloor(state, actions) {
 
         const feedButton = document.createElement('button');
         feedButton.type = 'button';
-        feedButton.textContent = 'Feed';
+        feedButton.textContent = withTd('Feed', 'connect input');
         feedButton.disabled = state.narration.mode !== 'none' || Boolean(inputItem);
         feedButton.addEventListener('click', () => {
           if (!feedSelect.value) {
@@ -271,7 +271,7 @@ export function renderFactoryFloor(state, actions) {
       const splitButton = document.createElement('button');
       splitButton.type = 'button';
       splitButton.className = 'split-button';
-      splitButton.textContent = 'Split Output';
+      splitButton.textContent = withTd('Split output', 'branch link');
       splitButton.disabled =
         state.narration.mode !== 'none' ||
         !state.connections.some((connection) => connection.fromNodeId === node.id);
@@ -322,7 +322,7 @@ export function renderClipboard(state, actions) {
 
   const button = document.createElement('button');
   button.type = 'button';
-  button.textContent = 'Press Status';
+  button.textContent = withTd('Press status', 'trigger viewer cook');
   button.disabled = state.narration.mode !== 'none';
   button.addEventListener('click', () => {
     actions.onPressStatus();
@@ -330,7 +330,7 @@ export function renderClipboard(state, actions) {
 
   const runButton = document.createElement('button');
   runButton.type = 'button';
-  runButton.textContent = 'Let it run';
+  runButton.textContent = withTd('Let it run', 'switch to auto cook');
   runButton.disabled = state.narration.mode !== 'none' || state.clipboard.mode === 'auto';
   runButton.addEventListener('click', () => {
     actions.onLetItRun();
@@ -356,7 +356,7 @@ export function renderClipboard(state, actions) {
 
   const modeText = document.createElement('p');
   modeText.className = 'clipboard-mode';
-  modeText.textContent = `Mode: ${state.clipboard.mode} | Tick: ${state.time.dt}ms | Clock: ${state.time.t.toFixed(2)}s`;
+  modeText.textContent = `${withTd('Mode', 'viewer mode')}: ${state.clipboard.mode} | ${withTd('Tick', 'time step')}: ${state.time.dt}ms | ${withTd('Clock', 'timeline')}: ${state.time.t.toFixed(2)}s`;
 
   controls.append(button, runButton, fasterButton, slowerButton);
 
@@ -366,7 +366,7 @@ export function renderClipboard(state, actions) {
 
   const wrongHeading = document.createElement('p');
   wrongHeading.className = 'connections-heading';
-  wrongHeading.textContent = 'Slightly Wrong Worker Instructions';
+  wrongHeading.textContent = withTd('Slightly wrong worker instructions', 'misleading production notes');
 
   const wrongList = document.createElement('ul');
   wrongList.className = 'inventory-list';
@@ -379,7 +379,7 @@ export function renderClipboard(state, actions) {
 
   const truthHeading = document.createElement('p');
   truthHeading.className = 'connections-heading';
-  truthHeading.textContent = 'Ray Ray Translation';
+  truthHeading.textContent = withTd('Ray Ray translation', 'technical correction');
 
   const truthList = document.createElement('ul');
   truthList.className = 'inventory-list';
