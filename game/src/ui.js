@@ -6,6 +6,28 @@ function getElementOrThrow(id) {
   return element;
 }
 
+export function renderNarration(state) {
+  const title = getElementOrThrow('narration-level-title');
+  const lineText = getElementOrThrow('narration-line-text');
+  const lineCount = getElementOrThrow('narration-line-count');
+  const continueButton = getElementOrThrow('continue-button');
+  const nextButton = getElementOrThrow('next-button');
+
+  title.textContent = state.levelMeta.title || '—';
+
+  const currentLine = state.narration.lines[state.narration.index];
+  lineText.textContent = currentLine || '—';
+
+  if (state.narration.mode === 'intro' || state.narration.mode === 'goals') {
+    lineCount.textContent = `Line ${state.narration.index + 1} / ${state.narration.lines.length}`;
+  } else {
+    lineCount.textContent = '—';
+  }
+
+  continueButton.disabled = state.narration.mode === 'none';
+  nextButton.disabled = state.narration.mode !== 'none';
+}
+
 export function renderBreakRoom(state) {
   const container = getElementOrThrow('break-room-content');
   container.innerHTML = '';
@@ -65,6 +87,7 @@ export function renderClipboard(state) {
 }
 
 export function renderAll(state) {
+  renderNarration(state);
   renderBreakRoom(state);
   renderFactoryFloor(state);
   renderClipboard(state);
