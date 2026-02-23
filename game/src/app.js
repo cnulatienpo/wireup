@@ -4,7 +4,7 @@ import {
   advanceNarration,
   createInitialState,
   feedInput,
-  getCompatibleInventoryForNode,
+  goToNextLevel,
   loadLevel,
   pressStatus,
   setClipboardAutoMode,
@@ -37,13 +37,14 @@ function setupControls(getState, setStateAndRender) {
       if (getState().narration.mode !== 'none') {
         return;
       }
-      window.alert('Gameplay starts next step');
+      const nextState = goToNextLevel(getState(), LEVELS);
+      setStateAndRender(nextState);
     });
   }
 }
 
 function initializeApp() {
-  let state = loadLevel(createInitialState(), LEVELS[0]);
+  let state = loadLevel(createInitialState(), LEVELS[0], 0, LEVELS.length);
   let autoTickHandle = null;
 
   const stopAutoTicker = () => {
@@ -86,7 +87,6 @@ function initializeApp() {
       const nextState = feedInput(state, itemId);
       setStateAndRender(nextState);
     },
-    getCompatibleItemsForNode: (node) => getCompatibleInventoryForNode(state, node),
     onSplitOutput: (nodeId) => {
       if (state.narration.mode !== 'none') {
         return;
