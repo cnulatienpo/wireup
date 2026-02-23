@@ -60,6 +60,46 @@ function getItemById(state, itemId) {
   return state.inventory.find((item) => item.id === itemId) || null;
 }
 
+function updateNodeById(state, nodeId, updater) {
+  const nodeIndex = state.lineNodes.findIndex((node) => node.id === nodeId);
+  if (nodeIndex < 0) {
+    return state;
+  }
+
+  const node = state.lineNodes[nodeIndex];
+  const updatedNode = updater(node);
+  const nextLineNodes = [...state.lineNodes];
+  nextLineNodes[nodeIndex] = updatedNode;
+
+  return {
+    ...state,
+    lineNodes: nextLineNodes
+  };
+}
+
+function updateBonesHistory(state, pulseValue) {
+  let nextState = state;
+
+  state.lineNodes.forEach((node) => {
+    if (node.typeId !== 'sop-mr-bones' || !node.params?.remember) {
+      return;
+    }
+
+    const history = Array.isArray(node.state?.history) ? node.state.history : [];
+    const nextHistory = [...history, pulseValue].slice(-5);
+
+    nextState = updateNodeById(nextState, node.id, (currentNode) => ({
+      ...currentNode,
+      state: {
+        ...(currentNode.state || {}),
+        history: nextHistory
+      }
+    }));
+  });
+
+  return nextState;
+}
+
 export function canWorkerAcceptItem(workerTypeId, itemKind) {
   const allowedKinds = INPUT_COMPATIBILITY[workerTypeId] || [];
   return allowedKinds.includes('*') || allowedKinds.includes(itemKind);
@@ -88,6 +128,11 @@ export function createInitialState() {
     clipboard: {
       mode: 'manual',
       lastReport: ''
+    },
+    time: {
+      running: false,
+      t: 0,
+      dt: 250
     },
     runtime: {
       lastCookedNodeIds: []
@@ -120,7 +165,14 @@ export function loadLevel(state, levelDef) {
     connections: [],
     clipboard: {
       ...state.clipboard,
+      mode: 'manual',
       lastReport: ''
+    },
+    time: {
+      ...state.time,
+      running: false,
+      t: 0,
+      dt: 250
     },
     runtime: {
       lastCookedNodeIds: []
@@ -178,6 +230,7 @@ export function addNodeToLine(state, workerTypeId) {
     typeId: workerType.id,
     label: workerType.displayName,
     params: {},
+    state: {},
     inputs: []
   };
 
@@ -197,6 +250,16 @@ export function addNodeToLine(state, workerTypeId) {
   };
 }
 
+export function setNodeParam(state, nodeId, key, value) {
+  return updateNodeById(state, nodeId, (node) => ({
+    ...node,
+    params: {
+      ...(node.params || {}),
+      [key]: value
+    }
+  }));
+}
+
 export function splitOutput(state, nodeId) {
   const outgoing = state.connections.find((connection) => connection.fromNodeId === nodeId);
   if (!outgoing) {
@@ -212,6 +275,10 @@ export function splitOutput(state, nodeId) {
     ...downstream,
     id: toNodeId(state.lineNodes.length + 1),
     params: { ...downstream.params },
+    state: {
+      ...(downstream.state || {}),
+      history: Array.isArray(downstream.state?.history) ? [...downstream.state.history] : []
+    },
     inputs: []
   };
 
@@ -293,6 +360,61 @@ export function feedInput(state, itemId) {
   };
 }
 
+export function setClipboardAutoMode(state) {
+  return {
+    ...state,
+    clipboard: {
+      ...state.clipboard,
+      mode: 'auto'
+    },
+    time: {
+      ...state.time,
+      running: true
+    },
+    flags: {
+      ...state.flags,
+      autoFormalLinePending: !state.flags.autoFormalLineShown,
+      autoFormalLineShown: state.flags.autoFormalLineShown || false
+    }
+  };
+}
+
+export function adjustTimeInterval(state, direction) {
+  const currentDt = state.time.dt;
+  const nextDt = direction === 'faster' ? Math.max(16, Math.floor(currentDt / 2)) : Math.min(1000, currentDt * 2);
+
+  return {
+    ...state,
+    time: {
+      ...state.time,
+      dt: nextDt
+    }
+  };
+}
+
+function getPulseValue(state) {
+  const hasPulseNode = state.lineNodes.some((node) => node.typeId === 'chop-mr-volume' && node.params?.pulse);
+  if (!hasPulseNode) {
+    return null;
+  }
+
+  return Math.sin(state.time.t);
+}
+
+export function tickTime(state) {
+  if (!state.time.running) {
+    return state;
+  }
+
+  return {
+    ...state,
+    time: {
+      ...state.time,
+      t: state.time.t + state.time.dt / 1000
+    }
+  };
+}
+
 export function pressStatus(state) {
   const clipboardTargetNodeId = state.mainLineNodeIds[state.mainLineNodeIds.length - 1] || null;
   const cookedNodeIds = getUpstreamNodeIds(state, clipboardTargetNodeId);
@@ -305,26 +427,52 @@ export function pressStatus(state) {
   const firstInput = firstInputId ? getItemById(state, firstInputId) : null;
   const inputText = firstInput ? firstInput.label : '(none)';
 
+  const pulseValue = getPulseValue(state);
+  let nextState = pulseValue === null ? state : updateBonesHistory(state, pulseValue);
+
   const reportLines = [
     `Line: ${lineText}`,
     `Nodes: ${cookedNodeIds.length}`,
     `Connections: ${state.connections.length}`,
-    `Input: ${inputText}`
+    `Input: ${inputText}`,
+    `Clock: t=${nextState.time.t.toFixed(2)}s, step=${nextState.time.dt}ms`
   ];
+
+  if (pulseValue !== null) {
+    reportLines.push(`Pulse: ${pulseValue.toFixed(3)}`);
+  }
+
+  nextState.lineNodes.forEach((node) => {
+    if (node.typeId !== 'sop-mr-bones' || !node.params?.remember) {
+      return;
+    }
+
+    const history = Array.isArray(node.state?.history) ? node.state.history : [];
+    reportLines.push(`${node.label} Trail: ${history.map((value) => value.toFixed(3)).join(', ') || '(empty)'}`);
+  });
 
   if (!firstInput) {
     reportLines.push('The machine has nothing to work on.');
   }
 
+  if (nextState.flags.autoFormalLinePending) {
+    reportLines.push('The procession will now continue.');
+  }
+
   return {
-    ...state,
+    ...nextState,
     runtime: {
-      ...state.runtime,
+      ...nextState.runtime,
       lastCookedNodeIds: cookedNodeIds
     },
     clipboard: {
-      ...state.clipboard,
+      ...nextState.clipboard,
       lastReport: reportLines.join('\n')
+    },
+    flags: {
+      ...nextState.flags,
+      autoFormalLinePending: false,
+      autoFormalLineShown: nextState.flags.autoFormalLineShown || nextState.flags.autoFormalLinePending
     }
   };
 }
