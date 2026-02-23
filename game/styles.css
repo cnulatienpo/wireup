@@ -1,0 +1,133 @@
+:root {
+  color-scheme: dark;
+  --bg: #0b0b0f;
+  --fg: #f2f2f5;
+  --muted: #b9b9c6;
+  --line: rgba(242, 242, 245, 0.14);
+  --panel: #13131a;
+  --panel-alt: #161621;
+  --highlight: #7ca3ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.top-bar h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.top-bar-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+button {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--fg);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.panel {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  min-height: 70vh;
+  padding: 1rem;
+}
+
+.panel h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.worker-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.worker-card {
+  border: 1px solid var(--line);
+  background: var(--panel-alt);
+  padding: 0.75rem;
+}
+
+.worker-card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.worker-subtitle {
+  margin: 0.25rem 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.worker-card.on-line {
+  border-color: var(--highlight);
+}
+
+.assembly-line {
+  border: 1px solid var(--line);
+  min-height: 12rem;
+  padding: 1rem;
+  position: relative;
+}
+
+.assembly-line::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  right: 1rem;
+  border-top: 2px solid var(--line);
+}
+
+.placeholder {
+  color: var(--muted);
+}
+
+.cooking {
+  box-shadow: 0 0 14px rgba(124, 163, 255, 0.4);
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    min-height: auto;
+  }
+}
