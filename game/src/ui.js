@@ -28,7 +28,7 @@ export function renderNarration(state) {
   nextButton.disabled = state.narration.mode !== 'none';
 }
 
-export function renderBreakRoom(state) {
+export function renderBreakRoom(state, actions) {
   const container = getElementOrThrow('break-room-content');
   container.innerHTML = '';
 
@@ -49,7 +49,10 @@ export function renderBreakRoom(state) {
     const button = document.createElement('button');
     button.type = 'button';
     button.textContent = 'Send to Line';
-    button.disabled = true;
+    button.disabled = state.narration.mode !== 'none';
+    button.addEventListener('click', () => {
+      actions.onSendToLine(worker.id);
+    });
 
     card.append(heading, subtitle, button);
     list.appendChild(card);
@@ -67,28 +70,54 @@ export function renderFactoryFloor(state) {
 
   if (state.lineNodes.length === 0) {
     const placeholder = document.createElement('p');
-    placeholder.className = 'placeholder';
+    placeholder.className = 'placeholder empty-line-message';
     placeholder.textContent = 'Assembly line is empty.';
     line.appendChild(placeholder);
+  } else {
+    const chain = document.createElement('div');
+    chain.className = 'line-chain';
+
+    state.lineNodes.forEach((node, index) => {
+      const box = document.createElement('div');
+      box.className = 'line-node-box';
+      box.textContent = node.label;
+      chain.appendChild(box);
+
+      if (index < state.connections.length) {
+        const arrow = document.createElement('span');
+        arrow.className = 'line-arrow';
+        arrow.textContent = ' ---> ';
+        chain.appendChild(arrow);
+      }
+    });
+
+    line.appendChild(chain);
   }
 
   container.appendChild(line);
 }
 
-export function renderClipboard(state) {
+export function renderClipboard(state, actions) {
   const container = getElementOrThrow('clipboard-content');
   container.innerHTML = '';
 
-  const report = document.createElement('p');
-  report.className = 'placeholder';
-  report.textContent = `Status Report: ${state.clipboard.lastReport || '(nothing yet)'}`;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.textContent = 'Press Status';
+  button.addEventListener('click', () => {
+    actions.onPressStatus();
+  });
 
-  container.appendChild(report);
+  const report = document.createElement('pre');
+  report.className = 'status-report';
+  report.textContent = state.clipboard.lastReport || 'Status Report: (nothing yet)';
+
+  container.append(button, report);
 }
 
-export function renderAll(state) {
+export function renderAll(state, actions) {
   renderNarration(state);
-  renderBreakRoom(state);
+  renderBreakRoom(state, actions);
   renderFactoryFloor(state);
-  renderClipboard(state);
+  renderClipboard(state, actions);
 }

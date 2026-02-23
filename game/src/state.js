@@ -43,6 +43,10 @@ const WORKER_TYPES = [
   }
 ];
 
+function toNodeId(index) {
+  return `node_${String(index).padStart(3, '0')}`;
+}
+
 export function createInitialState() {
   return {
     levelId: '',
@@ -118,6 +122,52 @@ export function advanceNarration(state) {
       lines: [],
       index: 0,
       mode: 'none'
+    }
+  };
+}
+
+export function addNodeToLine(state, workerTypeId) {
+  const workerType = state.breakRoomTypes.find((worker) => worker.id === workerTypeId);
+  if (!workerType) {
+    return state;
+  }
+
+  const nextNode = {
+    id: toNodeId(state.lineNodes.length + 1),
+    typeId: workerType.id,
+    label: workerType.displayName,
+    params: {}
+  };
+
+  const previousNode = state.lineNodes[state.lineNodes.length - 1];
+  const nextConnection = previousNode
+    ? {
+        fromNodeId: previousNode.id,
+        toNodeId: nextNode.id
+      }
+    : null;
+
+  return {
+    ...state,
+    lineNodes: [...state.lineNodes, nextNode],
+    connections: nextConnection ? [...state.connections, nextConnection] : [...state.connections]
+  };
+}
+
+export function pressStatus(state) {
+  const labels = state.lineNodes.map((node) => node.label);
+  const lineText = labels.length > 0 ? labels.join(' -> ') : '(empty)';
+  const report = [
+    `Line: ${lineText}`,
+    `Nodes: ${state.lineNodes.length}`,
+    `Connections: ${state.connections.length}`
+  ].join('\n');
+
+  return {
+    ...state,
+    clipboard: {
+      ...state.clipboard,
+      lastReport: report
     }
   };
 }

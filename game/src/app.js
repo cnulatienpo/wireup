@@ -1,5 +1,5 @@
 import { LEVELS } from './levels/index.js';
-import { advanceNarration, createInitialState, loadLevel } from './state.js';
+import { addNodeToLine, advanceNarration, createInitialState, loadLevel, pressStatus } from './state.js';
 import { renderAll } from './ui.js';
 
 function setupControls(getState, setStateAndRender) {
@@ -32,13 +32,24 @@ function setupControls(getState, setStateAndRender) {
 function initializeApp() {
   let state = loadLevel(createInitialState(), LEVELS[0]);
 
+  const actions = {
+    onSendToLine: (workerTypeId) => {
+      const nextState = addNodeToLine(state, workerTypeId);
+      setStateAndRender(nextState);
+    },
+    onPressStatus: () => {
+      const nextState = pressStatus(state);
+      setStateAndRender(nextState);
+    }
+  };
+
   const setStateAndRender = (nextState) => {
     state = nextState;
-    renderAll(state);
+    renderAll(state, actions);
   };
 
   setupControls(() => state, setStateAndRender);
-  renderAll(state);
+  renderAll(state, actions);
 }
 
 document.addEventListener('DOMContentLoaded', initializeApp);
