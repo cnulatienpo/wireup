@@ -2,42 +2,42 @@ const WORKER_TYPES = [
   {
     id: 'top-mr-draw',
     displayName: 'Mr Draw',
-    tdFamilyLabel: 'TOP (Texture Operator)',
+    tdFamilyLabel: 'Picture Painter (TOP / Texture Operator)',
     descriptionEli5: 'I paint pictures on things so they look right.',
     descriptionTd: 'Creates and processes image textures used by materials and lookdev.'
   },
   {
     id: 'chop-mr-volume',
     displayName: 'Mr Volume',
-    tdFamilyLabel: 'CHOP (Channel Operator)',
+    tdFamilyLabel: 'Number Beat Worker (CHOP / Channel Operator)',
     descriptionEli5: 'I handle changing numbers over time like music beats.',
     descriptionTd: 'Processes time-sliced channel data for animation, control, and signals.'
   },
   {
     id: 'sop-mr-bones',
     displayName: 'Mr Bones',
-    tdFamilyLabel: 'SOP (Surface Operator)',
+    tdFamilyLabel: 'Shape Builder (SOP / Surface Operator)',
     descriptionEli5: 'I build and change 3D shapes you can see.',
     descriptionTd: 'Generates and modifies geometric surfaces and point data.'
   },
   {
     id: 'comp-mr-box',
     displayName: 'Mr Box',
-    tdFamilyLabel: 'COMP (Component)',
+    tdFamilyLabel: 'Big Container (COMP / Component)',
     descriptionEli5: 'I hold tools together in little boxes so projects stay tidy.',
     descriptionTd: 'Encapsulates networks, UI, and behaviors into reusable component hierarchies.'
   },
   {
     id: 'dat-mr-plan',
     displayName: 'Mr Plan',
-    tdFamilyLabel: 'DAT (Data Operator)',
+    tdFamilyLabel: 'Table Reader (DAT / Data Operator)',
     descriptionEli5: 'I read and write words and tables for instructions.',
     descriptionTd: 'Manages structured and unstructured text/tabular data for logic and configuration.'
   },
   {
     id: 'pop-mr-move',
     displayName: 'Mr Move',
-    tdFamilyLabel: 'POP (Particle Operator)',
+    tdFamilyLabel: 'Dot Mover (POP / Particle Operator)',
     descriptionEli5: 'I move lots of tiny dots around like swarms.',
     descriptionTd: 'Simulates and updates particle systems and related motion attributes.'
   }
@@ -77,6 +77,60 @@ function updateNodeById(state, nodeId, updater) {
   };
 }
 
+function getUpstreamNodeIds(state, startNodeId) {
+  if (!startNodeId) {
+    return [];
+  }
+
+  const incomingByNodeId = new Map();
+  state.connections.forEach((connection) => {
+    const incoming = incomingByNodeId.get(connection.toNodeId) || [];
+    incoming.push(connection.fromNodeId);
+    incomingByNodeId.set(connection.toNodeId, incoming);
+  });
+
+  const visited = new Set();
+  const stack = [startNodeId];
+
+  while (stack.length > 0) {
+    const currentNodeId = stack.pop();
+    if (!currentNodeId || visited.has(currentNodeId)) {
+      continue;
+    }
+    visited.add(currentNodeId);
+
+    const upstreamNodeIds = incomingByNodeId.get(currentNodeId) || [];
+    upstreamNodeIds.forEach((upstreamNodeId) => stack.push(upstreamNodeId));
+  }
+
+  return [...visited];
+}
+
+function hasUnusedBranch(state) {
+  const mainLineSet = new Set(state.mainLineNodeIds || []);
+  return state.connections.some(
+    (connection) => mainLineSet.has(connection.fromNodeId) && !mainLineSet.has(connection.toNodeId)
+  );
+}
+
+function evaluateGoals(state) {
+  const checks = state.activeLevelDef?.requiredGoalChecks || [];
+  const results = checks.map((goalCheck) => Boolean(goalCheck(state)));
+  const complete = results.length > 0 && results.every(Boolean);
+
+  return {
+    ...state,
+    goalStatus: {
+      checks: results,
+      complete
+    }
+  };
+}
+
+function withGoalEvaluation(state) {
+  return evaluateGoals(state);
+}
+
 function updateBonesHistory(state, pulseValue) {
   let nextState = state;
 
@@ -100,6 +154,15 @@ function updateBonesHistory(state, pulseValue) {
   return nextState;
 }
 
+function getPulseValue(state) {
+  const hasPulseNode = state.lineNodes.some((node) => node.typeId === 'chop-mr-volume' && node.params?.pulse);
+  if (!hasPulseNode) {
+    return null;
+  }
+
+  return Math.sin(state.time.t);
+}
+
 export function canWorkerAcceptItem(workerTypeId, itemKind) {
   const allowedKinds = INPUT_COMPATIBILITY[workerTypeId] || [];
   return allowedKinds.includes('*') || allowedKinds.includes(itemKind);
@@ -112,6 +175,8 @@ export function getCompatibleInventoryForNode(state, node) {
 export function createInitialState() {
   return {
     levelId: '',
+    levelIndex: 0,
+    levelsTotal: 0,
     levelMeta: {
       title: ''
     },
@@ -143,14 +208,28 @@ export function createInitialState() {
       { id: 'inv_tube_shape', kind: 'geometry', label: 'Tube Shape' },
       { id: 'inv_checklist_note', kind: 'text', label: 'Checklist Note' }
     ],
-    flags: {}
+    goalStatus: {
+      checks: [],
+      complete: false
+    },
+    flags: {
+      lastRayMessage: '',
+      incompatibleAttempted: false,
+      statusPressed: false
+    }
   };
 }
 
-export function loadLevel(state, levelDef) {
-  return {
+export function loadLevel(state, levelDef, levelIndex = 0, levelsTotal = 1) {
+  const restrictedWorkers = state.breakRoomTypes.filter((worker) =>
+    (levelDef.allowedWorkers || []).includes(worker.id)
+  );
+
+  return evaluateGoals({
     ...state,
     levelId: levelDef.id,
+    levelIndex,
+    levelsTotal,
     levelMeta: {
       title: levelDef.title
     },
@@ -160,6 +239,7 @@ export function loadLevel(state, levelDef) {
       index: 0,
       mode: 'intro'
     },
+    breakRoomTypes: restrictedWorkers,
     lineNodes: [],
     mainLineNodeIds: [],
     connections: [],
@@ -176,8 +256,35 @@ export function loadLevel(state, levelDef) {
     },
     runtime: {
       lastCookedNodeIds: []
+    },
+    flags: {
+      lastRayMessage: '',
+      incompatibleAttempted: false,
+      statusPressed: false,
+      autoFormalLinePending: false,
+      autoFormalLineShown: false
     }
-  };
+  });
+}
+
+export function goToNextLevel(state, levels) {
+  if (!state.goalStatus.complete) {
+    return state;
+  }
+
+  const nextLevelIndex = state.levelIndex + 1;
+  if (nextLevelIndex >= levels.length) {
+    return {
+      ...state,
+      flags: {
+        ...state.flags,
+        lastRayMessage:
+          'You cleared every project. Factory boss mode unlocked. (All level goal checks complete.)'
+      }
+    };
+  }
+
+  return loadLevel(state, levels[nextLevelIndex], nextLevelIndex, levels.length);
 }
 
 export function advanceNarration(state) {
@@ -220,6 +327,18 @@ export function advanceNarration(state) {
 }
 
 export function addNodeToLine(state, workerTypeId) {
+  const allowedWorkers = state.activeLevelDef?.allowedWorkers || [];
+  if (!allowedWorkers.includes(workerTypeId)) {
+    return {
+      ...state,
+      flags: {
+        ...state.flags,
+        lastRayMessage:
+          'That worker is off this project today. (Not included in level allowedWorkers list.)'
+      }
+    };
+  }
+
   const workerType = state.breakRoomTypes.find((worker) => worker.id === workerTypeId);
   if (!workerType) {
     return state;
@@ -234,7 +353,7 @@ export function addNodeToLine(state, workerTypeId) {
     inputs: []
   };
 
-  const previousNode = state.lineNodes[state.lineNodes.length - 1];
+  const previousNode = state.lineNodes[state.lineNodes.length - 1] || null;
   const nextConnection = previousNode
     ? {
         fromNodeId: previousNode.id,
@@ -242,22 +361,26 @@ export function addNodeToLine(state, workerTypeId) {
       }
     : null;
 
-  return {
+  const nextState = {
     ...state,
     lineNodes: [...state.lineNodes, nextNode],
     mainLineNodeIds: [...state.mainLineNodeIds, nextNode.id],
     connections: nextConnection ? [...state.connections, nextConnection] : [...state.connections]
   };
+
+  return withGoalEvaluation(nextState);
 }
 
 export function setNodeParam(state, nodeId, key, value) {
-  return updateNodeById(state, nodeId, (node) => ({
-    ...node,
-    params: {
-      ...(node.params || {}),
-      [key]: value
-    }
-  }));
+  return withGoalEvaluation(
+    updateNodeById(state, nodeId, (node) => ({
+      ...node,
+      params: {
+        ...(node.params || {}),
+        [key]: value
+      }
+    }))
+  );
 }
 
 export function splitOutput(state, nodeId) {
@@ -282,7 +405,7 @@ export function splitOutput(state, nodeId) {
     inputs: []
   };
 
-  return {
+  return withGoalEvaluation({
     ...state,
     lineNodes: [...state.lineNodes, clonedNode],
     connections: [
@@ -292,36 +415,7 @@ export function splitOutput(state, nodeId) {
         toNodeId: clonedNode.id
       }
     ]
-  };
-}
-
-function getUpstreamNodeIds(state, startNodeId) {
-  if (!startNodeId) {
-    return [];
-  }
-
-  const incomingByNodeId = new Map();
-  state.connections.forEach((connection) => {
-    const incoming = incomingByNodeId.get(connection.toNodeId) || [];
-    incoming.push(connection.fromNodeId);
-    incomingByNodeId.set(connection.toNodeId, incoming);
   });
-
-  const visited = new Set();
-  const stack = [startNodeId];
-
-  while (stack.length > 0) {
-    const currentNodeId = stack.pop();
-    if (!currentNodeId || visited.has(currentNodeId)) {
-      continue;
-    }
-    visited.add(currentNodeId);
-
-    const upstreamNodeIds = incomingByNodeId.get(currentNodeId) || [];
-    upstreamNodeIds.forEach((upstreamNodeId) => stack.push(upstreamNodeId));
-  }
-
-  return [...visited];
 }
 
 export function feedInput(state, itemId) {
@@ -342,8 +436,21 @@ export function feedInput(state, itemId) {
   }
 
   const item = getItemById(state, itemId);
-  if (!item || !canWorkerAcceptItem(firstNode.typeId, item.kind)) {
+  if (!item) {
     return state;
+  }
+
+  if (!canWorkerAcceptItem(firstNode.typeId, item.kind)) {
+    return withGoalEvaluation({
+      ...state,
+      flags: {
+        ...state.flags,
+        incompatibleAttempted: true,
+        lastRayMessage: `That item does not fit this worker. (${firstNode.label} expects ${
+          INPUT_COMPATIBILITY[firstNode.typeId].join(' / ')
+        } input types.)`
+      }
+    });
   }
 
   const updatedFirstNode = {
@@ -354,14 +461,18 @@ export function feedInput(state, itemId) {
   const nextLineNodes = [...state.lineNodes];
   nextLineNodes[firstNodeIndex] = updatedFirstNode;
 
-  return {
+  return withGoalEvaluation({
     ...state,
-    lineNodes: nextLineNodes
-  };
+    lineNodes: nextLineNodes,
+    flags: {
+      ...state.flags,
+      lastRayMessage: ''
+    }
+  });
 }
 
 export function setClipboardAutoMode(state) {
-  return {
+  return withGoalEvaluation({
     ...state,
     clipboard: {
       ...state.clipboard,
@@ -376,7 +487,7 @@ export function setClipboardAutoMode(state) {
       autoFormalLinePending: !state.flags.autoFormalLineShown,
       autoFormalLineShown: state.flags.autoFormalLineShown || false
     }
-  };
+  });
 }
 
 export function adjustTimeInterval(state, direction) {
@@ -390,15 +501,6 @@ export function adjustTimeInterval(state, direction) {
       dt: nextDt
     }
   };
-}
-
-function getPulseValue(state) {
-  const hasPulseNode = state.lineNodes.some((node) => node.typeId === 'chop-mr-volume' && node.params?.pulse);
-  if (!hasPulseNode) {
-    return null;
-  }
-
-  return Math.sin(state.time.t);
 }
 
 export function tickTime(state) {
@@ -442,6 +544,11 @@ export function pressStatus(state) {
     reportLines.push(`Pulse: ${pulseValue.toFixed(3)}`);
   }
 
+  const hasDeepRoomRun = nextState.lineNodes.some((node) => node.typeId === 'sop-mr-bones' && node.inputs?.[0]);
+  if (hasDeepRoomRun) {
+    reportLines.push('Deep Room text preview: Geometry arrived and transformed.');
+  }
+
   nextState.lineNodes.forEach((node) => {
     if (node.typeId !== 'sop-mr-bones' || !node.params?.remember) {
       return;
@@ -455,11 +562,15 @@ export function pressStatus(state) {
     reportLines.push('The machine has nothing to work on.');
   }
 
+  if (hasUnusedBranch(nextState)) {
+    reportLines.push('Unused branch detected: split output exists without clipboard demand.');
+  }
+
   if (nextState.flags.autoFormalLinePending) {
     reportLines.push('The procession will now continue.');
   }
 
-  return {
+  return withGoalEvaluation({
     ...nextState,
     runtime: {
       ...nextState.runtime,
@@ -471,8 +582,9 @@ export function pressStatus(state) {
     },
     flags: {
       ...nextState.flags,
+      statusPressed: true,
       autoFormalLinePending: false,
       autoFormalLineShown: nextState.flags.autoFormalLineShown || nextState.flags.autoFormalLinePending
     }
-  };
+  });
 }

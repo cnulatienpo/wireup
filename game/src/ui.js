@@ -10,6 +10,10 @@ function getInventoryItemById(state, itemId) {
   return state.inventory.find((item) => item.id === itemId) || null;
 }
 
+function withTd(eli5, td) {
+  return `${eli5} (${td})`;
+}
+
 function hasUnusedBranch(state) {
   const mainLineSet = new Set(state.mainLineNodeIds || []);
   return state.connections.some(
@@ -18,15 +22,19 @@ function hasUnusedBranch(state) {
 }
 
 function getRayRayHint(state) {
+  if (state.flags.lastRayMessage) {
+    return state.flags.lastRayMessage;
+  }
+
   const firstNodeId = state.mainLineNodeIds?.[0] || null;
   const firstNode = state.lineNodes.find((node) => node.id === firstNodeId) || null;
 
   if (firstNode && !firstNode.inputs?.[0]) {
-    return "You didn't give the machine the thing to work on.";
+    return "You didn't give the machine the thing to work on. (No source input connected to first node.)";
   }
 
   if (hasUnusedBranch(state)) {
-    return 'That side line is idle. Nobody is asking it to work.';
+    return 'That side line is idle. Nobody is asking it to work. (Unused branch not cooking: not downstream of an active viewer/output.)';
   }
 
   return '';
@@ -38,7 +46,7 @@ function renderHowCard(state, node, actions, parent) {
 
   const title = document.createElement('p');
   title.className = 'how-card-title';
-  title.textContent = 'How';
+  title.textContent = withTd('How card', 'Parameters');
   howCard.appendChild(title);
 
   if (node.typeId === 'chop-mr-volume') {
@@ -54,7 +62,7 @@ function renderHowCard(state, node, actions, parent) {
     });
 
     const text = document.createElement('span');
-    text.textContent = 'Pulse';
+    text.textContent = 'Pulse (CHOP signal toggle)';
 
     pulseLabel.append(pulseCheckbox, text);
     howCard.appendChild(pulseLabel);
@@ -73,7 +81,7 @@ function renderHowCard(state, node, actions, parent) {
     });
 
     const text = document.createElement('span');
-    text.textContent = 'Remember';
+    text.textContent = 'Remember (history buffer)';
 
     rememberLabel.append(rememberCheckbox, text);
     howCard.append(rememberLabel);
@@ -99,11 +107,13 @@ export function renderNarration(state) {
   if (state.narration.mode === 'intro' || state.narration.mode === 'goals') {
     lineCount.textContent = `Line ${state.narration.index + 1} / ${state.narration.lines.length}`;
   } else {
-    lineCount.textContent = '—';
+    const doneCount = state.goalStatus.checks.filter(Boolean).length;
+    const total = state.goalStatus.checks.length;
+    lineCount.textContent = `Goals ${doneCount}/${total}`;
   }
 
   continueButton.disabled = state.narration.mode === 'none';
-  nextButton.disabled = state.narration.mode !== 'none';
+  nextButton.disabled = state.narration.mode !== 'none' || !state.goalStatus.complete;
 }
 
 export function renderBreakRoom(state, actions) {
@@ -115,7 +125,7 @@ export function renderBreakRoom(state, actions) {
 
   const supplyHeading = document.createElement('h3');
   supplyHeading.className = 'subpanel-heading';
-  supplyHeading.textContent = 'Supply Room';
+  supplyHeading.textContent = withTd('Supply Room', 'Input Inventory');
 
   const supplyList = document.createElement('ul');
   supplyList.className = 'inventory-list';
@@ -129,7 +139,7 @@ export function renderBreakRoom(state, actions) {
 
     const kind = document.createElement('span');
     kind.className = 'inventory-kind';
-    kind.textContent = item.kind;
+    kind.textContent = `${item.kind} (type)`;
 
     row.append(label, kind);
     supplyList.appendChild(row);
@@ -142,7 +152,7 @@ export function renderBreakRoom(state, actions) {
 
   const workersHeading = document.createElement('h3');
   workersHeading.className = 'subpanel-heading';
-  workersHeading.textContent = 'Workers';
+  workersHeading.textContent = withTd('Workers', 'Operators');
 
   const workerList = document.createElement('div');
   workerList.className = 'worker-list';
@@ -232,8 +242,7 @@ export function renderFactoryFloor(state, actions) {
         defaultOption.selected = true;
         feedSelect.appendChild(defaultOption);
 
-        const compatibleItems = actions.getCompatibleItemsForNode(node);
-        compatibleItems.forEach((item) => {
+        state.inventory.forEach((item) => {
           const option = document.createElement('option');
           option.value = item.id;
           option.textContent = item.label;
@@ -243,7 +252,7 @@ export function renderFactoryFloor(state, actions) {
         const feedButton = document.createElement('button');
         feedButton.type = 'button';
         feedButton.textContent = 'Feed';
-        feedButton.disabled = state.narration.mode !== 'none' || Boolean(inputItem) || compatibleItems.length === 0;
+        feedButton.disabled = state.narration.mode !== 'none' || Boolean(inputItem);
         feedButton.addEventListener('click', () => {
           if (!feedSelect.value) {
             return;
@@ -281,7 +290,7 @@ export function renderFactoryFloor(state, actions) {
 
     const heading = document.createElement('p');
     heading.className = 'connections-heading';
-    heading.textContent = 'Connections';
+    heading.textContent = withTd('Connections', 'Links');
     connections.appendChild(heading);
 
     if (state.connections.length === 0) {
@@ -353,13 +362,39 @@ export function renderClipboard(state, actions) {
 
   const report = document.createElement('pre');
   report.className = 'status-report';
-  report.textContent = state.clipboard.lastReport || 'Status Report: (nothing yet)';
+  report.textContent = state.clipboard.lastReport || `${withTd('Status Report', 'Viewer')}: (nothing yet)`;
+
+  const wrongHeading = document.createElement('p');
+  wrongHeading.className = 'connections-heading';
+  wrongHeading.textContent = 'Slightly Wrong Worker Instructions';
+
+  const wrongList = document.createElement('ul');
+  wrongList.className = 'inventory-list';
+  (state.activeLevelDef?.wrongHintLines || []).forEach((line) => {
+    const row = document.createElement('li');
+    row.className = 'inventory-item';
+    row.textContent = line;
+    wrongList.appendChild(row);
+  });
+
+  const truthHeading = document.createElement('p');
+  truthHeading.className = 'connections-heading';
+  truthHeading.textContent = 'Ray Ray Translation';
+
+  const truthList = document.createElement('ul');
+  truthList.className = 'inventory-list';
+  (state.activeLevelDef?.rayRayTruthLines || []).forEach((line) => {
+    const row = document.createElement('li');
+    row.className = 'inventory-item';
+    row.textContent = line;
+    truthList.appendChild(row);
+  });
 
   const hint = document.createElement('p');
   hint.className = 'ray-ray-hint';
   hint.textContent = getRayRayHint(state) || 'Ray Ray: ✅';
 
-  container.append(controls, modeText, report, hint);
+  container.append(controls, modeText, report, wrongHeading, wrongList, truthHeading, truthList, hint);
 }
 
 export function renderAll(state, actions) {
