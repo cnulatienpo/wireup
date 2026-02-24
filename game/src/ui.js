@@ -97,23 +97,20 @@ function renderHowCard(state, node, actions, parent) {
 }
 
 export function renderNarration(state) {
+  const popup = getElementOrThrow('narration-popup');
   const title = getElementOrThrow('narration-level-title');
   const lineText = getElementOrThrow('narration-line-text');
-  const lineCount = getElementOrThrow('narration-line-count');
   const continueButton = getElementOrThrow('continue-button');
   const nextButton = getElementOrThrow('next-button');
 
-  title.textContent = state.levelMeta.title || '—';
-
-  const currentLine = state.narration.lines[state.narration.index];
-  lineText.textContent = currentLine || '—';
-
-  if (state.narration.mode === 'intro' || state.narration.mode === 'goals') {
-    lineCount.textContent = `Line ${state.narration.index + 1} / ${state.narration.lines.length}`;
+  if (state.narration.mode === 'none') {
+    popup.classList.add('hidden');
   } else {
-    const doneCount = state.goalStatus.checks.filter(Boolean).length;
-    const total = state.goalStatus.checks.length;
-    lineCount.textContent = `Goals ${doneCount}/${total}`;
+    popup.classList.remove('hidden');
+    title.textContent = state.levelMeta.title || '—';
+
+    const currentLine = state.narration.lines[state.narration.index];
+    lineText.textContent = currentLine || '—';
   }
 
   continueButton.disabled = state.narration.mode === 'none';
