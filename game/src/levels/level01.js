@@ -2,9 +2,8 @@ export const level01 = {
   id: 'level01',
   title: 'Project 1: Taco Truck Emergency',
   introLines: [
-    'Lunch siren hits. Entire crew vanishes toward street tacos.',
-    'You hear someone yell, “Boss, don’t break the line!” from the parking lot.',
-    'Ray Ray slides over a marker and says this is your moment.'
+    "LEVEL 1\n\nThe whole reason you're here is to watch the clipboard. It's a status report of what goes on in the machine.",
+    'Step 2 — The Machine\n\nZoom out.\n\nNow you see the machine.\n\nHuge.\nWires everywhere.\nLights blinking.\nBelts moving.\nAlready powered on.\n\nThe machine is already running.\n\nThis matters.\n\nYou are not building the machine.\n\nYou are using a machine that is already alive.\n\nIt is waiting for something to work on.'
   ],
   goalLines: [
     'Build chain: Mr Draw -> Clipboard.',
