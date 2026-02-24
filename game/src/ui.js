@@ -121,6 +121,17 @@ export function renderNarration(state) {
   nextButton.disabled = state.narration.mode !== 'none' || !state.goalStatus.complete;
 }
 
+function renderMachineHighlight(state) {
+  const breakRoomPanel = getElementOrThrow('break-room-panel');
+  const factoryFloorPanel = getElementOrThrow('factory-floor-panel');
+
+  const isMachineStepActive =
+    state.levelId === 'level01' && state.narration.mode === 'intro' && state.narration.index === 1;
+
+  breakRoomPanel.classList.toggle('machine-highlight', isMachineStepActive);
+  factoryFloorPanel.classList.toggle('machine-highlight', isMachineStepActive);
+}
+
 export function renderBreakRoom(state, actions) {
   const container = getElementOrThrow('break-room-content');
   container.innerHTML = '';
@@ -404,6 +415,7 @@ export function renderClipboard(state, actions) {
 
 export function renderAll(state, actions) {
   renderNarration(state);
+  renderMachineHighlight(state);
   renderBreakRoom(state, actions);
   renderFactoryFloor(state, actions);
   renderClipboard(state, actions);
