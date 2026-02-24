@@ -52,3 +52,34 @@ body {
   background: #fff;
   color: #000;
 }
+
+.about-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  text-align: left;
+  line-height: 1.7;
+}
+
+.about-title {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 2rem;
+}
+
+.curriculum-content {
+  margin-bottom: 2.5rem;
+}
+
+.section-header {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.nav-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
