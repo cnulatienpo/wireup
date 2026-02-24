@@ -98,10 +98,14 @@ function renderHowCard(state, node, actions, parent) {
 
 export function renderNarration(state) {
   const popup = getElementOrThrow('narration-popup');
-  const title = getElementOrThrow('narration-level-title');
-  const lineText = getElementOrThrow('narration-line-text');
-  const continueButton = getElementOrThrow('continue-button');
+  const title = popup.querySelector('.narration-title');
+  const lineText = popup.querySelector('.narration-text');
+  const continueButton = getElementOrThrow('continue-btn');
   const nextButton = getElementOrThrow('next-button');
+
+  if (!title || !lineText) {
+    throw new Error('Missing narration title/text elements.');
+  }
 
   if (state.narration.mode === 'none') {
     popup.classList.add('hidden');
