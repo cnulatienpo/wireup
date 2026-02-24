@@ -83,3 +83,23 @@ body {
   flex-wrap: wrap;
   gap: 0.75rem;
 }
+
+
+.curriculum-content p {
+  margin-bottom: 1rem;
+}
+
+.curriculum-list {
+  margin-left: 1.5rem;
+  padding-left: 1rem;
+}
+
+.curriculum-list > li {
+  margin-bottom: 1rem;
+}
+
+.curriculum-list ul {
+  margin-top: 0.5rem;
+  margin-left: 1.25rem;
+  padding-left: 0.75rem;
+}
