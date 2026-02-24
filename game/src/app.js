@@ -23,7 +23,7 @@ function setupControls(getState, setStateAndRender) {
     });
   }
 
-  const continueButton = document.getElementById('continue-button');
+  const continueButton = document.getElementById('continue-btn');
   if (continueButton) {
     continueButton.addEventListener('click', () => {
       const nextState = advanceNarration(getState());
