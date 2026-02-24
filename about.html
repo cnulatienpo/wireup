@@ -8,17 +8,222 @@
 </head>
 <body>
   <main class="about-page">
-    <h1 class="about-title">What This Game Actually Teaches</h1>
+    <h1 class="about-title">What This Game Teaches</h1>
 
     <section class="curriculum-content">
       <h2 class="section-header">TouchDesigner-Language Structured Curriculum</h2>
-      <p>[PASTE THE FULL TD-LANGUAGE LIST FROM PREVIOUS MESSAGE HERE]</p>
+      <p>What This Game Really Is (TouchDesigner Language)
+
+Wireup is a structured introduction to TouchDesigner’s evaluation model.
+
+It teaches operator-based computation, dependency-driven cooking, type compatibility, time-sliced execution, and network architecture. Everything is explained in plain language first.
+
+The curriculum builds cumulatively.
+
+Each concept depends on the previous one.
+
+What You Learn 
+1. Viewer as Status, Not Renderer
+
+The Viewer shows the current output of an operator.
+
+It does not “render the project.”
+
+It reflects the most recent cooked state.
+
+2. Real-Time Evaluation Model
+
+TouchDesigner runs continuously.
+
+Networks exist in a persistent evaluation context.
+
+Operators maintain a current state at all times.
+
+3. Data Types (Operator Families by Data Domain)
+
+You learn the four primary data domains:
+
+TOP — 2D image data (textures, pixel grids)
+
+CHOP — channel data (sampled numeric values over time)
+
+SOP — geometry data (points, primitives, attributes in 3D space)
+
+DAT — structured data (tables, text, scripts)
+
+Later:
+
+COMP — container networks
+
+POP — particle systems (stateful point simulations)
+
+You learn that operators are strongly typed.
+
+4. Operators (Nodes)
+
+An operator performs a specific transformation.
+
+Operators have:
+
+Inputs
+
+Outputs
+
+Parameters
+
+Internal state (optional)
+
+Each operator belongs to exactly one family.
+
+5. Connections (Directed Dependencies)
+
+Connections establish data flow.
+
+Flow direction defines dependency.
+
+Downstream operators depend on upstream outputs.
+
+6. Input vs Output
+
+Inputs are references to upstream operator outputs.
+
+Outputs are computed results available to downstream operators.
+
+Outputs are not equivalent to “display.”
+
+7. Frame-Based Evaluation
+
+Evaluation occurs per time slice.
+
+Visual motion is the result of repeated evaluation at frame rate.
+
+A “frame” is a discrete evaluation of the network at time t.
+
+8. Cooking (Demand-Driven Execution)
+
+Operators cook only when requested.
+
+Cooking propagates upstream from a requesting operator.
+
+Operators not in the dependency chain do not cook.
+
+9. Branching (Fan-Out)
+
+One output may feed multiple downstream operators.
+
+Each downstream operator independently requests cooking.
+
+Shared upstream nodes cook once per evaluation cycle.
+
+10. Multiple Inputs
+
+Some operators require multiple inputs.
+
+Inputs are ordered and semantically meaningful.
+
+Evaluation depends on all required inputs being valid.
+
+11. Type Compatibility
+
+Operator inputs accept specific data types.
+
+Invalid type connections result in errors or null outputs.
+
+Conversion operators bridge incompatible types.
+
+12. Internal State
+
+Some operators maintain persistent internal memory.
+
+Examples:
+
+Feedback loops
+
+Accumulation buffers
+
+History storage
+
+State persists between evaluations.
+
+13. Accumulation Over Time
+
+Networks may integrate results over multiple frames.
+
+Accumulation requires stateful operators.
+
+Output at time t may depend on outputs at t-1.
+
+14. Time as Data
+
+Time can be:
+
+Read explicitly
+
+Used as input
+
+Used to drive oscillation, triggering, or modulation
+
+CHOP domains often represent time-sampled values.
+
+15. 2D vs 3D Domains
+
+TOP operates in image space (pixel grids).
+
+SOP operates in geometric space (points + primitives).
+
+Rendering requires a separate render pipeline.
+
+16. COMP (Network Encapsulation)
+
+COMPs contain sub-networks.
+
+Encapsulation improves modularity.
+
+Dependency and cooking still propagate across boundaries.
+
+17. Evaluation Order
+
+Cooking begins at a requested output (Viewer or export).
+
+Dependency resolution travels upstream.
+
+The evaluation graph determines execution order.
+
+18. Debugging via Dependency Tracing
+
+Debugging is:
+
+Inspecting inputs
+
+Inspecting output types
+
+Tracing upstream cooking
+
+Identifying null or mismatched connections
+
+Performance debugging involves observing cooking paths.
+
+19. Network Structure and Readability
+
+Logical grouping affects maintainability.
+
+Clear dependency layout improves traceability.
+
+Structure does not change execution semantics, but changes human comprehension.
+
+20. Automatic Evaluation (Continuous Mode)
+
+In real-time playback, evaluation occurs every frame.
+
+Manual stepping isolates evaluation for inspection.
+
+Automatic playback demonstrates continuous demand-driven cooking.</p>
     </section>
 
     <nav class="nav-buttons" aria-label="About page navigation">
       <a href="/index.html" class="nav-button">← Back</a>
       <a href="/game/index.html" class="nav-button">
-        Enter Factory Mode →
+        Proceed to game →
       </a>
     </nav>
   </main>
