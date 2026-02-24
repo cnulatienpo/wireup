@@ -452,10 +452,11 @@ select:disabled {
 
 .narration-popup {
   position: fixed;
-  right: 40px;
-  bottom: 40px;
-  width: 420px;
-  max-width: 90vw;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: none;
   background: #ffffff;
   color: #000000;
   border: 4px solid #cc0000;
