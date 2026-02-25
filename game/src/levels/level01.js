@@ -1,6 +1,6 @@
 export const level01 = {
   id: 'level01',
-  title: 'Project 1: Taco Truck Emergency',
+  title: 'Level 1',
   introLines: [
     "LEVEL 1\n\nThe whole reason you're here is to watch the clipboard. It's a status report of what goes on in the machine.",
     'Step 2 — The Machine\n\nZoom out.\n\nNow you see the machine.\n\nThe machine is already running.\n\nThis matters.\n\nYou are not building the machine.\n\nYou are using a machine that is already alive.\n\nIt is waiting for something to work on.'

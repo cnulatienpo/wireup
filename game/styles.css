@@ -57,6 +57,7 @@ body::before {
   gap: 1rem;
   padding: 1rem;
   border-bottom: 1px solid var(--line);
+  font-size: 1.08rem;
 }
 
 .top-bar h1 {
@@ -161,6 +162,13 @@ select:disabled {
   min-height: 70vh;
   padding: 1rem;
   clip-path: polygon(1% 1%, 99% 0, 100% 97%, 96% 100%, 2% 99%, 0 6%);
+  font-size: 1.08rem;
+}
+
+.top-bar :is(h1, button),
+.panel :is(h2, h3, h4, p, span, li, button, select, label) {
+  -webkit-text-stroke: 1px #000000;
+  text-shadow: none;
 }
 
 .narration-strip {
@@ -384,6 +392,14 @@ select:disabled {
   position: absolute;
   pointer-events: none;
   inset: 0;
+  z-index: 0;
+}
+
+.narration-strip > *,
+.inventory-item > *,
+.status-report > * {
+  position: relative;
+  z-index: 1;
 }
 
 .narration-strip::before {
@@ -460,8 +476,8 @@ select:disabled {
   background: #ffffff;
   color: #000000;
   border: 4px solid #cc0000;
-  box-shadow: 0 0 30px rgba(0,0,0,0.7);
-  z-index: 999;
+  box-shadow: none;
+  z-index: 2147483647;
   padding: 12px;
 }
 
@@ -473,16 +489,25 @@ select:disabled {
 
 .narration-title {
   font-weight: bold;
+  font-size: 1.9rem;
+  line-height: 1.2;
   margin-bottom: 6px;
+  color: #ffffff;
+  -webkit-text-stroke: 1px #000000;
+  text-shadow: none;
 }
 
 .narration-text {
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 1.35rem;
+  line-height: 1.55;
+  font-weight: 600;
   margin-bottom: 9px;
   max-height: 132px;
   overflow-y: auto;
   white-space: pre-line;
+  color: #ffffff;
+  -webkit-text-stroke: 1px #000000;
+  text-shadow: none;
 }
 
 .hidden {
