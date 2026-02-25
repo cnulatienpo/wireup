@@ -380,37 +380,11 @@ export function renderClipboard(state, actions) {
   report.className = 'status-report';
   report.textContent = state.clipboard.lastReport || `${withTd(state, 'Status Report', 'Viewer')}: (nothing yet)`;
 
-  const wrongHeading = document.createElement('p');
-  wrongHeading.className = 'connections-heading';
-  wrongHeading.textContent = withTd(state, 'Slightly wrong worker instructions', 'misleading production notes');
-
-  const wrongList = document.createElement('ul');
-  wrongList.className = 'inventory-list';
-  (state.activeLevelDef?.wrongHintLines || []).forEach((line) => {
-    const row = document.createElement('li');
-    row.className = 'inventory-item';
-    row.textContent = line;
-    wrongList.appendChild(row);
-  });
-
-  const truthHeading = document.createElement('p');
-  truthHeading.className = 'connections-heading';
-  truthHeading.textContent = withTd(state, 'Ray Ray translation', 'technical correction');
-
-  const truthList = document.createElement('ul');
-  truthList.className = 'inventory-list';
-  (state.activeLevelDef?.rayRayTruthLines || []).forEach((line) => {
-    const row = document.createElement('li');
-    row.className = 'inventory-item';
-    row.textContent = line;
-    truthList.appendChild(row);
-  });
-
   const hint = document.createElement('p');
   hint.className = 'ray-ray-hint';
   hint.textContent = getRayRayHint(state) || 'Ray Ray: ✅';
 
-  container.append(controls, modeText, report, wrongHeading, wrongList, truthHeading, truthList, hint);
+  container.append(controls, modeText, report, hint);
 }
 
 export function renderAll(state, actions) {
