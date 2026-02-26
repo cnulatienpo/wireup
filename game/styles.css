@@ -492,9 +492,7 @@ select:disabled {
   font-size: 1.9rem;
   line-height: 1.2;
   margin-bottom: 6px;
-  color: #ffffff;
-  -webkit-text-stroke: 1px #000000;
-  text-shadow: none;
+  color: #000000;
 }
 
 .narration-text {
@@ -505,9 +503,7 @@ select:disabled {
   max-height: 132px;
   overflow-y: auto;
   white-space: pre-line;
-  color: #ffffff;
-  -webkit-text-stroke: 1px #000000;
-  text-shadow: none;
+  color: #000000;
 }
 
 .hidden {
