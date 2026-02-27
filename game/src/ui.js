@@ -107,18 +107,25 @@ export function renderNarration(state) {
     throw new Error('Missing narration title/text elements.');
   }
 
+  nextButton.textContent = 'Next Level';
+
   if (state.narration.mode === 'none') {
     popup.classList.add('hidden');
   } else {
     popup.classList.remove('hidden');
     title.textContent = state.levelMeta.title || '—';
 
-    const currentLine = state.narration.lines[state.narration.index];
-    lineText.textContent = currentLine || '—';
+    const visibleLines = state.narration.lines.slice(0, state.dialogueIndex + 1).filter((line, idx) => {
+      if (idx === 0) {
+        return false;
+      }
+      return true;
+    });
+    lineText.textContent = visibleLines.join('\n') || '—';
   }
 
   continueButton.disabled = state.narration.mode === 'none';
-  nextButton.disabled = state.narration.mode !== 'none' || !state.goalStatus.complete;
+  nextButton.disabled = !state.dialogueComplete || state.currentLevelId >= state.levelsTotal;
 }
 
 function renderMachineHighlight(state) {
@@ -126,7 +133,7 @@ function renderMachineHighlight(state) {
   const factoryFloorPanel = getElementOrThrow('factory-floor-panel');
 
   const isMachineStepActive =
-    state.levelId === 'level01' && state.narration.mode === 'intro' && state.narration.index === 1;
+    state.currentLevelId === 1 && state.narration.mode === 'dialogue' && state.dialogueIndex === 1;
 
   breakRoomPanel.classList.toggle('machine-highlight', isMachineStepActive);
   factoryFloorPanel.classList.toggle('machine-highlight', isMachineStepActive);
