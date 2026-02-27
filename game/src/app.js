@@ -1,10 +1,10 @@
 import {
   addNodeToLine,
   adjustTimeInterval,
-  advanceNarration,
+  advanceDialogue,
   createInitialState,
   feedInput,
-  goToNextLevel,
+  nextLevel,
   loadLevel,
   pressStatus,
   setClipboardAutoMode,
@@ -12,7 +12,7 @@ import {
   splitOutput,
   tickTime
 } from './state.js';
-import { LEVELS } from './levels/index.js';
+import { LEVELS } from './levels.js';
 import { renderAll } from './ui.js';
 
 function setupControls(getState, setStateAndRender) {
@@ -26,7 +26,7 @@ function setupControls(getState, setStateAndRender) {
   const continueButton = document.getElementById('continue-btn');
   if (continueButton) {
     continueButton.addEventListener('click', () => {
-      const nextState = advanceNarration(getState());
+      const nextState = advanceDialogue(getState());
       setStateAndRender(nextState);
     });
   }
@@ -37,14 +37,14 @@ function setupControls(getState, setStateAndRender) {
       if (getState().narration.mode !== 'none') {
         return;
       }
-      const nextState = goToNextLevel(getState(), LEVELS);
+      const nextState = nextLevel(getState(), LEVELS);
       setStateAndRender(nextState);
     });
   }
 }
 
 function initializeApp() {
-  let state = loadLevel(createInitialState(), LEVELS[0], 0, LEVELS.length);
+  let state = loadLevel(createInitialState(), 1, LEVELS);
   let autoTickHandle = null;
 
   const stopAutoTicker = () => {

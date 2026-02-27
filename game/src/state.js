@@ -174,9 +174,12 @@ export function getCompatibleInventoryForNode(state, node) {
 
 export function createInitialState() {
   return {
+    currentLevelId: 1,
     levelId: '',
     levelIndex: 0,
     levelsTotal: 0,
+    dialogueIndex: 0,
+    dialogueComplete: false,
     levelMeta: {
       title: ''
     },
@@ -221,25 +224,39 @@ export function createInitialState() {
   };
 }
 
-export function loadLevel(state, levelDef, levelIndex = 0, levelsTotal = 1) {
-  const restrictedWorkers = state.breakRoomTypes.filter((worker) =>
-    (levelDef.allowedWorkers || []).includes(worker.id)
-  );
+export function loadLevel(state, levelId, levels) {
+  const requestedLevelId = Number(levelId) || 1;
+  if (state.activeLevelDef && requestedLevelId !== state.currentLevelId + 1) {
+    return state;
+  }
+
+  const safeLevelId = Math.max(1, Math.min(requestedLevelId, 30));
+  const levelDef = levels.find((level) => level.id === safeLevelId) || levels[0];
+  const levelIndex = levels.findIndex((level) => level.id === levelDef.id);
+  const levelsTotal = levels.length;
+  const restrictedWorkers =
+    Array.isArray(levelDef.allowedWorkers) && levelDef.allowedWorkers.length > 0
+      ? state.breakRoomTypes.filter((worker) => levelDef.allowedWorkers.includes(worker.id))
+      : state.breakRoomTypes.map((worker) => ({ ...worker }));
+  const dialogueLines = Array.isArray(levelDef.dialogue) ? levelDef.dialogue : [];
 
   return evaluateGoals({
     ...state,
-    levelId: levelDef.id,
+    currentLevelId: levelDef.id,
+    levelId: `level${String(levelDef.id).padStart(2, '0')}`,
     levelIndex,
     levelsTotal,
+    dialogueIndex: 0,
+    dialogueComplete: dialogueLines.length <= 1,
     levelMeta: {
       title: levelDef.title
     },
     activeLevelDef: levelDef,
-    showTranslations: Boolean(levelDef.showTranslations),
+    showTranslations: levelDef.id === 30,
     narration: {
-      lines: [...levelDef.introLines],
+      lines: dialogueLines,
       index: 0,
-      mode: 'intro'
+      mode: dialogueLines.length > 0 ? 'dialogue' : 'none'
     },
     breakRoomTypes: restrictedWorkers,
     lineNodes: [],
@@ -269,27 +286,26 @@ export function loadLevel(state, levelDef, levelIndex = 0, levelsTotal = 1) {
   });
 }
 
-export function goToNextLevel(state, levels) {
-  if (!state.goalStatus.complete) {
+export function nextLevel(state, levels) {
+  if (!state.dialogueComplete) {
     return state;
   }
 
-  const nextLevelIndex = state.levelIndex + 1;
-  if (nextLevelIndex >= levels.length) {
+  const nextLevelId = state.currentLevelId + 1;
+  if (nextLevelId > 30 || nextLevelId > levels.length) {
     return {
       ...state,
       flags: {
         ...state.flags,
-        lastRayMessage:
-          'You cleared every project. Factory boss mode unlocked. (All level goal checks complete.)'
+        lastRayMessage: 'You cleared every project. Graduation complete.'
       }
     };
   }
 
-  return loadLevel(state, levels[nextLevelIndex], nextLevelIndex, levels.length);
+  return loadLevel(state, nextLevelId, levels);
 }
 
-export function advanceNarration(state) {
+export function advanceDialogue(state) {
   const { narration, activeLevelDef } = state;
 
   if (narration.mode === 'none' || !activeLevelDef) {
@@ -298,28 +314,23 @@ export function advanceNarration(state) {
 
   const nextIndex = narration.index + 1;
   if (nextIndex < narration.lines.length) {
+    const isComplete = nextIndex >= narration.lines.length - 1;
     return {
       ...state,
+      dialogueIndex: nextIndex,
+      dialogueComplete: isComplete,
       narration: {
         ...narration,
-        index: nextIndex
-      }
-    };
-  }
-
-  if (narration.mode === 'intro') {
-    return {
-      ...state,
-      narration: {
-        lines: [...activeLevelDef.goalLines],
-        index: 0,
-        mode: 'goals'
+        index: nextIndex,
+        mode: isComplete ? 'none' : narration.mode
       }
     };
   }
 
   return {
     ...state,
+    dialogueIndex: narration.lines.length - 1,
+    dialogueComplete: true,
     narration: {
       lines: [],
       index: 0,
@@ -330,7 +341,8 @@ export function advanceNarration(state) {
 
 export function addNodeToLine(state, workerTypeId) {
   const allowedWorkers = state.activeLevelDef?.allowedWorkers || [];
-  if (!allowedWorkers.includes(workerTypeId)) {
+  const hasRestriction = Array.isArray(allowedWorkers) && allowedWorkers.length > 0;
+  if (hasRestriction && !allowedWorkers.includes(workerTypeId)) {
     return {
       ...state,
       flags: {

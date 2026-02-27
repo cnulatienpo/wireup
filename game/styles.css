@@ -467,7 +467,7 @@ select:disabled {
 
 
 .narration-popup {
-  position: fixed;
+  position: relative;
   left: 0;
   right: 0;
   bottom: 0;
@@ -481,13 +481,12 @@ select:disabled {
   padding: 12px;
 }
 
-.narration-content,
-.narration-content .narration-title,
-.narration-content .narration-text {
+.narration-content {
   font-family: Garamond, "Times New Roman", serif;
 }
 
 .narration-title {
+  font-family: "LaNuTienpo", Garamond, "Times New Roman", serif;
   font-weight: bold;
   font-size: 1.9rem;
   line-height: 1.2;
