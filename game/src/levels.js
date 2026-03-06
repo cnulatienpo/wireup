@@ -1,13 +1,32 @@
 const hasVideoSource = (state) =>
   state.lineNodes.some((node) => node.typeId === 'source' && node.materialType === 'video');
 
+const hasWorker = (state, typeId) => state.lineNodes.some((node) => node.typeId === typeId);
+
+const hasConnection = (state, fromTypeId, toTypeId) =>
+  state.connections.some((connection) => {
+    const fromNode = state.lineNodes.find((node) => node.id === connection.fromNodeId);
+    const toNode = state.lineNodes.find((node) => node.id === connection.toNodeId);
+    return fromNode?.typeId === fromTypeId && toNode?.typeId === toTypeId;
+  });
+
+const isDrawBeforeVolume = (state) => {
+  const drawIndex = state.lineNodes.findIndex((node) => node.typeId === 'top-mr-draw');
+  const volumeIndex = state.lineNodes.findIndex((node) => node.typeId === 'chop-mr-volume');
+  return drawIndex >= 0 && volumeIndex >= 0 && drawIndex < volumeIndex;
+};
+
+const hasVolumeHow = (state) =>
+  state.lineNodes.some((node) => node.typeId === 'chop-mr-volume' && typeof node.params?.pulse === 'boolean');
+
+const hasDeepRoomInput = (state) =>
+  state.lineNodes.some((node) => node.typeId === 'sop-mr-bones' && Boolean(node.inputs?.[0]));
+
 export const LEVELS = [
   {
     id: 1,
     title: 'Feed the Machine',
     dialogue: [
-      { speaker: 'system', text: 'LEVEL 1' },
-      { speaker: 'system', text: 'This is a machine.' },
       { speaker: 'system', text: 'It changes things.' },
       { speaker: 'system', text: 'But first it needs something to work on.' },
       { speaker: 'system', text: 'Drag a video into the machine.' }
@@ -25,111 +44,182 @@ export const LEVELS = [
   },
   {
     id: 2,
-    title: 'Level 2 — The machine is already running.',
+    title: 'Write the How',
     dialogue: [
-      { speaker: "system", text: 'LEVEL 2' },
-      { speaker: "system", text: '' },
-      { speaker: "system", text: 'Do not wait for startup.' },
-      { speaker: "system", text: 'The machine is already running.' },
-      { speaker: "system", text: 'Your job is to inspect and guide it.' }
+      { speaker: 'system', text: 'Workers know one job.' },
+      { speaker: 'system', text: 'Mr Draw changes color.' },
+      { speaker: 'system', text: 'But he needs instructions.' },
+      { speaker: 'system', text: 'Tell him what color to use.' }
     ],
-    unlocks: []
+    allowedWorkers: ['top-mr-draw'],
+    allowedSourceTypes: ['video'],
+    disableBeltDrawing: true,
+    requiredGoalChecks: [
+      (state) => hasVideoSource(state),
+      (state) => hasVideoSource(state) && Boolean(state.flags?.statusPressed)
+    ],
+    unlocks: ['howPanel'],
+    failureDialogue: [
+      { speaker: 'rayray', text: 'Numbers are still the same.\nYou gotta tell him how.' }
+    ]
   },
   {
     id: 3,
-    title: 'Level 3 — The machine needs something to work on.',
+    title: 'Draw the Belt',
     dialogue: [
-      { speaker: "system", text: 'LEVEL 3' },
-      { speaker: "system", text: '' },
-      { speaker: "system", text: 'Running is not enough.' },
-      { speaker: "system", text: 'The machine needs something to process.' },
-      { speaker: "system", text: 'No input means no meaningful result.' }
+      { speaker: 'system', text: 'Workers pass things to each other.' },
+      { speaker: 'system', text: 'They need a belt.' },
+      { speaker: 'system', text: 'Draw a belt from Draw to Volume.' }
     ],
-    unlocks: []
+    allowedWorkers: ['top-mr-draw', 'chop-mr-volume'],
+    allowedSourceTypes: ['video'],
+    requiredGoalChecks: [
+      (state) => hasVideoSource(state),
+      (state) => hasConnection(state, 'top-mr-draw', 'chop-mr-volume'),
+      (state) => hasConnection(state, 'top-mr-draw', 'chop-mr-volume') && Boolean(state.flags?.statusPressed)
+    ],
+    unlocks: ['mrVolume', 'belts'],
+    failureDialogue: [
+      { speaker: 'rayray', text: 'Mr Volume is waiting.\nDraw the belt so he gets the thing to change.' }
+    ]
   },
   {
     id: 4,
-    title: 'Level 4 — Data domains exist.',
+    title: 'Order Matters',
     dialogue: [
-      { speaker: "system", text: 'LEVEL 4' },
-      { speaker: "system", text: '' },
-      { speaker: "system", text: 'Data has families.' },
-      { speaker: "system", text: 'Common domains are image, number, geometry, and text.' },
-      { speaker: "system", text: 'Treat each domain as distinct.' }
+      { speaker: 'system', text: 'The order of workers matters.' },
+      { speaker: 'system', text: 'The thing moves left to right.' },
+      { speaker: 'system', text: 'Fix the order.' }
     ],
-    unlocks: []
+    allowedWorkers: ['top-mr-draw', 'chop-mr-volume'],
+    allowedSourceTypes: ['video'],
+    requiredGoalChecks: [
+      (state) => hasWorker(state, 'top-mr-draw') && hasWorker(state, 'chop-mr-volume'),
+      (state) => isDrawBeforeVolume(state),
+      (state) => hasConnection(state, 'top-mr-draw', 'chop-mr-volume'),
+      (state) =>
+        isDrawBeforeVolume(state) &&
+        hasConnection(state, 'top-mr-draw', 'chop-mr-volume') &&
+        Boolean(state.flags?.statusPressed)
+    ],
+    unlocks: ['workerReordering'],
+    failureDialogue: [
+      { speaker: 'rayray', text: 'Wrong order.\nThe thing moves this way.' }
+    ]
   },
   {
     id: 5,
-    title: 'Level 5 — Operators are typed.',
+    title: 'The Report Is A Snapshot',
     dialogue: [
-      { speaker: "system", text: 'LEVEL 5' },
-      { speaker: "system", text: '' },
-      { speaker: "system", text: 'Each operator has a type.' },
-      { speaker: "system", text: 'Type defines what it can accept and produce.' },
-      { speaker: "system", text: 'Choose operators by type, not by name alone.' }
+      { speaker: 'system', text: 'The machine is always working.' },
+      { speaker: 'system', text: 'But the clipboard is just a report.' },
+      { speaker: 'system', text: 'It shows one moment.' },
+      { speaker: 'system', text: 'Press Status to update the report.' }
     ],
-    unlocks: []
+    allowedWorkers: ['top-mr-draw', 'chop-mr-volume'],
+    allowedSourceTypes: ['video'],
+    requiredGoalChecks: [
+      (state) => hasVolumeHow(state),
+      (state) => hasVolumeHow(state) && Boolean(state.flags?.statusPressed)
+    ],
+    unlocks: [],
+    failureDialogue: [
+      { speaker: 'rayray', text: 'The machine changed.\nThe report didn’t.\nPush the button.' }
+    ]
   },
   {
     id: 6,
-    title: 'Level 6 — Operators have inputs and outputs.',
+    title: 'Workers Have Jobs',
     dialogue: [
-      { speaker: "system", text: 'LEVEL 6' },
-      { speaker: "system", text: '' },
-      { speaker: "system", text: 'Every operator receives data.' },
-      { speaker: "system", text: 'Every operator emits data.' },
-      { speaker: "system", text: 'Trace both ends before judging behavior.' }
+      { speaker: 'system', text: 'Every worker knows one job.' },
+      { speaker: 'system', text: 'Mr Draw chooses color.' },
+      { speaker: 'system', text: 'Mr Volume changes strength.' },
+      { speaker: 'system', text: 'They do different work.' }
+    ],
+    allowedWorkers: ['top-mr-draw', 'chop-mr-volume'],
+    allowedSourceTypes: ['video'],
+    requiredGoalChecks: [
+      (state) => hasWorker(state, 'top-mr-draw'),
+      (state) => hasWorker(state, 'chop-mr-volume'),
+      (state) => hasVolumeHow(state),
+      (state) => hasConnection(state, 'top-mr-draw', 'chop-mr-volume') && Boolean(state.flags?.statusPressed)
     ],
     unlocks: []
   },
   {
     id: 7,
-    title: 'Level 7 — Connections define dependency.',
+    title: 'Changing What',
     dialogue: [
-      { speaker: "system", text: 'LEVEL 7' },
-      { speaker: "system", text: '' },
-      { speaker: "system", text: 'A wire means dependency.' },
-      { speaker: "system", text: 'Downstream results depend on upstream values.' },
-      { speaker: "system", text: 'Connection order defines influence.' }
+      { speaker: 'system', text: 'Some workers change what you see.' },
+      { speaker: 'system', text: 'Color is one example.' },
+      { speaker: 'system', text: 'Use Mr Draw to change the picture.' }
+    ],
+    allowedWorkers: ['top-mr-draw'],
+    allowedSourceTypes: ['video'],
+    disableBeltDrawing: true,
+    disableHowPanel: true,
+    requiredGoalChecks: [
+      (state) => hasWorker(state, 'top-mr-draw') && hasVideoSource(state),
+      (state) => hasWorker(state, 'top-mr-draw') && hasVideoSource(state) && Boolean(state.flags?.statusPressed)
     ],
     unlocks: []
   },
   {
     id: 8,
-    title: 'Level 8 — Output is not display.',
+    title: 'Changing How Much',
     dialogue: [
-      { speaker: "system", text: 'LEVEL 8' },
-      { speaker: "system", text: '' },
-      { speaker: "system", text: 'Output exists before you see it.' },
-      { speaker: "system", text: 'Display is only one consumer.' },
-      { speaker: "system", text: 'Do not confuse visibility with existence.' }
+      { speaker: 'system', text: 'Some workers change how strong something is.' },
+      { speaker: 'system', text: 'Mr Volume changes strength.' },
+      { speaker: 'system', text: 'Make the picture brighter.' }
     ],
-    unlocks: []
+    allowedWorkers: ['top-mr-draw', 'chop-mr-volume'],
+    allowedSourceTypes: ['video'],
+    requiredGoalChecks: [
+      (state) => hasWorker(state, 'chop-mr-volume'),
+      (state) => hasVolumeHow(state),
+      (state) => hasVolumeHow(state) && Boolean(state.flags?.statusPressed)
+    ],
+    unlocks: [],
+    failureDialogue: [
+      { speaker: 'rayray', text: 'He only changes color.\nTry the strength worker.' }
+    ]
   },
   {
     id: 9,
-    title: 'Level 9 — Evaluation happens in discrete slices.',
+    title: 'Changing Where',
     dialogue: [
-      { speaker: "system", text: 'LEVEL 9' },
-      { speaker: "system", text: '' },
-      { speaker: "system", text: 'Evaluation is stepwise.' },
-      { speaker: "system", text: 'Each step is a discrete slice in time.' },
-      { speaker: "system", text: 'Compare slices to detect change.' }
+      { speaker: 'system', text: 'Some workers move things.' },
+      { speaker: 'system', text: 'They can move pictures.' },
+      { speaker: 'system', text: 'Try moving the picture.' }
     ],
-    unlocks: []
+    allowedWorkers: ['top-mr-draw', 'chop-mr-volume', 'sop-mr-bones'],
+    requiredGoalChecks: [
+      (state) => hasWorker(state, 'sop-mr-bones'),
+      (state) => state.lineNodes.some((node) => node.typeId === 'sop-mr-bones' && Boolean(node.params?.remember)),
+      (state) =>
+        state.lineNodes.some((node) => node.typeId === 'sop-mr-bones' && Boolean(node.params?.remember)) &&
+        Boolean(state.flags?.statusPressed)
+    ],
+    unlocks: ['transformWorker']
   },
   {
     id: 10,
-    title: 'Level 10 — Motion is repeated evaluation.',
+    title: 'The Deep Room',
     dialogue: [
-      { speaker: "system", text: 'LEVEL 10' },
-      { speaker: "system", text: '' },
-      { speaker: "system", text: 'Motion is not magic.' },
-      { speaker: "system", text: 'Motion is repeated evaluation across slices.' },
-      { speaker: "system", text: 'Stable repetition creates predictable movement.' }
+      { speaker: 'system', text: 'There is another room inside the machine.' },
+      { speaker: 'system', text: 'The Flat Room changes pictures.' },
+      { speaker: 'system', text: 'The Deep Room builds space.' },
+      { speaker: 'system', text: 'But you cannot see it directly.' },
+      { speaker: 'system', text: 'You need a camera.' },
+      { speaker: 'system', text: 'The camera takes a picture.' }
     ],
-    unlocks: []
+    allowedWorkers: ['top-mr-draw', 'chop-mr-volume', 'sop-mr-bones'],
+    requiredGoalChecks: [
+      (state) => hasWorker(state, 'sop-mr-bones'),
+      (state) => hasDeepRoomInput(state),
+      (state) => hasDeepRoomInput(state) && Boolean(state.flags?.statusPressed)
+    ],
+    unlocks: ['deepRoom', 'cameraWorker']
   },
   {
     id: 11,
