@@ -308,6 +308,7 @@ select:disabled {
   padding: 1rem;
   border-radius: 2px 8px 1px 10px;
   clip-path: polygon(1% 2%, 99% 0, 100% 96%, 95% 100%, 2% 99%, 0 7%);
+  position: relative;
 }
 
 .line-chain {
@@ -324,6 +325,7 @@ select:disabled {
   padding: 0.45rem 0.65rem;
   min-width: 10rem;
   clip-path: polygon(2% 2%, 99% 1%, 100% 96%, 96% 100%, 2% 99%, 0 8%);
+  position: relative;
 }
 
 .line-node-label {
@@ -546,3 +548,45 @@ select:disabled {
 }
 
 
+
+
+.belt-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.line-chain {
+  position: relative;
+  z-index: 3;
+}
+
+.right-connector,
+.left-connector {
+  position: absolute;
+  width: 10px;
+  height: 100%;
+  top: 0;
+  z-index: 4;
+}
+
+.right-connector {
+  right: -5px;
+  cursor: crosshair;
+}
+
+.left-connector {
+  left: -5px;
+}
+
+.belt-target-valid {
+  outline: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.belt-line {
+  stroke: #888;
+  stroke-width: 3;
+}

@@ -106,6 +106,71 @@ function getUpstreamNodeIds(state, startNodeId) {
   return [...visited];
 }
 
+function getNodeIndexMap(state) {
+  const nodeIndexMap = new Map();
+  state.lineNodes.forEach((node, index) => {
+    nodeIndexMap.set(node.id, index);
+  });
+  return nodeIndexMap;
+}
+
+function hasOutgoingConnection(state, nodeId) {
+  return state.connections.some((connection) => connection.fromNodeId === nodeId);
+}
+
+function isForwardConnection(state, fromNodeId, toNodeId) {
+  const nodeIndexMap = getNodeIndexMap(state);
+  const fromIndex = nodeIndexMap.get(fromNodeId);
+  const toIndex = nodeIndexMap.get(toNodeId);
+  if (typeof fromIndex !== 'number' || typeof toIndex !== 'number') {
+    return false;
+  }
+  return fromIndex < toIndex;
+}
+
+function findStatusIssue(state) {
+  const firstNodeId = state.mainLineNodeIds[0] || state.lineNodes[0]?.id || null;
+  const incomingCountByNodeId = new Map();
+  const nodeIndexMap = getNodeIndexMap(state);
+
+  state.connections.forEach((connection) => {
+    const count = incomingCountByNodeId.get(connection.toNodeId) || 0;
+    incomingCountByNodeId.set(connection.toNodeId, count + 1);
+  });
+
+  const hasReversedConnection = state.connections.some((connection) => {
+    const fromIndex = nodeIndexMap.get(connection.fromNodeId);
+    const toIndex = nodeIndexMap.get(connection.toNodeId);
+    return typeof fromIndex === 'number' && typeof toIndex === 'number' && fromIndex >= toIndex;
+  });
+  if (hasReversedConnection) {
+    return 'The procession moves this way.';
+  }
+
+  const disconnectedNode = state.lineNodes.find(
+    (node) => node.id !== firstNodeId && (incomingCountByNodeId.get(node.id) || 0) === 0
+  );
+  if (disconnectedNode) {
+    return 'No passage.';
+  }
+
+  const missingHowNode = state.lineNodes.find((node) => {
+    if (node.typeId === 'chop-mr-volume') {
+      return !node.params?.pulse;
+    }
+    if (node.typeId === 'sop-mr-bones') {
+      return !node.params?.remember;
+    }
+    return false;
+  });
+
+  if (missingHowNode) {
+    return `${missingHowNode.label} needs a How setting.`;
+  }
+
+  return '';
+}
+
 function hasUnusedBranch(state) {
   const mainLineSet = new Set(state.mainLineNodeIds || []);
   return state.connections.some(
@@ -218,6 +283,7 @@ export function createInitialState() {
     lineNodes: [],
     mainLineNodeIds: [],
     connections: [],
+    connectionDraft: null,
     clipboard: {
       mode: 'manual',
       lastReport: ''
@@ -286,6 +352,7 @@ export function loadLevel(state, levelId, levels) {
     lineNodes: [],
     mainLineNodeIds: [],
     connections: [],
+    connectionDraft: null,
     clipboard: {
       ...state.clipboard,
       mode: 'manual',
@@ -392,19 +459,11 @@ export function addNodeToLine(state, workerTypeId) {
     inputs: []
   };
 
-  const previousNode = state.lineNodes[state.lineNodes.length - 1] || null;
-  const nextConnection = previousNode
-    ? {
-        fromNodeId: previousNode.id,
-        toNodeId: nextNode.id
-      }
-    : null;
-
   const nextState = {
     ...state,
     lineNodes: [...state.lineNodes, nextNode],
     mainLineNodeIds: [...state.mainLineNodeIds, nextNode.id],
-    connections: nextConnection ? [...state.connections, nextConnection] : [...state.connections]
+    connections: [...state.connections]
   };
 
   return withGoalEvaluation(nextState);
@@ -423,38 +482,96 @@ export function setNodeParam(state, nodeId, key, value) {
 }
 
 export function splitOutput(state, nodeId) {
-  const outgoing = state.connections.find((connection) => connection.fromNodeId === nodeId);
-  if (!outgoing) {
+  return withGoalEvaluation({
+    ...state,
+    flags: {
+      ...state.flags,
+      lastRayMessage: 'Each worker can only send one belt onward.'
+    }
+  });
+}
+
+export function startConnection(state, nodeId) {
+  if (!state.lineNodes.some((node) => node.id === nodeId)) {
     return state;
   }
 
-  const downstream = state.lineNodes.find((node) => node.id === outgoing.toNodeId);
-  if (!downstream) {
-    return state;
+  if (hasOutgoingConnection(state, nodeId)) {
+    return {
+      ...state,
+      connectionDraft: null,
+      flags: {
+        ...state.flags,
+        lastRayMessage: 'Each worker can only send one belt onward.'
+      }
+    };
   }
 
-  const clonedNode = {
-    ...downstream,
-    id: toNodeId(state.lineNodes.length + 1),
-    params: { ...downstream.params },
-    state: {
-      ...(downstream.state || {}),
-      history: Array.isArray(downstream.state?.history) ? [...downstream.state.history] : []
-    },
-    inputs: []
+  return {
+    ...state,
+    connectionDraft: {
+      fromNodeId: nodeId
+    }
   };
+}
+
+export function completeConnection(state, targetNodeId) {
+  const fromNodeId = state.connectionDraft?.fromNodeId;
+  if (!fromNodeId) {
+    return state;
+  }
+
+  if (fromNodeId === targetNodeId || hasOutgoingConnection(state, fromNodeId)) {
+    return {
+      ...state,
+      connectionDraft: null
+    };
+  }
+
+  const targetExists = state.lineNodes.some((node) => node.id === targetNodeId);
+  const alreadyConnected = state.connections.some(
+    (connection) => connection.fromNodeId === fromNodeId && connection.toNodeId === targetNodeId
+  );
+  if (!targetExists || alreadyConnected) {
+    return {
+      ...state,
+      connectionDraft: null
+    };
+  }
+
+  if (!isForwardConnection(state, fromNodeId, targetNodeId)) {
+    return {
+      ...state,
+      connectionDraft: null,
+      flags: {
+        ...state.flags,
+        lastRayMessage: 'The procession moves this way.'
+      }
+    };
+  }
 
   return withGoalEvaluation({
     ...state,
-    lineNodes: [...state.lineNodes, clonedNode],
+    connectionDraft: null,
     connections: [
       ...state.connections,
       {
-        fromNodeId: nodeId,
-        toNodeId: clonedNode.id
+        fromNodeId,
+        toNodeId: targetNodeId
       }
     ]
   });
+}
+
+export function cancelConnection(state) {
+  if (!state.connectionDraft) {
+    return state;
+  }
+
+  return {
+    ...state,
+    connectionDraft: null
+  };
 }
 
 export function feedInput(state, itemId) {
@@ -557,6 +674,7 @@ export function tickTime(state) {
 }
 
 export function pressStatus(state) {
+  const statusIssue = findStatusIssue(state);
   const clipboardTargetNodeId = state.mainLineNodeIds[state.mainLineNodeIds.length - 1] || null;
   const cookedNodeIds = getUpstreamNodeIds(state, clipboardTargetNodeId);
   const cookedNodeSet = new Set(cookedNodeIds);
@@ -609,6 +727,10 @@ export function pressStatus(state) {
     reportLines.push('The procession will now continue.');
   }
 
+  if (statusIssue) {
+    reportLines.push(`Ray Ray: ${statusIssue}`);
+  }
+
   return withGoalEvaluation({
     ...nextState,
     runtime: {
@@ -621,6 +743,7 @@ export function pressStatus(state) {
     },
     flags: {
       ...nextState.flags,
+      lastRayMessage: statusIssue || nextState.flags.lastRayMessage,
       statusPressed: true,
       autoFormalLinePending: false,
       autoFormalLineShown: nextState.flags.autoFormalLineShown || nextState.flags.autoFormalLinePending

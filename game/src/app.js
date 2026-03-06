@@ -8,6 +8,9 @@ import {
   loadLevel,
   pressStatus,
   setClipboardAutoMode,
+  startConnection,
+  completeConnection,
+  cancelConnection,
   setNodeParam,
   splitOutput,
   tickTime
@@ -85,6 +88,28 @@ function initializeApp() {
         return;
       }
       const nextState = feedInput(state, itemId);
+      setStateAndRender(nextState);
+    },
+
+    onStartConnection: (nodeId) => {
+      if (state.narration.mode !== 'none') {
+        return;
+      }
+      const nextState = startConnection(state, nodeId);
+      setStateAndRender(nextState);
+    },
+    onCompleteConnection: (nodeId) => {
+      if (state.narration.mode !== 'none') {
+        return;
+      }
+      const nextState = completeConnection(state, nodeId);
+      setStateAndRender(nextState);
+    },
+    onCancelConnection: () => {
+      if (state.narration.mode !== 'none') {
+        return;
+      }
+      const nextState = cancelConnection(state);
       setStateAndRender(nextState);
     },
     onSplitOutput: (nodeId) => {
