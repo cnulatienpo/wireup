@@ -167,13 +167,22 @@ function normalizeDialogueLine(line) {
   if (typeof line === 'string') {
     return {
       speaker: 'system',
-      text: line
+      text: line,
+      highlight: null
     };
   }
 
   return {
     speaker: line?.speaker || 'system',
-    text: line?.text || ''
+    text: line?.text || '',
+    highlight: line?.highlight || null
+  };
+}
+
+export function setHighlight(state, panelName) {
+  return {
+    ...state,
+    uiHighlight: panelName || null
   };
 }
 
@@ -194,6 +203,7 @@ export function createInitialState() {
     levelsTotal: 0,
     dialogueIndex: 0,
     dialogueComplete: false,
+    uiHighlight: null,
     levelMeta: {
       title: ''
     },
@@ -254,7 +264,7 @@ export function loadLevel(state, levelId, levels) {
       : state.breakRoomTypes.map((worker) => ({ ...worker }));
   const dialogueLines = Array.isArray(levelDef.dialogue) ? levelDef.dialogue.map(normalizeDialogueLine) : [];
 
-  return evaluateGoals({
+  return evaluateGoals(setHighlight({
     ...state,
     currentLevelId: levelDef.id,
     levelId: `level${String(levelDef.id).padStart(2, '0')}`,
@@ -297,7 +307,7 @@ export function loadLevel(state, levelId, levels) {
       autoFormalLinePending: false,
       autoFormalLineShown: false
     }
-  });
+  }, dialogueLines[0]?.highlight || null));
 }
 
 export function nextLevel(state, levels) {
@@ -330,7 +340,7 @@ export function advanceDialogue(state) {
   if (nextIndex < narration.lines.length) {
     const currentLine = narration.lines[nextIndex];
     const isComplete = nextIndex >= narration.lines.length - 1 || !currentLine;
-    return {
+    return setHighlight({
       ...state,
       dialogueIndex: nextIndex,
       dialogueComplete: isComplete,
@@ -339,10 +349,10 @@ export function advanceDialogue(state) {
         index: nextIndex,
         mode: isComplete ? 'none' : narration.mode
       }
-    };
+    }, currentLine?.highlight || null);
   }
 
-  return {
+  return setHighlight({
     ...state,
     dialogueIndex: narration.lines.length - 1,
     dialogueComplete: true,
@@ -351,7 +361,7 @@ export function advanceDialogue(state) {
       index: 0,
       mode: 'none'
     }
-  };
+  }, null);
 }
 
 export function addNodeToLine(state, workerTypeId) {
