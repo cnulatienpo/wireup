@@ -114,6 +114,88 @@ function renderHowCard(state, node, actions, parent) {
   }
 }
 
+function bindManualConnectionDrag(state, actions, fromNodeId) {
+  let activeValidTarget = null;
+
+  const clearValidHighlight = () => {
+    if (activeValidTarget) {
+      activeValidTarget.classList.remove('belt-target-valid');
+      activeValidTarget = null;
+    }
+  };
+
+  const onMouseMove = (event) => {
+    clearValidHighlight();
+    const hovered = document.elementFromPoint(event.clientX, event.clientY);
+    const leftConnector = hovered?.closest('.left-connector');
+    if (!leftConnector) {
+      return;
+    }
+
+    const toNodeId = leftConnector.dataset.nodeId;
+    const fromNodeElement = document.querySelector(`.line-node-box[data-node-id="${fromNodeId}"]`);
+    const toNodeElement = document.querySelector(`.line-node-box[data-node-id="${toNodeId}"]`);
+    if (!fromNodeElement || !toNodeElement || fromNodeId === toNodeId) {
+      return;
+    }
+
+    const fromRect = fromNodeElement.getBoundingClientRect();
+    const toRect = toNodeElement.getBoundingClientRect();
+    if (fromRect.left < toRect.left) {
+      leftConnector.classList.add('belt-target-valid');
+      activeValidTarget = leftConnector;
+    }
+  };
+
+  const onMouseUp = (event) => {
+    clearValidHighlight();
+    const dropTarget = document.elementFromPoint(event.clientX, event.clientY)?.closest('.left-connector');
+    if (dropTarget?.dataset.nodeId) {
+      actions.onCompleteConnection(dropTarget.dataset.nodeId);
+    } else {
+      actions.onCancelConnection();
+    }
+
+    window.removeEventListener('mousemove', onMouseMove);
+    window.removeEventListener('mouseup', onMouseUp);
+  };
+
+  window.addEventListener('mousemove', onMouseMove);
+  window.addEventListener('mouseup', onMouseUp);
+}
+
+function renderBelts(line, chain, state) {
+  const beltLayer = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  beltLayer.classList.add('belt-layer');
+
+  const lineRect = line.getBoundingClientRect();
+  state.connections.forEach((connection) => {
+    const fromEl = chain.querySelector(`.line-node-box[data-node-id="${connection.fromNodeId}"]`);
+    const toEl = chain.querySelector(`.line-node-box[data-node-id="${connection.toNodeId}"]`);
+    if (!fromEl || !toEl) {
+      return;
+    }
+
+    const fromRect = fromEl.getBoundingClientRect();
+    const toRect = toEl.getBoundingClientRect();
+
+    const fromX = fromRect.right - lineRect.left;
+    const fromY = fromRect.top + fromRect.height / 2 - lineRect.top;
+    const toX = toRect.left - lineRect.left;
+    const toY = toRect.top + toRect.height / 2 - lineRect.top;
+
+    const lineEl = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    lineEl.setAttribute('x1', String(fromX));
+    lineEl.setAttribute('y1', String(fromY));
+    lineEl.setAttribute('x2', String(toX));
+    lineEl.setAttribute('y2', String(toY));
+    lineEl.setAttribute('class', 'belt-line');
+    beltLayer.appendChild(lineEl);
+  });
+
+  line.appendChild(beltLayer);
+}
+
 export function renderNarration(state) {
   const popup = getElementOrThrow('narration-popup');
   const title = popup.querySelector('.narration-title');
@@ -171,7 +253,7 @@ function renderPanelHighlights(state) {
 
   const breakroomHighlighted = state.uiHighlight === 'breakroom' || state.uiHighlight === 'machine';
   const factoryHighlighted = state.uiHighlight === 'factory' || state.uiHighlight === 'machine';
-  const clipboardHighlighted = state.uiHighlight === 'clipboard';
+  const clipboardHighlighted = state.uiHighlight === 'clipboard' || state.uiHighlight === 'machine';
 
   breakRoomPanel.classList.toggle('panel-highlight', breakroomHighlighted);
   factoryFloorPanel.classList.toggle('panel-highlight', factoryHighlighted);
@@ -273,6 +355,7 @@ export function renderFactoryFloor(state, actions) {
     state.lineNodes.forEach((node) => {
       const box = document.createElement('div');
       box.className = 'line-node-box worker-card worker-active';
+      box.dataset.nodeId = node.id;
       if (cookedNodeSet.has(node.id)) {
         box.classList.add('cooking');
       }
@@ -338,22 +421,29 @@ export function renderFactoryFloor(state, actions) {
 
       renderHowCard(state, node, actions, box);
 
-      const splitButton = document.createElement('button');
-      splitButton.type = 'button';
-      splitButton.className = 'split-button';
-      splitButton.textContent = withTd(state, 'Split output', 'branch link');
-      splitButton.disabled =
-        state.narration.mode !== 'none' ||
-        !state.connections.some((connection) => connection.fromNodeId === node.id);
-      splitButton.addEventListener('click', () => {
-        actions.onSplitOutput(node.id);
-      });
-      box.appendChild(splitButton);
+      const leftConnector = document.createElement('div');
+      leftConnector.className = 'left-connector';
+      leftConnector.dataset.nodeId = node.id;
 
+      const rightConnector = document.createElement('div');
+      rightConnector.className = 'right-connector';
+      rightConnector.dataset.nodeId = node.id;
+      rightConnector.addEventListener('mousedown', (event) => {
+        if (state.narration.mode !== 'none') {
+          return;
+        }
+
+        event.preventDefault();
+        actions.onStartConnection(node.id);
+        bindManualConnectionDrag(state, actions, node.id);
+      });
+
+      box.append(leftConnector, rightConnector);
       chain.appendChild(box);
     });
 
     line.appendChild(chain);
+    renderBelts(line, chain, state);
 
     const connections = document.createElement('div');
     connections.className = 'connections-list';
