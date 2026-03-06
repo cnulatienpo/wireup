@@ -1,5 +1,6 @@
 import {
   addNodeToLine,
+  addSourceNode,
   adjustTimeInterval,
   advanceDialogue,
   createInitialState,
@@ -76,6 +77,13 @@ function initializeApp() {
   };
 
   const actions = {
+    onAddSourceNode: (materialType) => {
+      if (state.narration.mode !== 'none') {
+        return;
+      }
+      const nextState = addSourceNode(state, materialType);
+      setStateAndRender(nextState);
+    },
     onSendToLine: (workerTypeId) => {
       if (state.narration.mode !== 'none') {
         return;
