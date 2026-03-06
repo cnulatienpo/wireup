@@ -33,6 +33,16 @@ function getWorkerIcon(worker) {
     'out-mr-move': '💨'
   };
 
+  if ((worker.typeId || worker.id) === 'source') {
+    const iconByMaterialType = {
+      video: '📼',
+      picture: '🖼',
+      sound: '🔊',
+      color: '🎨'
+    };
+    return iconByMaterialType[worker.materialType] || '📦';
+  }
+
   return iconByWorkerId[worker.typeId || worker.id] || '⚙️';
 }
 
@@ -46,6 +56,11 @@ function hasUnusedBranch(state) {
 function getRayRayHint(state) {
   if (state.flags.lastRayMessage) {
     return state.flags.lastRayMessage;
+  }
+
+  const hasSource = state.lineNodes.some((node) => node.typeId === 'source');
+  if (!hasSource) {
+    return 'Workers cannot change nothing.';
   }
 
   const firstNodeId = state.mainLineNodeIds?.[0] || null;
@@ -294,53 +309,74 @@ export function renderNarration(state) {
 }
 
 function renderPanelHighlights(state) {
+  const supplyRoomPanel = getElementOrThrow('supply-room-panel');
   const breakRoomPanel = getElementOrThrow('break-room-panel');
   const factoryFloorPanel = getElementOrThrow('factory-floor-panel');
   const clipboardPanel = getElementOrThrow('clipboard-panel');
 
+  supplyRoomPanel.classList.add('panel', 'supply-room');
   breakRoomPanel.classList.add('panel', 'breakroom');
   factoryFloorPanel.classList.add('panel', 'factory');
   clipboardPanel.classList.add('panel', 'clipboard');
 
+  const supplyHighlighted = state.uiHighlight === 'supply' || state.uiHighlight === 'machine';
   const breakroomHighlighted = state.uiHighlight === 'breakroom' || state.uiHighlight === 'machine';
   const factoryHighlighted = state.uiHighlight === 'factory' || state.uiHighlight === 'machine';
   const clipboardHighlighted = state.uiHighlight === 'clipboard' || state.uiHighlight === 'machine';
 
+  supplyRoomPanel.classList.toggle('panel-highlight', supplyHighlighted);
   breakRoomPanel.classList.toggle('panel-highlight', breakroomHighlighted);
   factoryFloorPanel.classList.toggle('panel-highlight', factoryHighlighted);
   clipboardPanel.classList.toggle('panel-highlight', clipboardHighlighted);
 }
 
+
+export function renderSupplyRoom(state, actions) {
+  const container = getElementOrThrow('supply-room-content');
+  container.innerHTML = '';
+
+  const items = [
+    { type: 'video', label: '📼 Video' },
+    { type: 'picture', label: '🖼 Picture' },
+    { type: 'sound', label: '🔊 Sound' },
+    { type: 'color', label: '🎨 Color' }
+  ];
+
+  const list = document.createElement('div');
+  list.className = 'supply-list';
+
+  items.forEach((item) => {
+    const card = document.createElement('div');
+    card.className = 'supply-item';
+    card.draggable = state.narration.mode === 'none';
+    card.dataset.type = item.type;
+    card.textContent = item.label;
+
+    card.addEventListener('dragstart', (event) => {
+      if (state.narration.mode !== 'none') {
+        event.preventDefault();
+        return;
+      }
+      event.dataTransfer?.setData('text/supply-type', item.type);
+      event.dataTransfer?.setData('text/plain', item.type);
+      if (event.dataTransfer) {
+        event.dataTransfer.effectAllowed = 'copy';
+      }
+    });
+
+    list.appendChild(card);
+  });
+
+  const hint = document.createElement('p');
+  hint.className = 'placeholder';
+  hint.textContent = 'Drag a crate to the source slot on the Factory Floor.';
+
+  container.append(list, hint);
+}
+
 export function renderBreakRoom(state, actions) {
   const container = getElementOrThrow('break-room-content');
   container.innerHTML = '';
-
-  const supplySection = document.createElement('section');
-  supplySection.className = 'subpanel';
-
-  const supplyHeading = document.createElement('h3');
-  supplyHeading.className = 'subpanel-heading';
-  supplyHeading.textContent = withTd(state, 'Supply Room', 'Input Inventory');
-
-  const supplyList = document.createElement('ul');
-  supplyList.className = 'inventory-list';
-
-  state.inventory.forEach((item) => {
-    const row = document.createElement('li');
-    row.className = 'inventory-item';
-
-    const label = document.createElement('span');
-    label.textContent = item.label;
-
-    const kind = document.createElement('span');
-    kind.className = 'inventory-kind';
-    kind.textContent = item.kind;
-
-    row.append(label, kind);
-    supplyList.appendChild(row);
-  });
-
-  supplySection.append(supplyHeading, supplyList);
 
   const workersSection = document.createElement('section');
   workersSection.className = 'subpanel';
@@ -381,7 +417,7 @@ export function renderBreakRoom(state, actions) {
 
   workersSection.append(workersHeading, workerList);
 
-  container.append(supplySection, workersSection);
+  container.append(workersSection);
 }
 
 export function renderFactoryFloor(state, actions) {
@@ -390,6 +426,31 @@ export function renderFactoryFloor(state, actions) {
 
   const line = document.createElement('div');
   line.className = 'assembly-line';
+
+  const sourceDropZone = document.createElement('div');
+  sourceDropZone.className = 'source-drop-zone';
+  sourceDropZone.textContent = 'Drop source crate here';
+  sourceDropZone.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    sourceDropZone.classList.add('active');
+  });
+  sourceDropZone.addEventListener('dragleave', () => {
+    sourceDropZone.classList.remove('active');
+  });
+  sourceDropZone.addEventListener('drop', (event) => {
+    event.preventDefault();
+    sourceDropZone.classList.remove('active');
+    if (state.narration.mode !== 'none') {
+      return;
+    }
+    const supplyType = event.dataTransfer?.getData('text/supply-type') || event.dataTransfer?.getData('text/plain');
+    if (!supplyType) {
+      return;
+    }
+    actions.onAddSourceNode(supplyType);
+  });
+
+  line.appendChild(sourceDropZone);
 
   if (state.lineNodes.length === 0) {
     const placeholder = document.createElement('p');
@@ -406,6 +467,9 @@ export function renderFactoryFloor(state, actions) {
     state.lineNodes.forEach((node) => {
       const box = document.createElement('div');
       box.className = 'line-node-box worker-card worker-active';
+      if (node.typeId === 'source') {
+        box.classList.add('source-node');
+      }
       box.dataset.nodeId = node.id;
       if (cookedNodeSet.has(node.id)) {
         box.classList.add('cooking');
@@ -425,7 +489,7 @@ export function renderFactoryFloor(state, actions) {
 
       box.append(icon, title, nodeIdLabel);
 
-      if (node.id === firstNodeId) {
+      if (node.id === firstNodeId && node.typeId !== 'source') {
         const inputId = node.inputs?.[0] || null;
         const inputItem = inputId ? getInventoryItemById(state, inputId) : null;
 
@@ -470,7 +534,9 @@ export function renderFactoryFloor(state, actions) {
         box.appendChild(controls);
       }
 
-      renderHowCard(state, node, actions, box);
+      if (node.typeId !== 'source') {
+        renderHowCard(state, node, actions, box);
+      }
 
       const leftConnector = document.createElement('div');
       leftConnector.className = 'left-connector';
@@ -584,6 +650,7 @@ export function renderClipboard(state, actions) {
 export function renderAll(state, actions) {
   renderNarration(state);
   renderPanelHighlights(state);
+  renderSupplyRoom(state, actions);
   renderBreakRoom(state, actions);
   renderFactoryFloor(state, actions);
   renderClipboard(state, actions);

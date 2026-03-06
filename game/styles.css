@@ -141,7 +141,7 @@ select:disabled {
 
 .layout {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
   padding: 1rem;
 }
@@ -177,6 +177,11 @@ select:disabled {
   border: 2px solid #000000;
 }
 
+
+#supply-room-panel {
+  transform: rotate(0.1deg);
+}
+
 #break-room-panel {
   transform: rotate(-0.22deg);
 }
@@ -192,6 +197,16 @@ select:disabled {
 .panel h2 {
   margin-top: 0;
   margin-bottom: 1rem;
+}
+
+
+.panel-title {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.panel-body {
+  min-height: 1px;
 }
 
 
@@ -600,4 +615,40 @@ select:disabled {
 .belt-line-draft {
   stroke-dasharray: 7 5;
   stroke: #6fe4ff;
+}
+
+
+.supply-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.supply-item {
+  border: 1px solid #888;
+  padding: 6px;
+  margin: 6px;
+  cursor: grab;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.supply-item:active {
+  cursor: grabbing;
+}
+
+.source-drop-zone {
+  border: 1px dashed rgba(255, 255, 255, 0.8);
+  padding: 0.6rem;
+  margin-bottom: 0.85rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.source-drop-zone.active {
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.source-node {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.95);
 }

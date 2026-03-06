@@ -56,6 +56,14 @@ function toNodeId(index) {
   return `node_${String(index).padStart(3, '0')}`;
 }
 
+function toSourceId(index) {
+  return `source${index}`;
+}
+
+function hasSourceNode(state) {
+  return state.lineNodes.some((node) => node.typeId === 'source');
+}
+
 function getItemById(state, itemId) {
   return state.inventory.find((item) => item.id === itemId) || null;
 }
@@ -129,6 +137,10 @@ function isForwardConnection(state, fromNodeId, toNodeId) {
 }
 
 function findStatusIssue(state) {
+  if (!hasSourceNode(state)) {
+    return 'No material.';
+  }
+
   const firstNodeId = state.mainLineNodeIds[0] || state.lineNodes[0]?.id || null;
   const incomingCountByNodeId = new Map();
   const nodeIndexMap = getNodeIndexMap(state);
@@ -470,6 +482,42 @@ export function addNodeToLine(state, workerTypeId) {
   return withGoalEvaluation(nextState);
 }
 
+
+export function addSourceNode(state, materialType) {
+  const materialLabelByType = {
+    video: '📼 Video Box',
+    picture: '🖼 Picture Box',
+    sound: '🔊 Sound Box',
+    color: '🎨 Color Box'
+  };
+
+  if (!materialLabelByType[materialType]) {
+    return state;
+  }
+
+  const sourceCount = state.lineNodes.filter((node) => node.typeId === 'source').length;
+  const nextSource = {
+    id: toSourceId(sourceCount + 1),
+    typeId: 'source',
+    materialType,
+    label: materialLabelByType[materialType],
+    params: {},
+    state: {},
+    inputs: []
+  };
+
+  return withGoalEvaluation({
+    ...state,
+    lineNodes: [nextSource, ...state.lineNodes],
+    mainLineNodeIds: [nextSource.id, ...state.mainLineNodeIds],
+    connections: [...state.connections],
+    flags: {
+      ...state.flags,
+      lastRayMessage: ''
+    }
+  });
+}
+
 export function setNodeParam(state, nodeId, key, value) {
   return withGoalEvaluation(
     updateNodeById(state, nodeId, (node) => ({
@@ -587,6 +635,10 @@ export function feedInput(state, itemId) {
     return state;
   }
 
+  if (firstNode.typeId === 'source') {
+    return state;
+  }
+
   const existingInput = firstNode.inputs?.[0];
   if (existingInput) {
     return state;
@@ -675,6 +727,25 @@ export function tickTime(state) {
 }
 
 export function pressStatus(state) {
+  if (!hasSourceNode(state)) {
+    return withGoalEvaluation({
+      ...state,
+      runtime: {
+        ...state.runtime,
+        lastCookedNodeIds: []
+      },
+      clipboard: {
+        ...state.clipboard,
+        lastReport: 'No material.'
+      },
+      flags: {
+        ...state.flags,
+        lastRayMessage: 'Workers cannot change nothing.',
+        statusPressed: true
+      }
+    });
+  }
+
   const statusIssue = findStatusIssue(state);
   const clipboardTargetNodeId = state.mainLineNodeIds[state.mainLineNodeIds.length - 1] || null;
   const cookedNodeIds = getUpstreamNodeIds(state, clipboardTargetNodeId);
