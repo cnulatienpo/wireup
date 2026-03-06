@@ -251,6 +251,36 @@ select:disabled {
   padding: 0.75rem;
   border-radius: 2px 8px 1px 7px;
   clip-path: polygon(1% 1%, 98% 0, 100% 95%, 95% 100%, 2% 99%, 0 8%);
+  transition: opacity 0.3s ease;
+}
+
+.worker-idle {
+  opacity: 0.85;
+  animation: idleFloat 4s ease-in-out infinite;
+}
+
+.worker-active {
+  opacity: 1;
+  animation: none;
+}
+
+.worker-icon {
+  margin: 0 0 0.25rem;
+  line-height: 1;
+  font-size: 1.2rem;
+  display: block;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.panel .worker-icon {
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
+}
+
+@keyframes idleFloat {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+  100% { transform: translateY(0px); }
 }
 
 .worker-card h4 {
