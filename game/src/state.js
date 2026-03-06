@@ -163,6 +163,20 @@ function getPulseValue(state) {
   return Math.sin(state.time.t);
 }
 
+function normalizeDialogueLine(line) {
+  if (typeof line === 'string') {
+    return {
+      speaker: 'system',
+      text: line
+    };
+  }
+
+  return {
+    speaker: line?.speaker || 'system',
+    text: line?.text || ''
+  };
+}
+
 export function canWorkerAcceptItem(workerTypeId, itemKind) {
   const allowedKinds = INPUT_COMPATIBILITY[workerTypeId] || [];
   return allowedKinds.includes('*') || allowedKinds.includes(itemKind);
@@ -238,7 +252,7 @@ export function loadLevel(state, levelId, levels) {
     Array.isArray(levelDef.allowedWorkers) && levelDef.allowedWorkers.length > 0
       ? state.breakRoomTypes.filter((worker) => levelDef.allowedWorkers.includes(worker.id))
       : state.breakRoomTypes.map((worker) => ({ ...worker }));
-  const dialogueLines = Array.isArray(levelDef.dialogue) ? levelDef.dialogue : [];
+  const dialogueLines = Array.isArray(levelDef.dialogue) ? levelDef.dialogue.map(normalizeDialogueLine) : [];
 
   return evaluateGoals({
     ...state,
@@ -252,7 +266,7 @@ export function loadLevel(state, levelId, levels) {
       title: levelDef.title
     },
     activeLevelDef: levelDef,
-    showTranslations: levelDef.id === 30,
+    showTranslations: Boolean(levelDef.unlocks?.includes('translationMode')),
     narration: {
       lines: dialogueLines,
       index: 0,
@@ -314,7 +328,8 @@ export function advanceDialogue(state) {
 
   const nextIndex = narration.index + 1;
   if (nextIndex < narration.lines.length) {
-    const isComplete = nextIndex >= narration.lines.length - 1;
+    const currentLine = narration.lines[nextIndex];
+    const isComplete = nextIndex >= narration.lines.length - 1 || !currentLine;
     return {
       ...state,
       dialogueIndex: nextIndex,
