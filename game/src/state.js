@@ -1,3 +1,5 @@
+import { getRandomRayRayLine } from './rayrayLines.js';
+
 const WORKER_TYPES = [
   {
     id: 'top-mr-draw',
@@ -320,6 +322,7 @@ export function createInitialState() {
     },
     flags: {
       lastRayMessage: '',
+      lastRayDialogue: null,
       incompatibleAttempted: false,
       statusPressed: false
     }
@@ -382,6 +385,7 @@ export function loadLevel(state, levelId, levels) {
     },
     flags: {
       lastRayMessage: '',
+      lastRayDialogue: null,
       incompatibleAttempted: false,
       statusPressed: false,
       autoFormalLinePending: false,
@@ -803,6 +807,14 @@ export function pressStatus(state) {
     reportLines.push(`Ray Ray: ${statusIssue}`);
   }
 
+  let successLine = '';
+  if (!statusIssue && nextState.goalStatus.complete) {
+    successLine = getRandomRayRayLine();
+    if (successLine === nextState.flags.lastRayMessage) {
+      successLine = getRandomRayRayLine();
+    }
+  }
+
   return withGoalEvaluation({
     ...nextState,
     runtime: {
@@ -815,7 +827,11 @@ export function pressStatus(state) {
     },
     flags: {
       ...nextState.flags,
-      lastRayMessage: statusIssue || nextState.flags.lastRayMessage,
+      lastRayMessage: statusIssue || successLine || nextState.flags.lastRayMessage,
+      lastRayDialogue: {
+        speaker: 'rayray',
+        text: statusIssue || successLine || nextState.flags.lastRayMessage
+      },
       statusPressed: true,
       autoFormalLinePending: false,
       autoFormalLineShown: nextState.flags.autoFormalLineShown || nextState.flags.autoFormalLinePending
