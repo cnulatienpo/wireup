@@ -142,15 +142,22 @@ export function renderNarration(state) {
   nextButton.disabled = !state.dialogueComplete || state.currentLevelId >= state.levelsTotal;
 }
 
-function renderMachineHighlight(state) {
+function renderPanelHighlights(state) {
   const breakRoomPanel = getElementOrThrow('break-room-panel');
   const factoryFloorPanel = getElementOrThrow('factory-floor-panel');
+  const clipboardPanel = getElementOrThrow('clipboard-panel');
 
-  const isMachineStepActive =
-    state.currentLevelId === 1 && state.narration.mode === 'dialogue' && state.dialogueIndex === 1;
+  breakRoomPanel.classList.add('panel', 'breakroom');
+  factoryFloorPanel.classList.add('panel', 'factory');
+  clipboardPanel.classList.add('panel', 'clipboard');
 
-  breakRoomPanel.classList.toggle('machine-highlight', isMachineStepActive);
-  factoryFloorPanel.classList.toggle('machine-highlight', isMachineStepActive);
+  const breakroomHighlighted = state.uiHighlight === 'breakroom' || state.uiHighlight === 'machine';
+  const factoryHighlighted = state.uiHighlight === 'factory' || state.uiHighlight === 'machine';
+  const clipboardHighlighted = state.uiHighlight === 'clipboard';
+
+  breakRoomPanel.classList.toggle('panel-highlight', breakroomHighlighted);
+  factoryFloorPanel.classList.toggle('panel-highlight', factoryHighlighted);
+  clipboardPanel.classList.toggle('panel-highlight', clipboardHighlighted);
 }
 
 export function renderBreakRoom(state, actions) {
@@ -410,7 +417,7 @@ export function renderClipboard(state, actions) {
 
 export function renderAll(state, actions) {
   renderNarration(state);
-  renderMachineHighlight(state);
+  renderPanelHighlights(state);
   renderBreakRoom(state, actions);
   renderFactoryFloor(state, actions);
   renderClipboard(state, actions);

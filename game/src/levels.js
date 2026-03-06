@@ -3,11 +3,34 @@ export const LEVELS = [
     id: 1,
     title: 'Level 1 — Clipboard is a status report.',
     dialogue: [
-      { speaker: "system", text: 'LEVEL 1' },
-      { speaker: "system", text: '' },
-      { speaker: "system", text: 'Read the clipboard first.' },
-      { speaker: "system", text: 'It reports machine status.' },
-      { speaker: "system", text: 'It is evidence, not decoration.' }
+      { speaker: "system", text: 'LEVEL 1', highlight: null },
+      {
+        speaker: "system",
+        text: "The whole reason you're here is to watch the clipboard.",
+        highlight: 'clipboard'
+      },
+      {
+        speaker: "system",
+        text: 'It's a status report of what goes on in the machine.',
+        highlight: 'clipboard'
+      },
+      { speaker: "system", text: 'This panel is the Break Room.', highlight: 'breakroom' },
+      {
+        speaker: "system",
+        text: 'Workers wait here until you put them on the line.',
+        highlight: 'breakroom'
+      },
+      { speaker: "system", text: 'This panel is the Factory Floor.', highlight: 'factory' },
+      {
+        speaker: "system",
+        text: 'This is where the workers actually do their jobs.',
+        highlight: 'factory'
+      },
+      {
+        speaker: "system",
+        text: 'The Break Room and the Factory Floor together make the machine.',
+        highlight: 'machine'
+      }
     ],
     unlocks: []
   },

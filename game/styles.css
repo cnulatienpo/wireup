@@ -194,6 +194,12 @@ select:disabled {
   margin-bottom: 1rem;
 }
 
+
+.panel-highlight {
+  outline: 4px solid red;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+}
+
 .subpanel {
   border: 1px solid var(--line);
   background: var(--panel-alt);
@@ -510,18 +516,3 @@ select:disabled {
 }
 
 
-#break-room-panel.machine-highlight,
-#factory-floor-panel.machine-highlight {
-  animation: machinePanelPulse 1.4s ease-in-out infinite;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35), 0 0 22px rgba(255, 255, 255, 0.3);
-}
-
-@keyframes machinePanelPulse {
-  0%,
-  100% {
-    border-color: rgba(255, 255, 255, 0.7);
-  }
-  50% {
-    border-color: rgba(255, 255, 255, 1);
-  }
-}
