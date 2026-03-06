@@ -1,4 +1,5 @@
 import { getRandomRayRayLine } from './rayrayLines.js';
+import { getRayRayDiagnosis } from './rayrayDiagnosis.js';
 
 const WORKER_TYPES = [
   {
@@ -140,7 +141,7 @@ function isForwardConnection(state, fromNodeId, toNodeId) {
 
 function findStatusIssue(state) {
   if (!hasSourceNode(state)) {
-    return 'No material.';
+    return 'inputMissing';
   }
 
   const firstNodeId = state.mainLineNodeIds[0] || state.lineNodes[0]?.id || null;
@@ -158,14 +159,14 @@ function findStatusIssue(state) {
     return typeof fromIndex === 'number' && typeof toIndex === 'number' && fromIndex >= toIndex;
   });
   if (hasReversedConnection) {
-    return 'The procession moves this way.';
+    return 'wrongOrder';
   }
 
   const disconnectedNode = state.lineNodes.find(
     (node) => node.id !== firstNodeId && (incomingCountByNodeId.get(node.id) || 0) === 0
   );
   if (disconnectedNode) {
-    return 'No passage.';
+    return 'beltMissing';
   }
 
   const missingHowNode = state.lineNodes.find((node) => {
@@ -179,7 +180,10 @@ function findStatusIssue(state) {
   });
 
   if (missingHowNode) {
-    return `${missingHowNode.label} needs a How setting.`;
+    if (missingHowNode.typeId === 'chop-mr-volume' && !hasSourceNode(state)) {
+      return 'volumeWithoutDraw';
+    }
+    return 'howMissing';
   }
 
   return '';
@@ -732,6 +736,7 @@ export function tickTime(state) {
 
 export function pressStatus(state) {
   if (!hasSourceNode(state)) {
+    const diagnosis = getRayRayDiagnosis('inputMissing') || 'Workers cannot change nothing.';
     return withGoalEvaluation({
       ...state,
       runtime: {
@@ -744,13 +749,18 @@ export function pressStatus(state) {
       },
       flags: {
         ...state.flags,
-        lastRayMessage: 'Workers cannot change nothing.',
+        lastRayMessage: diagnosis,
+        lastRayDialogue: {
+          speaker: 'rayray',
+          text: diagnosis
+        },
         statusPressed: true
       }
     });
   }
 
-  const statusIssue = findStatusIssue(state);
+  const statusIssueType = findStatusIssue(state);
+  const statusIssue = statusIssueType ? getRayRayDiagnosis(statusIssueType) || '' : '';
   const clipboardTargetNodeId = state.mainLineNodeIds[state.mainLineNodeIds.length - 1] || null;
   const cookedNodeIds = getUpstreamNodeIds(state, clipboardTargetNodeId);
   const cookedNodeSet = new Set(cookedNodeIds);
@@ -803,15 +813,15 @@ export function pressStatus(state) {
     reportLines.push('The procession will now continue.');
   }
 
-  if (statusIssue) {
+  if (statusIssueType && statusIssue) {
     reportLines.push(`Ray Ray: ${statusIssue}`);
   }
 
   let successLine = '';
-  if (!statusIssue && nextState.goalStatus.complete) {
-    successLine = getRandomRayRayLine();
+  if (!statusIssueType && nextState.goalStatus.complete) {
+    successLine = Math.random() < 0.05 ? getRayRayDiagnosis('rare') || '' : getRandomRayRayLine();
     if (successLine === nextState.flags.lastRayMessage) {
-      successLine = getRandomRayRayLine();
+      successLine = Math.random() < 0.05 ? getRayRayDiagnosis('rare') || '' : getRandomRayRayLine();
     }
   }
 
