@@ -78,6 +78,10 @@ function getRayRayHint(state) {
 }
 
 function renderHowCard(state, node, actions, parent) {
+  if (state.activeLevelDef?.disableHowPanel) {
+    return;
+  }
+
   const howCard = document.createElement('div');
   howCard.className = 'how-card';
 
@@ -162,6 +166,10 @@ function createDraftLineSvg(line, fromX, fromY) {
 }
 
 function bindManualConnectionDrag(state, actions, line, chain, fromNodeId) {
+  if (state.activeLevelDef?.disableBeltDrawing) {
+    return;
+  }
+
   let activeValidTarget = null;
 
   const fromNodeElement = chain.querySelector(`.line-node-box[data-node-id="${fromNodeId}"]`);
@@ -341,11 +349,16 @@ export function renderSupplyRoom(state, actions) {
     { type: 'sound', label: '🔊 Sound' },
     { type: 'color', label: '🎨 Color' }
   ];
+  const allowedSourceTypes = state.activeLevelDef?.allowedSourceTypes || [];
+  const hasSourceRestriction = Array.isArray(allowedSourceTypes) && allowedSourceTypes.length > 0;
+  const visibleItems = hasSourceRestriction
+    ? items.filter((item) => allowedSourceTypes.includes(item.type))
+    : items;
 
   const list = document.createElement('div');
   list.className = 'supply-list';
 
-  items.forEach((item) => {
+  visibleItems.forEach((item) => {
     const card = document.createElement('div');
     card.className = 'supply-item';
     card.draggable = state.narration.mode === 'none';
@@ -489,7 +502,7 @@ export function renderFactoryFloor(state, actions) {
 
       box.append(icon, title, nodeIdLabel);
 
-      if (node.id === firstNodeId && node.typeId !== 'source') {
+      if (!state.activeLevelDef?.disableHowPanel && node.id === firstNodeId && node.typeId !== 'source') {
         const inputId = node.inputs?.[0] || null;
         const inputItem = inputId ? getInventoryItemById(state, inputId) : null;
 

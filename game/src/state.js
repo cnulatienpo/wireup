@@ -503,6 +503,18 @@ export function addSourceNode(state, materialType) {
     return state;
   }
 
+  const allowedSourceTypes = state.activeLevelDef?.allowedSourceTypes || [];
+  const hasSourceRestriction = Array.isArray(allowedSourceTypes) && allowedSourceTypes.length > 0;
+  if (hasSourceRestriction && !allowedSourceTypes.includes(materialType)) {
+    return {
+      ...state,
+      flags: {
+        ...state.flags,
+        lastRayMessage: 'That source crate is blocked on this level.'
+      }
+    };
+  }
+
   const sourceCount = state.lineNodes.filter((node) => node.typeId === 'source').length;
   const nextSource = {
     id: toSourceId(sourceCount + 1),
@@ -736,7 +748,8 @@ export function tickTime(state) {
 
 export function pressStatus(state) {
   if (!hasSourceNode(state)) {
-    const diagnosis = getRayRayDiagnosis('inputMissing') || 'Workers cannot change nothing.';
+    const diagnosis =
+      state.activeLevelDef?.noInputDiagnosis || getRayRayDiagnosis('inputMissing') || 'Workers cannot change nothing.';
     return withGoalEvaluation({
       ...state,
       runtime: {
