@@ -115,13 +115,27 @@ export function renderNarration(state) {
     popup.classList.remove('hidden');
     title.textContent = state.levelMeta.title || '—';
 
-    const visibleLines = state.narration.lines.slice(0, state.dialogueIndex + 1).filter((line, idx) => {
-      if (idx === 0) {
-        return false;
+    const visibleLines = state.narration.lines.slice(0, state.dialogueIndex + 1).filter((_, idx) => idx > 0);
+    const renderedLines = visibleLines.map((line) => {
+      if (line.speaker === 'rayray') {
+        return `Ray Ray: ${line.text}`;
       }
-      return true;
+
+      if (line.speaker === 'sultan') {
+        return line.text;
+      }
+
+      return line.text;
     });
-    lineText.textContent = visibleLines.join('\n') || '—';
+
+    const lastLine = visibleLines[visibleLines.length - 1];
+    const activeSpeaker = lastLine?.speaker || 'system';
+    lineText.style.fontFamily = 'Garamond, serif';
+    lineText.style.fontStyle = activeSpeaker === 'rayray' ? 'italic' : 'normal';
+    lineText.style.fontVariant = activeSpeaker === 'sultan' ? 'small-caps' : 'normal';
+    lineText.style.fontWeight = activeSpeaker === 'sultan' ? '700' : '400';
+    lineText.style.backgroundColor = activeSpeaker === 'rayray' ? 'rgba(0, 0, 0, 0.08)' : '';
+    lineText.textContent = renderedLines.join('\n') || '—';
   }
 
   continueButton.disabled = state.narration.mode === 'none';
