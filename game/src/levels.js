@@ -1,37 +1,26 @@
+const hasVideoSource = (state) =>
+  state.lineNodes.some((node) => node.typeId === 'source' && node.materialType === 'video');
+
 export const LEVELS = [
   {
     id: 1,
-    title: 'Level 1 — Clipboard is a status report.',
+    title: 'Feed the Machine',
     dialogue: [
-      { speaker: "system", text: 'LEVEL 1', highlight: null },
-      {
-        speaker: "system",
-        text: "The whole reason you're here is to watch the clipboard.",
-        highlight: 'clipboard'
-      },
-      {
-        speaker: "system",
-        text: "It's a status report of what goes on in the machine.",
-        highlight: 'clipboard'
-      },
-      { speaker: "system", text: 'This panel is the Break Room.', highlight: 'breakroom' },
-      {
-        speaker: "system",
-        text: 'Workers wait here until you put them on the line.',
-        highlight: 'breakroom'
-      },
-      { speaker: "system", text: 'This panel is the Factory Floor.', highlight: 'factory' },
-      {
-        speaker: "system",
-        text: 'This is where the workers actually do their jobs.',
-        highlight: 'factory'
-      },
-      {
-        speaker: "system",
-        text: 'The Break Room and the Factory Floor together make the machine.',
-        highlight: 'machine'
-      }
+      { speaker: 'system', text: 'LEVEL 1' },
+      { speaker: 'system', text: 'This is a machine.' },
+      { speaker: 'system', text: 'It changes things.' },
+      { speaker: 'system', text: 'But first it needs something to work on.' },
+      { speaker: 'system', text: 'Drag a video into the machine.' }
     ],
+    allowedWorkers: ['top-mr-draw'],
+    allowedSourceTypes: ['video'],
+    disableBeltDrawing: true,
+    disableHowPanel: true,
+    requiredGoalChecks: [
+      (state) => hasVideoSource(state),
+      (state) => hasVideoSource(state) && Boolean(state.flags?.statusPressed)
+    ],
+    noInputDiagnosis: "Blank status report.\nYou didn't give the machine the thing to work on.",
     unlocks: []
   },
   {
