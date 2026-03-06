@@ -114,8 +114,51 @@ function renderHowCard(state, node, actions, parent) {
   }
 }
 
-function bindManualConnectionDrag(state, actions, fromNodeId) {
+function isForwardDrop(chain, fromNodeId, toNodeId) {
+  const fromNodeElement = chain.querySelector(`.line-node-box[data-node-id="${fromNodeId}"]`);
+  const toNodeElement = chain.querySelector(`.line-node-box[data-node-id="${toNodeId}"]`);
+  if (!fromNodeElement || !toNodeElement || fromNodeId === toNodeId) {
+    return false;
+  }
+
+  const fromRect = fromNodeElement.getBoundingClientRect();
+  const toRect = toNodeElement.getBoundingClientRect();
+  return fromRect.left < toRect.left;
+}
+
+function createDraftLineSvg(line, fromX, fromY) {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.classList.add('belt-layer', 'belt-layer-draft');
+
+  const draftLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  draftLine.setAttribute('x1', String(fromX));
+  draftLine.setAttribute('y1', String(fromY));
+  draftLine.setAttribute('x2', String(fromX));
+  draftLine.setAttribute('y2', String(fromY));
+  draftLine.setAttribute('class', 'belt-line belt-line-draft');
+  svg.appendChild(draftLine);
+
+  line.appendChild(svg);
+
+  return {
+    svg,
+    draftLine
+  };
+}
+
+function bindManualConnectionDrag(state, actions, line, chain, fromNodeId) {
   let activeValidTarget = null;
+
+  const fromNodeElement = chain.querySelector(`.line-node-box[data-node-id="${fromNodeId}"]`);
+  if (!fromNodeElement) {
+    return;
+  }
+
+  const lineRect = line.getBoundingClientRect();
+  const fromRect = fromNodeElement.getBoundingClientRect();
+  const fromX = fromRect.right - lineRect.left;
+  const fromY = fromRect.top + fromRect.height / 2 - lineRect.top;
+  const { svg: draftSvg, draftLine } = createDraftLineSvg(line, fromX, fromY);
 
   const clearValidHighlight = () => {
     if (activeValidTarget) {
@@ -124,8 +167,15 @@ function bindManualConnectionDrag(state, actions, fromNodeId) {
     }
   };
 
-  const onMouseMove = (event) => {
+  const onPointerMove = (event) => {
     clearValidHighlight();
+
+    const currentLineRect = line.getBoundingClientRect();
+    const toX = event.clientX - currentLineRect.left;
+    const toY = event.clientY - currentLineRect.top;
+    draftLine.setAttribute('x2', String(toX));
+    draftLine.setAttribute('y2', String(toY));
+
     const hovered = document.elementFromPoint(event.clientX, event.clientY);
     const leftConnector = hovered?.closest('.left-connector');
     if (!leftConnector) {
@@ -133,35 +183,36 @@ function bindManualConnectionDrag(state, actions, fromNodeId) {
     }
 
     const toNodeId = leftConnector.dataset.nodeId;
-    const fromNodeElement = document.querySelector(`.line-node-box[data-node-id="${fromNodeId}"]`);
-    const toNodeElement = document.querySelector(`.line-node-box[data-node-id="${toNodeId}"]`);
-    if (!fromNodeElement || !toNodeElement || fromNodeId === toNodeId) {
-      return;
-    }
-
-    const fromRect = fromNodeElement.getBoundingClientRect();
-    const toRect = toNodeElement.getBoundingClientRect();
-    if (fromRect.left < toRect.left) {
+    if (toNodeId && isForwardDrop(chain, fromNodeId, toNodeId)) {
       leftConnector.classList.add('belt-target-valid');
       activeValidTarget = leftConnector;
     }
   };
 
-  const onMouseUp = (event) => {
-    clearValidHighlight();
-    const dropTarget = document.elementFromPoint(event.clientX, event.clientY)?.closest('.left-connector');
-    if (dropTarget?.dataset.nodeId) {
-      actions.onCompleteConnection(dropTarget.dataset.nodeId);
-    } else {
-      actions.onCancelConnection();
+  const cleanup = () => {
+    if (draftSvg.parentNode) {
+      draftSvg.parentNode.removeChild(draftSvg);
     }
 
-    window.removeEventListener('mousemove', onMouseMove);
-    window.removeEventListener('mouseup', onMouseUp);
+    clearValidHighlight();
+    window.removeEventListener('pointermove', onPointerMove);
+    window.removeEventListener('pointerup', onPointerUp);
   };
 
-  window.addEventListener('mousemove', onMouseMove);
-  window.addEventListener('mouseup', onMouseUp);
+  const onPointerUp = (event) => {
+    const dropTarget = document.elementFromPoint(event.clientX, event.clientY)?.closest('.left-connector');
+    const targetNodeId = dropTarget?.dataset.nodeId;
+
+    if (targetNodeId) {
+      actions.onStartConnection(fromNodeId);
+      actions.onCompleteConnection(targetNodeId);
+    }
+
+    cleanup();
+  };
+
+  window.addEventListener('pointermove', onPointerMove);
+  window.addEventListener('pointerup', onPointerUp);
 }
 
 function renderBelts(line, chain, state) {
@@ -428,14 +479,13 @@ export function renderFactoryFloor(state, actions) {
       const rightConnector = document.createElement('div');
       rightConnector.className = 'right-connector';
       rightConnector.dataset.nodeId = node.id;
-      rightConnector.addEventListener('mousedown', (event) => {
+      rightConnector.addEventListener('pointerdown', (event) => {
         if (state.narration.mode !== 'none') {
           return;
         }
 
         event.preventDefault();
-        actions.onStartConnection(node.id);
-        bindManualConnectionDrag(state, actions, node.id);
+        bindManualConnectionDrag(state, actions, line, chain, node.id);
       });
 
       box.append(leftConnector, rightConnector);

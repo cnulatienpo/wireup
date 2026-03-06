@@ -324,10 +324,11 @@ export function loadLevel(state, levelId, levels) {
   const levelDef = levels.find((level) => level.id === safeLevelId) || levels[0];
   const levelIndex = levels.findIndex((level) => level.id === levelDef.id);
   const levelsTotal = levels.length;
+  const allWorkerTypes = WORKER_TYPES.map((worker) => ({ ...worker }));
   const restrictedWorkers =
     Array.isArray(levelDef.allowedWorkers) && levelDef.allowedWorkers.length > 0
-      ? state.breakRoomTypes.filter((worker) => levelDef.allowedWorkers.includes(worker.id))
-      : state.breakRoomTypes.map((worker) => ({ ...worker }));
+      ? allWorkerTypes.filter((worker) => levelDef.allowedWorkers.includes(worker.id))
+      : allWorkerTypes;
   const dialogueLines = Array.isArray(levelDef.dialogue) ? levelDef.dialogue.map(normalizeDialogueLine) : [];
 
   return evaluateGoals(setHighlight({

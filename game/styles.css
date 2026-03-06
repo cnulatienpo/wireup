@@ -567,26 +567,37 @@ select:disabled {
 .right-connector,
 .left-connector {
   position: absolute;
-  width: 10px;
-  height: 100%;
-  top: 0;
+  width: 14px;
+  height: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.85);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
   z-index: 4;
 }
 
 .right-connector {
-  right: -5px;
-  cursor: crosshair;
+  right: -8px;
+  cursor: grab;
 }
 
 .left-connector {
-  left: -5px;
+  left: -8px;
 }
 
 .belt-target-valid {
-  outline: 2px solid rgba(255, 255, 255, 0.4);
+  border-color: #6fe4ff;
+  box-shadow: 0 0 0 2px rgba(111, 228, 255, 0.4);
 }
 
 .belt-line {
-  stroke: #888;
+  stroke: #8cc2ff;
   stroke-width: 3;
+}
+
+.belt-line-draft {
+  stroke-dasharray: 7 5;
+  stroke: #6fe4ff;
 }

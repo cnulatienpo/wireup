@@ -11,7 +11,7 @@ export const LEVELS = [
       },
       {
         speaker: "system",
-        text: 'It's a status report of what goes on in the machine.',
+        text: "It's a status report of what goes on in the machine.",
         highlight: 'clipboard'
       },
       { speaker: "system", text: 'This panel is the Break Room.', highlight: 'breakroom' },
