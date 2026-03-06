@@ -18,6 +18,24 @@ function getWorkerLabel(state, worker) {
   return state.showTranslations ? worker.tdFamilyLabel : '';
 }
 
+function getWorkerIcon(worker) {
+  const iconByWorkerId = {
+    'top-mr-draw': '🎨',
+    'chop-mr-volume': '🎚',
+    'sop-mr-word': '📄',
+    'sop-mr-shape': '🔷',
+    'sop-mr-bones': '📄',
+    'comp-mr-box': '📦',
+    'mat-mr-box': '📦',
+    'dat-mr-plan': '🔷',
+    'mat-mr-plan': '🔷',
+    'pop-mr-move': '💨',
+    'out-mr-move': '💨'
+  };
+
+  return iconByWorkerId[worker.typeId || worker.id] || '⚙️';
+}
+
 function hasUnusedBranch(state) {
   const mainLineSet = new Set(state.mainLineNodeIds || []);
   return state.connections.some(
@@ -203,7 +221,11 @@ export function renderBreakRoom(state, actions) {
 
   state.breakRoomTypes.forEach((worker) => {
     const card = document.createElement('article');
-    card.className = 'worker-card';
+    card.className = 'worker-card worker-idle';
+
+    const icon = document.createElement('div');
+    icon.className = 'worker-icon';
+    icon.textContent = getWorkerIcon(worker);
 
     const heading = document.createElement('h4');
     heading.textContent = worker.displayName;
@@ -220,7 +242,7 @@ export function renderBreakRoom(state, actions) {
       actions.onSendToLine(worker.id);
     });
 
-    card.append(heading, subtitle, button);
+    card.append(icon, heading, subtitle, button);
     workerList.appendChild(card);
   });
 
@@ -250,10 +272,14 @@ export function renderFactoryFloor(state, actions) {
 
     state.lineNodes.forEach((node) => {
       const box = document.createElement('div');
-      box.className = 'line-node-box';
+      box.className = 'line-node-box worker-card worker-active';
       if (cookedNodeSet.has(node.id)) {
         box.classList.add('cooking');
       }
+
+      const icon = document.createElement('div');
+      icon.className = 'worker-icon';
+      icon.textContent = getWorkerIcon(node);
 
       const title = document.createElement('p');
       title.className = 'line-node-label';
@@ -263,7 +289,7 @@ export function renderFactoryFloor(state, actions) {
       nodeIdLabel.className = 'line-node-id';
       nodeIdLabel.textContent = node.id;
 
-      box.append(title, nodeIdLabel);
+      box.append(icon, title, nodeIdLabel);
 
       if (node.id === firstNodeId) {
         const inputId = node.inputs?.[0] || null;
