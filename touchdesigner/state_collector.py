@@ -162,6 +162,27 @@ def _walk_neighbors(start_node, direction='upstream', max_depth=GRAPH_DEPTH, max
     return results
 
 
+
+
+def _is_node_cooking(node):
+    if node is None:
+        return None
+
+    for attr in ('isCooking', 'cooking', 'cook'):
+        try:
+            value = getattr(node, attr)
+            if callable(value):
+                value = value()
+            if isinstance(value, bool):
+                return value
+            if isinstance(value, (int, float)):
+                return bool(value)
+        except Exception:
+            pass
+
+    return None
+
+
 def _current_selected_node():
     """Return currently selected OP from active network pane if possible."""
     try:
@@ -207,6 +228,7 @@ def collect_state():
                 'maxDepth': GRAPH_DEPTH,
                 'maxNodes': MAX_GRAPH_NODES,
             },
+            'isCooking': None,
             'warnings': [],
             'errors': [],
         }
@@ -231,6 +253,7 @@ def collect_state():
             'maxNodes': MAX_GRAPH_NODES,
             'capturedNodes': len(upstream) + len(downstream),
         },
+        'isCooking': _is_node_cooking(node),
         'warnings': messages['warnings'],
         'errors': messages['errors'],
     }

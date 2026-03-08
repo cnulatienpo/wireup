@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const { loadIndex, getOperatorSources } = require('./rayrayIndex');
+const { buildSignalFlowDescription } = require('./signalFlowInterpreter');
 
 const app = express();
 const PORT = 3000;
@@ -194,8 +195,30 @@ function buildPatchContext(state = {}) {
   ].join('\n');
 }
 
-function buildPrompt(context, question, state) {
+
+function buildSignalFlowContext(state = {}) {
+  const flow = buildSignalFlowDescription(state);
+  const warnings = flow.warnings.length
+    ? ['Flow Warnings:', ...flow.warnings.map((warning) => `- ${warning}`)]
+    : ['Flow Warnings:', '- none'];
+
+  return [
+    'Patch Signal Flow:',
+    flow.path.join(' -> ') || 'Unknown -> Unknown',
+    '',
+    'Flow Explanation:',
+    ...flow.orderedDescription.map((line) => `- ${line}`),
+    '',
+    ...warnings,
+  ].join('\n');
+}
+function buildPrompt(context, question, state, mode = 'qa') {
   const patchContext = buildPatchContext(state);
+  const flowContext = buildSignalFlowContext(state);
+
+  const modeInstruction = mode === 'explain_patch'
+    ? 'Instruction: The user asked for a short beginner-friendly patch signal-flow explanation. Prioritize the Patch Signal Flow section.'
+    : 'Instruction: Answer the user question using context and signal flow details when helpful.';
 
   return [
     'System:',
@@ -205,6 +228,10 @@ function buildPrompt(context, question, state) {
     context,
     '',
     patchContext,
+    '',
+    flowContext,
+    '',
+    modeInstruction,
     '',
     'User question:',
     question,
@@ -244,10 +271,22 @@ async function askRayRay(prompt) {
 
 app.post('/rayray', async (req, res) => {
   try {
-    const { question = '', state = {} } = req.body || {};
+    const { question = '', state = {}, mode = 'qa' } = req.body || {};
 
-    if (!question || typeof question !== 'string') {
+    if (typeof question !== 'string') {
       return res.status(400).json({ answer: 'Please include a valid question string.' });
+    }
+
+    const flow = buildSignalFlowDescription(state);
+    if (mode === 'explain_patch') {
+      return res.json({
+        answer: flow.beginnerSummary,
+        flow,
+      });
+    }
+
+    if (!question.trim()) {
+      return res.status(400).json({ answer: 'Please include a non-empty question, or use mode=explain_patch.' });
     }
 
     const operator = detectOperator(question, state);
@@ -257,7 +296,7 @@ app.post('/rayray', async (req, res) => {
     }
 
     const context = buildKnowledgeContext(operator);
-    const prompt = buildPrompt(context, question, state);
+    const prompt = buildPrompt(context, question, state, mode);
     const answer = await askRayRay(prompt);
 
     return res.json({ answer });

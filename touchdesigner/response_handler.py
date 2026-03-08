@@ -31,13 +31,23 @@ def _safe_json_loads(raw_text):
         return None
 
 
-def _build_output(question, state, answer):
-    return '\n'.join([
+def _build_output(question, state, answer, flow=None):
+    lines = [
         f"Selected Node: {state.get('selectedNode')}",
         f"Operator Type: {state.get('nodeType')}",
         f"Question Input: {question}",
         f"Ray Ray Response: {answer}",
-    ])
+    ]
+
+    if isinstance(flow, dict):
+        path = flow.get('path') or []
+        warnings = flow.get('warnings') or []
+        if path:
+            lines.append(f"Patch Signal Flow: {' -> '.join(path)}")
+        if warnings:
+            lines.append('Flow Warnings: ' + '; '.join(str(w) for w in warnings))
+
+    return '\n'.join(lines)
 
 
 def handle_web_response(raw_text):
@@ -51,7 +61,7 @@ def handle_web_response(raw_text):
         'nodeType': None,
     }
 
-    _set_response_view(_build_output(question, state, answer))
+    _set_response_view(_build_output(question, state, answer, payload.get('flow')))
 
 
 def onReceive(dat, rowIndex, message, bytes, peer):
