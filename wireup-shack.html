@@ -15,6 +15,21 @@
     <a class="shack-link" href="index.html">Back Home</a>
   </main>
 
+  <section id="rayray-output" class="rayray-output" aria-live="polite"></section>
+
+  <aside id="context-panel" class="context-panel" aria-label="Context panel"></aside>
+
+  <div class="rayray-input-wrap">
+    <input
+      id="rayray-input"
+      class="rayray-input"
+      type="text"
+      placeholder="Ask Ray Ray..."
+      aria-label="Ask Ray Ray"
+    />
+    <button id="rayray-send" class="rayray-send" type="button">Send</button>
+  </div>
+
   <script>
     (function () {
       const img = document.getElementById('shack-ui');
@@ -25,6 +40,9 @@
       const beltWidthFraction = 0.185;
       const beltInsetXFraction = 0.04;
       const beltInsetYFraction = 0.04;
+      const output = document.getElementById('rayray-output');
+      const inputWrap = document.querySelector('.rayray-input-wrap');
+      const contextPanel = document.getElementById('context-panel');
 
       function getContentBounds(image) {
         const canvas = document.createElement('canvas');
@@ -116,6 +134,27 @@
           belt.style.height = beltHeight + 'px';
           belt.style.transform = 'translate(' + beltX + 'px, ' + beltY + 'px)';
         }
+
+        if (output) {
+          output.style.left = contentX + contentWidth * 0.22 + 'px';
+          output.style.top = contentY + contentHeight * 0.17 + 'px';
+          output.style.width = contentWidth * 0.47 + 'px';
+          output.style.height = contentHeight * 0.56 + 'px';
+        }
+
+        if (contextPanel) {
+          contextPanel.style.left = contentX + contentWidth * 0.73 + 'px';
+          contextPanel.style.top = contentY + contentHeight * 0.17 + 'px';
+          contextPanel.style.width = contentWidth * 0.2 + 'px';
+          contextPanel.style.height = contentHeight * 0.64 + 'px';
+        }
+
+        if (inputWrap) {
+          inputWrap.style.left = contentX + contentWidth * 0.22 + 'px';
+          inputWrap.style.top = contentY + contentHeight * 0.77 + 'px';
+          inputWrap.style.width = contentWidth * 0.69 + 'px';
+          inputWrap.style.height = contentHeight * 0.12 + 'px';
+        }
       }
 
       if (img.complete) {
@@ -127,5 +166,6 @@
       window.addEventListener('resize', applyAutoFit);
     })();
   </script>
+  <script type="module" src="./wireup-shack-ui.js"></script>
 </body>
 </html>
