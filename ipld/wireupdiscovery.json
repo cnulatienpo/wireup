@@ -1,0 +1,23 @@
+{
+  "system": "pfp",
+  "components": [
+    {
+      "component_id": "wireup",
+      "component_type": "touchdesigner_patch_assistant",
+      "environment": "touchdesigner",
+      "functions": [
+        "patch_state_read",
+        "operator_diagnostics",
+        "signal_flow_analysis",
+        "node_relationship_description"
+      ]
+    }
+  ],
+  "knowledge_domains": [
+    "realtime_graphics",
+    "node_based_programming",
+    "signal_processing_networks",
+    "media_pipeline_debugging"
+  ],
+  "discovery_protocol": "machine_manifest"
+}
