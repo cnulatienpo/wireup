@@ -1,0 +1,11 @@
+{
+  "family": "TOP",
+  "kind": "output",
+  "name": "null1",
+  "network_path": "/project1",
+  "node_type": "touchdesigner.operator",
+  "op_type": "nullTOP",
+  "parameters": {},
+  "patch_name": "example_patch",
+  "path": "/project1/null1"
+}
