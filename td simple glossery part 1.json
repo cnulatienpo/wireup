@@ -1,0 +1,2734 @@
+{
+  "glossary": [
+    {
+      "term": "TouchDesigner",
+      "category": "Meta",
+      "plain_meaning": "TouchDesigner is software for moving information around so it turns into images, sound, or interaction while it is happening.",
+      "what_it_is_not": "This is not software where you work on one finished file and then press play.",
+      "mental_model": "A system where things are always moving instead of being worked on one at a time.",
+      "example": "Imagine a video of a train moving forward on tracks. TouchDesigner is the whole rail system that keeps the train moving."
+    },
+    {
+      "term": "Signal Flow",
+      "category": "Meta",
+      "plain_meaning": "Signal flow means information moves in a direction, step by step, from one place to the next.",
+      "what_it_is_not": "This is not information jumping randomly or happening all at once.",
+      "mental_model": "Something traveling along a path.",
+      "example": "The train moves forward along the tracks. Each section of track is part of the signal flow."
+    },
+    {
+      "term": "Operator",
+      "category": "Meta",
+      "plain_meaning": "An operator is one small part of the system that does one job and then passes the result along.",
+      "what_it_is_not": "This is not the whole project by itself.",
+      "mental_model": "One station the train passes through.",
+      "example": "The train passes through a station where something changes, like picking up passengers, then continues moving."
+    },
+    {
+      "term": "OP Taxonomy",
+      "category": "Meta",
+      "plain_meaning": "OP taxonomy is how TouchDesigner groups operators by what kind of job they do.",
+      "what_it_is_not": "This is not about which operators are better or worse.",
+      "mental_model": "Labels that say what each station is meant for.",
+      "example": "Different stations exist for different purposes, even though the same train passes through all of them."
+    }
+  ]
+}
+
+{
+  "glossary": [
+    {
+      "term": "Real Time",
+      "category": "Meta",
+      "plain_meaning": "Real time means things update immediately while they are happening.",
+      "what_it_is_not": "This is not something that waits until the end to show a result.",
+      "mental_model": "Seeing something happen live.",
+      "example": "You are watching a train move on the tracks as it moves, not watching a video later."
+    },
+    {
+      "term": "Network",
+      "category": "Container",
+      "plain_meaning": "A network is a group of connected parts that pass information to each other.",
+      "what_it_is_not": "This is not a single part working by itself.",
+      "mental_model": "Connected paths.",
+      "example": "The train moves through many connected tracks instead of just one short track."
+    },
+    {
+      "term": "TOP",
+      "category": "Meta",
+      "plain_meaning": "TOPs work with images.",
+      "what_it_is_not": "These do not work with numbers or text.",
+      "mental_model": "Pictures.",
+      "example": "The actual video of the train moving down the tracks."
+    },
+    {
+      "term": "CHOP",
+      "category": "Meta",
+      "plain_meaning": "CHOPs work with changing numbers.",
+      "what_it_is_not": "These are not images.",
+      "mental_model": "Values that move up and down.",
+      "example": "The train’s speed going faster or slower over time."
+    },
+    {
+      "term": "SOP",
+      "category": "Meta",
+      "plain_meaning": "SOPs work with shapes in space.",
+      "what_it_is_not": "These are not flat pictures.",
+      "mental_model": "Physical form.",
+      "example": "The shape of the train and the rails it sits on."
+    },
+    {
+      "term": "DAT",
+      "category": "Meta",
+      "plain_meaning": "DATs work with text and lists.",
+      "what_it_is_not": "These do not make images.",
+      "mental_model": "Written information.",
+      "example": "A written list of train stops and times."
+    },
+    {
+      "term": "MAT",
+      "category": "Meta",
+      "plain_meaning": "MATs control how surfaces look.",
+      "what_it_is_not": "These do not change shape or position.",
+      "mental_model": "Surface appearance.",
+      "example": "The color and finish of the train’s outer shell."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Input",
+      "category": "Boundary",
+      "plain_meaning": "Input is information that comes into something.",
+      "what_it_is_not": "This is not the final result.",
+      "mental_model": "What goes in.",
+      "example": "The train entering the tracks at the start."
+    },
+    {
+      "term": "Output",
+      "category": "Boundary",
+      "plain_meaning": "Output is information that comes out after something has happened to it.",
+      "what_it_is_not": "This is not where information starts.",
+      "mental_model": "What comes out.",
+      "example": "The train leaving the tracks at the end."
+    },
+    {
+      "term": "Viewer",
+      "category": "View",
+      "plain_meaning": "A viewer is a place where you can see what is happening.",
+      "what_it_is_not": "This does not change what is happening.",
+      "mental_model": "A window to look through.",
+      "example": "Watching the train through a window as it passes by."
+    },
+    {
+      "term": "Parameter",
+      "category": "Tool",
+      "plain_meaning": "A parameter is a setting that changes how something behaves.",
+      "what_it_is_not": "This is not the thing itself.",
+      "mental_model": "A knob or slider.",
+      "example": "Changing how fast the train moves by adjusting a speed control."
+    }
+  ]
+}
+
+{
+  "glossary": [
+    {
+      "term": "Cook",
+      "category": "Meta",
+      "plain_meaning": "Cook means the system is doing its work right now.",
+      "what_it_is_not": "This is not saving or rendering something for later.",
+      "mental_model": "Something actively running.",
+      "example": "The train is moving on the tracks right now, not parked."
+    },
+    {
+      "term": "Time",
+      "category": "Meta",
+      "plain_meaning": "Time is what keeps everything moving forward.",
+      "what_it_is_not": "This is not a timeline you scrub back and forth.",
+      "mental_model": "Forward motion.",
+      "example": "The train keeps moving forward and does not stop unless something makes it stop."
+    },
+    {
+      "term": "Data vs View",
+      "category": "Meta",
+      "plain_meaning": "Data is the information itself. View is how you look at that information.",
+      "what_it_is_not": "Seeing something does not mean it is changed.",
+      "mental_model": "The thing versus the window showing the thing.",
+      "example": "The train is real data. Watching the train through a window is the view."
+    },
+    {
+      "term": "State",
+      "category": "Meta",
+      "plain_meaning": "State means something remembers what happened before.",
+      "what_it_is_not": "This is not something that resets every moment.",
+      "mental_model": "Memory.",
+      "example": "The train remembers how fast it was going a moment ago instead of starting over."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Frame",
+      "category": "Meta",
+      "plain_meaning": "A frame is one update of the system.",
+      "what_it_is_not": "This is not a long stretch of time.",
+      "mental_model": "One step forward.",
+      "example": "Each small movement you see as the train moves forward is one frame."
+    },
+    {
+      "term": "Rate",
+      "category": "Meta",
+      "plain_meaning": "Rate is how many frames happen over time.",
+      "what_it_is_not": "This is not how big or strong something is.",
+      "mental_model": "Speed of updates.",
+      "example": "How fast the train appears to move because many frames happen quickly."
+    },
+    {
+      "term": "Context",
+      "category": "Meta",
+      "plain_meaning": "Context means where something exists and what it belongs to.",
+      "what_it_is_not": "This is not the thing itself.",
+      "mental_model": "Location matters.",
+      "example": "The same train looks different depending on whether you see it from the station, a bridge, or inside another train."
+    },
+    {
+      "term": "Inside vs Outside",
+      "category": "Meta",
+      "plain_meaning": "Inside means you are looking at something from within it. Outside means you are looking at it from the outside.",
+      "what_it_is_not": "This is not about distance or zoom.",
+      "mental_model": "Being in a room versus standing outside the room.",
+      "example": "Being inside the train car versus watching the train pass from the platform."
+    },
+    {
+      "term": "Live vs Stored",
+      "category": "Meta",
+      "plain_meaning": "Live means something keeps changing. Stored means something stays the same.",
+      "what_it_is_not": "Stored does not mean deleted or gone.",
+      "mental_model": "Moving versus frozen.",
+      "example": "A train currently moving is live. A photo of the train is stored."
+    },
+    {
+      "term": "Trigger / Event",
+      "category": "Meta",
+      "plain_meaning": "A trigger or event is something that happens once when a condition is met.",
+      "what_it_is_not": "This is not something that happens every frame.",
+      "mental_model": "A single action.",
+      "example": "The moment the train horn sounds as it enters the station."
+    },
+    {
+      "term": "Channel",
+      "category": "Meta",
+      "plain_meaning": "A channel is one stream of changing numbers.",
+      "what_it_is_not": "This is not an image or a block of text.",
+      "mental_model": "One line of information.",
+      "example": "One channel could be the train’s speed changing over time."
+    },
+    {
+      "term": "Units",
+      "category": "Meta",
+      "plain_meaning": "Units tell you what a number means.",
+      "what_it_is_not": "A number without units does not explain itself.",
+      "mental_model": "Labels on measurements.",
+      "example": "Knowing whether the train moved 10 meters, 10 seconds, or 10 frames."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Palette",
+      "category": "Container",
+      "plain_meaning": "The palette is a place where ready-made parts are listed so you can bring them into your work.",
+      "what_it_is_not": "This does not run anything by itself.",
+      "mental_model": "A shelf of parts you can pick from.",
+      "example": "A yard next to the tracks where train parts are stored before being used."
+    },
+    {
+      "term": "Derivative",
+      "category": "Container",
+      "plain_meaning": "Derivative is the main group of built-in parts made by the creators of the software.",
+      "what_it_is_not": "This is not your personal collection.",
+      "mental_model": "Official parts from the factory.",
+      "example": "Standard train cars made by the train company."
+    },
+    {
+      "term": "Generators",
+      "category": "Container",
+      "plain_meaning": "Generators are parts that create something from nothing.",
+      "what_it_is_not": "These do not need input to start.",
+      "mental_model": "Sources.",
+      "example": "A train starting its journey at the first station."
+    },
+    {
+      "term": "Image Filters",
+      "category": "Container",
+      "plain_meaning": "Image filters change the look of images.",
+      "what_it_is_not": "These do not create new images from scratch.",
+      "mental_model": "Ways to change appearance.",
+      "example": "Changing how the train video looks, like darker or blurrier."
+    },
+    {
+      "term": "Mapping",
+      "category": "Container",
+      "plain_meaning": "Mapping is about fitting images onto shapes or spaces.",
+      "what_it_is_not": "This does not change the image content itself.",
+      "mental_model": "Wrapping something onto something else.",
+      "example": "Projecting the train video onto the side of a building."
+    },
+    {
+      "term": "Meta Quest",
+      "category": "Container",
+      "plain_meaning": "Meta Quest groups parts made to work with VR headsets.",
+      "what_it_is_not": "This is not general image or sound work.",
+      "mental_model": "Tools for a specific device.",
+      "example": "Viewing the train scene through a VR headset."
+    },
+    {
+      "term": "POPs",
+      "category": "Container",
+      "plain_meaning": "POPs are parts that work with many small moving points.",
+      "what_it_is_not": "These are not single solid objects.",
+      "mental_model": "Lots of tiny pieces moving together.",
+      "example": "Seeing sparks or dust around the train as many small moving dots."
+    },
+    {
+      "term": "TD Ableton",
+      "category": "Container",
+      "plain_meaning": "TD Ableton groups parts that connect TouchDesigner to Ableton.",
+      "what_it_is_not": "This does not play music by itself.",
+      "mental_model": "A bridge to another program.",
+      "example": "The train syncing its movement to music coming from another control room."
+    },
+    {
+      "term": "TD Bitwing",
+      "category": "Container",
+      "plain_meaning": "TD Bitwing groups parts that connect TouchDesigner to Bitwing.",
+      "what_it_is_not": "This is not general sound control.",
+      "mental_model": "Another bridge to another system.",
+      "example": "The train receiving timing signals from a different control system."
+    },
+    {
+      "term": "TD Synchro",
+      "category": "Container",
+      "plain_meaning": "TD Synchro groups parts used to keep things in time together.",
+      "what_it_is_not": "This does not create content.",
+      "mental_model": "Keeping things lined up.",
+      "example": "Making sure multiple trains arrive at the station at the same time."
+    },
+    {
+      "term": "TDVR",
+      "category": "Container",
+      "plain_meaning": "TDVR groups parts made for virtual reality setups.",
+      "what_it_is_not": "This is not for flat screens.",
+      "mental_model": "VR-specific tools.",
+      "example": "Standing inside the train scene instead of watching it on a screen."
+    },
+    {
+      "term": "TDVS",
+      "category": "Container",
+      "plain_meaning": "TDVS groups parts made for video server workflows.",
+      "what_it_is_not": "This is not simple playback.",
+      "mental_model": "Large-scale output tools.",
+      "example": "Sending the train video to many screens at once."
+    },
+    {
+      "term": "Techniques",
+      "category": "Container",
+      "plain_meaning": "Techniques groups parts that help manage how the system runs.",
+      "what_it_is_not": "These do not create visuals directly.",
+      "mental_model": "Behind-the-scenes helpers.",
+      "example": "Systems that keep the train schedule running smoothly."
+    },
+    {
+      "term": "Thread Manager",
+      "category": "Tool",
+      "plain_meaning": "Thread Manager helps control how work is split up inside the system.",
+      "what_it_is_not": "This does not change what the work is.",
+      "mental_model": "Traffic control.",
+      "example": "Deciding which tracks trains use so they don’t collide."
+    },
+    {
+      "term": "Tools",
+      "category": "Container",
+      "plain_meaning": "Tools are helpers that make work easier.",
+      "what_it_is_not": "These are not the main content.",
+      "mental_model": "Extra equipment.",
+      "example": "Tools used by workers to inspect the train."
+    },
+    {
+      "term": "UI",
+      "category": "Container",
+      "plain_meaning": "UI groups parts used to build interfaces people interact with.",
+      "what_it_is_not": "These are not visuals meant only to be watched.",
+      "mental_model": "Buttons and controls.",
+      "example": "Buttons that start or stop the train."
+    },
+    {
+      "term": "Vive",
+      "category": "Container",
+      "plain_meaning": "Vive groups parts made to work with Vive hardware.",
+      "what_it_is_not": "This is not general VR support.",
+      "mental_model": "Device-specific tools.",
+      "example": "Controlling the train scene using Vive controllers."
+    },
+    {
+      "term": "Web RTC",
+      "category": "Container",
+      "plain_meaning": "Web RTC groups parts for sending data over the internet in real time.",
+      "what_it_is_not": "This is not saved file sharing.",
+      "mental_model": "Live connection.",
+      "example": "Watching the train live from another city."
+    },
+    {
+      "term": "My Components",
+      "category": "Container",
+      "plain_meaning": "My Components is your personal collection of saved parts.",
+      "what_it_is_not": "These are not built-in defaults.",
+      "mental_model": "Your own toolbox.",
+      "example": "Train parts you built yourself and keep for later."
+    },
+    {
+      "term": "Icon / Info / Suggestions",
+      "category": "View",
+      "plain_meaning": "This area shows details and hints about what is selected.",
+      "what_it_is_not": "This does not change anything.",
+      "mental_model": "An information panel.",
+      "example": "A sign next to the tracks that explains what this station does."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Live 11",
+      "category": "Container",
+      "plain_meaning": "Live 11 holds parts made to work with Ableton Live version 11.",
+      "what_it_is_not": "These parts are not for other versions of Ableton.",
+      "mental_model": "Parts made for one specific train model.",
+      "example": "Tracks designed only for a newer train so it runs correctly."
+    },
+    {
+      "term": "Live 9+10",
+      "category": "Container",
+      "plain_meaning": "Live 9+10 holds parts made to work with older versions of Ableton Live.",
+      "what_it_is_not": "These parts are not for Live 11.",
+      "mental_model": "Parts made for older train models.",
+      "example": "Tracks built for older trains so they still run safely."
+    },
+    {
+      "term": "Extras",
+      "category": "Container",
+      "plain_meaning": "Extras holds additional parts that are not required but can be useful.",
+      "what_it_is_not": "These are not the main connection parts.",
+      "mental_model": "Optional add-ons.",
+      "example": "Extra train cars you can attach if you want."
+    },
+    {
+      "term": "System Components",
+      "category": "Container",
+      "plain_meaning": "System Components are parts that help the overall system work together.",
+      "what_it_is_not": "These are not visuals or content by themselves.",
+      "mental_model": "Core machinery.",
+      "example": "The engines and controls that keep the train running."
+    },
+    {
+      "term": "Utilities",
+      "category": "Container",
+      "plain_meaning": "Utilities are small helper parts that do simple support jobs.",
+      "what_it_is_not": "These are not main features.",
+      "mental_model": "Helpful tools.",
+      "example": "Tools used to check the train before it moves."
+    },
+    {
+      "term": "World Objects",
+      "category": "Container",
+      "plain_meaning": "World Objects are parts that exist inside a 3D space.",
+      "what_it_is_not": "These are not flat images.",
+      "mental_model": "Things placed in the world.",
+      "example": "The train, tracks, and buildings around it."
+    },
+    {
+      "term": "Sick",
+      "category": "Container",
+      "plain_meaning": "Sick holds example interface designs made to look polished.",
+      "what_it_is_not": "These are not required for building interfaces.",
+      "mental_model": "Finished examples.",
+      "example": "A fully designed train control panel shown as inspiration."
+    },
+    {
+      "term": "Basic Widgets",
+      "category": "Container",
+      "plain_meaning": "Basic Widgets are simple interface parts like buttons and sliders.",
+      "what_it_is_not": "These are not full interfaces by themselves.",
+      "mental_model": "Simple building blocks.",
+      "example": "Basic switches used to start or stop a train."
+    },
+    {
+      "term": "Core",
+      "category": "Container",
+      "plain_meaning": "Core holds the most basic and necessary parts.",
+      "what_it_is_not": "These are not optional extras.",
+      "mental_model": "The foundation.",
+      "example": "The main tracks every train must use."
+    },
+    {
+      "term": "Gadgets",
+      "category": "Container",
+      "plain_meaning": "Gadgets are small ready-made parts that do one clear thing.",
+      "what_it_is_not": "These are not large systems.",
+      "mental_model": "Small devices.",
+      "example": "A small device that checks the train’s speed."
+    },
+    {
+      "term": "Package",
+      "category": "Container",
+      "plain_meaning": "Package groups parts that are meant to be used together.",
+      "what_it_is_not": "These are not single standalone pieces.",
+      "mental_model": "A bundled set.",
+      "example": "A full train kit that comes with engine, cars, and controls."
+    },
+    {
+      "term": "Scripting",
+      "category": "Container",
+      "plain_meaning": "Scripting groups parts that use written instructions to control behavior.",
+      "what_it_is_not": "These are not visual-only tools.",
+      "mental_model": "Written rules.",
+      "example": "Written instructions that tell the train when to stop or go."
+    },
+    {
+      "term": "Tools",
+      "category": "Container",
+      "plain_meaning": "Tools group parts that help build, manage, or inspect things.",
+      "what_it_is_not": "These are not the final result.",
+      "mental_model": "Work tools.",
+      "example": "Inspection tools used to check the train system."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Window Placement",
+      "category": "Container",
+      "plain_meaning": "Window Placement controls how the main window behaves and where it appears.",
+      "what_it_is_not": "This does not change the content itself.",
+      "mental_model": "Rules for where a window sits.",
+      "example": "Deciding whether you are in the control room watching the train system or out on the platform showing it to others."
+    },
+    {
+      "term": "Designer Mode",
+      "category": "Mode",
+      "plain_meaning": "Designer Mode is for building and adjusting things.",
+      "what_it_is_not": "This is not meant for showing a finished result.",
+      "mental_model": "Workshop mode.",
+      "example": "Engineers walking around the tracks while the train system is being worked on."
+    },
+    {
+      "term": "Performer Mode",
+      "category": "Mode",
+      "plain_meaning": "Performer Mode is for showing the result without editing.",
+      "what_it_is_not": "This is not for changing how things are built.",
+      "mental_model": "Show mode.",
+      "example": "Passengers watching the train run without seeing the controls."
+    },
+    {
+      "term": "Par",
+      "category": "Boundary",
+      "plain_meaning": "Par means the window follows settings from a parameter.",
+      "what_it_is_not": "This is not manually positioned.",
+      "mental_model": "Controlled by rules.",
+      "example": "The train’s position is decided by signals, not by someone pushing it."
+    },
+    {
+      "term": "Net",
+      "category": "Boundary",
+      "plain_meaning": "Net means the window placement is linked to the network.",
+      "what_it_is_not": "This is not an independent window.",
+      "mental_model": "Tied to the system.",
+      "example": "The train moves because it is connected to the rail network."
+    },
+    {
+      "term": "Open / Close",
+      "category": "Action",
+      "plain_meaning": "Open and Close control whether the window is visible or hidden.",
+      "what_it_is_not": "This does not stop the system from running.",
+      "mental_model": "Showing or hiding a window.",
+      "example": "Opening or closing the door so you can see the train pass."
+    },
+    {
+      "term": "Path",
+      "category": "Boundary",
+      "plain_meaning": "Path defines which part of the system the window is connected to.",
+      "what_it_is_not": "This is not the content itself.",
+      "mental_model": "A route.",
+      "example": "Choosing which track you are watching the train on."
+    },
+    {
+      "term": "Custom Position",
+      "category": "Tool",
+      "plain_meaning": "Custom Position lets you place the window exactly where you want.",
+      "what_it_is_not": "This does not affect how the system works.",
+      "mental_model": "Manual placement.",
+      "example": "Standing in a specific spot on the platform to watch the train."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "MIDI Mapper",
+      "category": "Tool",
+      "plain_meaning": "MIDI Mapper is where you connect MIDI controls to things in TouchDesigner.",
+      "what_it_is_not": "This does not create sound or visuals by itself.",
+      "mental_model": "A place to hook controls to actions.",
+      "example": "A control box that lets you change train signals using a handheld controller."
+    },
+    {
+      "term": "Device Mappings",
+      "category": "Container",
+      "plain_meaning": "Device Mappings is the list of all MIDI connections you have set up.",
+      "what_it_is_not": "This is not the MIDI data itself.",
+      "mental_model": "A list of hookups.",
+      "example": "A list showing which switches control which train signals."
+    },
+    {
+      "term": "In Device",
+      "category": "Boundary",
+      "plain_meaning": "In Device is the MIDI device that sends messages into TouchDesigner.",
+      "what_it_is_not": "This is not the device TouchDesigner sends messages to.",
+      "mental_model": "Incoming source.",
+      "example": "A handheld controller sending a signal to change a train light."
+    },
+    {
+      "term": "Out Device",
+      "category": "Boundary",
+      "plain_meaning": "Out Device is the MIDI device that TouchDesigner sends messages to.",
+      "what_it_is_not": "This is not the device sending messages into TouchDesigner.",
+      "mental_model": "Outgoing destination.",
+      "example": "TouchDesigner sending a signal out to a train control box."
+    },
+    {
+      "term": "MIDI Map",
+      "category": "Container",
+      "plain_meaning": "MIDI Map is the set of rules that say which MIDI message controls which thing.",
+      "what_it_is_not": "This is not the MIDI device itself.",
+      "mental_model": "A translation list.",
+      "example": "A note that says: this knob changes the train speed control."
+    },
+    {
+      "term": "Ch",
+      "category": "Boundary",
+      "plain_meaning": "Ch means which MIDI channel a message uses.",
+      "what_it_is_not": "This is not the message content.",
+      "mental_model": "A lane number.",
+      "example": "One train track out of many tracks, each with its own lane number."
+    },
+    {
+      "term": "Create New Mapping",
+      "category": "Action",
+      "plain_meaning": "Create New Mapping makes a new connection between a MIDI control and something in TouchDesigner.",
+      "what_it_is_not": "This does not delete or change existing mappings.",
+      "mental_model": "Add a new hookup.",
+      "example": "Adding a new rule so a button can switch a train signal."
+    },
+    {
+      "term": "Check MIDI Devices",
+      "category": "Action",
+      "plain_meaning": "Check MIDI Devices looks for MIDI devices that are connected and available.",
+      "what_it_is_not": "This does not create devices or fix hardware.",
+      "mental_model": "Scan for what is plugged in.",
+      "example": "Checking which control boxes are connected to the train system."
+    },
+    {
+      "term": "MIDI Console",
+      "category": "View",
+      "plain_meaning": "MIDI Console shows the MIDI messages that are coming in or going out.",
+      "what_it_is_not": "This does not change the messages.",
+      "mental_model": "A live log window.",
+      "example": "A display that shows every signal sent to the train controls."
+    },
+    {
+      "term": "ID",
+      "category": "Boundary",
+      "plain_meaning": "ID is the label that helps tell one message apart from another.",
+      "what_it_is_not": "This is not what the message means.",
+      "mental_model": "A tag number.",
+      "example": "A tag on a train car that identifies it."
+    },
+    {
+      "term": "Type",
+      "category": "Boundary",
+      "plain_meaning": "Type tells what kind of MIDI message it is.",
+      "what_it_is_not": "This is not the value of the message.",
+      "mental_model": "Category label.",
+      "example": "A label saying this train signal is a stop signal, not a speed signal."
+    },
+    {
+      "term": "Channel",
+      "category": "Boundary",
+      "plain_meaning": "Channel tells which MIDI channel the message is on.",
+      "what_it_is_not": "This is not which device sent it.",
+      "mental_model": "Which lane it used.",
+      "example": "Which track the train used to arrive at the station."
+    },
+    {
+      "term": "Index",
+      "category": "Boundary",
+      "plain_meaning": "Index is the number that points to which control or part the message refers to.",
+      "what_it_is_not": "This is not the strength of the message.",
+      "mental_model": "Which item number.",
+      "example": "Button number 3 on a control panel."
+    },
+    {
+      "term": "Value",
+      "category": "Boundary",
+      "plain_meaning": "Value is the number carried by the message.",
+      "what_it_is_not": "This is not the message type.",
+      "mental_model": "The amount.",
+      "example": "How much the train speed control is being turned up or down."
+    },
+    {
+      "term": "Message",
+      "category": "Boundary",
+      "plain_meaning": "Message is the full MIDI information being shown in the console.",
+      "what_it_is_not": "This is not a human sentence.",
+      "mental_model": "A signal packet.",
+      "example": "A short signal sent to the train system that says what just happened."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Console Settings",
+      "category": "Container",
+      "plain_meaning": "Console Settings control what the MIDI console shows.",
+      "what_it_is_not": "These settings do not change the MIDI data itself.",
+      "mental_model": "Filters for what you are allowed to see.",
+      "example": "Deciding which train signals are shown on a control screen."
+    },
+    {
+      "term": "Enable Logging",
+      "category": "Mode",
+      "plain_meaning": "Enable Logging turns message recording on or off.",
+      "what_it_is_not": "This does not change how MIDI works.",
+      "mental_model": "Start or stop writing things down.",
+      "example": "Turning on a logbook that records when trains pass."
+    },
+    {
+      "term": "In Messages",
+      "category": "View",
+      "plain_meaning": "In Messages shows MIDI messages coming into TouchDesigner.",
+      "what_it_is_not": "This does not show messages being sent out.",
+      "mental_model": "Incoming signals.",
+      "example": "Seeing signals arrive that control the train."
+    },
+    {
+      "term": "Out Messages",
+      "category": "View",
+      "plain_meaning": "Out Messages shows MIDI messages being sent out from TouchDesigner.",
+      "what_it_is_not": "This does not show incoming messages.",
+      "mental_model": "Outgoing signals.",
+      "example": "Seeing signals sent from the control room to the train system."
+    },
+    {
+      "term": "Clock / Timing Messages",
+      "category": "View",
+      "plain_meaning": "Clock and Timing Messages show signals related to timing and sync.",
+      "what_it_is_not": "These are not control changes or notes.",
+      "mental_model": "Timing signals.",
+      "example": "Signals that keep multiple trains moving in step."
+    },
+    {
+      "term": "Sensing Messages",
+      "category": "View",
+      "plain_meaning": "Sensing Messages show signals used to check if devices are still connected.",
+      "what_it_is_not": "These are not actions or commands.",
+      "mental_model": "Heartbeat signals.",
+      "example": "Regular pings that confirm the train control system is still online."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Beat Panel",
+      "category": "Container",
+      "plain_meaning": "Beat Panel is where timing based on rhythm is handled.",
+      "what_it_is_not": "This does not make sound by itself.",
+      "mental_model": "A rhythm control area.",
+      "example": "Keeping the train moving in time with a steady beat."
+    },
+    {
+      "term": "Time Panel",
+      "category": "View",
+      "plain_meaning": "Time Panel shows timing information related to beats.",
+      "what_it_is_not": "This does not control the timing.",
+      "mental_model": "A timing display.",
+      "example": "A screen that shows when the train should move in rhythm."
+    },
+    {
+      "term": "Beat Input",
+      "category": "Boundary",
+      "plain_meaning": "Beat Input is where beat information comes from.",
+      "what_it_is_not": "This is not the beat itself.",
+      "mental_model": "Where the rhythm enters.",
+      "example": "A signal telling the train when to move based on a beat."
+    },
+    {
+      "term": "Listen / Tap",
+      "category": "Action",
+      "plain_meaning": "Listen and Tap are ways to set a beat by listening or tapping.",
+      "what_it_is_not": "This does not play music.",
+      "mental_model": "Setting rhythm by hand.",
+      "example": "Tapping your foot to set when the train should move."
+    },
+    {
+      "term": "Tempo",
+      "category": "Boundary",
+      "plain_meaning": "Tempo is how fast the beat is.",
+      "what_it_is_not": "This is not the beat pattern.",
+      "mental_model": "Speed of rhythm.",
+      "example": "How fast the train moves when following the beat."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Variables / Macros / T-Script",
+      "category": "Container",
+      "plain_meaning": "This area is about names that stand in for values or text so they can be reused.",
+      "what_it_is_not": "This is not visuals or sound.",
+      "mental_model": "Short names that mean something else.",
+      "example": "Giving a train route a short name so you don’t have to say the full route every time."
+    },
+    {
+      "term": "Environment Variables",
+      "category": "Boundary",
+      "plain_meaning": "Environment variables are values set outside the project that the project can read.",
+      "what_it_is_not": "These are not settings saved inside the project.",
+      "mental_model": "Outside conditions.",
+      "example": "Weather conditions that affect how the train runs, even though they are set outside the station."
+    },
+    {
+      "term": "Built-in Variables",
+      "category": "Meta",
+      "plain_meaning": "Built-in variables are values TouchDesigner already knows and provides automatically.",
+      "what_it_is_not": "These are not custom names you invent.",
+      "mental_model": "Known facts.",
+      "example": "The train system already knows the current time without being told."
+    },
+    {
+      "term": "Macros",
+      "category": "Tool",
+      "plain_meaning": "Macros are shortcuts that expand into longer text or values.",
+      "what_it_is_not": "These are not commands that run by themselves.",
+      "mental_model": "Abbreviations.",
+      "example": "Writing a short code that always expands to the full train route name."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Console",
+      "category": "View",
+      "plain_meaning": "The console is a place where messages from the system are shown.",
+      "what_it_is_not": "This does not control or change anything.",
+      "mental_model": "A message window.",
+      "example": "A screen that shows notes about what the train system is doing right now."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Textport",
+      "category": "View",
+      "plain_meaning": "Textport is a place where you type text commands and see text responses.",
+      "what_it_is_not": "This is not a place where visuals or sound are shown.",
+      "mental_model": "A text-only control window.",
+      "example": "Typing instructions into a control room terminal to check on the train system."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Signal Flow Taxonomy",
+      "category": "Meta",
+      "plain_meaning": "Signal flow taxonomy is the system TouchDesigner uses to describe how information moves and connects.",
+      "what_it_is_not": "This is not a set of rules you must memorize.",
+      "mental_model": "A map of how trains are allowed to move.",
+      "example": "Rules that explain which tracks trains can use and how they connect."
+    },
+    {
+      "term": "Input",
+      "category": "Boundary",
+      "plain_meaning": "An input is where information enters something.",
+      "what_it_is_not": "This is not where information ends.",
+      "mental_model": "An entry point.",
+      "example": "Where the train enters the rail system."
+    },
+    {
+      "term": "Output",
+      "category": "Boundary",
+      "plain_meaning": "An output is where information leaves something.",
+      "what_it_is_not": "This is not where information begins.",
+      "mental_model": "An exit point.",
+      "example": "Where the train leaves one section of track."
+    },
+    {
+      "term": "One-to-One",
+      "category": "Meta",
+      "plain_meaning": "One-to-one means one thing feeds into one other thing.",
+      "what_it_is_not": "This is not combining multiple sources.",
+      "mental_model": "One track to one track.",
+      "example": "One train going from one track directly to the next."
+    },
+    {
+      "term": "One-to-Many",
+      "category": "Meta",
+      "plain_meaning": "One-to-many means one thing feeds into multiple things.",
+      "what_it_is_not": "This is not multiple things merging together.",
+      "mental_model": "A split in the tracks.",
+      "example": "One train signal controlling several different tracks."
+    },
+    {
+      "term": "Many-to-One",
+      "category": "Meta",
+      "plain_meaning": "Many-to-one means multiple things feed into one thing.",
+      "what_it_is_not": "This is not keeping sources separate.",
+      "mental_model": "Tracks merging together.",
+      "example": "Several tracks joining into one main track."
+    },
+    {
+      "term": "Chain",
+      "category": "Meta",
+      "plain_meaning": "A chain is a straight line of things connected one after another.",
+      "what_it_is_not": "This is not branching or merging.",
+      "mental_model": "A straight rail line.",
+      "example": "The train moving through stations one by one in order."
+    },
+    {
+      "term": "Branch",
+      "category": "Meta",
+      "plain_meaning": "A branch is where one output feeds into multiple paths.",
+      "what_it_is_not": "This is not a merge.",
+      "mental_model": "A fork in the tracks.",
+      "example": "One train signal sending instructions to two different routes."
+    },
+    {
+      "term": "Merge",
+      "category": "Meta",
+      "plain_meaning": "A merge is where multiple inputs come together into one.",
+      "what_it_is_not": "This is not keeping inputs separate.",
+      "mental_model": "Tracks coming together.",
+      "example": "Two trains entering the same main line."
+    },
+    {
+      "term": "Pass-Through",
+      "category": "Meta",
+      "plain_meaning": "Pass-through means information goes through unchanged.",
+      "what_it_is_not": "This is not transforming the information.",
+      "mental_model": "No stop, no change.",
+      "example": "A train passing through a station without stopping."
+    },
+    {
+      "term": "Process",
+      "category": "Meta",
+      "plain_meaning": "Process means information is changed as it moves through.",
+      "what_it_is_not": "This is not simple forwarding.",
+      "mental_model": "Something happens in the middle.",
+      "example": "The train changes speed while moving through a section of track."
+    },
+    {
+      "term": "Cook Dependency",
+      "category": "Meta",
+      "plain_meaning": "Cook dependency means one thing updates because something before it changed.",
+      "what_it_is_not": "This is not random updating.",
+      "mental_model": "Cause and effect.",
+      "example": "The train moves because the signal before it changed."
+    },
+    {
+      "term": "Upstream",
+      "category": "Meta",
+      "plain_meaning": "Upstream means earlier in the flow.",
+      "what_it_is_not": "This is not what comes after.",
+      "mental_model": "Behind you on the track.",
+      "example": "The part of the track the train already passed."
+    },
+    {
+      "term": "Downstream",
+      "category": "Meta",
+      "plain_meaning": "Downstream means later in the flow.",
+      "what_it_is_not": "This is not what comes before.",
+      "mental_model": "Ahead of you on the track.",
+      "example": "The part of the track the train is about to reach."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Family-Specific Flow Rules",
+      "category": "Meta",
+      "plain_meaning": "Family-specific flow rules describe which kinds of data are allowed to connect to each other.",
+      "what_it_is_not": "This is not about how to connect things.",
+      "mental_model": "Rules about which tracks fit which trains.",
+      "example": "A freight train can use cargo tracks, but not passenger-only tracks."
+    },
+    {
+      "term": "Image Data",
+      "category": "Meta",
+      "plain_meaning": "Image data is information that represents pictures.",
+      "what_it_is_not": "This is not text or numbers.",
+      "mental_model": "Pictures moving through the system.",
+      "example": "The video of the train moving along the tracks."
+    },
+    {
+      "term": "Value Data",
+      "category": "Meta",
+      "plain_meaning": "Value data is information made of changing numbers.",
+      "what_it_is_not": "This is not an image.",
+      "mental_model": "Numbers that move.",
+      "example": "The speed of the train going up or down."
+    },
+    {
+      "term": "Shape Data",
+      "category": "Meta",
+      "plain_meaning": "Shape data describes form and structure in space.",
+      "what_it_is_not": "This is not a flat picture.",
+      "mental_model": "Physical shapes.",
+      "example": "The shape of the train and the rails."
+    },
+    {
+      "term": "Text Data",
+      "category": "Meta",
+      "plain_meaning": "Text data is information written as words, lists, or tables.",
+      "what_it_is_not": "This is not visual imagery.",
+      "mental_model": "Written information.",
+      "example": "A written schedule of train stops."
+    },
+    {
+      "term": "Surface Data",
+      "category": "Meta",
+      "plain_meaning": "Surface data describes how something looks on the outside.",
+      "what_it_is_not": "This does not define shape.",
+      "mental_model": "Surface appearance.",
+      "example": "The paint and finish on the train."
+    },
+    {
+      "term": "Compatible",
+      "category": "Meta",
+      "plain_meaning": "Compatible means two things can connect directly.",
+      "what_it_is_not": "This does not mean they will work well together.",
+      "mental_model": "Tracks that line up.",
+      "example": "Two rail sections that fit together."
+    },
+    {
+      "term": "Incompatible",
+      "category": "Meta",
+      "plain_meaning": "Incompatible means two things cannot connect directly.",
+      "what_it_is_not": "This does not mean either thing is broken.",
+      "mental_model": "Tracks that do not match.",
+      "example": "Trying to run a train on the wrong type of track."
+    },
+    {
+      "term": "Connection Words",
+      "category": "Meta",
+      "plain_meaning": "Connection words are the terms TouchDesigner uses to describe how data is shared.",
+      "what_it_is_not": "These are not instructions.",
+      "mental_model": "Labels on connections.",
+      "example": "Signs that explain how trains share tracks."
+    },
+    {
+      "term": "Connect",
+      "category": "Action",
+      "plain_meaning": "Connect means linking an output to an input.",
+      "what_it_is_not": "This does not change the data.",
+      "mental_model": "Joining tracks.",
+      "example": "Linking one section of track to the next."
+    },
+    {
+      "term": "Reference",
+      "category": "Boundary",
+      "plain_meaning": "Reference means pointing to something without copying it.",
+      "what_it_is_not": "This is not a duplicate.",
+      "mental_model": "A sign pointing somewhere else.",
+      "example": "A sign that points to the train instead of moving the train."
+    },
+    {
+      "term": "Export",
+      "category": "Boundary",
+      "plain_meaning": "Export means sending information out to be used elsewhere.",
+      "what_it_is_not": "This does not keep control inside.",
+      "mental_model": "Sending something away.",
+      "example": "Sending train timing information to another control room."
+    },
+    {
+      "term": "Link",
+      "category": "Boundary",
+      "plain_meaning": "Link means keeping two things connected so they stay in sync.",
+      "what_it_is_not": "This is not a one-time copy.",
+      "mental_model": "Tied together.",
+      "example": "Two signals that always change together on the train line."
+    },
+    {
+      "term": "Bind",
+      "category": "Boundary",
+      "plain_meaning": "Bind means locking one thing to follow another.",
+      "what_it_is_not": "This is not a loose connection.",
+      "mental_model": "Locked together.",
+      "example": "A train car that must follow the engine."
+    },
+    {
+      "term": "Fetch",
+      "category": "Action",
+      "plain_meaning": "Fetch means pulling information from somewhere else.",
+      "what_it_is_not": "This does not push information out.",
+      "mental_model": "Reaching out to grab something.",
+      "example": "Checking another station to see where the train is."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Pull vs Push",
+      "category": "Meta",
+      "plain_meaning": "Pull means something updates because it is asked for. Push means something updates because it decides to send data out.",
+      "what_it_is_not": "This is not about speed or performance.",
+      "mental_model": "Being asked versus speaking up.",
+      "example": "A train moves because the next station asks for it to arrive, not because it moves on its own."
+    },
+    {
+      "term": "Demand",
+      "category": "Meta",
+      "plain_meaning": "Demand means something only updates when something else needs it.",
+      "what_it_is_not": "This is not constant updating.",
+      "mental_model": "Only acting when needed.",
+      "example": "The train only moves when a station expects it, not when no one is watching."
+    },
+    {
+      "term": "Active vs Inactive",
+      "category": "Meta",
+      "plain_meaning": "Active means something is currently being used. Inactive means it is not being used.",
+      "what_it_is_not": "Inactive does not mean deleted or broken.",
+      "mental_model": "On versus off.",
+      "example": "A train on the main track is active. A train parked on a side track is inactive."
+    },
+    {
+      "term": "Order of Evaluation",
+      "category": "Meta",
+      "plain_meaning": "Order of evaluation is the order in which things are checked and updated.",
+      "what_it_is_not": "This is not random.",
+      "mental_model": "What happens first, then next.",
+      "example": "Signals are checked before the train is allowed to move forward."
+    },
+    {
+      "term": "Side Effects",
+      "category": "Meta",
+      "plain_meaning": "Side effects are changes that happen beyond the main result.",
+      "what_it_is_not": "This is not the main output.",
+      "mental_model": "Extra changes.",
+      "example": "Changing a train signal also affects nearby tracks, even if that wasn’t the main goal."
+    },
+    {
+      "term": "Ownership",
+      "category": "Meta",
+      "plain_meaning": "Ownership means which part is responsible for the data.",
+      "what_it_is_not": "This is not shared responsibility.",
+      "mental_model": "Who is in charge.",
+      "example": "One station is responsible for scheduling the train, not every station."
+    },
+    {
+      "term": "Scope",
+      "category": "Meta",
+      "plain_meaning": "Scope means how far something can be seen or used.",
+      "what_it_is_not": "This is not about physical distance.",
+      "mental_model": "Reach.",
+      "example": "Some train signals affect the whole rail system, others only affect one station."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Operator Families",
+      "category": "Meta",
+      "plain_meaning": "Operator families are groups that tell you what kind of data an operator works with.",
+      "what_it_is_not": "This is not about what an operator looks like or how hard it is to use.",
+      "mental_model": "Different types of train cars for different cargo.",
+      "example": "Some train cars carry people, some carry boxes, some carry fuel."
+    },
+    {
+      "term": "TOP Family",
+      "category": "Meta",
+      "plain_meaning": "The TOP family works with images.",
+      "what_it_is_not": "These do not work with numbers or text.",
+      "mental_model": "Pictures moving through the system.",
+      "example": "The video of a train moving along the tracks."
+    },
+    {
+      "term": "CHOP Family",
+      "category": "Meta",
+      "plain_meaning": "The CHOP family works with changing numbers over time.",
+      "what_it_is_not": "These are not images.",
+      "mental_model": "Numbers that move.",
+      "example": "The train’s speed going up and down as it moves."
+    },
+    {
+      "term": "SOP Family",
+      "category": "Meta",
+      "plain_meaning": "The SOP family works with shapes and structure in space.",
+      "what_it_is_not": "These are not flat pictures.",
+      "mental_model": "Physical form.",
+      "example": "The shape of the train and the rails."
+    },
+    {
+      "term": "DAT Family",
+      "category": "Meta",
+      "plain_meaning": "The DAT family works with text, tables, and lists.",
+      "what_it_is_not": "These do not directly show images or motion.",
+      "mental_model": "Written information.",
+      "example": "A written schedule showing when the train stops."
+    },
+    {
+      "term": "MAT Family",
+      "category": "Meta",
+      "plain_meaning": "The MAT family works with how surfaces look.",
+      "what_it_is_not": "These do not define shape or movement.",
+      "mental_model": "Surface appearance.",
+      "example": "The color and finish painted on the train."
+    },
+    {
+      "term": "Family Compatibility",
+      "category": "Meta",
+      "plain_meaning": "Family compatibility means some families can connect directly and others cannot.",
+      "what_it_is_not": "This does not mean incompatible families are wrong or useless.",
+      "mental_model": "Matching cargo to the right train car.",
+      "example": "You don’t put liquid fuel in a passenger car."
+    },
+    {
+      "term": "Family Boundaries",
+      "category": "Meta",
+      "plain_meaning": "Family boundaries explain where data must change form to keep moving.",
+      "what_it_is_not": "This is not an error or failure.",
+      "mental_model": "Transfer stations.",
+      "example": "Moving cargo from one type of train car into another."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Shared Mem In",
+      "category": "Boundary",
+      "plain_meaning": "Shared Mem In receives data from another program using shared memory.",
+      "what_it_is_not": "This does not send data out or create data.",
+      "mental_model": "A shared pickup point.",
+      "example": "Another train system leaves cargo on a shared platform, and this train picks it up."
+    },
+
+    {
+      "term": "Setup",
+      "category": "Container",
+      "plain_meaning": "Setup contains the settings needed to identify and connect to shared memory.",
+      "what_it_is_not": "This does not change the data itself.",
+      "mental_model": "Connection details.",
+      "example": "Naming which platform the train should stop at."
+    },
+    {
+      "term": "Shared Mem Name",
+      "category": "Boundary",
+      "plain_meaning": "Shared Mem Name is the name used to find the shared memory.",
+      "what_it_is_not": "This is not the data inside the memory.",
+      "mental_model": "A label.",
+      "example": "The name painted on the platform where cargo is shared."
+    },
+    {
+      "term": "objsharedmem",
+      "category": "Meta",
+      "plain_meaning": "objsharedmem is the default shared memory name used by TouchDesigner.",
+      "what_it_is_not": "This is not special or required.",
+      "mental_model": "A default label.",
+      "example": "A standard platform name used unless changed."
+    },
+    {
+      "term": "Shared Mem Type",
+      "category": "Boundary",
+      "plain_meaning": "Shared Mem Type describes what kind of data is being received.",
+      "what_it_is_not": "This does not describe where the data comes from.",
+      "mental_model": "Type of cargo.",
+      "example": "Knowing whether the train is picking up boxes or liquid."
+    },
+
+    {
+      "term": "Extensions",
+      "category": "Container",
+      "plain_meaning": "Extensions holds extra behaviors added to the component.",
+      "what_it_is_not": "These are not required for basic operation.",
+      "mental_model": "Optional abilities.",
+      "example": "Extra equipment added to the train."
+    },
+    {
+      "term": "Promote Extension",
+      "category": "Action",
+      "plain_meaning": "Promote Extension makes extension features visible at a higher level.",
+      "what_it_is_not": "This does not change how the component works.",
+      "mental_model": "Making controls easier to reach.",
+      "example": "Moving train controls closer to the driver."
+    },
+    {
+      "term": "Re-Init Extension",
+      "category": "Action",
+      "plain_meaning": "Re-Init Extension resets the extension logic.",
+      "what_it_is_not": "This does not reset the whole component.",
+      "mental_model": "Restarting a helper system.",
+      "example": "Resetting the train’s onboard computer without stopping the engine."
+    },
+
+    {
+      "term": "Common",
+      "category": "Container",
+      "plain_meaning": "Common contains settings shared by many components.",
+      "what_it_is_not": "These settings are not unique to shared memory.",
+      "mental_model": "Standard controls.",
+      "example": "Rules that apply to many stations."
+    },
+    {
+      "term": "Viewer Active",
+      "category": "Mode",
+      "plain_meaning": "Viewer Active controls whether the viewer is updating.",
+      "what_it_is_not": "This does not stop the component itself.",
+      "mental_model": "Screen on or off.",
+      "example": "Turning the station monitor on or off."
+    },
+    {
+      "term": "Cook Type",
+      "category": "Mode",
+      "plain_meaning": "Cook Type controls when the component updates.",
+      "what_it_is_not": "This does not control what the component does.",
+      "mental_model": "When work happens.",
+      "example": "Deciding when the train should move."
+    },
+    {
+      "term": "Node View",
+      "category": "View",
+      "plain_meaning": "Node View controls how the component appears in the network.",
+      "what_it_is_not": "This does not affect behavior.",
+      "mental_model": "How it looks on the map.",
+      "example": "How a station icon looks on the rail map."
+    },
+    {
+      "term": "Clone",
+      "category": "Boundary",
+      "plain_meaning": "Clone allows the component to follow another one.",
+      "what_it_is_not": "This is not an independent copy.",
+      "mental_model": "Following a leader.",
+      "example": "One train copying the behavior of another."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Shared Mem Out",
+      "category": "Boundary",
+      "plain_meaning": "Shared Mem Out sends data from TouchDesigner to another program using shared memory.",
+      "what_it_is_not": "This does not receive data from other programs.",
+      "mental_model": "A shared drop-off point.",
+      "example": "Your train places cargo onto a shared platform so another train system can pick it up."
+    },
+
+    {
+      "term": "Setup",
+      "category": "Container",
+      "plain_meaning": "Setup contains the settings needed to send data to shared memory.",
+      "what_it_is_not": "This does not change the data itself.",
+      "mental_model": "Delivery details.",
+      "example": "Choosing which platform the train will leave cargo on."
+    },
+    {
+      "term": "Active",
+      "category": "Mode",
+      "plain_meaning": "Active controls whether data is being sent out or not.",
+      "what_it_is_not": "This does not delete or disconnect anything.",
+      "mental_model": "On or off.",
+      "example": "Deciding whether the train is currently dropping off cargo."
+    },
+    {
+      "term": "Shared Mem Name",
+      "category": "Boundary",
+      "plain_meaning": "Shared Mem Name is the name used so other programs know where to find the shared data.",
+      "what_it_is_not": "This is not the data itself.",
+      "mental_model": "A label.",
+      "example": "The name written on the shared platform."
+    },
+    {
+      "term": "objsharedmem",
+      "category": "Meta",
+      "plain_meaning": "objsharedmem is the default shared memory name used by TouchDesigner.",
+      "what_it_is_not": "This is not required or special.",
+      "mental_model": "A default label.",
+      "example": "A standard platform name used unless changed."
+    },
+    {
+      "term": "Shared Mem Type",
+      "category": "Boundary",
+      "plain_meaning": "Shared Mem Type describes what kind of data is being sent.",
+      "what_it_is_not": "This does not describe who receives it.",
+      "mental_model": "Type of cargo.",
+      "example": "Whether the train is sending boxes, liquid, or signals."
+    },
+
+    {
+      "term": "Extensions",
+      "category": "Container",
+      "plain_meaning": "Extensions holds extra behavior added to the component.",
+      "what_it_is_not": "These are not required for basic sending.",
+      "mental_model": "Optional abilities.",
+      "example": "Extra equipment added to the train for special situations."
+    },
+    {
+      "term": "Promote Extension",
+      "category": "Action",
+      "plain_meaning": "Promote Extension makes extension features visible at a higher level.",
+      "what_it_is_not": "This does not change how data is sent.",
+      "mental_model": "Making controls easier to reach.",
+      "example": "Moving train controls closer to the operator."
+    },
+    {
+      "term": "Re-Init Extension",
+      "category": "Action",
+      "plain_meaning": "Re-Init Extension restarts the extension logic.",
+      "what_it_is_not": "This does not restart the whole component.",
+      "mental_model": "Restarting a helper system.",
+      "example": "Resetting the train’s onboard helper computer."
+    },
+
+    {
+      "term": "Common",
+      "category": "Container",
+      "plain_meaning": "Common contains settings shared by many components.",
+      "what_it_is_not": "These settings are not specific to shared memory.",
+      "mental_model": "Standard controls.",
+      "example": "Rules that apply to many stations."
+    },
+    {
+      "term": "Viewer Active",
+      "category": "Mode",
+      "plain_meaning": "Viewer Active controls whether the viewer is updating.",
+      "what_it_is_not": "This does not stop data from being sent.",
+      "mental_model": "Screen on or off.",
+      "example": "Turning the station monitor on or off."
+    },
+    {
+      "term": "Cook Type",
+      "category": "Mode",
+      "plain_meaning": "Cook Type controls when the component updates.",
+      "what_it_is_not": "This does not change what is being sent.",
+      "mental_model": "When work happens.",
+      "example": "Deciding when the train should drop off cargo."
+    },
+    {
+      "term": "Node View",
+      "category": "View",
+      "plain_meaning": "Node View controls how the component appears in the network.",
+      "what_it_is_not": "This does not affect behavior.",
+      "mental_model": "Map appearance.",
+      "example": "How the station icon looks on the rail map."
+    },
+    {
+      "term": "Clone",
+      "category": "Boundary",
+      "plain_meaning": "Clone allows the component to follow another one.",
+      "what_it_is_not": "This is not an independent copy.",
+      "mental_model": "Following a leader.",
+      "example": "One train copying another train’s behavior."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Ambient Light",
+      "category": "Boundary",
+      "plain_meaning": "Ambient Light adds overall light that affects everything evenly.",
+      "what_it_is_not": "This is not a directional or focused light.",
+      "mental_model": "Light that is everywhere.",
+      "example": "Soft daylight that lights the whole train yard at once."
+    },
+
+    {
+      "term": "Light",
+      "category": "Container",
+      "plain_meaning": "Light contains settings that control the basic color and strength of the light.",
+      "what_it_is_not": "This does not control how objects are drawn.",
+      "mental_model": "Light settings.",
+      "example": "Deciding what color the daylight is around the train."
+    },
+    {
+      "term": "Light Color",
+      "category": "Boundary",
+      "plain_meaning": "Light Color sets the color of the ambient light.",
+      "what_it_is_not": "This does not change object colors directly.",
+      "mental_model": "Color of the light itself.",
+      "example": "Making the light around the train warm or cool."
+    },
+    {
+      "term": "Dimmer",
+      "category": "Boundary",
+      "plain_meaning": "Dimmer controls how strong the ambient light is.",
+      "what_it_is_not": "This does not turn the light into a spotlight.",
+      "mental_model": "Brightness level.",
+      "example": "Turning the overall daylight brighter or darker in the train yard."
+    },
+
+    {
+      "term": "Render",
+      "category": "Container",
+      "plain_meaning": "Render contains settings that affect how things are drawn.",
+      "what_it_is_not": "This does not change the light itself.",
+      "mental_model": "Drawing rules.",
+      "example": "Rules for how the train and tracks are drawn on screen."
+    },
+    {
+      "term": "Material Render",
+      "category": "Mode",
+      "plain_meaning": "Material Render controls whether materials are used when drawing.",
+      "what_it_is_not": "This does not change object shape.",
+      "mental_model": "Using paint rules or not.",
+      "example": "Deciding whether the train uses its paint and finish."
+    },
+    {
+      "term": "Draw Priority",
+      "category": "Boundary",
+      "plain_meaning": "Draw Priority controls which things are drawn first or last.",
+      "what_it_is_not": "This does not move objects in space.",
+      "mental_model": "Draw order.",
+      "example": "Deciding whether the train is drawn before or after the background."
+    },
+    {
+      "term": "Pick Priority",
+      "category": "Boundary",
+      "plain_meaning": "Pick Priority controls which object is chosen when things overlap.",
+      "what_it_is_not": "This does not affect drawing order.",
+      "mental_model": "Selection order.",
+      "example": "Choosing which train car gets selected when two overlap."
+    },
+    {
+      "term": "Wireframe Color",
+      "category": "Boundary",
+      "plain_meaning": "Wireframe Color sets the color used for wireframe display.",
+      "what_it_is_not": "This does not affect the final look.",
+      "mental_model": "Outline color.",
+      "example": "Changing the color of the outline drawn around the train."
+    },
+
+    {
+      "term": "Extensions",
+      "category": "Container",
+      "plain_meaning": "Extensions holds extra behavior added to the component.",
+      "what_it_is_not": "These are not required for basic use.",
+      "mental_model": "Extra abilities.",
+      "example": "Extra systems added to the train."
+    },
+    {
+      "term": "Extension",
+      "category": "Boundary",
+      "plain_meaning": "Extension refers to added logic attached to the component.",
+      "what_it_is_not": "This is not the main function.",
+      "mental_model": "Attached helper.",
+      "example": "A helper computer added to the train."
+    },
+    {
+      "term": "Object",
+      "category": "Boundary",
+      "plain_meaning": "Object refers to the component itself as a controllable item.",
+      "what_it_is_not": "This is not the data it produces.",
+      "mental_model": "The thing itself.",
+      "example": "The train, not the cargo it carries."
+    },
+    {
+      "term": "Re-Init Extensions",
+      "category": "Action",
+      "plain_meaning": "Re-Init Extensions resets the extension logic.",
+      "what_it_is_not": "This does not reset the whole component.",
+      "mental_model": "Restart helpers.",
+      "example": "Restarting the train’s helper systems."
+    },
+    {
+      "term": "Init Extensions on Start",
+      "category": "Mode",
+      "plain_meaning": "Init Extensions on Start controls whether extensions start automatically.",
+      "what_it_is_not": "This does not start the main component.",
+      "mental_model": "Auto-start helpers.",
+      "example": "Helper systems turning on when the train starts."
+    },
+
+    {
+      "term": "Common",
+      "category": "Container",
+      "plain_meaning": "Common contains settings shared by many components.",
+      "what_it_is_not": "These are not unique to lighting.",
+      "mental_model": "Standard controls.",
+      "example": "Rules shared by many train stations."
+    },
+    {
+      "term": "Parent Shortcut",
+      "category": "Boundary",
+      "plain_meaning": "Parent Shortcut is a quick way to refer to the parent component.",
+      "what_it_is_not": "This is not a copy.",
+      "mental_model": "Shortcut path.",
+      "example": "A quick route back to the main station."
+    },
+    {
+      "term": "Global OP Shortcut",
+      "category": "Boundary",
+      "plain_meaning": "Global OP Shortcut is a name used to access this component globally.",
+      "what_it_is_not": "This is not local only.",
+      "mental_model": "Global name.",
+      "example": "A train station name known across the whole system."
+    },
+    {
+      "term": "Internal OP Shortcut",
+      "category": "Boundary",
+      "plain_meaning": "Internal OP Shortcut is a name used inside the component.",
+      "what_it_is_not": "This is not visible everywhere.",
+      "mental_model": "Local nickname.",
+      "example": "A nickname used only inside one station."
+    },
+    {
+      "term": "Node View",
+      "category": "View",
+      "plain_meaning": "Node View controls how the component looks in the network.",
+      "what_it_is_not": "This does not affect behavior.",
+      "mental_model": "Map appearance.",
+      "example": "How the station icon looks on the rail map."
+    },
+    {
+      "term": "Enable Cloning",
+      "category": "Mode",
+      "plain_meaning": "Enable Cloning allows the component to follow another one.",
+      "what_it_is_not": "This does not make an independent copy.",
+      "mental_model": "Follow mode.",
+      "example": "One train copying another train’s actions."
+    },
+    {
+      "term": "Clone Master",
+      "category": "Boundary",
+      "plain_meaning": "Clone Master is the component being followed.",
+      "what_it_is_not": "This is not a separate copy.",
+      "mental_model": "Leader.",
+      "example": "The lead train others follow."
+    },
+    {
+      "term": "Load on Demand",
+      "category": "Mode",
+      "plain_meaning": "Load on Demand means parts load only when needed.",
+      "what_it_is_not": "This is not always loaded.",
+      "mental_model": "Load when asked.",
+      "example": "A train that only arrives when requested."
+    },
+    {
+      "term": "Enable External TOX",
+      "category": "Mode",
+      "plain_meaning": "Enable External TOX allows the component to load from a file.",
+      "what_it_is_not": "This is not an internal component.",
+      "mental_model": "Loaded from outside.",
+      "example": "Bringing in a train car built elsewhere."
+    },
+    {
+      "term": "External TOX Path",
+      "category": "Boundary",
+      "plain_meaning": "External TOX Path is where the external file is located.",
+      "what_it_is_not": "This is not the file itself.",
+      "mental_model": "Address.",
+      "example": "The address of the train factory."
+    },
+    {
+      "term": "Reload Custom Parameters",
+      "category": "Action",
+      "plain_meaning": "Reload Custom Parameters refreshes custom settings.",
+      "what_it_is_not": "This does not reload everything.",
+      "mental_model": "Refresh settings.",
+      "example": "Updating custom train controls."
+    },
+    {
+      "term": "Reload Built-In Parameters",
+      "category": "Action",
+      "plain_meaning": "Reload Built-In Parameters refreshes default settings.",
+      "what_it_is_not": "This does not reload custom settings.",
+      "mental_model": "Reset defaults.",
+      "example": "Refreshing standard train controls."
+    },
+    {
+      "term": "Sub-Component to Load",
+      "category": "Boundary",
+      "plain_meaning": "Sub-Component to Load selects which part to load from a file.",
+      "what_it_is_not": "This is not the whole file.",
+      "mental_model": "Choose a part.",
+      "example": "Selecting one train car from a full train set."
+    },
+    {
+      "term": "Relative File Path Behavior",
+      "category": "Mode",
+      "plain_meaning": "Relative File Path Behavior controls how file paths are handled.",
+      "what_it_is_not": "This does not change the file.",
+      "mental_model": "Path rules.",
+      "example": "Deciding how directions to the train depot are interpreted."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Blend",
+      "category": "Boundary",
+      "plain_meaning": "Blend combines multiple things into one result.",
+      "what_it_is_not": "This does not create new content by itself.",
+      "mental_model": "Mixing.",
+      "example": "Two train routes merging into one shared track."
+    },
+
+    {
+      "term": "Blend Type",
+      "category": "Mode",
+      "plain_meaning": "Blend Type decides how things are combined.",
+      "what_it_is_not": "This does not choose what is being combined.",
+      "mental_model": "Mixing rule.",
+      "example": "Deciding whether two trains take turns or overlap."
+    },
+    {
+      "term": "Sequence",
+      "category": "Mode",
+      "plain_meaning": "Sequence controls the order things are combined.",
+      "what_it_is_not": "This does not change the content itself.",
+      "mental_model": "Order of mixing.",
+      "example": "Which train enters the track first."
+    },
+    {
+      "term": "Reset Frame",
+      "category": "Action",
+      "plain_meaning": "Reset Frame resets timing used by the blend.",
+      "what_it_is_not": "This does not reset the whole system.",
+      "mental_model": "Start over point.",
+      "example": "Sending the train back to the start of the schedule."
+    },
+    {
+      "term": "Weight",
+      "category": "Boundary",
+      "plain_meaning": "Weight controls how much influence something has.",
+      "what_it_is_not": "This does not turn things on or off.",
+      "mental_model": "Importance level.",
+      "example": "One train having more priority on the track."
+    },
+
+    {
+      "term": "Mask",
+      "category": "Boundary",
+      "plain_meaning": "Mask limits where blending happens.",
+      "what_it_is_not": "This does not change the blended content.",
+      "mental_model": "Allowed area.",
+      "example": "Only blending trains on certain sections of track."
+    },
+
+    {
+      "term": "Normal Offset",
+      "category": "Boundary",
+      "plain_meaning": "Normal Offset shifts blending along a surface direction.",
+      "what_it_is_not": "This does not rotate objects.",
+      "mental_model": "Push or pull.",
+      "example": "Sliding the train slightly sideways on the track."
+    },
+    {
+      "term": "Orient",
+      "category": "Mode",
+      "plain_meaning": "Orient controls how direction is aligned.",
+      "what_it_is_not": "This does not move position.",
+      "mental_model": "Facing direction.",
+      "example": "Which way the train is pointing."
+    },
+    {
+      "term": "Axes",
+      "category": "Boundary",
+      "plain_meaning": "Axes define directions used for orientation.",
+      "what_it_is_not": "These are not positions.",
+      "mental_model": "Direction lines.",
+      "example": "Forward, left, and up directions for the train."
+    },
+    {
+      "term": "Short Rotation",
+      "category": "Mode",
+      "plain_meaning": "Short Rotation chooses the shortest turn direction.",
+      "what_it_is_not": "This does not change final orientation.",
+      "mental_model": "Shortest turn.",
+      "example": "The train turning the quickest way to face forward."
+    },
+
+    {
+      "term": "Xform",
+      "category": "Container",
+      "plain_meaning": "Xform controls position, rotation, and size.",
+      "what_it_is_not": "This does not change appearance or color.",
+      "mental_model": "Move, turn, resize.",
+      "example": "Moving and rotating the train on the tracks."
+    },
+    {
+      "term": "Transform Order",
+      "category": "Mode",
+      "plain_meaning": "Transform Order controls the order of movement steps.",
+      "what_it_is_not": "This does not change the values themselves.",
+      "mental_model": "Step order.",
+      "example": "Turning the train before moving it."
+    },
+    {
+      "term": "Rotate Order",
+      "category": "Mode",
+      "plain_meaning": "Rotate Order controls how rotations are applied.",
+      "what_it_is_not": "This does not set rotation amount.",
+      "mental_model": "Rotation sequence.",
+      "example": "Which way the train turns first."
+    },
+    {
+      "term": "Translate",
+      "category": "Boundary",
+      "plain_meaning": "Translate moves position.",
+      "what_it_is_not": "This does not rotate or resize.",
+      "mental_model": "Move.",
+      "example": "The train moving forward."
+    },
+    {
+      "term": "Rotate",
+      "category": "Boundary",
+      "plain_meaning": "Rotate turns orientation.",
+      "what_it_is_not": "This does not move position.",
+      "mental_model": "Turn.",
+      "example": "The train turning a corner."
+    },
+    {
+      "term": "Scale",
+      "category": "Boundary",
+      "plain_meaning": "Scale changes size.",
+      "what_it_is_not": "This does not move or rotate.",
+      "mental_model": "Grow or shrink.",
+      "example": "The train appearing bigger or smaller."
+    },
+    {
+      "term": "Pivot",
+      "category": "Boundary",
+      "plain_meaning": "Pivot sets the point rotations happen around.",
+      "what_it_is_not": "This does not move the object.",
+      "mental_model": "Hinge point.",
+      "example": "The axle the train turns around."
+    },
+    {
+      "term": "Uniform Scale",
+      "category": "Mode",
+      "plain_meaning": "Uniform Scale keeps size changes equal in all directions.",
+      "what_it_is_not": "This does not control position.",
+      "mental_model": "Even scaling.",
+      "example": "The train growing evenly."
+    },
+    {
+      "term": "Parent Transform Source",
+      "category": "Boundary",
+      "plain_meaning": "Parent Transform Source chooses where inherited movement comes from.",
+      "what_it_is_not": "This is not manual movement.",
+      "mental_model": "Follow source.",
+      "example": "A train car following the engine."
+    },
+    {
+      "term": "Look At",
+      "category": "Mode",
+      "plain_meaning": "Look At makes something face a target.",
+      "what_it_is_not": "This does not move position.",
+      "mental_model": "Face toward.",
+      "example": "The train always facing the next station."
+    },
+    {
+      "term": "Path OP",
+      "category": "Boundary",
+      "plain_meaning": "Path OP defines a path to follow.",
+      "what_it_is_not": "This does not define speed.",
+      "mental_model": "Route.",
+      "example": "The track the train follows."
+    },
+    {
+      "term": "Orient Along Path",
+      "category": "Mode",
+      "plain_meaning": "Orient Along Path makes orientation follow the path direction.",
+      "what_it_is_not": "This does not change the path itself.",
+      "mental_model": "Turn with track.",
+      "example": "The train turning as the track curves."
+    },
+
+    {
+      "term": "Pre-Xform",
+      "category": "Container",
+      "plain_meaning": "Pre-Xform applies movement before the main transform.",
+      "what_it_is_not": "This is not the final transform.",
+      "mental_model": "Move before main move.",
+      "example": "Adjusting the train before placing it on the track."
+    },
+    {
+      "term": "Apply Pre-Transform",
+      "category": "Mode",
+      "plain_meaning": "Apply Pre-Transform turns pre-transform on or off.",
+      "what_it_is_not": "This does not change main transform values.",
+      "mental_model": "Enable early move.",
+      "example": "Deciding whether the early adjustment is used."
+    },
+    {
+      "term": "Reset Transform",
+      "category": "Action",
+      "plain_meaning": "Reset Transform clears transform values.",
+      "what_it_is_not": "This does not delete the object.",
+      "mental_model": "Zero out.",
+      "example": "Putting the train back to the starting position."
+    },
+    {
+      "term": "Commit to Main Transform",
+      "category": "Action",
+      "plain_meaning": "Commit to Main Transform moves pre-transform into the main transform.",
+      "what_it_is_not": "This does not add a second transform.",
+      "mental_model": "Make it permanent.",
+      "example": "Locking in the train’s adjusted position."
+    },
+
+    {
+      "term": "Render",
+      "category": "Container",
+      "plain_meaning": "Render controls how things are drawn.",
+      "what_it_is_not": "This does not move or change data.",
+      "mental_model": "Drawing rules.",
+      "example": "Rules for how the train appears on screen."
+    },
+    {
+      "term": "Material",
+      "category": "Boundary",
+      "plain_meaning": "Material defines surface appearance.",
+      "what_it_is_not": "This does not define shape.",
+      "mental_model": "Surface rules.",
+      "example": "The paint on the train."
+    },
+    {
+      "term": "Light Mask",
+      "category": "Boundary",
+      "plain_meaning": "Light Mask controls which lights affect this object.",
+      "what_it_is_not": "This does not change the lights themselves.",
+      "mental_model": "Light filter.",
+      "example": "Only certain lights shining on the train."
+    },
+
+    {
+      "term": "Extensions",
+      "category": "Container",
+      "plain_meaning": "Extensions hold extra behavior logic.",
+      "what_it_is_not": "These are not required for basic use.",
+      "mental_model": "Extra helpers.",
+      "example": "Optional systems added to the train."
+    },
+
+    {
+      "term": "Common",
+      "category": "Container",
+      "plain_meaning": "Common contains shared component settings.",
+      "what_it_is_not": "These are not unique to blending.",
+      "mental_model": "Standard settings.",
+      "example": "Rules shared by many stations."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Blend",
+      "category": "Boundary",
+      "plain_meaning": "Blend combines multiple things into one result.",
+      "what_it_is_not": "This does not create new content by itself.",
+      "mental_model": "Mixing.",
+      "example": "Two train routes merging into one shared track."
+    },
+
+    {
+      "term": "Blend Type",
+      "category": "Mode",
+      "plain_meaning": "Blend Type decides how things are combined.",
+      "what_it_is_not": "This does not choose what is being combined.",
+      "mental_model": "Mixing rule.",
+      "example": "Deciding whether two trains take turns or overlap."
+    },
+    {
+      "term": "Sequence",
+      "category": "Mode",
+      "plain_meaning": "Sequence controls the order things are combined.",
+      "what_it_is_not": "This does not change the content itself.",
+      "mental_model": "Order of mixing.",
+      "example": "Which train enters the track first."
+    },
+    {
+      "term": "Reset Frame",
+      "category": "Action",
+      "plain_meaning": "Reset Frame resets timing used by the blend.",
+      "what_it_is_not": "This does not reset the whole system.",
+      "mental_model": "Start over point.",
+      "example": "Sending the train back to the start of the schedule."
+    },
+    {
+      "term": "Weight",
+      "category": "Boundary",
+      "plain_meaning": "Weight controls how much influence something has.",
+      "what_it_is_not": "This does not turn things on or off.",
+      "mental_model": "Importance level.",
+      "example": "One train having more priority on the track."
+    },
+
+    {
+      "term": "Mask",
+      "category": "Boundary",
+      "plain_meaning": "Mask limits where blending happens.",
+      "what_it_is_not": "This does not change the blended content.",
+      "mental_model": "Allowed area.",
+      "example": "Only blending trains on certain sections of track."
+    },
+
+    {
+      "term": "Normal Offset",
+      "category": "Boundary",
+      "plain_meaning": "Normal Offset shifts blending along a surface direction.",
+      "what_it_is_not": "This does not rotate objects.",
+      "mental_model": "Push or pull.",
+      "example": "Sliding the train slightly sideways on the track."
+    },
+    {
+      "term": "Orient",
+      "category": "Mode",
+      "plain_meaning": "Orient controls how direction is aligned.",
+      "what_it_is_not": "This does not move position.",
+      "mental_model": "Facing direction.",
+      "example": "Which way the train is pointing."
+    },
+    {
+      "term": "Axes",
+      "category": "Boundary",
+      "plain_meaning": "Axes define directions used for orientation.",
+      "what_it_is_not": "These are not positions.",
+      "mental_model": "Direction lines.",
+      "example": "Forward, left, and up directions for the train."
+    },
+    {
+      "term": "Short Rotation",
+      "category": "Mode",
+      "plain_meaning": "Short Rotation chooses the shortest turn direction.",
+      "what_it_is_not": "This does not change final orientation.",
+      "mental_model": "Shortest turn.",
+      "example": "The train turning the quickest way to face forward."
+    },
+
+    {
+      "term": "Xform",
+      "category": "Container",
+      "plain_meaning": "Xform controls position, rotation, and size.",
+      "what_it_is_not": "This does not change appearance or color.",
+      "mental_model": "Move, turn, resize.",
+      "example": "Moving and rotating the train on the tracks."
+    },
+    {
+      "term": "Transform Order",
+      "category": "Mode",
+      "plain_meaning": "Transform Order controls the order of movement steps.",
+      "what_it_is_not": "This does not change the values themselves.",
+      "mental_model": "Step order.",
+      "example": "Turning the train before moving it."
+    },
+    {
+      "term": "Rotate Order",
+      "category": "Mode",
+      "plain_meaning": "Rotate Order controls how rotations are applied.",
+      "what_it_is_not": "This does not set rotation amount.",
+      "mental_model": "Rotation sequence.",
+      "example": "Which way the train turns first."
+    },
+    {
+      "term": "Translate",
+      "category": "Boundary",
+      "plain_meaning": "Translate moves position.",
+      "what_it_is_not": "This does not rotate or resize.",
+      "mental_model": "Move.",
+      "example": "The train moving forward."
+    },
+    {
+      "term": "Rotate",
+      "category": "Boundary",
+      "plain_meaning": "Rotate turns orientation.",
+      "what_it_is_not": "This does not move position.",
+      "mental_model": "Turn.",
+      "example": "The train turning a corner."
+    },
+    {
+      "term": "Scale",
+      "category": "Boundary",
+      "plain_meaning": "Scale changes size.",
+      "what_it_is_not": "This does not move or rotate.",
+      "mental_model": "Grow or shrink.",
+      "example": "The train appearing bigger or smaller."
+    },
+    {
+      "term": "Pivot",
+      "category": "Boundary",
+      "plain_meaning": "Pivot sets the point rotations happen around.",
+      "what_it_is_not": "This does not move the object.",
+      "mental_model": "Hinge point.",
+      "example": "The axle the train turns around."
+    },
+    {
+      "term": "Uniform Scale",
+      "category": "Mode",
+      "plain_meaning": "Uniform Scale keeps size changes equal in all directions.",
+      "what_it_is_not": "This does not control position.",
+      "mental_model": "Even scaling.",
+      "example": "The train growing evenly."
+    },
+    {
+      "term": "Parent Transform Source",
+      "category": "Boundary",
+      "plain_meaning": "Parent Transform Source chooses where inherited movement comes from.",
+      "what_it_is_not": "This is not manual movement.",
+      "mental_model": "Follow source.",
+      "example": "A train car following the engine."
+    },
+    {
+      "term": "Look At",
+      "category": "Mode",
+      "plain_meaning": "Look At makes something face a target.",
+      "what_it_is_not": "This does not move position.",
+      "mental_model": "Face toward.",
+      "example": "The train always facing the next station."
+    },
+    {
+      "term": "Path OP",
+      "category": "Boundary",
+      "plain_meaning": "Path OP defines a path to follow.",
+      "what_it_is_not": "This does not define speed.",
+      "mental_model": "Route.",
+      "example": "The track the train follows."
+    },
+    {
+      "term": "Orient Along Path",
+      "category": "Mode",
+      "plain_meaning": "Orient Along Path makes orientation follow the path direction.",
+      "what_it_is_not": "This does not change the path itself.",
+      "mental_model": "Turn with track.",
+      "example": "The train turning as the track curves."
+    },
+
+    {
+      "term": "Pre-Xform",
+      "category": "Container",
+      "plain_meaning": "Pre-Xform applies movement before the main transform.",
+      "what_it_is_not": "This is not the final transform.",
+      "mental_model": "Move before main move.",
+      "example": "Adjusting the train before placing it on the track."
+    },
+    {
+      "term": "Apply Pre-Transform",
+      "category": "Mode",
+      "plain_meaning": "Apply Pre-Transform turns pre-transform on or off.",
+      "what_it_is_not": "This does not change main transform values.",
+      "mental_model": "Enable early move.",
+      "example": "Deciding whether the early adjustment is used."
+    },
+    {
+      "term": "Reset Transform",
+      "category": "Action",
+      "plain_meaning": "Reset Transform clears transform values.",
+      "what_it_is_not": "This does not delete the object.",
+      "mental_model": "Zero out.",
+      "example": "Putting the train back to the starting position."
+    },
+    {
+      "term": "Commit to Main Transform",
+      "category": "Action",
+      "plain_meaning": "Commit to Main Transform moves pre-transform into the main transform.",
+      "what_it_is_not": "This does not add a second transform.",
+      "mental_model": "Make it permanent.",
+      "example": "Locking in the train’s adjusted position."
+    },
+
+    {
+      "term": "Render",
+      "category": "Container",
+      "plain_meaning": "Render controls how things are drawn.",
+      "what_it_is_not": "This does not move or change data.",
+      "mental_model": "Drawing rules.",
+      "example": "Rules for how the train appears on screen."
+    },
+    {
+      "term": "Material",
+      "category": "Boundary",
+      "plain_meaning": "Material defines surface appearance.",
+      "what_it_is_not": "This does not define shape.",
+      "mental_model": "Surface rules.",
+      "example": "The paint on the train."
+    },
+    {
+      "term": "Light Mask",
+      "category": "Boundary",
+      "plain_meaning": "Light Mask controls which lights affect this object.",
+      "what_it_is_not": "This does not change the lights themselves.",
+      "mental_model": "Light filter.",
+      "example": "Only certain lights shining on the train."
+    },
+
+    {
+      "term": "Extensions",
+      "category": "Container",
+      "plain_meaning": "Extensions hold extra behavior logic.",
+      "what_it_is_not": "These are not required for basic use.",
+      "mental_model": "Extra helpers.",
+      "example": "Optional systems added to the train."
+    },
+
+    {
+      "term": "Common",
+      "category": "Container",
+      "plain_meaning": "Common contains shared component settings.",
+      "what_it_is_not": "These are not unique to blending.",
+      "mental_model": "Standard settings.",
+      "example": "Rules shared by many stations."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Bone",
+      "category": "Boundary",
+      "plain_meaning": "A Bone controls movement and bending for connected parts, usually in a chain.",
+      "what_it_is_not": "This is not a visible object by itself.",
+      "mental_model": "A joint in a skeleton.",
+      "example": "Each car of a train connected so the whole train can bend along the track."
+    },
+
+    {
+      "term": "Xform",
+      "category": "Container",
+      "plain_meaning": "Xform controls position, rotation, and size.",
+      "what_it_is_not": "This does not control bending behavior.",
+      "mental_model": "Move, turn, resize.",
+      "example": "Placing the train on the tracks and pointing it forward."
+    },
+    {
+      "term": "Transform Order",
+      "category": "Mode",
+      "plain_meaning": "Transform Order sets the order movement steps happen.",
+      "what_it_is_not": "This does not change movement values.",
+      "mental_model": "Step order.",
+      "example": "Turning the train before moving it."
+    },
+    {
+      "term": "Rotate Order",
+      "category": "Mode",
+      "plain_meaning": "Rotate Order sets the order rotations are applied.",
+      "what_it_is_not": "This does not set how much rotation happens.",
+      "mental_model": "Turn sequence.",
+      "example": "Which way the train turns first."
+    },
+    {
+      "term": "Translate",
+      "category": "Boundary",
+      "plain_meaning": "Translate moves position.",
+      "what_it_is_not": "This does not rotate or resize.",
+      "mental_model": "Move.",
+      "example": "The train moving forward."
+    },
+    {
+      "term": "Rotate",
+      "category": "Boundary",
+      "plain_meaning": "Rotate turns direction.",
+      "what_it_is_not": "This does not move position.",
+      "mental_model": "Turn.",
+      "example": "The train turning a corner."
+    },
+    {
+      "term": "Scale",
+      "category": "Boundary",
+      "plain_meaning": "Scale changes size.",
+      "what_it_is_not": "This does not move position.",
+      "mental_model": "Grow or shrink.",
+      "example": "The train appearing larger."
+    },
+    {
+      "term": "Pivot",
+      "category": "Boundary",
+      "plain_meaning": "Pivot sets the point rotation happens around.",
+      "what_it_is_not": "This does not move the object.",
+      "mental_model": "Hinge point.",
+      "example": "The axle the train turns around."
+    },
+    {
+      "term": "Uniform Scale",
+      "category": "Mode",
+      "plain_meaning": "Uniform Scale keeps size changes equal in all directions.",
+      "what_it_is_not": "This does not control position.",
+      "mental_model": "Even sizing.",
+      "example": "The train growing evenly."
+    },
+    {
+      "term": "Parent Transform Source",
+      "category": "Boundary",
+      "plain_meaning": "Parent Transform Source decides what movement this follows.",
+      "what_it_is_not": "This is not manual movement.",
+      "mental_model": "Follow the leader.",
+      "example": "A train car following the engine."
+    },
+    {
+      "term": "Look At",
+      "category": "Mode",
+      "plain_meaning": "Look At makes the bone face a target.",
+      "what_it_is_not": "This does not move position.",
+      "mental_model": "Face toward.",
+      "example": "The train always facing the next station."
+    },
+    {
+      "term": "Forward Direction",
+      "category": "Boundary",
+      "plain_meaning": "Forward Direction defines what direction counts as forward.",
+      "what_it_is_not": "This does not move the bone.",
+      "mental_model": "Which way is front.",
+      "example": "Defining the front of the train."
+    },
+    {
+      "term": "Up Vector",
+      "category": "Boundary",
+      "plain_meaning": "Up Vector defines which direction is considered up.",
+      "what_it_is_not": "This does not rotate by itself.",
+      "mental_model": "Which way is up.",
+      "example": "Keeping the train upright."
+    },
+    {
+      "term": "Path OP",
+      "category": "Boundary",
+      "plain_meaning": "Path OP defines a path to follow.",
+      "what_it_is_not": "This does not define speed.",
+      "mental_model": "Route.",
+      "example": "The tracks the train follows."
+    },
+    {
+      "term": "Roll Position",
+      "category": "Boundary",
+      "plain_meaning": "Roll Position controls rotation along the path.",
+      "what_it_is_not": "This does not move along the path.",
+      "mental_model": "Twist.",
+      "example": "The train tilting slightly on a curve."
+    },
+    {
+      "term": "Orient Along Path",
+      "category": "Mode",
+      "plain_meaning": "Orient Along Path makes direction follow the path.",
+      "what_it_is_not": "This does not change the path.",
+      "mental_model": "Turn with the track.",
+      "example": "The train turning as the track curves."
+    },
+    {
+      "term": "Orient Up Vector",
+      "category": "Mode",
+      "plain_meaning": "Orient Up Vector keeps orientation aligned upright.",
+      "what_it_is_not": "This does not control movement.",
+      "mental_model": "Stay upright.",
+      "example": "The train staying upright on slopes."
+    },
+    {
+      "term": "Auto Bank Factor",
+      "category": "Boundary",
+      "plain_meaning": "Auto Bank Factor controls how much automatic tilt happens on turns.",
+      "what_it_is_not": "This does not move forward.",
+      "mental_model": "Automatic leaning.",
+      "example": "The train leaning into curves."
+    },
+
+    {
+      "term": "Pre-Xform",
+      "category": "Container",
+      "plain_meaning": "Pre-Xform applies movement before the main transform.",
+      "what_it_is_not": "This is not the final position.",
+      "mental_model": "Early adjustment.",
+      "example": "Adjusting the train before placing it."
+    },
+    {
+      "term": "Apply Pre-Transform",
+      "category": "Mode",
+      "plain_meaning": "Apply Pre-Transform turns the pre-transform on or off.",
+      "what_it_is_not": "This does not change main transform values.",
+      "mental_model": "Enable early move.",
+      "example": "Choosing whether early adjustments count."
+    },
+    {
+      "term": "Reset Transform",
+      "category": "Action",
+      "plain_meaning": "Reset Transform clears transform values.",
+      "what_it_is_not": "This does not delete the bone.",
+      "mental_model": "Zero out.",
+      "example": "Putting the train back to start."
+    },
+    {
+      "term": "Commit to Main Transform",
+      "category": "Action",
+      "plain_meaning": "Commit to Main Transform makes the pre-transform permanent.",
+      "what_it_is_not": "This does not add another transform.",
+      "mental_model": "Lock it in.",
+      "example": "Fixing the train’s position permanently."
+    },
+
+    {
+      "term": "Bone Settings",
+      "category": "Container",
+      "plain_meaning": "Bone settings control bending and limits.",
+      "what_it_is_not": "These do not move the whole chain.",
+      "mental_model": "Joint rules.",
+      "example": "Rules for how train cars can bend."
+    },
+    {
+      "term": "Display Link",
+      "category": "View",
+      "plain_meaning": "Display Link shows the bone connection.",
+      "what_it_is_not": "This does not affect behavior.",
+      "mental_model": "Visible joint.",
+      "example": "Seeing the connection between train cars."
+    },
+    {
+      "term": "Rest Angles",
+      "category": "Boundary",
+      "plain_meaning": "Rest Angles define the default angle.",
+      "what_it_is_not": "This is not movement.",
+      "mental_model": "Neutral position.",
+      "example": "The train when not turning."
+    },
+    {
+      "term": "Bone Length",
+      "category": "Boundary",
+      "plain_meaning": "Bone Length controls how long the bone is.",
+      "what_it_is_not": "This does not control rotation.",
+      "mental_model": "Length.",
+      "example": "Distance between train joints."
+    },
+    {
+      "term": "Dampening",
+      "category": "Mode",
+      "plain_meaning": "Dampening softens movement.",
+      "what_it_is_not": "This does not stop movement.",
+      "mental_model": "Smoothing.",
+      "example": "The train not snapping suddenly."
+    },
+
+    {
+      "term": "Capture",
+      "category": "Container",
+      "plain_meaning": "Capture controls how geometry is influenced by bones.",
+      "what_it_is_not": "This does not move bones.",
+      "mental_model": "Influence area.",
+      "example": "Which train cars are affected by a joint."
+    },
+    {
+      "term": "Display Capture Geometry",
+      "category": "View",
+      "plain_meaning": "Display Capture Geometry shows the affected area.",
+      "what_it_is_not": "This does not change behavior.",
+      "mental_model": "Show influence.",
+      "example": "Seeing which cars are affected by a joint."
+    },
+
+    {
+      "term": "Render",
+      "category": "Container",
+      "plain_meaning": "Render controls how things are drawn.",
+      "what_it_is_not": "This does not change movement.",
+      "mental_model": "Drawing rules.",
+      "example": "How the train is drawn on screen."
+    },
+
+    {
+      "term": "Extensions",
+      "category": "Container",
+      "plain_meaning": "Extensions hold extra behavior logic.",
+      "what_it_is_not": "These are not required.",
+      "mental_model": "Helpers.",
+      "example": "Extra systems on the train."
+    },
+
+    {
+      "term": "Common",
+      "category": "Container",
+      "plain_meaning": "Common contains shared component settings.",
+      "what_it_is_not": "These are not bone-specific.",
+      "mental_model": "Standard settings.",
+      "example": "Rules shared by many stations."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Camera",
+      "category": "Boundary",
+      "plain_meaning": "Camera defines how the scene is viewed.",
+      "what_it_is_not": "This does not create objects or light.",
+      "mental_model": "Eyes looking at the world.",
+      "example": "Where the train yard is being viewed from."
+    },
+
+    {
+      "term": "Xform",
+      "category": "Container",
+      "plain_meaning": "Xform controls where the camera is, how it is turned, and its size scale.",
+      "what_it_is_not": "This does not control what the camera sees.",
+      "mental_model": "Moving the viewpoint.",
+      "example": "Walking around the train yard and turning your head."
+    },
+    {
+      "term": "Transform Order",
+      "category": "Mode",
+      "plain_meaning": "Transform Order sets the order that movement steps happen.",
+      "what_it_is_not": "This does not change the values themselves.",
+      "mental_model": "Step sequence.",
+      "example": "Turning before stepping forward."
+    },
+    {
+      "term": "Rotate Order",
+      "category": "Mode",
+      "plain_meaning": "Rotate Order sets the order rotations are applied.",
+      "what_it_is_not": "This does not change how much rotation there is.",
+      "mental_model": "Turn sequence.",
+      "example": "Looking left before looking up."
+    },
+    {
+      "term": "Translate",
+      "category": "Boundary",
+      "plain_meaning": "Translate moves the camera.",
+      "what_it_is_not": "This does not rotate the camera.",
+      "mental_model": "Move position.",
+      "example": "Walking closer to the train."
+    },
+    {
+      "term": "Rotate",
+      "category": "Boundary",
+      "plain_meaning": "Rotate turns the camera.",
+      "what_it_is_not": "This does not move the camera.",
+      "mental_model": "Turn view.",
+      "example": "Looking toward a different track."
+    },
+    {
+      "term": "Scale",
+      "category": "Boundary",
+      "plain_meaning": "Scale changes the camera’s scale space.",
+      "what_it_is_not": "This is not zoom.",
+      "mental_model": "Resize space.",
+      "example": "Changing how large the world feels."
+    },
+    {
+      "term": "Pivot",
+      "category": "Boundary",
+      "plain_meaning": "Pivot sets the point rotations happen around.",
+      "what_it_is_not": "This does not move the camera by itself.",
+      "mental_model": "Turn center.",
+      "example": "Turning your head around your neck."
+    },
+    {
+      "term": "Uniform Scale",
+      "category": "Mode",
+      "plain_meaning": "Uniform Scale keeps scale equal in all directions.",
+      "what_it_is_not": "This does not affect position.",
+      "mental_model": "Even scaling.",
+      "example": "Everything shrinking evenly."
+    },
+    {
+      "term": "Parent Transform Source",
+      "category": "Boundary",
+      "plain_meaning": "Parent Transform Source makes the camera follow another object.",
+      "what_it_is_not": "This is not manual control.",
+      "mental_model": "Follow mode.",
+      "example": "The camera riding on a train."
+    },
+    {
+      "term": "Look At",
+      "category": "Mode",
+      "plain_meaning": "Look At makes the camera face a target.",
+      "what_it_is_not": "This does not move the camera.",
+      "mental_model": "Always face.",
+      "example": "The camera always looking at the train."
+    },
+    {
+      "term": "Look At Up Vector",
+      "category": "Boundary",
+      "plain_meaning": "Look At Up Vector defines what direction is considered up while looking.",
+      "what_it_is_not": "This does not change the target.",
+      "mental_model": "Which way is upright.",
+      "example": "Keeping the camera from flipping upside down."
+    },
+    {
+      "term": "Path OP",
+      "category": "Boundary",
+      "plain_meaning": "Path OP defines a path the camera can follow.",
+      "what_it_is_not": "This does not define speed.",
+      "mental_model": "Camera track.",
+      "example": "A rail the camera moves along beside the train."
+    },
+
+    {
+      "term": "Pre-Xform",
+      "category": "Container",
+      "plain_meaning": "Pre-Xform applies movement before the main transform.",
+      "what_it_is_not": "This is not the final position.",
+      "mental_model": "Early adjustment.",
+      "example": "Adjusting your stance before looking."
+    },
+    {
+      "term": "Apply Pre-Transform",
+      "category": "Mode",
+      "plain_meaning": "Apply Pre-Transform turns the pre-transform on or off.",
+      "what_it_is_not": "This does not change main transform values.",
+      "mental_model": "Enable early move.",
+      "example": "Deciding whether the early adjustment matters."
+    },
+    {
+      "term": "Reset Transform",
+      "category": "Action",
+      "plain_meaning": "Reset Transform clears transform values.",
+      "what_it_is_not": "This does not delete the camera.",
+      "mental_model": "Zero out.",
+      "example": "Putting the camera back to default."
+    },
+    {
+      "term": "Commit to Main Transform",
+      "category": "Action",
+      "plain_meaning": "Commit to Main Transform makes the pre-transform permanent.",
+      "what_it_is_not": "This does not add another transform.",
+      "mental_model": "Lock it in.",
+      "example": "Fixing the camera position permanently."
+    },
+
+    {
+      "term": "View",
+      "category": "Container",
+      "plain_meaning": "View controls how the camera sees the world.",
+      "what_it_is_not": "This does not move the camera.",
+      "mental_model": "Lens settings.",
+      "example": "Choosing how wide the train yard looks."
+    },
+    {
+      "term": "Projection",
+      "category": "Mode",
+      "plain_meaning": "Projection controls how 3D space is flattened into an image.",
+      "what_it_is_not": "This does not move objects.",
+      "mental_model": "How depth is shown.",
+      "example": "Wide-angle versus flat view of the train yard."
+    },
+    {
+      "term": "Viewing Angle Method",
+      "category": "Mode",
+      "plain_meaning": "Viewing Angle Method chooses how viewing angles are calculated.",
+      "what_it_is_not": "This does not change camera position.",
+      "mental_model": "Angle math rule.",
+      "example": "How wide the camera sees."
+    },
+    {
+      "term": "FOV Angle",
+      "category": "Boundary",
+      "plain_meaning": "FOV Angle controls how wide the camera sees.",
+      "what_it_is_not": "This does not move the camera.",
+      "mental_model": "Field of view.",
+      "example": "Seeing the whole train yard or just one track."
+    },
+    {
+      "term": "Near",
+      "category": "Boundary",
+      "plain_meaning": "Near sets how close objects can be before disappearing.",
+      "what_it_is_not": "This does not affect far objects.",
+      "mental_model": "Closest view limit.",
+      "example": "The train disappearing when too close."
+    },
+    {
+      "term": "Far",
+      "category": "Boundary",
+      "plain_meaning": "Far sets how distant objects can be before disappearing.",
+      "what_it_is_not": "This does not affect near objects.",
+      "mental_model": "Farthest view limit.",
+      "example": "The train fading out in the distance."
+    },
+    {
+      "term": "Window Roll",
+      "category": "Boundary",
+      "plain_meaning": "Window Roll rotates the camera view.",
+      "what_it_is_not": "This does not move the camera.",
+      "mental_model": "Tilt view.",
+      "example": "Tilting your head while watching the train."
+    },
+    {
+      "term": "IPD Shift",
+      "category": "Boundary",
+      "plain_meaning": "IPD Shift adjusts eye separation for stereo viewing.",
+      "what_it_is_not": "This does not affect mono view.",
+      "mental_model": "Eye spacing.",
+      "example": "Seeing depth like human eyes do."
+    },
+
+    {
+      "term": "Settings",
+      "category": "Container",
+      "plain_meaning": "Settings control background and rendering behavior.",
+      "what_it_is_not": "This does not change camera position.",
+      "mental_model": "View environment rules.",
+      "example": "Deciding what the sky behind the train looks like."
+    },
+    {
+      "term": "Background Color",
+      "category": "Boundary",
+      "plain_meaning": "Background Color sets the color behind everything.",
+      "what_it_is_not": "This does not affect objects.",
+      "mental_model": "Backdrop color.",
+      "example": "The sky color behind the train."
+    },
+    {
+      "term": "Fog",
+      "category": "Mode",
+      "plain_meaning": "Fog fades distant objects.",
+      "what_it_is_not": "This does not move objects.",
+      "mental_model": "Distance haze.",
+      "example": "The train fading into mist."
+    },
+    {
+      "term": "Camera Light Mask",
+      "category": "Boundary",
+      "plain_meaning": "Camera Light Mask controls which lights affect the camera view.",
+      "what_it_is_not": "This does not change the lights themselves.",
+      "mental_model": "Light filter.",
+      "example": "Only certain lights visible on the train."
+    },
+
+    {
+      "term": "Extensions",
+      "category": "Container",
+      "plain_meaning": "Extensions add extra behavior logic.",
+      "what_it_is_not": "These are not required.",
+      "mental_model": "Helpers.",
+      "example": "Extra camera control systems."
+    },
+
+    {
+      "term": "Common",
+      "category": "Container",
+      "plain_meaning": "Common contains shared component settings.",
+      "what_it_is_not": "These are not camera-specific.",
+      "mental_model": "Standard settings.",
+      "example": "Rules shared by many stations."
+    }
+  ]
+}
+

@@ -1,0 +1,2296 @@
+{
+  "glossary": [
+    {
+      "term": "Environment Light",
+      "category": "Boundary",
+      "plain_meaning": "Environment Light lights everything using an image instead of a single direction.",
+      "what_it_is_not": "This is not a spotlight or point light.",
+      "mental_model": "Light coming from the whole world.",
+      "example": "The train yard being lit by the sky all around it."
+    },
+
+    {
+      "term": "Light",
+      "category": "Container",
+      "plain_meaning": "Light contains settings that control the color and strength of the environment light.",
+      "what_it_is_not": "This does not control drawing order.",
+      "mental_model": "Light properties.",
+      "example": "Deciding what kind of sky light the train yard has."
+    },
+    {
+      "term": "Light Color",
+      "category": "Boundary",
+      "plain_meaning": "Light Color tints the environment light.",
+      "what_it_is_not": "This does not replace the environment image.",
+      "mental_model": "Color filter.",
+      "example": "Making the sky light warmer or cooler over the train yard."
+    },
+    {
+      "term": "Dimmer",
+      "category": "Boundary",
+      "plain_meaning": "Dimmer controls how strong the environment light is.",
+      "what_it_is_not": "This does not change light direction.",
+      "mental_model": "Brightness knob.",
+      "example": "Making the overall sky light brighter or darker."
+    },
+    {
+      "term": "Env Map",
+      "category": "Boundary",
+      "plain_meaning": "Env Map is the image used to light the scene from all directions.",
+      "what_it_is_not": "This is not the background image.",
+      "mental_model": "Light source image.",
+      "example": "A picture of the sky that lights the train yard."
+    },
+    {
+      "term": "Env Map Rotate",
+      "category": "Boundary",
+      "plain_meaning": "Env Map Rotate turns the environment image.",
+      "what_it_is_not": "This does not move objects.",
+      "mental_model": "Rotate the sky.",
+      "example": "Turning the sky image so light comes from a different side."
+    },
+    {
+      "term": "Use Pre-Filter Maps",
+      "category": "Mode",
+      "plain_meaning": "Use Pre-Filter Maps enables prepared lighting versions of the environment image.",
+      "what_it_is_not": "This does not change the original image.",
+      "mental_model": "Use ready-made lighting data.",
+      "example": "Using a pre-calculated sky light for the train yard."
+    },
+
+    {
+      "term": "Render",
+      "category": "Container",
+      "plain_meaning": "Render controls how the light is applied and drawn.",
+      "what_it_is_not": "This does not change light color.",
+      "mental_model": "Drawing rules.",
+      "example": "Rules for how the environment light affects the train."
+    },
+    {
+      "term": "Material",
+      "category": "Boundary",
+      "plain_meaning": "Material controls how surfaces react to the environment light.",
+      "what_it_is_not": "This does not change geometry.",
+      "mental_model": "Surface response.",
+      "example": "How shiny the train looks under sky light."
+    },
+    {
+      "term": "Draw Priority",
+      "category": "Boundary",
+      "plain_meaning": "Draw Priority controls draw order relative to other objects.",
+      "what_it_is_not": "This does not affect light strength.",
+      "mental_model": "Draw order.",
+      "example": "Whether the light is processed before or after other elements."
+    },
+    {
+      "term": "Pick Priority",
+      "category": "Boundary",
+      "plain_meaning": "Pick Priority controls selection when items overlap.",
+      "what_it_is_not": "This does not affect visuals.",
+      "mental_model": "Selection order.",
+      "example": "Which object gets selected first in the train yard."
+    },
+    {
+      "term": "Wireframe Color",
+      "category": "Boundary",
+      "plain_meaning": "Wireframe Color sets the outline color when shown as wireframe.",
+      "what_it_is_not": "This does not affect final lighting.",
+      "mental_model": "Outline color.",
+      "example": "The outline color of the light helper in the yard."
+    },
+
+    {
+      "term": "Extensions",
+      "category": "Container",
+      "plain_meaning": "Extensions hold extra behavior added to the component.",
+      "what_it_is_not": "These are not required for basic lighting.",
+      "mental_model": "Extra helpers.",
+      "example": "Optional systems added to the lighting setup."
+    },
+    {
+      "term": "Re-Init Extensions",
+      "category": "Action",
+      "plain_meaning": "Re-Init Extensions resets extension logic.",
+      "what_it_is_not": "This does not reset the light itself.",
+      "mental_model": "Restart helpers.",
+      "example": "Restarting lighting helper systems."
+    },
+    {
+      "term": "Init Extensions on Start",
+      "category": "Mode",
+      "plain_meaning": "Init Extensions on Start controls whether extensions start automatically.",
+      "what_it_is_not": "This does not affect core lighting.",
+      "mental_model": "Auto-start helpers.",
+      "example": "Helper systems turning on when the train yard loads."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Geometry",
+      "category": "Boundary",
+      "plain_meaning": "Geometry is the shape that exists in 3D space.",
+      "what_it_is_not": "This is not light, color, or movement by itself.",
+      "mental_model": "The physical thing.",
+      "example": "The train cars and tracks themselves."
+    },
+
+    {
+      "term": "Xform",
+      "category": "Container",
+      "plain_meaning": "Xform controls where the geometry is, how it is turned, and how big it is.",
+      "what_it_is_not": "This does not change the shape itself.",
+      "mental_model": "Move, turn, resize.",
+      "example": "Placing the train on the tracks and pointing it forward."
+    },
+    {
+      "term": "Transform Order",
+      "category": "Mode",
+      "plain_meaning": "Transform Order decides the order moves happen.",
+      "what_it_is_not": "This does not change the move values.",
+      "mental_model": "Step order.",
+      "example": "Turning the train before moving it."
+    },
+    {
+      "term": "Rotate Order",
+      "category": "Mode",
+      "plain_meaning": "Rotate Order decides the order rotations happen.",
+      "what_it_is_not": "This does not change how much rotation happens.",
+      "mental_model": "Turn sequence.",
+      "example": "Looking left before looking up."
+    },
+    {
+      "term": "Translate",
+      "category": "Boundary",
+      "plain_meaning": "Translate moves the geometry.",
+      "what_it_is_not": "This does not rotate or resize.",
+      "mental_model": "Move.",
+      "example": "The train moving forward."
+    },
+    {
+      "term": "Rotate",
+      "category": "Boundary",
+      "plain_meaning": "Rotate turns the geometry.",
+      "what_it_is_not": "This does not move it.",
+      "mental_model": "Turn.",
+      "example": "The train turning a corner."
+    },
+    {
+      "term": "Scale",
+      "category": "Boundary",
+      "plain_meaning": "Scale changes size.",
+      "what_it_is_not": "This does not move or rotate.",
+      "mental_model": "Grow or shrink.",
+      "example": "The train appearing larger."
+    },
+    {
+      "term": "Pivot",
+      "category": "Boundary",
+      "plain_meaning": "Pivot is the point rotations happen around.",
+      "what_it_is_not": "This does not move the geometry.",
+      "mental_model": "Hinge point.",
+      "example": "The axle the train turns around."
+    },
+    {
+      "term": "Uniform Scale",
+      "category": "Mode",
+      "plain_meaning": "Uniform Scale keeps scaling even in all directions.",
+      "what_it_is_not": "This does not control position.",
+      "mental_model": "Even sizing.",
+      "example": "The train growing evenly."
+    },
+    {
+      "term": "Parent Transform Source",
+      "category": "Boundary",
+      "plain_meaning": "Parent Transform Source makes geometry follow another object’s movement.",
+      "what_it_is_not": "This is not manual movement.",
+      "mental_model": "Follow the leader.",
+      "example": "A train car following the engine."
+    },
+    {
+      "term": "Look At",
+      "category": "Mode",
+      "plain_meaning": "Look At makes geometry face a target.",
+      "what_it_is_not": "This does not move position.",
+      "mental_model": "Always face.",
+      "example": "The train always pointing toward the next station."
+    },
+    {
+      "term": "Look At Up Vector",
+      "category": "Boundary",
+      "plain_meaning": "Look At Up Vector defines which direction stays upright.",
+      "what_it_is_not": "This does not change the target.",
+      "mental_model": "Keep upright.",
+      "example": "Keeping the train from flipping over."
+    },
+    {
+      "term": "Path OP",
+      "category": "Boundary",
+      "plain_meaning": "Path OP defines a path to follow.",
+      "what_it_is_not": "This does not define speed.",
+      "mental_model": "Route.",
+      "example": "The tracks the train follows."
+    },
+
+    {
+      "term": "Pre-Xform",
+      "category": "Container",
+      "plain_meaning": "Pre-Xform applies movement before the main transform.",
+      "what_it_is_not": "This is not the final position.",
+      "mental_model": "Early adjustment.",
+      "example": "Adjusting the train before placing it on the tracks."
+    },
+    {
+      "term": "Apply Pre-Transform",
+      "category": "Mode",
+      "plain_meaning": "Apply Pre-Transform turns the pre-transform on or off.",
+      "what_it_is_not": "This does not change main transform values.",
+      "mental_model": "Enable early move.",
+      "example": "Choosing whether early adjustments matter."
+    },
+    {
+      "term": "Reset Transform",
+      "category": "Action",
+      "plain_meaning": "Reset Transform clears transform values.",
+      "what_it_is_not": "This does not delete geometry.",
+      "mental_model": "Zero out.",
+      "example": "Putting the train back to default."
+    },
+    {
+      "term": "Commit to Main Transform",
+      "category": "Action",
+      "plain_meaning": "Commit to Main Transform makes pre-transform permanent.",
+      "what_it_is_not": "This does not add a second transform.",
+      "mental_model": "Lock it in.",
+      "example": "Fixing the train’s adjusted position."
+    },
+
+    {
+      "term": "Instance",
+      "category": "Container",
+      "plain_meaning": "Instance creates many copies of the same geometry.",
+      "what_it_is_not": "This is not unique geometry.",
+      "mental_model": "Repeating the same thing.",
+      "example": "Many identical train cars made from one model."
+    },
+    {
+      "term": "Instancing",
+      "category": "Mode",
+      "plain_meaning": "Instancing turns multiple copies on or off.",
+      "what_it_is_not": "This does not change the original shape.",
+      "mental_model": "Enable repetition.",
+      "example": "Deciding whether to show one train car or many."
+    },
+    {
+      "term": "Instance Count Mode",
+      "category": "Mode",
+      "plain_meaning": "Instance Count Mode decides how the number of instances is determined.",
+      "what_it_is_not": "This does not move instances.",
+      "mental_model": "How many copies.",
+      "example": "How many train cars to show."
+    },
+    {
+      "term": "Default Instance OP",
+      "category": "Boundary",
+      "plain_meaning": "Default Instance OP supplies data for instances.",
+      "what_it_is_not": "This is not geometry.",
+      "mental_model": "Instruction source.",
+      "example": "A list describing where each train car goes."
+    },
+
+    {
+      "term": "Texture Mode",
+      "category": "Mode",
+      "plain_meaning": "Texture Mode controls how textures are applied to instances.",
+      "what_it_is_not": "This does not change geometry.",
+      "mental_model": "Surface placement rule.",
+      "example": "How paint is applied to train cars."
+    },
+    {
+      "term": "Texture Coord OP",
+      "category": "Boundary",
+      "plain_meaning": "Texture Coord OP supplies texture coordinates.",
+      "what_it_is_not": "This is not the texture image.",
+      "mental_model": "Paint map.",
+      "example": "Instructions for where paint goes on the train."
+    },
+    {
+      "term": "UVW",
+      "category": "Meta",
+      "plain_meaning": "UVW are three directions used for texture placement.",
+      "what_it_is_not": "These are not world directions.",
+      "mental_model": "Texture axes.",
+      "example": "Directions paint wraps around the train."
+    },
+
+    {
+      "term": "Custom Instance",
+      "category": "Mode",
+      "plain_meaning": "Custom Instance allows full custom control over instances.",
+      "what_it_is_not": "This is not automatic instancing.",
+      "mental_model": "Manual control.",
+      "example": "Placing each train car exactly where you want."
+    },
+
+    {
+      "term": "Render",
+      "category": "Container",
+      "plain_meaning": "Render controls how geometry is drawn.",
+      "what_it_is_not": "This does not change geometry shape.",
+      "mental_model": "Drawing rules.",
+      "example": "How the train appears on screen."
+    },
+    {
+      "term": "Light Mask",
+      "category": "Boundary",
+      "plain_meaning": "Light Mask controls which lights affect the geometry.",
+      "what_it_is_not": "This does not change the lights.",
+      "mental_model": "Light filter.",
+      "example": "Only certain lights shining on the train."
+    },
+
+    {
+      "term": "Extensions",
+      "category": "Container",
+      "plain_meaning": "Extensions add extra behavior logic.",
+      "what_it_is_not": "These are not required.",
+      "mental_model": "Helpers.",
+      "example": "Extra systems added to manage the train."
+    },
+
+    {
+      "term": "Common",
+      "category": "Container",
+      "plain_meaning": "Common contains shared component settings.",
+      "what_it_is_not": "These are not geometry-specific.",
+      "mental_model": "Standard rules.",
+      "example": "Rules shared by many stations."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Handle",
+      "category": "Boundary",
+      "plain_meaning": "Handle is a control used to move or rotate other objects.",
+      "what_it_is_not": "This is not geometry meant to be rendered as part of the scene.",
+      "mental_model": "A control grip.",
+      "example": "A handle you grab to pull or turn the train cars."
+    },
+
+    {
+      "term": "Handle",
+      "category": "Container",
+      "plain_meaning": "The Handle menu contains settings that control how the handle affects its target.",
+      "what_it_is_not": "This does not define the target object itself.",
+      "mental_model": "Control behavior.",
+      "example": "Rules for how strongly pulling the handle moves the train."
+    },
+    {
+      "term": "Target Weight",
+      "category": "Boundary",
+      "plain_meaning": "Target Weight controls how much the handle influences the target.",
+      "what_it_is_not": "This does not turn the handle on or off.",
+      "mental_model": "Influence strength.",
+      "example": "How hard pulling the handle affects the train."
+    },
+    {
+      "term": "Twist Only Falloff",
+      "category": "Mode",
+      "plain_meaning": "Twist Only Falloff limits influence to twisting motion.",
+      "what_it_is_not": "This does not allow full movement.",
+      "mental_model": "Twist-only control.",
+      "example": "The handle only twists the train, not moves it sideways."
+    },
+    {
+      "term": "Rotation Limits",
+      "category": "Container",
+      "plain_meaning": "Rotation Limits set boundaries on how far rotation is allowed.",
+      "what_it_is_not": "These do not cause rotation by themselves.",
+      "mental_model": "Turn stops.",
+      "example": "The train can only turn so far before stopping."
+    },
+    {
+      "term": "X Rotation Limits",
+      "category": "Boundary",
+      "plain_meaning": "X Rotation Limits restrict rotation on the X axis.",
+      "what_it_is_not": "This does not affect other axes.",
+      "mental_model": "Left-right limit.",
+      "example": "Limiting how much the train can pitch up or down."
+    },
+    {
+      "term": "Y Rotation Limits",
+      "category": "Boundary",
+      "plain_meaning": "Y Rotation Limits restrict rotation on the Y axis.",
+      "what_it_is_not": "This does not affect other axes.",
+      "mental_model": "Up-down limit.",
+      "example": "Limiting how much the train can turn side to side."
+    },
+    {
+      "term": "Z Rotation Limits",
+      "category": "Boundary",
+      "plain_meaning": "Z Rotation Limits restrict rotation on the Z axis.",
+      "what_it_is_not": "This does not affect other axes.",
+      "mental_model": "Twist limit.",
+      "example": "Limiting how much the train can roll."
+    },
+
+    {
+      "term": "Render",
+      "category": "Container",
+      "plain_meaning": "Render controls how the handle is drawn in the viewer.",
+      "what_it_is_not": "This does not affect how the handle controls targets.",
+      "mental_model": "Display rules.",
+      "example": "How the handle looks when visible in the train yard."
+    },
+    {
+      "term": "Material",
+      "category": "Boundary",
+      "plain_meaning": "Material defines the surface look of the handle when drawn.",
+      "what_it_is_not": "This does not affect control behavior.",
+      "mental_model": "Surface appearance.",
+      "example": "The color of the handle grip."
+    },
+    {
+      "term": "Draw Priority",
+      "category": "Boundary",
+      "plain_meaning": "Draw Priority controls draw order relative to other items.",
+      "what_it_is_not": "This does not affect interaction.",
+      "mental_model": "Draw order.",
+      "example": "Whether the handle is drawn on top of the train."
+    },
+    {
+      "term": "Pick Priority",
+      "category": "Boundary",
+      "plain_meaning": "Pick Priority controls selection when things overlap.",
+      "what_it_is_not": "This does not change visuals.",
+      "mental_model": "Selection order.",
+      "example": "Which handle is selected first if multiple overlap."
+    },
+    {
+      "term": "Wireframe Color",
+      "category": "Boundary",
+      "plain_meaning": "Wireframe Color sets the outline color when shown as wireframe.",
+      "what_it_is_not": "This does not affect final rendering.",
+      "mental_model": "Outline color.",
+      "example": "The outline color of the handle."
+    },
+    {
+      "term": "Light Mask",
+      "category": "Boundary",
+      "plain_meaning": "Light Mask controls which lights affect the handle’s appearance.",
+      "what_it_is_not": "This does not affect the lights themselves.",
+      "mental_model": "Light filter.",
+      "example": "Which lights make the handle visible."
+    },
+
+    {
+      "term": "Extensions",
+      "category": "Container",
+      "plain_meaning": "Extensions add extra behavior logic to the handle.",
+      "what_it_is_not": "These are not required for basic control.",
+      "mental_model": "Helpers.",
+      "example": "Extra systems attached to the handle."
+    },
+
+    {
+      "term": "Common",
+      "category": "Container",
+      "plain_meaning": "Common contains shared component settings.",
+      "what_it_is_not": "These are not handle-specific.",
+      "mental_model": "Standard rules.",
+      "example": "Rules shared by many stations."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Light",
+      "category": "Boundary",
+      "plain_meaning": "Light creates illumination that affects objects in the scene.",
+      "what_it_is_not": "This does not create geometry or images by itself.",
+      "mental_model": "A lamp in the world.",
+      "example": "A light shining on the train yard so the trains can be seen."
+    },
+
+    {
+      "term": "Xform",
+      "category": "Container",
+      "plain_meaning": "Xform controls where the light is, how it is turned, and its size scale.",
+      "what_it_is_not": "This does not control how bright the light is.",
+      "mental_model": "Move and aim the lamp.",
+      "example": "Moving a floodlight closer to the tracks and pointing it."
+    },
+    {
+      "term": "Transform Order",
+      "category": "Mode",
+      "plain_meaning": "Transform Order sets the order that movement steps happen.",
+      "what_it_is_not": "This does not change movement values.",
+      "mental_model": "Step sequence.",
+      "example": "Turning the light before moving it."
+    },
+    {
+      "term": "Rotate Order",
+      "category": "Mode",
+      "plain_meaning": "Rotate Order sets the order rotations are applied.",
+      "what_it_is_not": "This does not set rotation amount.",
+      "mental_model": "Turn sequence.",
+      "example": "Tilting the light before panning it."
+    },
+    {
+      "term": "Translate",
+      "category": "Boundary",
+      "plain_meaning": "Translate moves the light.",
+      "what_it_is_not": "This does not rotate the light.",
+      "mental_model": "Move position.",
+      "example": "Sliding the light along the platform."
+    },
+    {
+      "term": "Rotate",
+      "category": "Boundary",
+      "plain_meaning": "Rotate turns the light.",
+      "what_it_is_not": "This does not move the light.",
+      "mental_model": "Aim.",
+      "example": "Pointing the light toward the train."
+    },
+    {
+      "term": "Scale",
+      "category": "Boundary",
+      "plain_meaning": "Scale changes the light’s transform scale.",
+      "what_it_is_not": "This does not change brightness.",
+      "mental_model": "Resize space.",
+      "example": "Scaling the light rig."
+    },
+    {
+      "term": "Pivot",
+      "category": "Boundary",
+      "plain_meaning": "Pivot sets the point rotations happen around.",
+      "what_it_is_not": "This does not move the light.",
+      "mental_model": "Hinge point.",
+      "example": "The mount the light swivels on."
+    },
+    {
+      "term": "Uniform Scale",
+      "category": "Mode",
+      "plain_meaning": "Uniform Scale keeps scaling equal in all directions.",
+      "what_it_is_not": "This does not affect brightness.",
+      "mental_model": "Even scaling.",
+      "example": "Resizing the light rig evenly."
+    },
+    {
+      "term": "Parent Transform Source",
+      "category": "Boundary",
+      "plain_meaning": "Parent Transform Source makes the light follow another object’s movement.",
+      "what_it_is_not": "This is not manual control.",
+      "mental_model": "Follow mode.",
+      "example": "A light mounted on a moving train."
+    },
+    {
+      "term": "Look At",
+      "category": "Mode",
+      "plain_meaning": "Look At makes the light face a target.",
+      "what_it_is_not": "This does not move the light.",
+      "mental_model": "Always aim at.",
+      "example": "The light always pointing at the lead engine."
+    },
+    {
+      "term": "Look At Up Vector",
+      "category": "Boundary",
+      "plain_meaning": "Look At Up Vector defines which direction stays upright.",
+      "what_it_is_not": "This does not change the target.",
+      "mental_model": "Keep upright.",
+      "example": "Preventing the light from rolling sideways."
+    },
+    {
+      "term": "Path OP",
+      "category": "Boundary",
+      "plain_meaning": "Path OP defines a path the light can follow.",
+      "what_it_is_not": "This does not define brightness.",
+      "mental_model": "Light track.",
+      "example": "A light moving along the rail path."
+    },
+
+    {
+      "term": "Pre-Xform",
+      "category": "Container",
+      "plain_meaning": "Pre-Xform applies movement before the main transform.",
+      "what_it_is_not": "This is not the final position.",
+      "mental_model": "Early adjustment.",
+      "example": "Adjusting the light before locking its position."
+    },
+    {
+      "term": "Apply Pre-Transform",
+      "category": "Mode",
+      "plain_meaning": "Apply Pre-Transform turns pre-transform on or off.",
+      "what_it_is_not": "This does not change main transform values.",
+      "mental_model": "Enable early move.",
+      "example": "Choosing whether early adjustments count."
+    },
+    {
+      "term": "Reset Transform",
+      "category": "Action",
+      "plain_meaning": "Reset Transform clears transform values.",
+      "what_it_is_not": "This does not delete the light.",
+      "mental_model": "Zero out.",
+      "example": "Putting the light back to default."
+    },
+    {
+      "term": "Commit to Main Transform",
+      "category": "Action",
+      "plain_meaning": "Commit to Main Transform makes the pre-transform permanent.",
+      "what_it_is_not": "This does not add another transform.",
+      "mental_model": "Lock it in.",
+      "example": "Fixing the light’s adjusted position."
+    },
+
+    {
+      "term": "Light Settings",
+      "category": "Container",
+      "plain_meaning": "Light settings control color, type, and falloff.",
+      "what_it_is_not": "These do not move the light.",
+      "mental_model": "Lamp properties.",
+      "example": "Choosing what kind of lamp lights the train yard."
+    },
+    {
+      "term": "Light Color",
+      "category": "Boundary",
+      "plain_meaning": "Light Color sets the color of the light.",
+      "what_it_is_not": "This does not change geometry.",
+      "mental_model": "Bulb color.",
+      "example": "White or warm light over the tracks."
+    },
+    {
+      "term": "Dimmer",
+      "category": "Boundary",
+      "plain_meaning": "Dimmer controls how strong the light is.",
+      "what_it_is_not": "This does not change direction.",
+      "mental_model": "Brightness knob.",
+      "example": "Turning the yard lights up or down."
+    },
+    {
+      "term": "Light Type",
+      "category": "Mode",
+      "plain_meaning": "Light Type chooses how the light behaves.",
+      "what_it_is_not": "This does not change color.",
+      "mental_model": "Lamp style.",
+      "example": "Spotlight versus floodlight on the train."
+    },
+    {
+      "term": "Cone Angle",
+      "category": "Boundary",
+      "plain_meaning": "Cone Angle sets how wide a spotlight spreads.",
+      "what_it_is_not": "This does not change brightness.",
+      "mental_model": "Beam width.",
+      "example": "A narrow beam focused on the engine."
+    },
+    {
+      "term": "Distance Attenuated",
+      "category": "Mode",
+      "plain_meaning": "Distance Attenuated makes light fade with distance.",
+      "what_it_is_not": "This does not move the light.",
+      "mental_model": "Fade over distance.",
+      "example": "The light getting weaker farther from the lamp."
+    },
+
+    {
+      "term": "Shadow",
+      "category": "Container",
+      "plain_meaning": "Shadow controls how shadows are created by the light.",
+      "what_it_is_not": "This does not change light color.",
+      "mental_model": "Shadow rules.",
+      "example": "Shadows cast by trains on the ground."
+    },
+    {
+      "term": "Shadow Type",
+      "category": "Mode",
+      "plain_meaning": "Shadow Type chooses how shadows are calculated.",
+      "what_it_is_not": "This does not move objects.",
+      "mental_model": "Shadow method.",
+      "example": "Hard versus soft shadows under the train."
+    },
+    {
+      "term": "Shadow Resolution",
+      "category": "Boundary",
+      "plain_meaning": "Shadow Resolution controls shadow detail.",
+      "what_it_is_not": "This does not change light strength.",
+      "mental_model": "Shadow sharpness.",
+      "example": "Crisp shadows under wheels."
+    },
+
+    {
+      "term": "View",
+      "category": "Container",
+      "plain_meaning": "View controls how the light projects into the scene.",
+      "what_it_is_not": "This does not change color.",
+      "mental_model": "Projection rules.",
+      "example": "How the light spreads across the yard."
+    },
+
+    {
+      "term": "Render",
+      "category": "Container",
+      "plain_meaning": "Render controls how the light helper is drawn.",
+      "what_it_is_not": "This does not change lighting behavior.",
+      "mental_model": "Drawing rules.",
+      "example": "How the light icon appears in the scene."
+    },
+
+    {
+      "term": "Extensions",
+      "category": "Container",
+      "plain_meaning": "Extensions add extra behavior logic.",
+      "what_it_is_not": "These are not required.",
+      "mental_model": "Helpers.",
+      "example": "Extra systems controlling the light."
+    },
+
+    {
+      "term": "Common",
+      "category": "Container",
+      "plain_meaning": "Common contains shared component settings.",
+      "what_it_is_not": "These are not light-specific.",
+      "mental_model": "Standard rules.",
+      "example": "Rules shared by many stations."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "term": "Camera Blend",
+      "category": "Boundary",
+      "plain_meaning": "Camera Blend combines multiple cameras into one view.",
+      "what_it_is_not": "This does not create a camera or a scene.",
+      "mental_model": "Mixing viewpoints.",
+      "example": "Blending views from cameras placed along the train tracks."
+    },
+
+    {
+      "term": "Settings",
+      "category": "Container",
+      "plain_meaning": "Settings control background and fog blending between cameras.",
+      "what_it_is_not": "This does not move cameras.",
+      "mental_model": "Environment mix rules.",
+      "example": "Blending sky color and fog between two train-yard views."
+    },
+    {
+      "term": "Background Color Weight",
+      "category": "Boundary",
+      "plain_meaning": "Background Color Weight controls how much background color is blended.",
+      "what_it_is_not": "This does not change camera position.",
+      "mental_model": "Influence amount.",
+      "example": "How much sky color comes from one camera versus another."
+    },
+    {
+      "term": "Background Color",
+      "category": "Boundary",
+      "plain_meaning": "Background Color sets the color behind the scene.",
+      "what_it_is_not": "This does not affect objects.",
+      "mental_model": "Backdrop.",
+      "example": "The sky behind the train yard."
+    },
+    {
+      "term": "Fog Weight",
+      "category": "Boundary",
+      "plain_meaning": "Fog Weight controls how much fog is blended.",
+      "what_it_is_not": "This does not change fog type.",
+      "mental_model": "Fog influence.",
+      "example": "How much haze comes from one camera view."
+    },
+    {
+      "term": "Fog",
+      "category": "Mode",
+      "plain_meaning": "Fog turns fog blending on or off.",
+      "what_it_is_not": "This does not move objects.",
+      "mental_model": "Haze switch.",
+      "example": "Turning distance haze on in the train yard."
+    },
+    {
+      "term": "Fog Density",
+      "category": "Boundary",
+      "plain_meaning": "Fog Density controls how thick the fog is.",
+      "what_it_is_not": "This does not change fog color.",
+      "mental_model": "Fog thickness.",
+      "example": "Dense mist around the tracks."
+    },
+    {
+      "term": "Fog Near",
+      "category": "Boundary",
+      "plain_meaning": "Fog Near sets where fog starts.",
+      "what_it_is_not": "This does not affect far distance.",
+      "mental_model": "Fog start point.",
+      "example": "Fog starting near the train."
+    },
+    {
+      "term": "Fog Far",
+      "category": "Boundary",
+      "plain_meaning": "Fog Far sets where fog reaches full strength.",
+      "what_it_is_not": "This does not affect near distance.",
+      "mental_model": "Fog end point.",
+      "example": "Fog fully hiding distant tracks."
+    },
+    {
+      "term": "Fog Color",
+      "category": "Boundary",
+      "plain_meaning": "Fog Color sets the color of the fog.",
+      "what_it_is_not": "This does not change density.",
+      "mental_model": "Fog tint.",
+      "example": "Gray morning fog over the yard."
+    },
+    {
+      "term": "Fog Alpha",
+      "category": "Boundary",
+      "plain_meaning": "Fog Alpha controls fog transparency.",
+      "what_it_is_not": "This does not move fog.",
+      "mental_model": "Fog strength.",
+      "example": "Light haze versus thick fog."
+    },
+    {
+      "term": "Fog Map",
+      "category": "Boundary",
+      "plain_meaning": "Fog Map uses an image to control where fog appears.",
+      "what_it_is_not": "This does not define fog color.",
+      "mental_model": "Fog mask.",
+      "example": "Fog only in low areas of the train yard."
+    },
+    {
+      "term": "Camera Light Mask",
+      "category": "Boundary",
+      "plain_meaning": "Camera Light Mask controls which lights affect the blended camera.",
+      "what_it_is_not": "This does not change the lights.",
+      "mental_model": "Light filter.",
+      "example": "Only certain yard lights affecting the view."
+    },
+
+    {
+      "term": "View",
+      "category": "Container",
+      "plain_meaning": "View controls how the blended camera sees space.",
+      "what_it_is_not": "This does not move cameras.",
+      "mental_model": "Lens rules.",
+      "example": "How wide the blended train-yard view is."
+    },
+    {
+      "term": "Projection",
+      "category": "Mode",
+      "plain_meaning": "Projection controls how 3D space becomes a flat image.",
+      "what_it_is_not": "This does not change camera position.",
+      "mental_model": "Depth flattening.",
+      "example": "Wide versus flat view of the tracks."
+    },
+    {
+      "term": "Projection Blend",
+      "category": "Mode",
+      "plain_meaning": "Projection Blend controls how projection types are mixed.",
+      "what_it_is_not": "This does not move the view.",
+      "mental_model": "Lens mixing.",
+      "example": "Blending wide-angle and narrow views."
+    },
+    {
+      "term": "Viewing Angle Method",
+      "category": "Mode",
+      "plain_meaning": "Viewing Angle Method decides how viewing angles are calculated.",
+      "what_it_is_not": "This does not change camera placement.",
+      "mental_model": "Angle math rule.",
+      "example": "How wide the camera sees the yard."
+    },
+    {
+      "term": "FOV Angle",
+      "category": "Boundary",
+      "plain_meaning": "FOV Angle sets how wide the view is.",
+      "what_it_is_not": "This does not move the camera.",
+      "mental_model": "Field of view.",
+      "example": "Seeing all tracks or just one."
+    },
+    {
+      "term": "Near",
+      "category": "Boundary",
+      "plain_meaning": "Near sets the closest visible distance.",
+      "what_it_is_not": "This does not affect far distance.",
+      "mental_model": "Close limit.",
+      "example": "Objects disappearing when too close."
+    },
+    {
+      "term": "Far",
+      "category": "Boundary",
+      "plain_meaning": "Far sets the farthest visible distance.",
+      "what_it_is_not": "This does not affect near distance.",
+      "mental_model": "Far limit.",
+      "example": "Tracks fading away in the distance."
+    },
+    {
+      "term": "IPD Shift",
+      "category": "Boundary",
+      "plain_meaning": "IPD Shift adjusts eye separation for stereo views.",
+      "what_it_is_not": "This does not affect mono view.",
+      "mental_model": "Eye spacing.",
+      "example": "Depth perception in a stereo train view."
+    },
+
+    {
+      "term": "Pre-Xform",
+      "category": "Container",
+      "plain_meaning": "Pre-Xform applies movement before main transforms.",
+      "what_it_is_not": "This is not the final transform.",
+      "mental_model": "Early adjustment.",
+      "example": "Adjusting the camera before locking its position."
+    },
+
+    {
+      "term": "Xform",
+      "category": "Container",
+      "plain_meaning": "Xform controls position, rotation, and scale of the camera blend.",
+      "what_it_is_not": "This does not control blending.",
+      "mental_model": "Move the viewpoint.",
+      "example": "Shifting where the blended camera sits over the yard."
+    },
+
+    {
+      "term": "Blend",
+      "category": "Container",
+      "plain_meaning": "Blend controls how multiple camera inputs are combined.",
+      "what_it_is_not": "This does not change camera settings.",
+      "mental_model": "Mixing controls.",
+      "example": "Mixing views from cameras along the tracks."
+    },
+    {
+      "term": "Type",
+      "category": "Mode",
+      "plain_meaning": "Type sets the blending rule used.",
+      "what_it_is_not": "This does not select cameras.",
+      "mental_model": "Mix rule.",
+      "example": "Crossfading between two train views."
+    },
+    {
+      "term": "Sequence",
+      "category": "Mode",
+      "plain_meaning": "Sequence sets the order cameras are blended.",
+      "what_it_is_not": "This does not change weights.",
+      "mental_model": "Blend order.",
+      "example": "Which camera comes first in the mix."
+    },
+    {
+      "term": "Weight",
+      "category": "Boundary",
+      "plain_meaning": "Weight controls how much each camera contributes.",
+      "what_it_is_not": "This does not turn cameras on or off.",
+      "mental_model": "Influence amount.",
+      "example": "One camera dominating the blended view."
+    },
+    {
+      "term": "Mask",
+      "category": "Boundary",
+      "plain_meaning": "Mask limits where blending happens.",
+      "what_it_is_not": "This does not move cameras.",
+      "mental_model": "Allowed area.",
+      "example": "Blending only the center of the yard."
+    },
+    {
+      "term": "Short Rotation",
+      "category": "Mode",
+      "plain_meaning": "Short Rotation uses the shortest turn direction when blending.",
+      "what_it_is_not": "This does not change final orientation.",
+      "mental_model": "Shortest turn.",
+      "example": "Avoiding long camera spins during blends."
+    },
+
+    {
+      "term": "Render",
+      "category": "Container",
+      "plain_meaning": "Render controls how the camera blend helper is drawn.",
+      "what_it_is_not": "This does not affect blending behavior.",
+      "mental_model": "Display rules.",
+      "example": "How the camera blend icon appears in the yard."
+    },
+
+    {
+      "term": "Extensions",
+      "category": "Container",
+      "plain_meaning": "Extensions add extra behavior logic.",
+      "what_it_is_not": "These are not required.",
+      "mental_model": "Helpers.",
+      "example": "Extra systems controlling camera blending."
+    },
+
+    {
+      "term": "Common",
+      "category": "Container",
+      "plain_meaning": "Common contains shared component settings.",
+      "what_it_is_not": "These are not specific to camera blending.",
+      "mental_model": "Standard rules.",
+      "example": "Rules shared by many stations."
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "operator": "FBX",
+      "what_it_is": "An FBX loads a 3D file made in another program into TouchDesigner.",
+      "mental_model": "Bringing in a finished model.",
+      "example": "Importing a train model that was built in Blender or Maya.",
+      "menus": {
+        "Xform": {
+          "meaning": "Controls where the imported model is placed and how it is oriented.",
+          "items": {
+            "Transform Order": "The order movement steps happen.",
+            "Rotate Order": "The order rotations happen.",
+            "Translate": "Moves the model in space.",
+            "Rotate": "Turns the model.",
+            "Scale": "Changes the model’s size.",
+            "Pivot": "The point the model rotates around.",
+            "Uniform Scale": "Scales evenly in all directions.",
+            "Parent Transform Source": "Makes the model follow another object.",
+            "Look At": "Forces the model to face a target.",
+            "Look At Up Vector": "Keeps the model upright.",
+            "Path OP": "A path the model can follow."
+          }
+        },
+        "Pre-Xform": {
+          "meaning": "Adjustments applied before the main transform.",
+          "items": {
+            "Apply Pre-Transform": "Turns early adjustments on or off.",
+            "Reset Transform": "Clears transform values.",
+            "Commit to Main Transform": "Makes the early adjustment permanent."
+          }
+        },
+        "FBX": {
+          "meaning": "Controls how the FBX file is loaded and interpreted.",
+          "items": {
+            "File": "The FBX file to load.",
+            "Reload": "Reloads the file from disk.",
+            "Units": "How size units are interpreted.",
+            "Up Axis": "Which direction is considered up.",
+            "Import Animations": "Loads animation data from the file.",
+            "Import Cameras": "Loads cameras from the file.",
+            "Import Lights": "Loads lights from the file.",
+            "Import Materials": "Loads materials from the file.",
+            "Import Textures": "Loads textures from the file.",
+            "Triangulate": "Converts polygons into triangles.",
+            "Merge Meshes": "Combines meshes into one.",
+            "Scale Factor": "Overall size adjustment."
+          }
+        },
+        "Animation": {
+          "meaning": "Controls playback of animations inside the FBX.",
+          "items": {
+            "Play": "Plays the animation.",
+            "Frame": "Current animation frame.",
+            "Speed": "How fast the animation runs.",
+            "Loop": "Repeats the animation.",
+            "Range Start": "First animation frame.",
+            "Range End": "Last animation frame."
+          }
+        },
+        "Render": {
+          "meaning": "Controls how the FBX helper is drawn.",
+          "items": {
+            "Material": "Surface appearance.",
+            "Render": "Turns drawing on or off.",
+            "Draw Priority": "Draw order.",
+            "Pick Priority": "Selection order.",
+            "Wireframe Color": "Outline color.",
+            "Light Mask": "Which lights affect it."
+          }
+        },
+        "Extensions": "Extra logic hooks.",
+        "Common": "Shared component settings."
+      }
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "operator": "FBX",
+      "what_it_is": "An FBX loads a 3D file made in another program into TouchDesigner.",
+      "mental_model": "Bringing in a finished model.",
+      "example": "Importing a train model that was built in Blender or Maya.",
+      "menus": {
+        "Xform": {
+          "meaning": "Controls where the imported model is placed and how it is oriented.",
+          "items": {
+            "Transform Order": "The order movement steps happen.",
+            "Rotate Order": "The order rotations happen.",
+            "Translate": "Moves the model in space.",
+            "Rotate": "Turns the model.",
+            "Scale": "Changes the model’s size.",
+            "Pivot": "The point the model rotates around.",
+            "Uniform Scale": "Scales evenly in all directions.",
+            "Parent Transform Source": "Makes the model follow another object.",
+            "Look At": "Forces the model to face a target.",
+            "Look At Up Vector": "Keeps the model upright.",
+            "Path OP": "A path the model can follow."
+          }
+        },
+        "Pre-Xform": {
+          "meaning": "Adjustments applied before the main transform.",
+          "items": {
+            "Apply Pre-Transform": "Turns early adjustments on or off.",
+            "Reset Transform": "Clears transform values.",
+            "Commit to Main Transform": "Makes the early adjustment permanent."
+          }
+        },
+        "FBX": {
+          "meaning": "Controls how the FBX file is loaded and interpreted.",
+          "items": {
+            "File": "The FBX file to load.",
+            "Reload": "Reloads the file from disk.",
+            "Units": "How size units are interpreted.",
+            "Up Axis": "Which direction is considered up.",
+            "Import Animations": "Loads animation data from the file.",
+            "Import Cameras": "Loads cameras from the file.",
+            "Import Lights": "Loads lights from the file.",
+            "Import Materials": "Loads materials from the file.",
+            "Import Textures": "Loads textures from the file.",
+            "Triangulate": "Converts polygons into triangles.",
+            "Merge Meshes": "Combines meshes into one.",
+            "Scale Factor": "Overall size adjustment."
+          }
+        },
+        "Animation": {
+          "meaning": "Controls playback of animations inside the FBX.",
+          "items": {
+            "Play": "Plays the animation.",
+            "Frame": "Current animation frame.",
+            "Speed": "How fast the animation runs.",
+            "Loop": "Repeats the animation.",
+            "Range Start": "First animation frame.",
+            "Range End": "Last animation frame."
+          }
+        },
+        "Render": {
+          "meaning": "Controls how the FBX helper is drawn.",
+          "items": {
+            "Material": "Surface appearance.",
+            "Render": "Turns drawing on or off.",
+            "Draw Priority": "Draw order.",
+            "Pick Priority": "Selection order.",
+            "Wireframe Color": "Outline color.",
+            "Light Mask": "Which lights affect it."
+          }
+        },
+        "Extensions": "Extra logic hooks.",
+        "Common": "Shared component settings."
+      }
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "operator": "GeoText",
+      "what_it_is": "GeoText turns text into 3D geometry.",
+      "mental_model": "Text made out of shapes.",
+      "example": "The train’s destination sign built as real 3D letters.",
+      "menus": {
+        "Text": {
+          "meaning": "What the text says and how it behaves in 3D.",
+          "items": {
+            "Mode": "How the text is generated.",
+            "Text": "The words themselves.",
+            "Formatting Code": "Special symbols that change formatting.",
+            "Smart Punctuation": "Automatically fixes quotes and punctuation.",
+            "Word Wrap": "Moves words to new lines automatically.",
+            "Width Affected by FOV or Ortho Width": "Links text width to camera view.",
+            "Face Camera": "Always turns text toward the camera.",
+            "Depth Scale S-Curve": "How text depth changes with distance.",
+            "Depth Distance Near": "Near distance for depth scaling.",
+            "Depth Distance Far": "Far distance for depth scaling.",
+            "Depth Scale Near": "Thickness near the camera.",
+            "Depth Scale Far": "Thickness far from the camera.",
+            "Depth Scale Bias": "Shifts depth balance.",
+            "Depth Scale Steepness": "How sharply depth changes.",
+            "Depth Scale Linearize": "Makes depth change evenly.",
+            "Lift Toward Camera": "Pulls text closer to the camera."
+          }
+        },
+        "Font": {
+          "meaning": "How the text looks.",
+          "items": {
+            "Font": "Which font is used.",
+            "Font File": "Custom font file.",
+            "Bold": "Thicker letters.",
+            "Italic": "Slanted letters.",
+            "Font Size": "Letter size.",
+            "Tracking": "Space between letters.",
+            "Skew": "Slant distortion.",
+            "Horizontal Stretch": "Width stretch.",
+            "Line Spacing": "Space between lines.",
+            "Font Color": "Text color.",
+            "Font Alpha": "Text transparency.",
+            "Layout Box Anchor U": "Horizontal anchor point.",
+            "Layout Box Anchor V": "Vertical anchor point.",
+            "Layout Box Size": "Text box size.",
+            "Clip to Layout Box": "Cuts off overflow text.",
+            "Text Padding": "Space inside the box.",
+            "Horizontal Align": "Left, center, or right.",
+            "Vertical Align": "Top, middle, or bottom.",
+            "Vertical Align Mode": "How vertical alignment is calculated."
+          }
+        },
+        "Pre-Xform": {
+          "meaning": "Early movement before main transforms.",
+          "items": {
+            "Apply Pre-Transform": "Turns early movement on or off.",
+            "Reset Transform": "Clears transform values.",
+            "Commit to Main Transform": "Makes early movement permanent."
+          }
+        },
+        "Instance": {
+          "meaning": "Creates many copies of the same text.",
+          "items": {
+            "Instancing": "Turns instancing on or off.",
+            "Instance Count Mode": "How many copies are made.",
+            "Default Instance OP": "Source of instance data.",
+            "Translate OP": "Position per copy.",
+            "Rotate OP": "Rotation per copy.",
+            "Scale OP": "Size per copy.",
+            "Pivot OP": "Pivot per copy."
+          }
+        },
+        "Instance 2": {
+          "meaning": "Extra instance controls for orientation and texture.",
+          "items": {
+            "Rotate Vector Order": "Rotation rule for vectors.",
+            "Rotate to Vector Forward Direction": "Forward direction choice.",
+            "Rotate to OP": "Target for rotation.",
+            "Texture Mode": "How textures apply to instances.",
+            "Texture Coord OP": "Texture coordinate source.",
+            "Rotate U": "Texture rotation U.",
+            "Rotate V": "Texture rotation V.",
+            "Rotate W": "Texture rotation W.",
+            "Scale U": "Texture scale U.",
+            "Scale V": "Texture scale V.",
+            "Scale W": "Texture scale W."
+          }
+        },
+        "Instance 3": {
+          "meaning": "Fully custom instance behavior.",
+          "items": {
+            "Custom Instance": "User-defined instance logic."
+          }
+        },
+        "Render": {
+          "meaning": "How the text geometry is drawn.",
+          "items": {
+            "Material": "Surface appearance.",
+            "Render": "Turns drawing on or off.",
+            "Draw Priority": "Draw order.",
+            "Pick Priority": "Selection order.",
+            "Wireframe Color": "Outline color.",
+            "Light Mask": "Which lights affect it."
+          }
+        },
+        "Extensions": {
+          "meaning": "Extra logic added to the component.",
+          "items": {
+            "Extension": "Attached logic class.",
+            "Object": "Python object reference.",
+            "Reinit Extensions": "Reloads extension logic.",
+            "Init Extensions on Start": "Runs logic on load."
+          }
+        },
+        "Common": {
+          "meaning": "Shared component settings.",
+          "items": {
+            "Parent Shortcut": "Quick parent reference.",
+            "Global OP Shortcut": "Global reference name.",
+            "Internal OP Shortcut": "Internal reference name.",
+            "Node View": "How it appears in the network.",
+            "Enable Cloning": "Allows cloning.",
+            "Clone Master": "Source for clones.",
+            "Load on Demand": "Loads only when needed.",
+            "Enable External TOX": "Uses external file.",
+            "External TOX Path": "File location.",
+            "Reload Custom Parameters": "Refreshes custom params.",
+            "Reload Built-in Parameters": "Refreshes default params.",
+            "Subcomponent to Load": "Which part loads.",
+            "Relative File Path Behavior": "How paths are resolved."
+          }
+        }
+      }
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "operator": "Null",
+      "what_it_is": "A Null is an empty placeholder that holds position and connections.",
+      "mental_model": "An invisible handle or marker.",
+      "example": "An invisible point in the train yard used to line things up.",
+      "menus": {
+        "Xform": {
+          "meaning": "Controls where the Null exists in space.",
+          "items": {
+            "Transform Order": "The order movement steps happen.",
+            "Rotate Order": "The order rotations happen.",
+            "Translate": "Moves the Null.",
+            "Rotate": "Turns the Null.",
+            "Scale": "Scales the Null’s transform space.",
+            "Pivot": "The point rotations happen around.",
+            "Uniform Scale": "Scales evenly in all directions.",
+            "Parent Transform Source": "Makes the Null follow another object.",
+            "Look At": "Forces the Null to face a target.",
+            "Look At Up Vector": "Keeps the Null upright.",
+            "Path OP": "A path the Null can follow."
+          }
+        },
+        "FreeXform": {
+          "meaning": "Allows interactive movement in the viewer.",
+          "items": {
+            "Enable": "Turns free transform controls on or off.",
+            "Translate": "Drag to move.",
+            "Rotate": "Drag to turn.",
+            "Scale": "Drag to resize."
+          }
+        },
+        "Render": {
+          "meaning": "Controls how the Null helper is drawn.",
+          "items": {
+            "Material": "Surface appearance of the helper.",
+            "Render": "Turns helper drawing on or off.",
+            "Draw Priority": "Draw order.",
+            "Pick Priority": "Selection order.",
+            "Wireframe Color": "Outline color."
+          }
+        },
+        "Extensions": {
+          "meaning": "Extra logic added to the component.",
+          "items": {
+            "Extension": "Attached logic class.",
+            "Object": "Python object reference.",
+            "Reinit Extensions": "Reloads extension logic.",
+            "Init Extensions on Start": "Runs logic on load."
+          }
+        },
+        "Common": {
+          "meaning": "Shared component settings.",
+          "items": {
+            "Parent Shortcut": "Quick parent reference.",
+            "Global OP Shortcut": "Global reference name.",
+            "Internal OP Shortcut": "Internal reference name.",
+            "Node View": "How it appears in the network.",
+            "Enable Cloning": "Allows cloning.",
+            "Clone Master": "Source for clones.",
+            "Load on Demand": "Loads only when needed.",
+            "Enable External TOX": "Uses an external file.",
+            "External TOX Path": "File location.",
+            "Reload Custom Parameters": "Refreshes custom params.",
+            "Reload Built-in Parameters": "Refreshes default params.",
+            "Subcomponent to Load": "Which part loads.",
+            "Relative File Path Behavior": "How paths are resolved."
+          }
+        }
+      }
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "operator": "USD",
+      "what_it_is": "USD loads and plays Universal Scene Description files.",
+      "mental_model": "A scene container that brings in a whole world.",
+      "example": "Importing an entire train yard scene built somewhere else.",
+      "menus": {
+        "Xform": {
+          "meaning": "Controls where the USD scene is placed and how it moves.",
+          "items": {
+            "Transform Order": "The order movement steps happen.",
+            "Rotate Order": "The order rotations happen.",
+            "Translate": "Moves the whole scene.",
+            "Rotate": "Turns the whole scene.",
+            "Scale": "Changes the scene’s size.",
+            "Pivot": "The point rotations happen around.",
+            "Uniform Scale": "Scales evenly in all directions.",
+            "Parent Transform Source": "Makes the scene follow another object.",
+            "Look At Up Vector": "Keeps the scene upright.",
+            "Path OP": "A path the scene can follow."
+          }
+        },
+        "Pre-Xform": {
+          "meaning": "Early movement applied before the main transform.",
+          "items": {
+            "Apply Pre-Transform": "Turns early movement on or off.",
+            "Reset Transform": "Clears transform values.",
+            "Commit to Main Transform": "Makes early movement permanent."
+          }
+        },
+        "Play": {
+          "meaning": "Controls animation playback inside the USD.",
+          "items": {
+            "Shift Animation Start": "Offsets when animation begins.",
+            "Sample Rate Mode": "How animation timing is sampled.",
+            "Play Mode": "How playback behaves.",
+            "Initialize": "Prepares animation state.",
+            "Start Play": "Begins playback.",
+            "Speed": "How fast animation runs.",
+            "Queue": "Stores upcoming playback.",
+            "Queue Point": "Position in the queue.",
+            "Index": "Current animation index.",
+            "Trim": "Limits animation range.",
+            "Trim Start": "First frame used.",
+            "Trim End": "Last frame used.",
+            "Extend Left": "Behavior before start.",
+            "Extend Right": "Behavior after end."
+          }
+        },
+        "USD": {
+          "meaning": "Controls how the USD file is imported.",
+          "items": {
+            "USD File Import Method": "How the file is read.",
+            "Import": "Loads the USD file.",
+            "Use Material": "Uses materials from the file.",
+            "Cameras": "Imports cameras.",
+            "Generate Actor Comps": "Creates actor components.",
+            "Merge Geometry": "Combines geometry.",
+            "Max Wired Children": "Limit on generated children.",
+            "Compute Normals": "Rebuilds surface normals.",
+            "Geometry Color Space": "Color rules for geometry.",
+            "Material Color Space": "Color rules for materials.",
+            "Import POPs": "Imports particle data.",
+            "Direct to GPU": "Uploads data straight to the GPU.",
+            "Keep Parameter Values": "Preserves existing values.",
+            "Keep Connections": "Preserves existing connections.",
+            "Callbacks": "Hooks for logic.",
+            "DAT": "Data output reference."
+          }
+        },
+        "Render": {
+          "meaning": "Controls how the USD helper is drawn.",
+          "items": {
+            "Material": "Surface appearance.",
+            "Render": "Turns drawing on or off.",
+            "Draw Priority": "Draw order.",
+            "Pick Priority": "Selection order.",
+            "Wireframe Color": "Outline color.",
+            "Light Mask": "Which lights affect it."
+          }
+        },
+        "Extensions": {
+          "meaning": "Extra logic added to the component.",
+          "items": {
+            "Extension": "Attached logic class.",
+            "Object": "Python object reference.",
+            "Reinit Extensions": "Reloads logic.",
+            "Init Extensions on Start": "Runs logic on load."
+          }
+        },
+        "Common": {
+          "meaning": "Shared component settings.",
+          "items": {
+            "Parent Shortcut": "Quick parent reference.",
+            "Global OP Shortcut": "Global reference name.",
+            "Internal OP Shortcut": "Internal reference name.",
+            "Node View": "How it appears in the network.",
+            "Enable Cloning": "Allows cloning.",
+            "Clone Master": "Source for clones.",
+            "Load on Demand": "Loads only when needed.",
+            "Enable External TOX": "Uses an external file.",
+            "External TOX Path": "File location.",
+            "Reload Custom Parameters": "Refreshes custom params.",
+            "Reload Built-in Parameters": "Refreshes default params.",
+            "Subcomponent to Load": "Which part loads.",
+            "Relative File Path Behavior": "How paths are resolved."
+          }
+        }
+      }
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "operator": "Button",
+      "what_it_is": "A UI component that can be clicked or pressed.",
+      "mental_model": "A physical button on a control panel.",
+      "example": "A button that starts the train moving.",
+      "menus": {
+        "Drag and Drop": {
+          "meaning": "Controls what happens when this button is dragged or receives drops.",
+          "items": {
+            "When Dragging This": "What the button does while being dragged.",
+            "On Dropping Into": "What happens when something is dropped onto the button.",
+            "Built-in Drop Options": "Standard actions for drag-and-drop."
+          }
+        },
+        "Children": {
+          "meaning": "Controls how child UI elements are arranged inside the button.",
+          "items": {
+            "Align": "How children line up.",
+            "Spacing": "Space between children.",
+            "Max Per Line": "Maximum items per row or column.",
+            "Margin": "Space around children.",
+            "Justify Method": "How extra space is handled.",
+            "Justify Horizontal": "Horizontal distribution.",
+            "Justify Vertical": "Vertical distribution.",
+            "Fit": "Fit children to the container.",
+            "Scale": "Scale children.",
+            "Offset": "Shift children position.",
+            "Crop": "Hide overflow.",
+            "Horizontal Scrollbar": "Show horizontal scrolling.",
+            "Vertical Scrollbar": "Show vertical scrolling.",
+            "Thickness": "Scrollbar size.",
+            "Scroll Overlay": "Scrollbar overlays content."
+          }
+        },
+        "Look": {
+          "meaning": "Controls how the button looks.",
+          "items": {
+            "Background Color": "Main background color.",
+            "Background Alpha": "Background transparency.",
+            "Background Top": "Top background layer.",
+            "Top Fill": "Fill style for top layer.",
+            "Top Smoothness": "Edge softness.",
+            "Border A": "Primary border color.",
+            "Border A Alpha": "Primary border transparency.",
+            "Border B": "Secondary border color.",
+            "Border B Alpha": "Secondary border transparency.",
+            "Left Border": "Left edge border.",
+            "Right Border": "Right edge border.",
+            "Bottom Border": "Bottom edge border.",
+            "Top Border": "Top edge border.",
+            "Border Over Children": "Draw border above contents.",
+            "Disable Color": "Color when disabled.",
+            "Pre-Multiply RGB by Alpha": "Blending rule.",
+            "Composite": "How layers combine.",
+            "Opacity": "Overall visibility."
+          }
+        },
+        "Panel": {
+          "meaning": "Controls interaction behavior.",
+          "items": {
+            "Display": "Shows or hides the panel.",
+            "Enable": "Turns interaction on or off.",
+            "Help DAT": "Help text source.",
+            "Cursor": "Cursor behavior.",
+            "Multi-Touch": "Allows multiple touches.",
+            "Constrain Cursor": "Limits cursor movement.",
+            "Click Through": "Allows clicks to pass through.",
+            "Allow UI Shortcut Keys": "Keyboard shortcuts allowed.",
+            "Use Mouse Wheel": "Responds to mouse wheel.",
+            "Mouse UV Buttons": "Mouse button mapping.",
+            "Relative UV": "Relative cursor positioning.",
+            "Drag Edges to Resize": "Resize by dragging edges.",
+            "Component Drag to Reposition": "Move component by dragging.",
+            "Anchor Drag": "Drag using anchors."
+          }
+        },
+        "Layout": {
+          "meaning": "Controls where the button sits and how big it is.",
+          "items": {
+            "X": "Horizontal position.",
+            "Y": "Vertical position.",
+            "Width": "Button width.",
+            "Height": "Button height.",
+            "Fixed Aspect": "Locks aspect ratio.",
+            "Depth Layer": "Draw layer order.",
+            "Horizontal Mode": "Horizontal layout rule.",
+            "Left Anchor": "Left anchor point.",
+            "Horizontal Origin": "Horizontal reference point.",
+            "Vertical Mode": "Vertical layout rule.",
+            "Bottom Anchor": "Bottom anchor point.",
+            "Vertical Origin": "Vertical reference point.",
+            "Parent Alignment": "Alignment relative to parent.",
+            "Align Order": "Order of alignment.",
+            "Post Offset": "Final position adjustment.",
+            "Size from Window": "Resizes with window."
+          }
+        },
+        "Button": {
+          "meaning": "Controls button-specific behavior and label.",
+          "items": {
+            "Label": "Text on the button.",
+            "Value": "On/off or numeric value.",
+            "Button Type": "Momentary or toggle behavior.",
+            "Scale": "Button scale.",
+            "Text to Fit": "Resizes text to fit.",
+            "Font Size": "Text size.",
+            "Line Spacing": "Space between text lines.",
+            "Text Padding": "Space around text.",
+            "Color": "Text or button color."
+          }
+        },
+        "Extensions": "Extra logic hooks.",
+        "Common": "Shared component settings."
+      }
+    }
+  ]
+}
+{
+  "glossary": [
+    {
+      "operator": "Container",
+      "what_it_is": "A UI box that holds other UI elements.",
+      "mental_model": "A tray that holds controls.",
+      "example": "A panel that holds buttons and sliders for the train controls.",
+      "menus": {
+        "Drag and Drop": {
+          "meaning": "Controls how this container behaves when dragging or receiving items.",
+          "items": {
+            "When Dragging This": "What happens while the container is dragged.",
+            "On Dropping Into": "What happens when something is dropped inside.",
+            "Built-in Drop Options": "Standard drag-and-drop actions."
+          }
+        },
+        "Children": {
+          "meaning": "Controls how child UI elements are arranged inside the container.",
+          "items": {
+            "Align": "How children line up.",
+            "Spacing": "Space between children.",
+            "Max Per Line": "Maximum items per row or column.",
+            "Margin": "Space around children.",
+            "Justify Method": "How extra space is handled.",
+            "Justify Horizontal": "Horizontal distribution.",
+            "Justify Vertical": "Vertical distribution.",
+            "Fit": "Fit children to container.",
+            "Scale": "Scale children.",
+            "Offset": "Shift child positions.",
+            "Crop": "Hide overflow.",
+            "Horizontal Scrollbar": "Show horizontal scrolling.",
+            "Vertical Scrollbar": "Show vertical scrolling.",
+            "Thickness": "Scrollbar size.",
+            "Scroll Overlay": "Scrollbar overlays content."
+          }
+        },
+        "Look": {
+          "meaning": "Controls how the container looks.",
+          "items": {
+            "Background Color": "Main background color.",
+            "Background Alpha": "Background transparency.",
+            "Background Top": "Top background layer.",
+            "Top Fill": "Fill style for top layer.",
+            "Top Smoothness": "Edge softness.",
+            "Border A": "Primary border color.",
+            "Border A Alpha": "Primary border transparency.",
+            "Border B": "Secondary border color.",
+            "Border B Alpha": "Secondary border transparency.",
+            "Left Border": "Left edge border.",
+            "Right Border": "Right edge border.",
+            "Bottom Border": "Bottom edge border.",
+            "Top Border": "Top edge border.",
+            "Border Over Children": "Draw border above contents.",
+            "Disable Color": "Color when disabled.",
+            "Pre-Multiply RGB by Alpha": "Blending rule.",
+            "Composite": "How layers combine.",
+            "Opacity": "Overall visibility."
+          }
+        },
+        "Panel": {
+          "meaning": "Controls interaction behavior.",
+          "items": {
+            "Display": "Shows or hides the container.",
+            "Enable": "Turns interaction on or off.",
+            "Help Text": "Help text source.",
+            "Cursor": "Cursor behavior.",
+            "Multi-Touch": "Allows multiple touches.",
+            "Constrain Cursor": "Limits cursor movement.",
+            "Click Through": "Allows clicks to pass through.",
+            "Allow UI Shortcut Keys": "Keyboard shortcuts allowed.",
+            "Use Mouse Wheel": "Responds to mouse wheel.",
+            "Mouse UV Buttons": "Mouse button mapping.",
+            "Relative UV": "Relative cursor positioning.",
+            "Drag Edges to Resize": "Resize by dragging edges.",
+            "Component Drag to Reposition": "Move container by dragging.",
+            "Anchor Drag": "Drag using anchors."
+          }
+        },
+        "Layout": {
+          "meaning": "Controls where the container sits and how big it is.",
+          "items": {
+            "X": "Horizontal position.",
+            "Y": "Vertical position.",
+            "Width": "Container width.",
+            "Height": "Container height.",
+            "Fixed Aspect": "Locks aspect ratio.",
+            "Depth Layer": "Draw layer order.",
+            "Horizontal Mode": "Horizontal layout rule.",
+            "Left Anchor": "Left anchor point.",
+            "Horizontal Origin": "Horizontal reference point.",
+            "Vertical Mode": "Vertical layout rule.",
+            "Bottom Anchor": "Bottom anchor point.",
+            "Vertical Origin": "Vertical reference point.",
+            "Parent Alignment": "Alignment relative to parent.",
+            "Align Order": "Order of alignment.",
+            "Post Offset": "Final position adjustment.",
+            "Size from Window": "Resizes with window."
+          }
+        },
+        "Extensions": "Extra logic hooks.",
+        "Common": "Shared component settings."
+      }
+    }
+  ]
+}
+{
+  "operator": "Field",
+  "what_it_is": "A UI element used to enter or display text or numbers.",
+  "mental_model": "A text box or number box.",
+  "example": "Typing the train’s speed into a control panel.",
+  "operator_specific_menus": {
+    "Field": {
+      "meaning": "Controls what kind of input the field accepts and how it behaves.",
+      "items": {
+        "Field Type": "What kind of value the field holds (text, number, etc.).",
+        "Enable Field Format Numbers": "Turns number formatting rules on or off.",
+        "Field Total Digits": "Maximum total digits allowed.",
+        "Field Decimal Digits": "How many digits appear after the decimal.",
+        "Field Trailing Zeros": "Keeps zeros at the end of numbers.",
+        "Field Leading Zeros": "Adds zeros to the front of numbers.",
+        "Field Lock": "Prevents editing.",
+        "Expand TScript Variables": "Replaces variables with their values.",
+        "Render Password Protected": "Hides characters as they are typed.",
+        "Spaces to Underscores": "Automatically replaces spaces.",
+        "Allow Multi-Line Input": "Allows multiple lines of text.",
+        "Enter as New Line with No Shift": "Pressing Enter adds a new line.",
+        "Render Cursor": "Shows or hides the text cursor.",
+        "Focus Order": "Order this field receives focus when tabbing."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Common",
+    "Extensions",
+    "Drag and Drop",
+    "Children",
+    "Look",
+    "Panel",
+    "Layout"
+  ]
+}
+{
+  "operator": "GLSL",
+  "what_it_is": "A UI component that stores shader values and code.",
+  "mental_model": "A control box for GPU math and shaders.",
+  "example": "Sending color, numbers, and images into a shader that draws the train.",
+  "operator_specific_menus": {
+    "Constant": {
+      "meaning": "Defines single named values sent to the shader.",
+      "items": {
+        "Constant": "Turns a constant on or off.",
+        "Constant Name": "The name used inside the shader.",
+        "Value": "The number sent to the shader."
+      }
+    },
+    "Vectors": {
+      "meaning": "Defines multi-number values sent to the shader.",
+      "items": {
+        "Vector Name": "The name used inside the shader.",
+        "Value": "A group of numbers sent together."
+      }
+    },
+    "Color": {
+      "meaning": "Defines color values sent to the shader.",
+      "items": {
+        "Premultiply RGB by Alpha": "How color transparency is handled.",
+        "Color Name": "The name used inside the shader.",
+        "RGBA": "Red, green, blue, and alpha values."
+      }
+    },
+    "Samplers": {
+      "meaning": "Connects images to the shader.",
+      "items": {
+        "Sampler": "Turns the sampler on or off.",
+        "Name": "The name used inside the shader.",
+        "TOP": "The image input sent to the shader."
+      }
+    },
+    "GLSL": {
+      "meaning": "The shader code itself.",
+      "items": {
+        "Vertex Shader": "Code that controls position and shape.",
+        "Pixel Shader": "Code that controls color and pixels."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Common",
+    "Extensions",
+    "Drag and Drop",
+    "Children",
+    "Look",
+    "Panel",
+    "Layout"
+  ]
+}
+{
+  "operator": "List",
+  "what_it_is": "A UI component that displays data in rows and columns.",
+  "mental_model": "A spreadsheet or table view.",
+  "example": "A list showing train schedules with rows for times and columns for stations.",
+  "operator_specific_menus": {
+    "List": {
+      "meaning": "Controls how the list displays and behaves.",
+      "items": {
+        "Callbacks": "Hooks for reacting to user actions.",
+        "Rows": "Number of visible rows.",
+        "Columns": "Number of visible columns.",
+        "Lock First Row": "Keeps the top row fixed when scrolling.",
+        "Lock First Column": "Keeps the first column fixed when scrolling.",
+        "Horizontal Scrollbar": "Shows or hides horizontal scrolling.",
+        "Vertical Scrollbar": "Shows or hides vertical scrolling.",
+        "Off Cell Callbacks": "Callbacks for clicks outside cells.",
+        "Reset": "Resets list state."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Common",
+    "Extensions",
+    "Drag and Drop",
+    "Children",
+    "Look",
+    "Panel",
+    "Layout"
+  ]
+}
+{
+  "operator": "OP Viewer",
+  "what_it_is": "A UI component that displays the output of another operator.",
+  "mental_model": "A window that shows what another node is producing.",
+  "example": "A screen showing the live video feed of the train camera.",
+  "operator_specific_menus": {
+    "OP Viewer": {
+      "meaning": "Controls how another operator is displayed and interacted with.",
+      "items": {
+        "Operator Viewer Interactive": "Allows direct interaction with the viewed operator.",
+        "Center Scale": "Centers and scales the content inside the viewer.",
+        "Draw TOP Directly": "Draws the image output without extra processing.",
+        "Use Content Size": "Matches the viewer size to the content size."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Common",
+    "Extensions",
+    "Drag and Drop",
+    "Children",
+    "Look",
+    "Panel",
+    "Layout"
+  ]
+}
+{
+  "operator": "OP Viewer",
+  "what_it_is": "A UI component that displays the output of another operator.",
+  "mental_model": "A window that shows what another node is producing.",
+  "example": "A screen showing the live video feed of the train camera.",
+  "operator_specific_menus": {
+    "OP Viewer": {
+      "meaning": "Controls how another operator is displayed and interacted with.",
+      "items": {
+        "Operator Viewer Interactive": "Allows direct interaction with the viewed operator.",
+        "Center Scale": "Centers and scales the content inside the viewer.",
+        "Draw TOP Directly": "Draws the image output without extra processing.",
+        "Use Content Size": "Matches the viewer size to the content size."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Common",
+    "Extensions",
+    "Drag and Drop",
+    "Children",
+    "Look",
+    "Panel",
+    "Layout"
+  ]
+}
+{
+  "operator": "Select",
+  "what_it_is": "A UI component that shows or follows another selected operator.",
+  "mental_model": "A window that tracks whatever you point at.",
+  "example": "A panel that always shows the currently selected train component.",
+  "operator_specific_menus": {
+    "Select": {
+      "meaning": "Controls how selection is followed and displayed.",
+      "items": {
+        "Select Panel": "Chooses which panel or operator is being followed.",
+        "Match Size": "Resizes to match the selected item.",
+        "Follow Selection": "Automatically updates when the selection changes."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Common",
+    "Extensions",
+    "Drag and Drop",
+    "Children",
+    "Look",
+    "Panel",
+    "Layout"
+  ]
+}
+{
+  "operator": "Slider",
+  "what_it_is": "A UI control for changing a value by dragging.",
+  "mental_model": "A physical slider or fader.",
+  "example": "Sliding a control to change the train’s speed.",
+  "operator_specific_menus": {
+    "Slider": {
+      "meaning": "Controls how the slider behaves and what value it outputs.",
+      "items": {
+        "Label": "Text shown next to or on the slider.",
+        "Slider Type": "The slider’s behavior or orientation.",
+        "Value": "The current value of the slider.",
+        "Value Range": "Minimum and maximum values.",
+        "Zone Left-Right": "Active horizontal drag area.",
+        "Zone Bottom-Top": "Active vertical drag area.",
+        "Clamp U-Low": "Lowest allowed output value.",
+        "Clamp U-High": "Highest allowed output value.",
+        "Color": "The slider’s visual color."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Common",
+    "Extensions",
+    "Drag and Drop",
+    "Children",
+    "Look",
+    "Panel",
+    "Layout"
+  ]
+}
+{
+  "operator": "Table",
+  "what_it_is": "A UI component that displays tabular data.",
+  "mental_model": "A spreadsheet view.",
+  "example": "A table showing train times by row and station by column.",
+  "operator_specific_menus": {
+    "Table": {
+      "meaning": "Controls what table data is shown and how it is displayed.",
+      "items": {
+        "Cell Attribute Stat": "Shows statistics for individual cells.",
+        "Row Attribute Stat": "Shows statistics for rows.",
+        "Column Attribute Stat": "Shows statistics for columns.",
+        "Table Attribute Stat": "Shows statistics for the whole table.",
+        "Values Stat": "Shows statistics for the cell values themselves.",
+        "Table Rows": "Number of visible rows.",
+        "Table Columns": "Number of visible columns.",
+        "Table Align": {
+          "what_it_is": "How text is aligned inside table cells.",
+          "choices": [
+            "Left",
+            "Center",
+            "Right"
+          ],
+          "meaning": {
+            "Left": "Text starts at the left edge of the cell.",
+            "Center": "Text is centered in the cell.",
+            "Right": "Text ends at the right edge of the cell."
+          }
+        },
+        "Font Size Unit": {
+          "what_it_is": "How font size is measured.",
+          "choices": [
+            "Pixels",
+            "Relative"
+          ],
+          "meaning": {
+            "Pixels": "Font size is fixed in screen pixels.",
+            "Relative": "Font size scales with the component size."
+          }
+        },
+        "Info Format": {
+          "what_it_is": "How table statistics are displayed.",
+          "choices": [
+            "None",
+            "Compact",
+            "Full"
+          ],
+          "meaning": {
+            "None": "No extra information is shown.",
+            "Compact": "Minimal summary information.",
+            "Full": "Detailed statistics and labels."
+          }
+        },
+        "Table Offset": {
+          "what_it_is": "Shifts which part of the table is visible.",
+          "choices": [
+            "None",
+            "Row",
+            "Column"
+          ],
+          "meaning": {
+            "None": "No offset applied.",
+            "Row": "Shifts visible rows.",
+            "Column": "Shifts visible columns."
+          }
+        },
+        "Table Reset": {
+          "what_it_is": "Resets table state.",
+          "choices": [
+            "None",
+            "Scroll",
+            "All"
+          ],
+          "meaning": {
+            "None": "No reset action.",
+            "Scroll": "Resets scroll position.",
+            "All": "Resets scroll and display state."
+          }
+        }
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Common",
+    "Extensions",
+    "Drag and Drop",
+    "Children",
+    "Look",
+    "Panel",
+    "Layout"
+  ]
+}
+{
+  "operator": "Widget",
+  "operator_specific_explanations": {
+    "Layout Panel": {
+      "Fixed Aspect": {
+        "Off": "Width and height can change independently. The widget can stretch."
+      },
+      "Use Horizontal": {
+        "meaning": "Horizontal layout rules are active.",
+        "what_it_affects": "Width, left/right anchoring, horizontal alignment."
+      },
+      "Use Vertical": {
+        "meaning": "Vertical layout rules are active.",
+        "what_it_affects": "Height, bottom/top anchoring, vertical alignment."
+      },
+      "Horizontal Mode": {
+        "Fixed Width": "Width stays constant, position changes around it.",
+        "Fill": "Width expands to fill available horizontal space.",
+        "Anchors": "Width is determined by left/right anchor positions."
+      },
+      "Vertical Mode": {
+        "Fixed Height": "Height stays constant, position changes around it.",
+        "Fill": "Height expands to fill available vertical space.",
+        "Anchors": "Height is determined by bottom/top anchor positions."
+      },
+      "Parent Alignment": {
+        "Allow": "Parent alignment rules are applied to this widget.",
+        "Ignore": "Parent alignment rules are not applied.",
+        "Ignore Margins": "Parent alignment applies, but margins are skipped."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Look",
+    "Children",
+    "Drag and Drop",
+    "Extensions",
+    "Common"
+  ]
+}
+{
+  "operator": "Base",
+  "what_it_is": "A container for building your own custom component.",
+  "mental_model": "An empty box you build systems inside.",
+  "example": "A custom control box that holds logic for how the train system works.",
+  "operator_specific_menus": {
+    "Base": {
+      "meaning": "The Base operator has no operator-specific parameters.",
+      "items": {}
+    }
+  },
+  "assumed_standard_menus": [
+    "Extensions",
+    "Common"
+  ]
+}
+{
+  "operator": "Engine",
+  "what_it_is": "A component that runs a separate process to execute logic or playback independently.",
+  "mental_model": "A motor that runs on its own timeline.",
+  "example": "A train engine that keeps running even if the control room pauses.",
+  "operator_specific_menus": {
+    "Engine": {
+      "meaning": "Controls what the engine loads and how it recovers.",
+      "items": {
+        "Cogs File": "The file that defines what the engine runs.",
+        "Unload": "Stops and unloads the engine.",
+        "Reload": "Reloads the engine contents.",
+        "Reload on Crash": "Automatically reloads if the engine crashes.",
+        "Asset Paths": "File paths the engine can access.",
+        "Callback DATs": "DATs that receive engine event callbacks."
+      }
+    },
+    "Tune": {
+      "meaning": "Controls timing, synchronization, and playback behavior.",
+      "items": {
+        "Clock": "Which clock the engine uses.",
+        "Synchronized": "Engine timing stays locked to the main system.",
+        "Independent": "Engine runs on its own timing.",
+        "Match Local Component Rate": "Uses the parent component’s rate.",
+        "Wait for Render": "Waits for rendering before advancing.",
+        "Buffer Auto": "Automatically manages input buffering.",
+        "Out Buffer Auto": "Automatically manages output buffering.",
+        "Init Start": "Initial start state.",
+        "Pre-Scroll": "Runs setup before playback.",
+        "Ready When Component Loaded": "Marks ready once loaded.",
+        "Output Buffered": "Indicates output is buffered.",
+        "Component Running": "Indicates the engine is running.",
+        "Initialize": "Resets engine state.",
+        "Start": "Starts engine execution.",
+        "Play": "Plays the engine timeline.",
+        "Go To Done": "Jumps to the finished state.",
+        "On Done": "Action taken when finished."
+      }
+    },
+    "Advanced": {
+      "meaning": "Controls engine creation and process behavior.",
+      "items": {
+        "On Engine Comp Create": "Callback when the engine component is created.",
+        "Launch Engine Process": "Starts a separate engine process.",
+        "Quick Engine Process": "Uses a faster, lightweight process."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Extensions",
+    "Common"
+  ]
+}
+{
+  "operator": "Engine",
+  "what_it_is": "A component that runs a separate process to execute logic or playback independently.",
+  "mental_model": "A motor that runs on its own timeline.",
+  "example": "A train engine that keeps running even if the control room pauses.",
+  "operator_specific_menus": {
+    "Engine": {
+      "meaning": "Controls what the engine loads and how it recovers.",
+      "items": {
+        "Cogs File": "The file that defines what the engine runs.",
+        "Unload": "Stops and unloads the engine.",
+        "Reload": "Reloads the engine contents.",
+        "Reload on Crash": "Automatically reloads if the engine crashes.",
+        "Asset Paths": "File paths the engine can access.",
+        "Callback DATs": "DATs that receive engine event callbacks."
+      }
+    },
+    "Tune": {
+      "meaning": "Controls timing, synchronization, and playback behavior.",
+      "items": {
+        "Clock": "Which clock the engine uses.",
+        "Synchronized": "Engine timing stays locked to the main system.",
+        "Independent": "Engine runs on its own timing.",
+        "Match Local Component Rate": "Uses the parent component’s rate.",
+        "Wait for Render": "Waits for rendering before advancing.",
+        "Buffer Auto": "Automatically manages input buffering.",
+        "Out Buffer Auto": "Automatically manages output buffering.",
+        "Init Start": "Initial start state.",
+        "Pre-Scroll": "Runs setup before playback.",
+        "Ready When Component Loaded": "Marks ready once loaded.",
+        "Output Buffered": "Indicates output is buffered.",
+        "Component Running": "Indicates the engine is running.",
+        "Initialize": "Resets engine state.",
+        "Start": "Starts engine execution.",
+        "Play": "Plays the engine timeline.",
+        "Go To Done": "Jumps to the finished state.",
+        "On Done": "Action taken when finished."
+      }
+    },
+    "Advanced": {
+      "meaning": "Controls engine creation and process behavior.",
+      "items": {
+        "On Engine Comp Create": "Callback when the engine component is created.",
+        "Launch Engine Process": "Starts a separate engine process.",
+        "Quick Engine Process": "Uses a faster, lightweight process."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Extensions",
+    "Common"
+  ]
+}
+{
+  "operator": "Time",
+  "operator_specific_menus": {
+    "Animation": {
+      "meaning": "Controls how animation time is interpreted and played.",
+      "items": {
+        "Animation Time Reference": "Which time source the animation follows.",
+        "Channels Data": "Where animation values are read from.",
+        "Play Mode": "How animation plays (forwards, backwards, looping, etc.).",
+        "Play Speed": "How fast the animation plays.",
+        "Cue": "Named or indexed points used to jump in time.",
+        "Cue Point": "The exact time or frame a cue refers to.",
+        "Input Index Unit": "What unit the input index uses (frames, seconds, etc.).",
+        "Cyclic Range": "Whether the animation wraps around when it reaches the end.",
+        "Specify Edit Attributes": "Chooses which animation attributes can be edited.",
+        "Edit Animation": "Enables direct editing of animation data."
+      }
+    },
+    "Range": {
+      "meaning": "Defines the portion of time the animation is allowed to use.",
+      "items": {
+        "Type": {
+          "Timeline": "Uses the global or parent timeline.",
+          "Custom": "Uses a manually defined time range."
+        },
+        "Start": "The starting point of the animation range.",
+        "Trim Left": "Cuts time from the beginning of the range.",
+        "Trim Right": "Cuts time from the end of the range."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Common",
+    "Extensions"
+  ]
+}
+{
+  "operator": "Animation",
+  "what_it_is": "A component that plays back animation data using time and channels.",
+  "mental_model": "A timeline player that reads animation values.",
+  "example": "Playing the train’s movement and rotation over time.",
+  "operator_specific_menus": {
+    "Animation": {
+      "meaning": "Controls how animation data is interpreted and played.",
+      "items": {
+        "Animation Time Reference": "Which time source the animation follows.",
+        "Channels DAT": "Where the animation values come from.",
+        "Play Mode": "How playback behaves (forward, loop, etc.).",
+        "Lock the Timeline": "Forces animation to stay locked to the timeline.",
+        "Use Input Index": "Uses an external index instead of time.",
+        "Sequential": "Plays animation entries in order.",
+        "Output Full Range": "Outputs values across the full animation range.",
+        "Play Speed": "How fast the animation plays.",
+        "Queue": "Enables queued playback behavior.",
+        "Queue Point": "A specific queued position in the animation.",
+        "Input Index Units": "Units used for the input index (frames, seconds, etc.).",
+        "Cyclic Range": "Wraps animation when reaching the end.",
+        "Specify Edit Attributes": "Chooses which attributes can be edited.",
+        "Edit Origin": "Edits where animation starts from.",
+        "Edit Rate": "Edits the playback rate.",
+        "Edit Animation": "Enables editing of animation data."
+      }
+    },
+    "Range": {
+      "meaning": "Defines which portion of the animation is active.",
+      "items": {
+        "Type": {
+          "Timeline": "Uses the main timeline range.",
+          "Custom": "Uses a manually defined range."
+        },
+        "Start": "The starting point of the animation range.",
+        "End": "The ending point of the animation range.",
+        "Trim Left": "Cuts time from the beginning.",
+        "Trim": "General trimming control.",
+        "Trim Right": "Cuts time from the end."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Common",
+    "Extensions"
+  ]
+}

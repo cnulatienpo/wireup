@@ -1,0 +1,391 @@
+{
+  "operator": "Annotate",
+  "what_it_is": "A UI component used to label, comment on, or visually explain parts of a network.",
+  "mental_model": "Sticky notes and callouts placed on the network.",
+  "example": "Notes explaining how the train system is wired together.",
+  "operator_specific_menus": {
+    "Annotate": {
+      "meaning": "Controls how annotations attach to operators and where they appear.",
+      "items": {
+        "Operator Viewer": "Links the annotation to an operator viewer.",
+        "Enable Interaction": "Allows clicking and interacting with the annotation.",
+        "Close Operators Utility": "Closes linked operators from the annotation.",
+        "Include in Order": "Includes this annotation in ordering logic.",
+        "Order": "Controls draw or stacking order.",
+        "Layer Zone": {
+          "Below Grid": "Annotation appears under the network grid.",
+          "Between Grid and Nodes": "Annotation appears between grid and nodes.",
+          "Above Nodes": "Annotation appears on top of nodes."
+        },
+        "Depth Layer": "Controls depth stacking relative to other UI elements."
+      }
+    },
+    "Text": {
+      "meaning": "Controls the text content and layout of the annotation.",
+      "items": {
+        "Text Title": "Title text for the annotation.",
+        "Annotate": "Main annotation text.",
+        "Tile Height": "Height of the text tile.",
+        "Tile Align": "Alignment of the text tile.",
+        "Body Text": "Main body text content.",
+        "Body Font Size": "Font size for body text.",
+        "Limit Body Text Width": "Restricts how wide the text can be."
+      }
+    },
+    "Settings": {
+      "meaning": "Controls annotation behavior and appearance mode.",
+      "items": {
+        "Mode": "What kind of annotation this is.",
+        "Annotate": "Annotation mode.",
+        "Comment": "Comment-style annotation.",
+        "Network Box": "Annotation behaves like a network box.",
+        "Smart Quote": "Automatically formats quotes.",
+        "Body Word Wrap": "Wraps body text to multiple lines.",
+        "Back Color": "Background color.",
+        "Back Color Alpha": "Background transparency.",
+        "Annotate Opacity": "Overall annotation visibility."
+      }
+    },
+    "OP Viewer": {
+      "meaning": "Controls how an operator’s output is shown inside the annotation.",
+      "items": {
+        "Viewer Display OP": "Which operator is displayed.",
+        "OP Viewer Interactive": "Allows interaction with the embedded viewer.",
+        "Size Aspect Override": {
+          "Natural": "Uses the operator’s natural aspect.",
+          "Specify": "Uses a specified aspect.",
+          "Auto Fit": "Automatically fits content."
+        },
+        "Scale": "Scales the embedded viewer.",
+        "Justify X": "Horizontal alignment.",
+        "Justify Y": "Vertical alignment.",
+        "Cover Body": "Viewer covers the text body.",
+        "Tile OP Viewer Zoom": "Zoom level of the viewer.",
+        "OP Viewer Offset": "Shifts viewer position.",
+        "Fill Alpha": "Transparency of the viewer fill."
+      }
+    },
+    "About": {
+      "meaning": "Information about the Annotate component.",
+      "items": {}
+    }
+  },
+  "assumed_standard_menus": [
+    "Common",
+    "Extensions",
+    "Layout",
+    "Panel",
+    "Look",
+    "Drag and Drop",
+    "Children"
+  ]
+}
+{
+  "operator": "Annotate",
+  "what_it_is": "A UI component used to label, comment on, or visually explain parts of a network.",
+  "mental_model": "Sticky notes and callouts placed on the network.",
+  "example": "Notes explaining how the train system is wired together.",
+  "operator_specific_menus": {
+    "Annotate": {
+      "meaning": "Controls how annotations attach to operators and where they appear.",
+      "items": {
+        "Operator Viewer": "Links the annotation to an operator viewer.",
+        "Enable Interaction": "Allows clicking and interacting with the annotation.",
+        "Close Operators Utility": "Closes linked operators from the annotation.",
+        "Include in Order": "Includes this annotation in ordering logic.",
+        "Order": "Controls draw or stacking order.",
+        "Layer Zone": {
+          "Below Grid": "Annotation appears under the network grid.",
+          "Between Grid and Nodes": "Annotation appears between grid and nodes.",
+          "Above Nodes": "Annotation appears on top of nodes."
+        },
+        "Depth Layer": "Controls depth stacking relative to other UI elements."
+      }
+    },
+    "Text": {
+      "meaning": "Controls the text content and layout of the annotation.",
+      "items": {
+        "Text Title": "Title text for the annotation.",
+        "Annotate": "Main annotation text.",
+        "Tile Height": "Height of the text tile.",
+        "Tile Align": "Alignment of the text tile.",
+        "Body Text": "Main body text content.",
+        "Body Font Size": "Font size for body text.",
+        "Limit Body Text Width": "Restricts how wide the text can be."
+      }
+    },
+    "Settings": {
+      "meaning": "Controls annotation behavior and appearance mode.",
+      "items": {
+        "Mode": "What kind of annotation this is.",
+        "Annotate": "Annotation mode.",
+        "Comment": "Comment-style annotation.",
+        "Network Box": "Annotation behaves like a network box.",
+        "Smart Quote": "Automatically formats quotes.",
+        "Body Word Wrap": "Wraps body text to multiple lines.",
+        "Back Color": "Background color.",
+        "Back Color Alpha": "Background transparency.",
+        "Annotate Opacity": "Overall annotation visibility."
+      }
+    },
+    "OP Viewer": {
+      "meaning": "Controls how an operator’s output is shown inside the annotation.",
+      "items": {
+        "Viewer Display OP": "Which operator is displayed.",
+        "OP Viewer Interactive": "Allows interaction with the embedded viewer.",
+        "Size Aspect Override": {
+          "Natural": "Uses the operator’s natural aspect.",
+          "Specify": "Uses a specified aspect.",
+          "Auto Fit": "Automatically fits content."
+        },
+        "Scale": "Scales the embedded viewer.",
+        "Justify X": "Horizontal alignment.",
+        "Justify Y": "Vertical alignment.",
+        "Cover Body": "Viewer covers the text body.",
+        "Tile OP Viewer Zoom": "Zoom level of the viewer.",
+        "OP Viewer Offset": "Shifts viewer position.",
+        "Fill Alpha": "Transparency of the viewer fill."
+      }
+    },
+    "About": {
+      "meaning": "Information about the Annotate component.",
+      "items": {}
+    }
+  },
+  "assumed_standard_menus": [
+    "Common",
+    "Extensions",
+    "Layout",
+    "Panel",
+    "Look",
+    "Drag and Drop",
+    "Children"
+  ]
+}
+{
+  "operator": "Window",
+  "what_it_is": "Controls an application window on your screen.",
+  "mental_model": "The frame and rules of a computer window.",
+  "example": "The window where you watch the train scene run.",
+  "operator_specific_menus": {
+    "Window": {
+      "meaning": "Controls how the TouchDesigner window appears and behaves.",
+      "items": {
+        "Ignore Taskbar": "Lets the window overlap the system taskbar.",
+        "Display": "Which screen or monitor the window appears on.",
+        "Justify Horizontal": "Horizontal alignment on the screen.",
+        "Justify Vertical": "Vertical alignment on the screen.",
+        "Offset": "Moves the window from its aligned position.",
+        "Shift to Single Display": "Forces the window onto one display.",
+        "DPI Scaling": "Scales the window for high-DPI screens.",
+        "Width": "Window width in pixels.",
+        "Height": "Window height in pixels.",
+        "Update Settings from Window": "Reads size and position from the current window.",
+        "Borders": "Shows or hides the window frame.",
+        "Include Borders in Size": "Counts borders in width and height.",
+        "Always on Top": "Keeps the window above others.",
+        "Cursor Visible": "Shows or hides the mouse cursor.",
+        "Constrain Cursor": "Keeps the cursor inside the window.",
+        "Allow Viewer Interaction": "Allows clicking and interacting inside the window.",
+        "Allow Minimize": "Allows the window to be minimized.",
+        "Window Pixel Format": "Pixel format used by the window.",
+        "Output Color Space": "Color space the window outputs.",
+        "Output Reference White": "Brightness reference for color output.",
+        "V-Sync Mode": "Controls synchronization with the display refresh.",
+        "Draw Window": "Turns window drawing on or off.",
+        "Hardware Frame Lock": "Locks frame timing to hardware."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Common",
+    "Extensions"
+  ]
+}
+{
+  "operator": "Constraint",
+  "what_it_is": "An operator that limits or connects how things can move.",
+  "mental_model": "A physical rule or joint between parts.",
+  "example": "Coupling train cars so they can move but not separate.",
+  "operator_specific_menus": {
+    "Constraint": {
+      "meaning": "Defines what kind of connection or limit exists.",
+      "items": {
+        "Active": "Turns the constraint on or off.",
+        "Type": {
+          "Point to Point": "Connects two points together.",
+          "Hinge": "Allows rotation around one axis.",
+          "Slider": "Allows movement along one axis.",
+          "Body to Body": "Connects two physical bodies."
+        },
+        "Display Constraint": "Shows the constraint visually.",
+        "Actor Comp": "Which physics system this belongs to.",
+        "Legacy Pattern Matching": "Uses older matching rules.",
+        "Actor Bodies": "Which bodies are connected.",
+        "Pivot": "The connection point."
+      }
+    },
+    "Limits": {
+      "meaning": "Controls how far movement or rotation is allowed.",
+      "items": {
+        "Slider Rotation": "Controls rotation behavior on sliders.",
+        "Enable Limits": "Turns limits on or off.",
+        "Lower Linear Limit": "Minimum allowed movement.",
+        "Upper Linear Limit": "Maximum allowed movement.",
+        "Lower Angular Limit": "Minimum allowed rotation."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Common",
+    "Extensions"
+  ]
+}
+{
+  "operator": "Actor",
+  "what_it_is": "An operator that turns geometry into a physical object that can move, collide, and be affected by forces.",
+  "mental_model": "A physical object in the world with weight and motion.",
+  "example": "A train car that can roll, bump into things, and be pushed.",
+  "operator_specific_menus": {
+    "General": {
+      "meaning": "Basic physical identity and setup.",
+      "items": {
+        "Initialize Actor": "Resets the actor to its starting state.",
+        "Update Collision Shape": "Rebuilds the collision shape from geometry.",
+        "Active": "Turns physics on or off for this actor.",
+        "Kinematic State": {
+          "Static": "Does not move unless forced by code.",
+          "Dynamic": "Moves and reacts to forces."
+        },
+        "Collision SOPs": "Geometry used to define collisions.",
+        "Collision Shape": {
+          "Convex Hull": "Tight shape wrapped around geometry.",
+          "Oriented Bounding Box": "A rotated box around the object.",
+          "Axis Aligned Bounding Box": "A box aligned to world axes.",
+          "Bounding Ellipsoid": "An oval-shaped boundary.",
+          "Bounding Sphere": "A round boundary.",
+          "Compound": "Multiple shapes combined."
+        },
+        "Infinite Mass": "Object cannot be moved by forces.",
+        "Mass": "How heavy the object is.",
+        "Q Velocity": "Quick-set velocity control.",
+        "Linear Velocity": "Straight-line movement speed.",
+        "Angular Velocity": "Rotational movement speed."
+      }
+    },
+    "Bullet": {
+      "meaning": "Settings for rigid-body physics behavior.",
+      "items": {
+        "Forces": "External forces applied to the actor.",
+        "Use Global Gravity": "Uses the scene’s gravity.",
+        "Friction": "Resistance to sliding.",
+        "Rolling Friction": "Resistance to rolling.",
+        "Restitution": "Bounciness.",
+        "Continuous Collision Detection": "Prevents fast objects from passing through others.",
+        "Display Guide": "Shows helper visuals.",
+        "Center of Mass": "Balance point of the object.",
+        "Bullet Feedback CHOP": "Outputs physics data."
+      }
+    },
+    "Flex": {
+      "meaning": "Settings for particle or fluid-style physics.",
+      "items": {
+        "Triangle Collision Direction": "Which side of geometry collides.",
+        "Flex Type": {
+          "Fluid": "Behaves like liquid.",
+          "Fluid Emitter": "Creates fluid particles."
+        },
+        "Enable Emission": "Turns particle emission on or off.",
+        "Enable Size": "Controls particle size.",
+        "Emission Speed": "How fast particles are emitted.",
+        "Max Emission Particles": "Maximum particles allowed.",
+        "Position Feedback TOP": "Outputs particle positions.",
+        "Velocity Feedback TOP": "Outputs particle velocities."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Xform",
+    "Pre-Xform",
+    "Instance",
+    "Instance 2",
+    "Instance 3",
+    "Render",
+    "Extensions",
+    "Common"
+  ]
+}
+{
+  "operator": "Bullet Solver",
+  "what_it_is": "The system that runs physics for actors.",
+  "mental_model": "The physics engine that moves and updates all physical objects.",
+  "example": "The rules engine that decides how all the train cars move, collide, and react.",
+  "operator_specific_menus": {
+    "Solver": {
+      "meaning": "Controls how the physics simulation runs.",
+      "items": {
+        "Actors": "Which actors are controlled by this solver.",
+        "Global Forces": "Forces applied to all actors.",
+        "Gravitational Acceleration": "How strong gravity is.",
+        "Dimension": {
+          "3D": "Full three-dimensional physics.",
+          "2D": "Flat, two-dimensional physics.",
+          "1D": "Movement along a single line."
+        },
+        "Linear Multiplier": "Scales straight movement strength.",
+        "Angular Multiplier": "Scales rotation strength.",
+        "Initialize Sim and Collision Shapes": "Resets physics and collision data.",
+        "Initialize Sim": "Resets the physics simulation.",
+        "Start Sim": "Begins the simulation.",
+        "Play": "Runs the simulation forward.",
+        "Sample Rate": "How often physics updates.",
+        "Simulation Speed": "How fast physics runs.",
+        "Feedback CHOP": "Outputs physics data for monitoring.",
+        "Perform Contact Tests": "Checks when objects touch.",
+        "Always Simulate": "Keeps simulation running even if not visible.",
+        "Callback DATs": "Scripts triggered by physics events."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Xform",
+    "Pre-Xform",
+    "Render",
+    "Extensions",
+    "Common"
+  ]
+}
+{
+  "operator": "Force",
+  "what_it_is": "An operator that pushes, pulls, or spins physical objects.",
+  "mental_model": "An invisible push or twist applied to things.",
+  "example": "Wind pushing a train car or a shove that starts it moving.",
+  "operator_specific_menus": {
+    "Force": {
+      "meaning": "Controls continuous force applied over time.",
+      "items": {
+        "Active": "Turns the force on or off.",
+        "Force": "The direction and strength of the push.",
+        "Force Offset": "Where the force is applied from.",
+        "Torque": "A twisting force that causes rotation.",
+        "Impulse Force": "A one-time push instead of a constant push."
+      }
+    },
+    "Force Field": {
+      "meaning": "Controls how force spreads through space.",
+      "items": {
+        "Active": "Turns the force field on or off.",
+        "Strength": "How strong the force is.",
+        "Radius": "How far the force reaches.",
+        "Linear Falloff": "Force gets weaker farther away."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Xform",
+    "Pre-Xform",
+    "Render",
+    "Extensions",
+    "Common"
+  ]
+}
