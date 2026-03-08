@@ -10,6 +10,7 @@ const {
   getMostRecentInteraction,
   appendInteraction,
 } = require('./sessionMemory');
+const { generateAnswer } = require('./llmAdapter');
 
 const app = express();
 const PORT = 3000;
@@ -300,7 +301,7 @@ function buildComparisonPrompt(operatorA, operatorB, question, recentHistory = [
 
 async function compareOperators(operatorA, operatorB, question, recentHistory = [], followUp = false) {
   const prompt = buildComparisonPrompt(operatorA, operatorB, question, recentHistory, followUp);
-  return askRayRay(prompt);
+  return generateAnswer(prompt);
 }
 
 function summarizeNeighborhood(nodes = []) {
@@ -443,37 +444,6 @@ function buildPrompt(context, question, state, previousState = null, mode = 'qa'
   ].join('\n');
 }
 
-async function askRayRay(prompt) {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    throw new Error('OPENAI_API_KEY is not set.');
-  }
-
-  const baseUrl = process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1';
-  const model = process.env.OPENAI_MODEL || 'gpt-4o-mini';
-
-  const response = await fetch(`${baseUrl}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model,
-      temperature: 0.25,
-      messages: [{ role: 'user', content: prompt }],
-    }),
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Model request failed: ${response.status} ${text}`);
-  }
-
-  const json = await response.json();
-  return json.choices?.[0]?.message?.content?.trim() || 'I could not generate an answer right now.';
-}
-
 app.post('/rayray', async (req, res) => {
   try {
     const { question = '', state = {}, mode = 'qa', sessionId: incomingSessionId } = req.body || {};
@@ -557,7 +527,7 @@ app.post('/rayray', async (req, res) => {
 
     const context = buildKnowledgeContext(operator);
     const prompt = buildPrompt(context, question, effectiveState, previousState, mode, recentHistory, followUp);
-    const answer = await askRayRay(prompt);
+    const answer = await generateAnswer(prompt);
 
     appendInteraction(sessionId, {
       question,
