@@ -157,13 +157,54 @@ function buildKnowledgeContext(operatorName) {
   return [`Operator: ${operatorName}`, '', ...fragments].join('\n\n');
 }
 
-function buildPrompt(context, question) {
+function summarizeNeighborhood(nodes = []) {
+  return nodes
+    .map((node) => {
+      const family = node.family ? ` [${node.family}]` : '';
+      const depth = node.depth != null ? ` (depth ${node.depth})` : '';
+      return `- ${node.name || 'unknown'}: ${node.type || 'Unknown Type'}${family}${depth}`;
+    })
+    .join('\n');
+}
+
+function buildPatchContext(state = {}) {
+  const upstream = Array.isArray(state.upstream) ? state.upstream : [];
+  const downstream = Array.isArray(state.downstream) ? state.downstream : [];
+  const params = state.parameters && typeof state.parameters === 'object' ? state.parameters : {};
+  const paramPreview = Object.entries(params)
+    .slice(0, 12)
+    .map(([key, value]) => `- ${key}: ${JSON.stringify(value)}`)
+    .join('\n');
+
+  return [
+    'Patch Context:',
+    `Selected Node: ${state.nodeType || state.selectedNode || 'Unknown'}`,
+    `Selected Name: ${state.selectedNode || 'Unknown'}`,
+    `Network: ${state.network || 'Unknown'}`,
+    `Family: ${state.nodeFamily || 'Unknown'}`,
+    '',
+    'Upstream Nodes:',
+    summarizeNeighborhood(upstream) || '- none',
+    '',
+    'Downstream Nodes:',
+    summarizeNeighborhood(downstream) || '- none',
+    '',
+    'Selected Node Parameters:',
+    paramPreview || '- none',
+  ].join('\n');
+}
+
+function buildPrompt(context, question, state) {
+  const patchContext = buildPatchContext(state);
+
   return [
     'System:',
     '"You are Ray Ray, a TouchDesigner tutor who explains nodes clearly using layered reasoning."',
     '',
     'Context:',
     context,
+    '',
+    patchContext,
     '',
     'User question:',
     question,
@@ -216,7 +257,7 @@ app.post('/rayray', async (req, res) => {
     }
 
     const context = buildKnowledgeContext(operator);
-    const prompt = buildPrompt(context, question);
+    const prompt = buildPrompt(context, question, state);
     const answer = await askRayRay(prompt);
 
     return res.json({ answer });
