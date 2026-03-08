@@ -1,0 +1,12 @@
+{
+  "name": "wireup-outpost",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "ipld:build": "node scripts/build-ipld.js"
+  },
+  "dependencies": {
+    "ipfs-only-hash": "^4.0.0",
+    "multiformats": "^13.3.1"
+  }
+}

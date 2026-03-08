@@ -1,0 +1,9 @@
+{
+  "stage": "node_graph_execution",
+  "operations": [
+    "patch_state_read",
+    "signal_path_trace",
+    "operator_analysis",
+    "parameter_interpretation"
+  ]
+}
