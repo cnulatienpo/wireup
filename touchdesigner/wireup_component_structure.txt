@@ -1,0 +1,34 @@
+wireup (Base COMP)
+ ├─ question_field (Text Field COMP)
+ │   └─ Used for user question input.
+ ├─ ask_button (Button COMP)
+ │   └─ Attach callback DAT: ask_button_callback (callbacks on value change / pulse).
+ ├─ response_view (Text TOP or Panel Text COMP)
+ │   └─ Displays selected node summary, question, and Ray Ray response.
+ ├─ state_collector (Script DAT)
+ │   └─ Script file: state_collector.py
+ │   └─ Exposes collect_state() -> dict
+ ├─ request_sender (Web Client DAT)
+ │   └─ Method: POST
+ │   └─ URL: http://localhost:3000/rayray
+ │   └─ Trigger request from ask_button callback by writing JSON to request body then pulsing send.
+ └─ response_handler (Script DAT)
+     └─ Script file: response_handler.py
+     └─ Parses request_sender response and writes answer into response_view.
+
+Data flow
+1) User enters question in question_field.
+2) User presses ask_button.
+3) ask_button_callback.py reads question and calls state_collector.collect_state().
+4) Callback serializes {"question": ..., "state": ...} JSON and sends via request_sender Web Client DAT.
+5) response_handler.py parses JSON response and updates response_view.
+
+Panel fields shown in response_view
+- Selected Node
+- Operator Type
+- Question Input
+- Ray Ray Response
+
+Fallback behavior
+- If no node is selected, state_collector returns selectedNode=None and minimal state.
+- Request still sends question so Ray Ray can answer from question alone.
