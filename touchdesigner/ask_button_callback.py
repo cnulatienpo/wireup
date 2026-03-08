@@ -161,6 +161,7 @@ def onOffToOn(panelValue):
     state = _collect_state()
 
     payload = {
+        'mode': 'qa',
         'question': question,
         'state': state,
     }

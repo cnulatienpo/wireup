@@ -3,6 +3,9 @@ wireup (Base COMP)
  │   └─ Used for user question input.
  ├─ ask_button (Button COMP)
  │   └─ Attach callback DAT: ask_button_callback (callbacks on value change / pulse).
+ ├─ explain_patch_button (Button COMP)
+ │   └─ Label: "Explain Patch"
+ │   └─ Attach callback DAT: explain_patch_button_callback.
  ├─ response_view (Text TOP or Panel Text COMP)
  │   └─ Displays selected node summary, question, and Ray Ray response.
  ├─ state_collector (Script DAT)
@@ -18,9 +21,9 @@ wireup (Base COMP)
 
 Data flow
 1) User enters question in question_field.
-2) User presses ask_button.
-3) ask_button_callback.py reads question and calls state_collector.collect_state().
-4) Callback serializes {"question": ..., "state": ...} JSON and sends via request_sender Web Client DAT.
+2) User presses ask_button for Q&A OR explain_patch_button for signal-flow narration.
+3) callback script calls state_collector.collect_state().
+4) Callback serializes JSON and sends via request_sender Web Client DAT.
 5) response_handler.py parses JSON response and updates response_view.
 
 Panel fields shown in response_view
@@ -28,6 +31,7 @@ Panel fields shown in response_view
 - Operator Type
 - Question Input
 - Ray Ray Response
+- Patch Signal Flow (when available)
 
 Fallback behavior
 - If no node is selected, state_collector returns selectedNode=None and minimal state.
