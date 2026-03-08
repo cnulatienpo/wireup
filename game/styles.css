@@ -7,23 +7,19 @@
   --panel: rgba(255, 255, 255, 0.07);
   --panel-alt: rgba(255, 255, 255, 0.05);
   --highlight: #ffffff;
-  --belt-slot-width: clamp(150px, 18vw, 440px);
-  --belt-slot-ratio: 1.656;
-  --belt-slot-right: clamp(24px, 3.2vw, 110px);
-  --belt-slot-bottom: clamp(18px, 2.8vw, 84px);
 }
 
 * {
   box-sizing: border-box;
-  font-family: Garamond, "Times New Roman", serif;
+  font-family: "LaNuTienpo", Garamond, serif;
 }
 
 body {
   margin: 0;
-  font-family: Garamond, "Times New Roman", serif;
-  background-image: url("/wireup.png"), url("./assets/metal-bg.jpg");
-  background-size: cover, cover;
-  background-position: center, center;
+  font-family: "LaNuTienpo", Garamond, serif;
+  background-image: url("./assets/metal-bg.jpg");
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
   color: var(--fg);
@@ -40,33 +36,18 @@ body::before {
   z-index: 0;
 }
 
-body::after {
-  content: "";
-  position: fixed;
-  right: var(--belt-slot-right);
-  bottom: var(--belt-slot-bottom);
-  width: var(--belt-slot-width);
-  height: calc(var(--belt-slot-width) / var(--belt-slot-ratio));
-  background-image: url("/wire_belt.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: right bottom;
-  pointer-events: none;
-  z-index: 1;
-}
-
 #app,
 .panel,
 .narration-strip {
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 
 .top-bar,
 .narration-wrap,
 .layout {
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 
 .top-bar {
@@ -270,7 +251,7 @@ select:disabled {
 
 .inventory-kind {
   color: var(--muted);
-  font-family: Garamond, "Times New Roman", serif;
+  font-family: monospace;
 }
 
 .worker-list {
@@ -371,7 +352,7 @@ select:disabled {
   margin: 0.2rem 0 0;
   color: var(--muted);
   font-size: 0.8rem;
-  font-family: Garamond, "Times New Roman", serif;
+  font-family: monospace;
 }
 
 .line-node-input {
@@ -408,7 +389,7 @@ select:disabled {
 .connection-row {
   margin: 0.2rem 0;
   color: var(--muted);
-  font-family: Garamond, "Times New Roman", serif;
+  font-family: monospace;
 }
 
 .placeholder {
@@ -427,7 +408,7 @@ select:disabled {
   color: #ffffff;
   min-height: 6rem;
   white-space: pre-wrap;
-  font-family: Garamond, "Times New Roman", serif;
+  font-family: monospace;
 }
 
 .rayray-hint,
@@ -511,12 +492,6 @@ select:disabled {
 }
 
 @media (max-width: 900px) {
-  :root {
-    --belt-slot-width: clamp(108px, 32vw, 220px);
-    --belt-slot-right: clamp(8px, 2.2vw, 20px);
-    --belt-slot-bottom: clamp(8px, 2.2vw, 20px);
-  }
-
   .narration-strip {
     grid-template-columns: 1fr;
   }
@@ -564,7 +539,7 @@ select:disabled {
 }
 
 .narration-title {
-  font-family: Garamond, "Times New Roman", serif;
+  font-family: "LaNuTienpo", Garamond, "Times New Roman", serif;
   font-weight: bold;
   font-size: 1.9rem;
   line-height: 1.2;

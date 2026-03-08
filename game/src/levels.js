@@ -25,9 +25,9 @@ const hasDeepRoomInput = (state) =>
 export const LEVELS = [
   {
     id: 1,
-    title: 'Feed the Machine',
+    title: 'This is a factory',
     dialogue: [
-      { speaker: 'system', text: 'It changes things.' },
+      { speaker: 'system', text: 'You are the boss. You will make it make a thing.' },
       { speaker: 'system', text: 'But first it needs something to work on.' },
       { speaker: 'system', text: 'Drag a video into the machine.' }
     ],
@@ -36,8 +36,7 @@ export const LEVELS = [
     disableBeltDrawing: true,
     disableHowPanel: true,
     requiredGoalChecks: [
-      (state) => hasVideoSource(state),
-      (state) => hasVideoSource(state) && Boolean(state.flags?.statusPressed)
+      (state) => hasVideoSource(state)
     ],
     noInputDiagnosis: "Blank status report.\nYou didn't give the machine the thing to work on.",
     unlocks: []

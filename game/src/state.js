@@ -783,7 +783,15 @@ export function pressStatus(state) {
   const firstNode = state.lineNodes.find((node) => node.id === firstNodeId) || null;
   const firstInputId = firstNode?.inputs?.[0] || null;
   const firstInput = firstInputId ? getItemById(state, firstInputId) : null;
-  const inputText = firstInput ? firstInput.label : '(none)';
+  const sourceLabelByType = {
+    video: '📼 Video Box',
+    picture: '🖼 Picture Box',
+    sound: '🔊 Sound Box',
+    color: '🎨 Color Box'
+  };
+  const sourceInputLabel =
+    firstNode?.typeId === 'source' ? sourceLabelByType[firstNode.materialType] || firstNode.label || '(none)' : null;
+  const inputText = firstInput ? firstInput.label : sourceInputLabel || '(none)';
 
   const pulseValue = getPulseValue(state);
   let nextState = pulseValue === null ? state : updateBonesHistory(state, pulseValue);
@@ -814,7 +822,7 @@ export function pressStatus(state) {
     reportLines.push(`${node.label} Trail: ${history.map((value) => value.toFixed(3)).join(', ') || '(empty)'}`);
   });
 
-  if (!firstInput) {
+  if (!firstInput && firstNode?.typeId !== 'source') {
     reportLines.push('The machine has nothing to work on.');
   }
 

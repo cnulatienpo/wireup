@@ -1,5 +1,3 @@
-import { LEVELS } from './levels.js';
-
 function getElementOrThrow(id) {
   const element = document.getElementById(id);
   if (!element) {
@@ -12,34 +10,12 @@ function getInventoryItemById(state, itemId) {
   return state.inventory.find((item) => item.id === itemId) || null;
 }
 
-function createDragPayload(kind, id) {
-  return JSON.stringify({ kind, id });
-}
-
-function readDragPayload(dataTransfer) {
+function readSupplyType(dataTransfer) {
   if (!dataTransfer) {
-    return null;
+    return '';
   }
 
-  const raw = dataTransfer.getData('application/x-wireup-drag') || dataTransfer.getData('text/plain');
-  if (!raw) {
-    return null;
-  }
-
-  try {
-    const parsed = JSON.parse(raw);
-    if (!parsed || typeof parsed !== 'object') {
-      return null;
-    }
-
-    if (typeof parsed.kind !== 'string' || typeof parsed.id !== 'string') {
-      return null;
-    }
-
-    return parsed;
-  } catch {
-    return null;
-  }
+  return dataTransfer.getData('text/supply-type') || dataTransfer.getData('text/plain') || '';
 }
 
 function withTd(state, eli5, td) {
@@ -98,7 +74,7 @@ function getRayRayHint(state) {
   const firstNodeId = state.mainLineNodeIds?.[0] || null;
   const firstNode = state.lineNodes.find((node) => node.id === firstNodeId) || null;
 
-  if (firstNode && !firstNode.inputs?.[0]) {
+  if (firstNode && firstNode.typeId !== 'source' && !firstNode.inputs?.[0]) {
     return "You didn't give the machine the thing to work on. (No source input connected to first node.)";
   }
 
@@ -319,17 +295,9 @@ export function renderNarration(state) {
     popup.classList.add('hidden');
   } else {
     popup.classList.remove('hidden');
-    const levelFromSource = LEVELS.find((level) => level.id === state.currentLevelId) || null;
-    const sourceLines = Array.isArray(levelFromSource?.dialogue)
-      ? levelFromSource.dialogue.map((line) =>
-          typeof line === 'string' ? { speaker: 'system', text: line } : line
-        )
-      : state.narration.lines;
+    title.textContent = state.levelMeta.title || '—';
 
-    title.textContent = levelFromSource?.title || state.levelMeta.title || '—';
-
-    const safeIndex = Math.max(0, Math.min(state.dialogueIndex, sourceLines.length - 1));
-    const visibleLines = sourceLines.slice(0, safeIndex + 1).filter((_, idx) => idx > 0);
+    const visibleLines = state.narration.lines.slice(0, state.dialogueIndex + 1);
     const renderedLines = visibleLines.map((line) => {
       if (line.speaker === 'rayray') {
         return `Ray Ray: ${line.text}`;
@@ -430,6 +398,7 @@ export function renderSupplyRoom(state, actions) {
 export function renderBreakRoom(state, actions) {
   const container = getElementOrThrow('break-room-content');
   container.innerHTML = '';
+
   const workersSection = document.createElement('section');
   workersSection.className = 'subpanel';
 
@@ -443,20 +412,6 @@ export function renderBreakRoom(state, actions) {
   state.breakRoomTypes.forEach((worker) => {
     const card = document.createElement('article');
     card.className = 'worker-card worker-idle';
-    card.draggable = state.narration.mode === 'none';
-
-    card.addEventListener('dragstart', (event) => {
-      const transfer = event.dataTransfer;
-      if (!transfer || state.narration.mode !== 'none') {
-        event.preventDefault();
-        return;
-      }
-
-      transfer.effectAllowed = 'copy';
-      const payload = createDragPayload('worker', worker.id);
-      transfer.setData('application/x-wireup-drag', payload);
-      transfer.setData('text/plain', payload);
-    });
 
     const icon = document.createElement('div');
     icon.className = 'worker-icon';
@@ -496,18 +451,9 @@ export function renderFactoryFloor(state, actions) {
     }
 
     event.preventDefault();
-    const payload = readDragPayload(event.dataTransfer);
-    if (!payload) {
-      return;
-    }
-
-    if (payload.kind === 'worker') {
-      actions.onSendToLine(payload.id);
-      return;
-    }
-
-    if (payload.kind === 'inventory') {
-      actions.onFeedInput(payload.id);
+    const supplyType = readSupplyType(event.dataTransfer);
+    if (supplyType) {
+      actions.onAddSourceNode(supplyType);
     }
   };
 
@@ -516,8 +462,8 @@ export function renderFactoryFloor(state, actions) {
       return;
     }
 
-    const payload = readDragPayload(event.dataTransfer);
-    if (!payload) {
+    const supplyType = readSupplyType(event.dataTransfer);
+    if (!supplyType) {
       return;
     }
 
@@ -546,7 +492,7 @@ export function renderFactoryFloor(state, actions) {
     if (state.narration.mode !== 'none') {
       return;
     }
-    const supplyType = event.dataTransfer?.getData('text/supply-type') || event.dataTransfer?.getData('text/plain');
+    const supplyType = readSupplyType(event.dataTransfer);
     if (!supplyType) {
       return;
     }

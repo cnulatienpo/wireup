@@ -51,6 +51,22 @@ function initializeApp() {
   let state = loadLevel(createInitialState(), 1, LEVELS);
   let autoTickHandle = null;
 
+  const maybeAdvanceOnGoalComplete = (nextState) => {
+    if (nextState.narration.mode !== 'none') {
+      return nextState;
+    }
+
+    if (!nextState.goalStatus?.complete) {
+      return nextState;
+    }
+
+    if (nextState.currentLevelId >= nextState.levelsTotal) {
+      return nextState;
+    }
+
+    return loadLevel(nextState, nextState.currentLevelId + 1, LEVELS);
+  };
+
   const stopAutoTicker = () => {
     if (autoTickHandle !== null) {
       window.clearInterval(autoTickHandle);
@@ -159,7 +175,7 @@ function initializeApp() {
   };
 
   const setStateAndRender = (nextState) => {
-    state = nextState;
+    state = maybeAdvanceOnGoalComplete(nextState);
     renderAll(state, actions);
     syncAutoTicker();
   };
