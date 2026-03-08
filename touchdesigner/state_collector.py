@@ -1,7 +1,10 @@
 """TouchDesigner Script DAT: state_collector
 
-Collects a lightweight snapshot of the currently selected operator for Ray Ray.
+Collects a lightweight graph snapshot around the currently selected operator for Ray Ray.
 """
+
+MAX_GRAPH_NODES = 10
+GRAPH_DEPTH = 2
 
 
 def _safe_eval_par(par):
@@ -25,7 +28,7 @@ def _safe_eval_par(par):
 
 
 def _collect_parameters(node, limit=24):
-    """Collect a basic subset of custom/page parameters."""
+    """Collect a basic subset of parameters."""
     params = {}
     if node is None:
         return params
@@ -37,7 +40,6 @@ def _collect_parameters(node, limit=24):
 
     count = 0
     for par in pars:
-        # Skip read-only/time-varying metadata-ish entries when possible.
         name = getattr(par, 'name', None)
         if not name:
             continue
@@ -60,7 +62,6 @@ def _collect_messages(node):
     if node is None:
         return result
 
-    # TouchDesigner may expose errors/warnings via attributes/properties that vary by OP type/version.
     for attr_name, key in (('warnings', 'warnings'), ('warning', 'warnings'), ('errors', 'errors'), ('error', 'errors')):
         try:
             attr = getattr(node, attr_name)
@@ -75,8 +76,103 @@ def _collect_messages(node):
     return result
 
 
+def _op_type(op):
+    try:
+        op_type = getattr(op, 'OPType', None)
+        if op_type:
+            return str(op_type)
+    except Exception:
+        pass
+
+    try:
+        return str(getattr(op, 'type', ''))
+    except Exception:
+        return ''
+
+
+def _op_family(op):
+    """Return coarse TouchDesigner family when possible (TOP/CHOP/SOP/DAT/MAT/POP)."""
+    families = {'TOP', 'CHOP', 'SOP', 'DAT', 'MAT', 'POP'}
+
+    for attr in ('family', 'familyName'):
+        try:
+            value = getattr(op, attr)
+            if value is None:
+                continue
+            text = str(value).upper()
+            if text in families:
+                return text
+        except Exception:
+            pass
+
+    op_type = _op_type(op).upper()
+    for fam in families:
+        if op_type.endswith(' %s' % fam) or (' %s ' % fam) in op_type:
+            return fam
+
+    return None
+
+
+def _node_info(op):
+    return {
+        'name': getattr(op, 'name', None),
+        'type': _op_type(op),
+        'path': getattr(op, 'path', None),
+        'family': _op_family(op),
+    }
+
+
+def _walk_neighbors(start_node, direction='upstream', max_depth=GRAPH_DEPTH, max_nodes=MAX_GRAPH_NODES):
+    """Breadth-first walk to gather a small upstream/downstream neighborhood."""
+    if start_node is None:
+        return []
+
+    visited = set()
+    queue = [(start_node, 0)]
+    results = []
+
+    while queue and len(results) < max_nodes:
+        current, depth = queue.pop(0)
+        if current is None or depth >= max_depth:
+            continue
+
+        try:
+            neighbors = current.inputs if direction == 'upstream' else current.outputs
+        except Exception:
+            neighbors = []
+
+        for neighbor in neighbors:
+            if neighbor is None:
+                continue
+
+            key = getattr(neighbor, 'path', None) or id(neighbor)
+            if key in visited:
+                continue
+            visited.add(key)
+
+            entry = _node_info(neighbor)
+            entry['depth'] = depth + 1
+            results.append(entry)
+
+            if len(results) >= max_nodes:
+                break
+
+            queue.append((neighbor, depth + 1))
+
+    return results
+
+
 def _current_selected_node():
-    """Return the first currently selected OP, if any."""
+    """Return currently selected OP from active network pane if possible."""
+    try:
+        pane = ui.panes.current
+        if pane is not None and getattr(pane, 'owner', None) is not None:
+            child = pane.owner.currentChild
+            if child is not None:
+                return child
+    except Exception:
+        pass
+
     try:
         selected = list(ui.panes.current.owner.selectedChildren)
         if selected:
@@ -95,11 +191,7 @@ def _current_selected_node():
 
 
 def collect_state():
-    """Primary API for ask_button_callback.
-
-    Returns:
-        dict: JSON-serializable state payload.
-    """
+    """Primary API for ask_button_callback."""
     node = _current_selected_node()
 
     if node is None:
@@ -107,28 +199,38 @@ def collect_state():
             'selectedNode': None,
             'nodeType': None,
             'network': None,
-            'inputs': [],
+            'nodeFamily': None,
             'parameters': {},
+            'upstream': [],
+            'downstream': [],
+            'graphLimits': {
+                'maxDepth': GRAPH_DEPTH,
+                'maxNodes': MAX_GRAPH_NODES,
+            },
             'warnings': [],
             'errors': [],
         }
 
-    input_names = []
-    try:
-        for input_op in node.inputs:
-            if input_op is not None:
-                input_names.append(input_op.name)
-    except Exception:
-        pass
-
     messages = _collect_messages(node)
+    upstream_budget = max(0, MAX_GRAPH_NODES // 2)
+    upstream = _walk_neighbors(node, direction='upstream', max_depth=GRAPH_DEPTH, max_nodes=upstream_budget)
+    downstream_budget = max(0, MAX_GRAPH_NODES - len(upstream))
+    downstream = _walk_neighbors(node, direction='downstream', max_depth=GRAPH_DEPTH, max_nodes=downstream_budget)
 
     return {
         'selectedNode': getattr(node, 'name', None),
-        'nodeType': getattr(node, 'OPType', None) or str(getattr(node, 'type', '')),
+        'nodeType': _op_type(node),
         'network': getattr(getattr(node, 'parent', lambda: None)(), 'path', None),
-        'inputs': input_names,
+        'nodePath': getattr(node, 'path', None),
+        'nodeFamily': _op_family(node),
         'parameters': _collect_parameters(node),
+        'upstream': upstream,
+        'downstream': downstream,
+        'graphLimits': {
+            'maxDepth': GRAPH_DEPTH,
+            'maxNodes': MAX_GRAPH_NODES,
+            'capturedNodes': len(upstream) + len(downstream),
+        },
         'warnings': messages['warnings'],
         'errors': messages['errors'],
     }
