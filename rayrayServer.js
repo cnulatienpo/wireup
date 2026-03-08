@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { loadIndex, getOperatorSources } = require('./rayrayIndex');
 const { buildSignalFlowDescription } = require('./signalFlowInterpreter');
+const { interpretParameters } = require('./parameterInterpreter');
 const {
   ensureSession,
   getRecentHistory,
@@ -340,6 +341,22 @@ function buildPatchContext(state = {}) {
 }
 
 
+
+function buildParameterObservationContext(state = {}, previousState = null) {
+  const observations = interpretParameters({
+    nodeType: state.nodeType || state.selectedNode || '',
+    nodeFamily: state.nodeFamily || state.family || '',
+    parameters: state.parameters || {},
+    previousParameters: previousState?.parameters || {},
+  });
+
+  if (!observations.length) {
+    return 'Parameter Observations:\n- none';
+  }
+
+  return ['Parameter Observations:', ...observations.map((line) => `- ${line}`)].join('\n');
+}
+
 function buildSignalFlowContext(state = {}) {
   const flow = buildSignalFlowDescription(state);
   const warnings = flow.warnings.length
@@ -355,6 +372,11 @@ function buildSignalFlowContext(state = {}) {
     '',
     ...warnings,
   ].join('\n');
+}
+
+
+function hasStateSnapshot(state = {}) {
+  return Boolean(state && typeof state === 'object' && Object.keys(state).length > 0);
 }
 
 const FOLLOW_UP_PATTERNS = [
@@ -383,9 +405,10 @@ function buildRecentConversationContext(history = []) {
   return lines.join('\n');
 }
 
-function buildPrompt(context, question, state, mode = 'qa', recentHistory = [], followUp = false) {
+function buildPrompt(context, question, state, previousState = null, mode = 'qa', recentHistory = [], followUp = false) {
   const patchContext = buildPatchContext(state);
   const flowContext = buildSignalFlowContext(state);
+  const parameterObservationContext = buildParameterObservationContext(state, previousState);
 
   const modeInstruction = mode === 'explain_patch'
     ? 'Instruction: The user asked for a short beginner-friendly patch signal-flow explanation. Prioritize the Patch Signal Flow section.'
@@ -405,6 +428,8 @@ function buildPrompt(context, question, state, mode = 'qa', recentHistory = [], 
     context,
     '',
     patchContext,
+    '',
+    parameterObservationContext,
     '',
     flowContext,
     '',
@@ -464,7 +489,9 @@ app.post('/rayray', async (req, res) => {
 
     const followUp = isFollowUpQuestion(question);
     const mostRecent = getMostRecentInteraction(sessionId);
-    const effectiveState = followUp && mostRecent?.state ? mostRecent.state : state;
+    const hasIncomingState = hasStateSnapshot(state);
+    const effectiveState = hasIncomingState ? state : (followUp && mostRecent?.state ? mostRecent.state : state);
+    const previousState = mostRecent?.state || null;
 
     const flow = buildSignalFlowDescription(effectiveState);
     if (mode === 'explain_patch') {
@@ -529,7 +556,7 @@ app.post('/rayray', async (req, res) => {
     }
 
     const context = buildKnowledgeContext(operator);
-    const prompt = buildPrompt(context, question, effectiveState, mode, recentHistory, followUp);
+    const prompt = buildPrompt(context, question, effectiveState, previousState, mode, recentHistory, followUp);
     const answer = await askRayRay(prompt);
 
     appendInteraction(sessionId, {
