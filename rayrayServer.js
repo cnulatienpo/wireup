@@ -3,6 +3,12 @@ const fs = require('fs');
 const path = require('path');
 const { loadIndex, getOperatorSources } = require('./rayrayIndex');
 const { buildSignalFlowDescription } = require('./signalFlowInterpreter');
+const {
+  ensureSession,
+  getRecentHistory,
+  getMostRecentInteraction,
+  appendInteraction,
+} = require('./sessionMemory');
 
 const app = express();
 const PORT = 3000;
@@ -212,13 +218,46 @@ function buildSignalFlowContext(state = {}) {
     ...warnings,
   ].join('\n');
 }
-function buildPrompt(context, question, state, mode = 'qa') {
+
+const FOLLOW_UP_PATTERNS = [
+  /\bwhat about now\b/i,
+  /\band now\b/i,
+  /\bdid that fix it\b/i,
+  /^\s*why\b/i,
+];
+
+function isFollowUpQuestion(question = '') {
+  return FOLLOW_UP_PATTERNS.some((pattern) => pattern.test(question));
+}
+
+function buildRecentConversationContext(history = []) {
+  if (!history.length) {
+    return 'Recent Conversation:\n- none';
+  }
+
+  const lines = ['Recent Conversation:'];
+
+  history.forEach((entry, index) => {
+    lines.push(`${index + 1}. User: ${entry.question || '(no question)'}`);
+    lines.push(`   Ray Ray: ${entry.answer || '(no answer)'}`);
+  });
+
+  return lines.join('\n');
+}
+
+function buildPrompt(context, question, state, mode = 'qa', recentHistory = [], followUp = false) {
   const patchContext = buildPatchContext(state);
   const flowContext = buildSignalFlowContext(state);
 
   const modeInstruction = mode === 'explain_patch'
     ? 'Instruction: The user asked for a short beginner-friendly patch signal-flow explanation. Prioritize the Patch Signal Flow section.'
     : 'Instruction: Answer the user question using context and signal flow details when helpful.';
+
+  const followUpInstruction = followUp
+    ? 'Follow-up handling: This looks like a follow-up question. Prefer continuity with the latest remembered patch state and prior answer.'
+    : 'Follow-up handling: Treat this as a standalone question unless conversation history helps.';
+
+  const recentConversation = buildRecentConversationContext(recentHistory);
 
   return [
     'System:',
@@ -231,7 +270,10 @@ function buildPrompt(context, question, state, mode = 'qa') {
     '',
     flowContext,
     '',
+    recentConversation,
+    '',
     modeInstruction,
+    followUpInstruction,
     '',
     'User question:',
     question,
@@ -271,35 +313,72 @@ async function askRayRay(prompt) {
 
 app.post('/rayray', async (req, res) => {
   try {
-    const { question = '', state = {}, mode = 'qa' } = req.body || {};
+    const { question = '', state = {}, mode = 'qa', sessionId: incomingSessionId } = req.body || {};
+
+    const sessionId = ensureSession(incomingSessionId);
 
     if (typeof question !== 'string') {
-      return res.status(400).json({ answer: 'Please include a valid question string.' });
+      return res.status(400).json({
+        sessionId,
+        answer: 'Please include a valid question string.',
+      });
     }
 
-    const flow = buildSignalFlowDescription(state);
+    const followUp = isFollowUpQuestion(question);
+    const mostRecent = getMostRecentInteraction(sessionId);
+    const effectiveState = followUp && mostRecent?.state ? mostRecent.state : state;
+
+    const flow = buildSignalFlowDescription(effectiveState);
     if (mode === 'explain_patch') {
+      const answer = flow.beginnerSummary;
+      appendInteraction(sessionId, {
+        question,
+        state: effectiveState,
+        answer,
+        timestamp: Date.now(),
+      });
+
       return res.json({
-        answer: flow.beginnerSummary,
+        sessionId,
+        answer,
         flow,
       });
     }
 
     if (!question.trim()) {
-      return res.status(400).json({ answer: 'Please include a non-empty question, or use mode=explain_patch.' });
+      return res.status(400).json({
+        sessionId,
+        answer: 'Please include a non-empty question, or use mode=explain_patch.',
+      });
     }
 
-    const operator = detectOperator(question, state);
+    const operator = detectOperator(question, effectiveState);
 
     if (!operator) {
-      return res.json({ answer: "I couldn't determine which operator you're asking about." });
+      const answer = "I couldn't determine which operator you're asking about.";
+      appendInteraction(sessionId, {
+        question,
+        state: effectiveState,
+        answer,
+        timestamp: Date.now(),
+      });
+
+      return res.json({ sessionId, answer });
     }
 
+    const recentHistory = getRecentHistory(sessionId, 5);
     const context = buildKnowledgeContext(operator);
-    const prompt = buildPrompt(context, question, state, mode);
+    const prompt = buildPrompt(context, question, effectiveState, mode, recentHistory, followUp);
     const answer = await askRayRay(prompt);
 
-    return res.json({ answer });
+    appendInteraction(sessionId, {
+      question,
+      state: effectiveState,
+      answer,
+      timestamp: Date.now(),
+    });
+
+    return res.json({ sessionId, answer });
   } catch (error) {
     return res.status(500).json({ answer: `Ray Ray hit an error: ${error.message}` });
   }
