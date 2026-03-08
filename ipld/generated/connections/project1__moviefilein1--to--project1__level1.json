@@ -1,0 +1,7 @@
+{
+  "from": "/project1/moviefilein1",
+  "network_path": "/project1",
+  "node_type": "touchdesigner.connection",
+  "patch_name": "example_patch",
+  "to": "/project1/level1"
+}
