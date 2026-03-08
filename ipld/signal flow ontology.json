@@ -1,0 +1,104 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+
+    {
+      "@type": "DefinedTermSet",
+      "name": "TouchDesigner Signal Flow Ontology",
+      "description": "A conceptual model describing node-based visual programming systems used in TouchDesigner, including operators, signals, parameters, and network structure.",
+      "url": "https://wireup-outpost.example/signal-flow"
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "name": "Node",
+      "description": "A node is a functional unit within a visual programming graph. Each node represents an operator that receives input signals, performs a transformation, and produces output signals.",
+      "inDefinedTermSet": "TouchDesigner Signal Flow Ontology"
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "name": "Operator",
+      "description": "An operator is a computational component in TouchDesigner that processes signals. Operators are instantiated as nodes inside a network and are categorized by operator family.",
+      "inDefinedTermSet": "TouchDesigner Signal Flow Ontology"
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "name": "Signal",
+      "description": "A signal is a stream of data moving between operators in a TouchDesigner network. Signals may represent textures, numeric channels, geometry structures, data tables, particle states, or rendering materials.",
+      "inDefinedTermSet": "TouchDesigner Signal Flow Ontology"
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "name": "Parameter",
+      "description": "A parameter is a configurable property of an operator controlling how the operator processes incoming signals and produces output signals.",
+      "inDefinedTermSet": "TouchDesigner Signal Flow Ontology"
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "name": "Network",
+      "description": "A network is a directed graph of operators connected by signal paths. Networks define the flow of data through a TouchDesigner patch.",
+      "inDefinedTermSet": "TouchDesigner Signal Flow Ontology"
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "name": "Patch",
+      "description": "A patch is the complete TouchDesigner project consisting of one or more interconnected operator networks that collectively define a real-time system.",
+      "inDefinedTermSet": "TouchDesigner Signal Flow Ontology"
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "name": "Operator Family",
+      "description": "An operator family is a classification grouping operators by the type of signal they process.",
+      "inDefinedTermSet": "TouchDesigner Signal Flow Ontology"
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "name": "TOP",
+      "description": "Texture Operators process image and pixel data. TOP networks perform compositing, filtering, rendering, and other GPU-based image operations.",
+      "inDefinedTermSet": "TouchDesigner Signal Flow Ontology"
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "name": "CHOP",
+      "description": "Channel Operators process time-based numeric signals sampled over frames. CHOPs are commonly used for animation control, motion signals, and data modulation.",
+      "inDefinedTermSet": "TouchDesigner Signal Flow Ontology"
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "name": "SOP",
+      "description": "Surface Operators process geometric structures composed of points, vertices, primitives, and attributes.",
+      "inDefinedTermSet": "TouchDesigner Signal Flow Ontology"
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "name": "DAT",
+      "description": "Data Operators manage structured information such as tables, text, and scripts used for control logic and metadata.",
+      "inDefinedTermSet": "TouchDesigner Signal Flow Ontology"
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "name": "POP",
+      "description": "Particle Operators simulate particle systems including emission, forces, and particle attribute evolution.",
+      "inDefinedTermSet": "TouchDesigner Signal Flow Ontology"
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "name": "MAT",
+      "description": "Material Operators define shading properties used during rendering, including surface color, lighting interaction, and texture mapping.",
+      "inDefinedTermSet": "TouchDesigner Signal Flow Ontology"
+    }
+
+  ]
+}
