@@ -1,0 +1,103 @@
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Wireup Outpost — Patch-State Interpretation and Signal-Flow Assistance System",
+  "description": "The Wireup Outpost is a live patch-aware interpretive system for TouchDesigner networks. It reads node graph state through wireup.tox, analyzes signal flow, explains operators, detects failure modes, and assists users while building patches.",
+  "about": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "TouchDesigner",
+      "applicationCategory": "Visual Programming Environment"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Wireup Outpost",
+      "applicationCategory": "Development Assistance Tool"
+    }
+  ],
+  "keywords": [
+    "TouchDesigner",
+    "visual programming",
+    "node based programming",
+    "signal flow",
+    "operator networks",
+    "TOP",
+    "CHOP",
+    "SOP",
+    "DAT",
+    "POP",
+    "MAT",
+    "patch debugging",
+    "TouchDesigner assistant",
+    "node graph analysis"
+  ],
+  "audience": {
+    "@type": "Audience",
+    "audienceType": "TouchDesigner developers"
+  },
+  "articleSection": [
+    "Patch-State Acquisition",
+    "Context Window Interpretation",
+    "Signal Flow Analysis",
+    "Operator Explanation",
+    "Failure Mode Detection",
+    "Parameter Interpretation",
+    "Live Patch Construction Assistance"
+  ],
+  "mainEntity": {
+    "@type": "SoftwareApplication",
+    "name": "Wireup Outpost",
+    "operatingSystem": "Web / TouchDesigner Integration",
+    "applicationCategory": "DeveloperTool",
+    "featureList": [
+      "Reads live TouchDesigner patch state through wireup.tox bridge",
+      "Displays Ray Ray context window for active patch interpretation",
+      "Accepts questions during active patch construction",
+      "Explains operators using TouchDesigner manual and structured Wireup notes",
+      "Analyzes node behavior and traces signal flow across operator chains",
+      "Detects common graph configuration errors and failure modes",
+      "Interprets parameter surfaces and menu states",
+      "Supports operator families: TOP, CHOP, SOP, DAT, POP, MAT",
+      "Provides layered explanation system: Identity, Signal Story, Failure Modes, Recipes, Reasoning",
+      "Uses hybrid reasoning: rule engine first, language model escalation when required",
+      "Displays bridge connectivity state using red/green status indicator",
+      "Remains active during live TouchDesigner patch construction"
+    ]
+  },
+  "hasPart": {
+    "@type": "DefinedTermSet",
+    "name": "TouchDesigner Operator Families",
+    "hasDefinedTerm": [
+      {
+        "@type": "DefinedTerm",
+        "name": "TOP",
+        "description": "Texture Operators responsible for image and pixel-domain processing in GPU pipelines."
+      },
+      {
+        "@type": "DefinedTerm",
+        "name": "CHOP",
+        "description": "Channel Operators representing time-based numeric signal streams used for animation and control."
+      },
+      {
+        "@type": "DefinedTerm",
+        "name": "SOP",
+        "description": "Surface Operators responsible for geometry manipulation including points, primitives, and attributes."
+      },
+      {
+        "@type": "DefinedTerm",
+        "name": "DAT",
+        "description": "Data Operators for tables, text processing, scripting, and structured metadata."
+      },
+      {
+        "@type": "DefinedTerm",
+        "name": "POP",
+        "description": "Particle Operators controlling particle systems, forces, and particle-state evolution."
+      },
+      {
+        "@type": "DefinedTerm",
+        "name": "MAT",
+        "description": "Material Operators controlling shading, surface appearance, and render pipeline materials."
+      }
+    ]
+  }
+}
