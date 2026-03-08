@@ -1,0 +1,6 @@
+{
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "max_tokens": 150,
+  "temperature": 0.2
+}
