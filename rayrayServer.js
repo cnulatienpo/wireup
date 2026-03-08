@@ -10,7 +10,7 @@ const {
   getMostRecentInteraction,
   appendInteraction,
 } = require('./sessionMemory');
-const { generateAnswer } = require('./llmAdapter');
+const { generateRayRayResponse } = require('./llmAdapter');
 
 const app = express();
 const PORT = 3000;
@@ -301,7 +301,7 @@ function buildComparisonPrompt(operatorA, operatorB, question, recentHistory = [
 
 async function compareOperators(operatorA, operatorB, question, recentHistory = [], followUp = false) {
   const prompt = buildComparisonPrompt(operatorA, operatorB, question, recentHistory, followUp);
-  return generateAnswer(prompt);
+  return generateRayRayResponse([{ role: 'user', content: prompt }]);
 }
 
 function summarizeNeighborhood(nodes = []) {
@@ -527,7 +527,7 @@ app.post('/rayray', async (req, res) => {
 
     const context = buildKnowledgeContext(operator);
     const prompt = buildPrompt(context, question, effectiveState, previousState, mode, recentHistory, followUp);
-    const answer = await generateAnswer(prompt);
+    const answer = await generateRayRayResponse([{ role: 'user', content: prompt }]);
 
     appendInteraction(sessionId, {
       question,

@@ -1,66 +1,53 @@
 # Ray Ray LLM Setup
 
-Ray Ray now uses a pluggable LLM adapter so you can switch providers by editing `rayrayConfig.json`.
+Ray Ray supports both DeepSeek and OpenAI through a shared adapter configured by `llmConfig.json`.
 
-## 1) Local mode (Ollama)
+## 1) Add a DeepSeek API key
 
-1. Start Ollama locally.
-2. Pull a model (example):
-   ```bash
-   ollama pull llama3
-   ```
-3. Set `rayrayConfig.json`:
-   ```json
-   {
-     "provider": "ollama",
-     "model": "llama3",
-     "endpoint": "http://localhost:11434/api/generate",
-     "temperature": 0.2
-   }
-   ```
-4. Start the Ray Ray server.
+Set your DeepSeek API key in your shell environment before starting the server:
 
-## 2) Cloud API mode (OpenAI-compatible)
+```bash
+export DEEPSEEK_API_KEY="your-deepseek-api-key"
+```
 
-1. Set your API key:
-   ```bash
-   export OPENAI_API_KEY="your-key"
-   ```
-2. Update `rayrayConfig.json`:
-   ```json
-   {
-     "provider": "openai",
-     "model": "gpt-4o-mini",
-     "endpoint": "https://api.openai.com/v1/chat/completions",
-     "temperature": 0.2
-   }
-   ```
+Ray Ray reads this key automatically when `provider` is set to `deepseek`.
 
-Notes:
-- `endpoint` supports OpenAI-compatible servers, so you can point this to other compatible APIs.
-- `model` should match whatever that endpoint provides.
+## 2) Switch providers in `llmConfig.json`
 
-## 3) Mock mode (no LLM required)
+Use `llmConfig.json` in the repository root to choose the provider and model.
 
-Use this when you want Ray Ray to run even without local or cloud model access.
-
-`rayrayConfig.json`:
+### DeepSeek example
 
 ```json
 {
-  "provider": "mock",
-  "model": "rayray-mock",
-  "endpoint": "http://localhost:11434/api/generate",
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "max_tokens": 150,
   "temperature": 0.2
 }
 ```
 
-In mock mode, Ray Ray returns a basic explanation derived from the detected operator name.
+### OpenAI example
 
-## Adapter entry point
+```json
+{
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "max_tokens": 150,
+  "temperature": 0.2
+}
+```
 
-The routing logic lives in `llmAdapter.js` and exports:
+If `provider` is `openai`, set:
 
-- `generateAnswer(prompt)`
+```bash
+export OPENAI_API_KEY="your-openai-api-key"
+```
 
-`rayrayServer.js` now calls this adapter for model responses.
+## 3) Run Ray Ray without an LLM
+
+If the selected provider API key is missing, Ray Ray does not crash. It returns:
+
+`LLM not configured. Ray Ray running in rule-only mode.`
+
+This lets the server keep running while you work without cloud API access.
