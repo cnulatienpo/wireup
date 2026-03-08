@@ -20,48 +20,26 @@ function loadConfig() {
   }
 }
 
-function getProviderSettings(provider) {
-  if (provider === 'deepseek') {
-    return {
-      endpoint: 'https://api.deepseek.com/v1/chat/completions',
-      apiKey: process.env.DEEPSEEK_API_KEY,
-    };
-  }
-
-  if (provider === 'openai') {
-    return {
-      endpoint: 'https://api.openai.com/v1/chat/completions',
-      apiKey: process.env.OPENAI_API_KEY,
-    };
-  }
-
-  return null;
-}
-
 function normalizeMessages(messages) {
-  if (!Array.isArray(messages)) {
+  if (!Array.isArray(messages) || messages.length === 0) {
     return [{ role: 'user', content: String(messages || '') }];
-  }
-
-  if (!messages.length) {
-    return [{ role: 'user', content: '' }];
   }
 
   return messages;
 }
 
-async function requestChatCompletion(messages, config, providerSettings) {
-  const response = await fetch(providerSettings.endpoint, {
+async function postChatCompletion({ endpoint, apiKey, model, messages, temperature, maxTokens }) {
+  const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${providerSettings.apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: config.model,
+      model,
       messages,
-      temperature: config.temperature,
-      max_tokens: config.max_tokens,
+      temperature,
+      max_tokens: maxTokens,
     }),
   });
 
@@ -74,26 +52,58 @@ async function requestChatCompletion(messages, config, providerSettings) {
   return data?.choices?.[0]?.message?.content?.trim() || '';
 }
 
-async function generateRayRayResponse(messages) {
-  const config = loadConfig();
-  const provider = String(config.provider || '').toLowerCase();
-  const providerSettings = getProviderSettings(provider);
-
-  if (!providerSettings || !providerSettings.apiKey) {
+async function callDeepSeek(messages, config) {
+  const apiKey = process.env.DEEPSEEK_API_KEY;
+  if (!apiKey) {
     return FALLBACK_MESSAGE;
   }
 
-  const normalizedMessages = normalizeMessages(messages);
-  const text = await requestChatCompletion(normalizedMessages, config, providerSettings);
+  const text = await postChatCompletion({
+    endpoint: 'https://api.deepseek.com/v1/chat/completions',
+    apiKey,
+    model: config.model,
+    messages,
+    temperature: config.temperature,
+    maxTokens: config.max_tokens,
+  });
 
   return text || 'I could not generate an answer right now.';
 }
 
-async function generateAnswer(prompt) {
-  return generateRayRayResponse([{ role: 'user', content: prompt }]);
+async function callOpenAI(messages, config) {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    return FALLBACK_MESSAGE;
+  }
+
+  const text = await postChatCompletion({
+    endpoint: 'https://api.openai.com/v1/chat/completions',
+    apiKey,
+    model: config.model,
+    messages,
+    temperature: config.temperature,
+    maxTokens: config.max_tokens,
+  });
+
+  return text || 'I could not generate an answer right now.';
+}
+
+async function generateRayRayResponse(messages) {
+  const config = loadConfig();
+  const normalizedMessages = normalizeMessages(messages);
+  const provider = String(config.provider || 'deepseek').toLowerCase();
+
+  if (provider === 'deepseek') {
+    return callDeepSeek(normalizedMessages, config);
+  }
+
+  if (provider === 'openai') {
+    return callOpenAI(normalizedMessages, config);
+  }
+
+  return FALLBACK_MESSAGE;
 }
 
 module.exports = {
   generateRayRayResponse,
-  generateAnswer,
 };
