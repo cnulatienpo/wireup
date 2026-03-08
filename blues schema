@@ -1,0 +1,94 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MusicComposition",
+  "name": "Signal Flow Blues",
+  "alternateName": "The Signal Flow Blues",
+  "genre": "Blues",
+  "description": "A mnemonic blues song introducing the foundational concepts of TouchDesigner visual programming including operators, node networks, and signal flow.",
+  "composer": {
+    "@type": "Person",
+    "name": "Blind Ray Ray McCoy",
+    "description": "Fictional blues singer and workshop narrator used in the Wireup Outpost learning environment."
+  },
+  "about": [
+    {
+      "@type": "Thing",
+      "name": "TouchDesigner",
+      "description": "A node-based visual programming environment used for real-time graphics and interactive systems."
+    },
+    {
+      "@type": "Thing",
+      "name": "Signal Flow",
+      "description": "The movement of data between operators in a node-based programming network."
+    },
+    {
+      "@type": "Thing",
+      "name": "Node-Based Programming",
+      "description": "A programming paradigm where computation is expressed through interconnected nodes rather than linear code."
+    }
+  ],
+  "educationalUse": "mnemonic",
+  "learningResourceType": "conceptual introduction",
+  "teaches": [
+    "signal flow",
+    "operator families",
+    "TouchDesigner networks",
+    "visual programming fundamentals"
+  ],
+  "isPartOf": {
+    "@type": "WebPage",
+    "name": "Wireup Outpost",
+    "description": "A live assistance system for TouchDesigner patch construction."
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MusicComposition",
+  "name": "Signal Flow Blues",
+  "genre": "Chicago Blues",
+  "description": "A mnemonic blues song explaining TouchDesigner signal flow, operator families, and node-based visual programming.",
+  "composer": {
+    "@type": "Person",
+    "name": "Blind Ray Ray McCoy"
+  },
+  "educationalUse": "mnemonic",
+  "learningResourceType": "concept introduction",
+  "about": [
+    {
+      "@type": "Thing",
+      "name": "TouchDesigner",
+      "description": "A node-based visual programming environment for real-time graphics and interactive systems."
+    },
+    {
+      "@type": "Thing",
+      "name": "Signal Flow",
+      "description": "The movement of data between connected operators in a node-based system."
+    },
+    {
+      "@type": "Thing",
+      "name": "Node-Based Programming",
+      "description": "A programming paradigm where operations are represented as interconnected nodes rather than linear code."
+    }
+  ],
+  "lyrics": {
+    "@type": "CreativeWork",
+    "text": "Walked into a workshop full of blinking little squares.\nEvery box a machine waiting for a signal.\nSignals move through wires from node to node.\nOne machine transforms it, the next machine continues the flow.\n\nTOP operators process image and texture data.\nCHOP operators process time-based numeric channels.\nSOP operators manipulate geometric structures.\nDAT operators store tables, text, and script data.\nPOP operators simulate particle systems.\nMAT operators define material and shading behavior.\n\nSignals enter an operator.\nThe operator transforms the signal.\nThe signal exits and moves downstream.\nThe network behaves as a chain of transformations.\n\nIf the patch fails, trace the signal path.\nFind where the signal stops or changes unexpectedly.\nCorrect the operator configuration or routing.\nSignal flow restored."
+  },
+  "isPartOf": {
+    "@type": "CreativeWork",
+    "name": "Wireup Outpost",
+    "description": "A patch-aware assistance system for TouchDesigner network construction."
+  },
+  "keywords": [
+    "TouchDesigner",
+    "signal flow",
+    "node graph",
+    "visual programming",
+    "TOP CHOP SOP DAT POP MAT"
+  ]
+}
+</script>
