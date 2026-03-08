@@ -11,12 +11,12 @@
 
 * {
   box-sizing: border-box;
-  font-family: "LaNuTienpo", Garamond, serif;
+  font-family: Garamond, "Times New Roman", serif;
 }
 
 body {
   margin: 0;
-  font-family: "LaNuTienpo", Garamond, serif;
+  font-family: Garamond, "Times New Roman", serif;
   background-image: url("./assets/metal-bg.jpg");
   background-size: cover;
   background-position: center;
@@ -251,7 +251,7 @@ select:disabled {
 
 .inventory-kind {
   color: var(--muted);
-  font-family: monospace;
+  font-family: Garamond, "Times New Roman", serif;
 }
 
 .worker-list {
@@ -352,7 +352,7 @@ select:disabled {
   margin: 0.2rem 0 0;
   color: var(--muted);
   font-size: 0.8rem;
-  font-family: monospace;
+  font-family: Garamond, "Times New Roman", serif;
 }
 
 .line-node-input {
@@ -389,7 +389,7 @@ select:disabled {
 .connection-row {
   margin: 0.2rem 0;
   color: var(--muted);
-  font-family: monospace;
+  font-family: Garamond, "Times New Roman", serif;
 }
 
 .placeholder {
@@ -408,7 +408,7 @@ select:disabled {
   color: #ffffff;
   min-height: 6rem;
   white-space: pre-wrap;
-  font-family: monospace;
+  font-family: Garamond, "Times New Roman", serif;
 }
 
 .rayray-hint,
@@ -539,7 +539,7 @@ select:disabled {
 }
 
 .narration-title {
-  font-family: "LaNuTienpo", Garamond, "Times New Roman", serif;
+  font-family: Garamond, "Times New Roman", serif;
   font-weight: bold;
   font-size: 1.9rem;
   line-height: 1.2;

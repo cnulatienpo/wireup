@@ -1,3 +1,5 @@
+import { LEVELS } from './levels.js';
+
 function getElementOrThrow(id) {
   const element = document.getElementById(id);
   if (!element) {
@@ -8,6 +10,36 @@ function getElementOrThrow(id) {
 
 function getInventoryItemById(state, itemId) {
   return state.inventory.find((item) => item.id === itemId) || null;
+}
+
+function createDragPayload(kind, id) {
+  return JSON.stringify({ kind, id });
+}
+
+function readDragPayload(dataTransfer) {
+  if (!dataTransfer) {
+    return null;
+  }
+
+  const raw = dataTransfer.getData('application/x-wireup-drag') || dataTransfer.getData('text/plain');
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object') {
+      return null;
+    }
+
+    if (typeof parsed.kind !== 'string' || typeof parsed.id !== 'string') {
+      return null;
+    }
+
+    return parsed;
+  } catch {
+    return null;
+  }
 }
 
 function withTd(state, eli5, td) {
@@ -287,9 +319,17 @@ export function renderNarration(state) {
     popup.classList.add('hidden');
   } else {
     popup.classList.remove('hidden');
-    title.textContent = state.levelMeta.title || '—';
+    const levelFromSource = LEVELS.find((level) => level.id === state.currentLevelId) || null;
+    const sourceLines = Array.isArray(levelFromSource?.dialogue)
+      ? levelFromSource.dialogue.map((line) =>
+          typeof line === 'string' ? { speaker: 'system', text: line } : line
+        )
+      : state.narration.lines;
 
-    const visibleLines = state.narration.lines.slice(0, state.dialogueIndex + 1).filter((_, idx) => idx > 0);
+    title.textContent = levelFromSource?.title || state.levelMeta.title || '—';
+
+    const safeIndex = Math.max(0, Math.min(state.dialogueIndex, sourceLines.length - 1));
+    const visibleLines = sourceLines.slice(0, safeIndex + 1).filter((_, idx) => idx > 0);
     const renderedLines = visibleLines.map((line) => {
       if (line.speaker === 'rayray') {
         return `Ray Ray: ${line.text}`;
@@ -390,7 +430,6 @@ export function renderSupplyRoom(state, actions) {
 export function renderBreakRoom(state, actions) {
   const container = getElementOrThrow('break-room-content');
   container.innerHTML = '';
-
   const workersSection = document.createElement('section');
   workersSection.className = 'subpanel';
 
@@ -404,6 +443,20 @@ export function renderBreakRoom(state, actions) {
   state.breakRoomTypes.forEach((worker) => {
     const card = document.createElement('article');
     card.className = 'worker-card worker-idle';
+    card.draggable = state.narration.mode === 'none';
+
+    card.addEventListener('dragstart', (event) => {
+      const transfer = event.dataTransfer;
+      if (!transfer || state.narration.mode !== 'none') {
+        event.preventDefault();
+        return;
+      }
+
+      transfer.effectAllowed = 'copy';
+      const payload = createDragPayload('worker', worker.id);
+      transfer.setData('application/x-wireup-drag', payload);
+      transfer.setData('text/plain', payload);
+    });
 
     const icon = document.createElement('div');
     icon.className = 'worker-icon';
@@ -436,6 +489,43 @@ export function renderBreakRoom(state, actions) {
 export function renderFactoryFloor(state, actions) {
   const container = getElementOrThrow('factory-floor-content');
   container.innerHTML = '';
+
+  const onFactoryDrop = (event) => {
+    if (state.narration.mode !== 'none') {
+      return;
+    }
+
+    event.preventDefault();
+    const payload = readDragPayload(event.dataTransfer);
+    if (!payload) {
+      return;
+    }
+
+    if (payload.kind === 'worker') {
+      actions.onSendToLine(payload.id);
+      return;
+    }
+
+    if (payload.kind === 'inventory') {
+      actions.onFeedInput(payload.id);
+    }
+  };
+
+  container.addEventListener('dragover', (event) => {
+    if (state.narration.mode !== 'none') {
+      return;
+    }
+
+    const payload = readDragPayload(event.dataTransfer);
+    if (!payload) {
+      return;
+    }
+
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'copy';
+  });
+
+  container.addEventListener('drop', onFactoryDrop);
 
   const line = document.createElement('div');
   line.className = 'assembly-line';
