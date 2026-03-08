@@ -1,0 +1,664 @@
+{
+  "common_menus": {
+    "Blending": {
+      "Transparency": "This decides whether the thing you are drawing can be seen through, like glass or plastic, or not, like cardboard.",
+      "Blend Operation": "This decides how the thing you are drawing mixes with what is already behind it on the screen.",
+      "Source Color": "This is the color coming from the material you are using right now.",
+      "Destination Color": "This is the color that is already on the screen behind the object.",
+      "Separate Alpha Function": "This lets the see-through part follow different rules than the color part.",
+      "Alpha Blend": "This controls how see-through the object becomes when mixed with what is behind it.",
+      "Orient": "This checks which side of a surface is facing the camera.",
+      "Operation": "This is the math rule that decides how colors are mixed together.",
+      "Source Alpha": "This is how see-through the object itself is.",
+      "Destination Alpha": "This is how see-through the background already is.",
+      "Blend Constant Color": "This is a fixed color used for mixing, instead of using the object or background color.",
+      "Blend Constant Alpha": "This is a fixed see-through amount used for mixing.",
+      "Legacy Alpha Behavior": "This uses older rules that existed in past versions.",
+      "Point Color Premultiply": "This mixes color and see-through amount together before drawing.",
+      "Depth Test": "This checks which object is closer to the camera.",
+      "Depth Test Function": "This decides how closeness is compared.",
+      "Write Depth Values": "This tells the computer to remember how close the object is.",
+      "Discard Pixels Based on Alpha": "This throws away very faint parts so they are not drawn.",
+      "Keep Pixels With Alpha": "This keeps only parts that are strong enough to see.",
+      "Alpha Threshold": "This is the cutoff point for what is kept or thrown away.",
+      "Wireframe": "This draws only the lines of the shape, like a cage.",
+      "Line Width": "This controls how thick those lines are.",
+      "Cull Face": "This hides surfaces that are facing the wrong direction.",
+      "Polygon Depth Offset": "This slightly moves surfaces forward or backward to stop flickering."
+    }
+  },
+  "operators": [
+    {
+      "operator": "Constant (MAT)",
+      "what_it_is": "A material that paints an object one solid color without reacting to lights.",
+      "mental_model": "Dipping an object into a bucket of paint.",
+      "example": "Make a train car one flat color with no shadows.",
+      "menu": {
+        "Apply Projection Maps": "Uses projected images if any exist.",
+        "Color": "The paint color used on the object.",
+        "Alpha": "How see-through the object is. Zero means invisible. One means solid.",
+        "Apply Point Color": "Uses color stored on the object itself.",
+        "Color Map": "An image that decides color across the surface.",
+        "Deform": "Allows the surface to bend or move.",
+        "Get Bone Data": "Reads movement from a skeleton.",
+        "POP/SOP With Capture Data": "Uses stored movement data.",
+        "Bone Paths": "Where the bones are located.",
+        "Attribute": "A named piece of data stored on the object.",
+        "PCAP Path": "Location of capture data.",
+        "Bone Bind Poses": "The original pose bones start from.",
+        "PCAP Data Attrib": "Which data is used for movement.",
+        "PCAP Part Data Zero": "Starting index for capture parts.",
+        "Skeleton Root Path": "The main bone everything connects to.",
+        "MAT": "Lets this material reference another material.",
+        "Blending": {
+          "$ref": "COMMON_MENU/Blending"
+        }
+      },
+      "explain_like_im_five": "It colors something one simple color, like crayons."
+    }
+  ]
+}
+{
+  "common_menus": {
+    "Deform": {
+      "Deform": "Turns on bending or moving the object using animation data.",
+      "Get Bone Data": "Reads movement from a skeleton made of bones.",
+      "POP/SOP With Capture Data": "Uses stored movement information from particles or geometry.",
+      "Bone Paths": "Tells the material where the bones live.",
+      "PCAP Path": "Location of point capture animation data.",
+      "Attribute": "Name of the data used to move the object.",
+      "Bone Bind Poses": "The original resting pose of the bones.",
+      "PCAP Data Attrib": "Which captured data is used.",
+      "Skeleton Root Path": "The main bone everything connects to."
+    }
+  },
+  "operators": [
+    {
+      "operator": "Depth (MAT)",
+      "what_it_is": "A material that draws how far surfaces are from the camera instead of color.",
+      "mental_model": "A ruler that measures distance instead of paint.",
+      "example": "Show which parts of a train are closer or farther away.",
+      "menu": {
+        "Deform": {
+          "$ref": "COMMON_MENU/Deform"
+        },
+        "Blending": {
+          "$ref": "COMMON_MENU/Blending"
+        }
+      },
+      "explain_like_im_five": "It doesn’t draw color. It draws distance."
+    }
+  ]
+}
+{
+  "common_menus": {
+    "GLSL Core": {
+      "Load": "Loads the shader code from a file or text.",
+      "Version": "Tells the computer which language rules to use.",
+      "Preprocessor Directives": "Small instructions that change how the code is prepared before running.",
+      "Vertex Shader": "Code that decides where points of the shape are placed.",
+      "Pixel Shader": "Code that decides the color of each tiny dot on the screen.",
+      "Geometry Shader": "Optional code that can create or change shapes.",
+      "Compile Behavior": "Controls when the code is checked and prepared.",
+      "Error Behavior": "Decides what happens if the code has mistakes.",
+      "Load Uniform Names": "Reads outside values so the code can use them.",
+      "Clear Uniform Names": "Removes previously loaded outside values.",
+      "Inherit Uniform Samplers From": "Uses textures from another material.",
+      "Lighting Space": "Decides how light direction is understood.",
+      "TD Simplex Noise": "Built-in random pattern generator.",
+      "Attributes": "Data stored on the shape itself.",
+      "Attribute Name": "Name of the data on the shape.",
+      "Type": "What kind of data it is.",
+      "Matrix Attribute Name": "Name of grid-like data.",
+      "Components": "How many parts a value has.",
+      "Columns": "How many vertical sections a grid has.",
+      "Samplers": "Ways to read images or textures.",
+      "Sampler Name": "Name used to access a texture.",
+      "TOP": "The image used by the shader.",
+      "Colors": "Named color values sent into the code.",
+      "Premultiply RGB by Alpha": "Mixes color with see-through amount first.",
+      "Color Name": "Name used inside the code.",
+      "RGB Alpha": "Red, green, blue, and see-through value.",
+      "Vectors": "Small direction or position values.",
+      "Vector Name": "Name of the direction value.",
+      "Value": "The actual numbers used.",
+      "Arrays": "Lists of values.",
+      "Array Name": "Name of the list.",
+      "Array Type": "What kind of values are in the list.",
+      "CHOP Array Type": "How channel data is read.",
+      "Channel Scope": "Which channels are used.",
+      "Matrices": "Grid-style number data.",
+      "Matrix Name": "Name of the grid.",
+      "Matrix": "The grid values.",
+      "Relative Name": "Name relative to another object.",
+      "Xform From": "Starting space for movement.",
+      "Xform To": "Ending space for movement.",
+      "Constants": "Fixed numbers that do not change.",
+      "Constant Name": "Name of the fixed number.",
+      "Buffers": "Temporary storage for data.",
+      "Buffer POP": "Particle data source.",
+      "Attribute Class": "What kind of object the data belongs to.",
+      "Attribute": "The actual data stored.",
+      "Name": "Label used to find the data."
+    },
+    "Comment": {
+      "Comment": "A note for humans that does not affect behavior."
+    }
+  },
+  "operators": [
+    {
+      "operator": "GLSL (MAT)",
+      "what_it_is": "A material where you write instructions that control how shapes are drawn.",
+      "mental_model": "Giving the computer a recipe for drawing.",
+      "example": "Make a train surface ripple, glow, or distort using math.",
+      "menu": {
+        "GLSL": {
+          "$ref": "COMMON_MENU/GLSL Core"
+        },
+        "Deform": {
+          "$ref": "COMMON_MENU/Deform"
+        },
+        "MAT": "Allows this material to reference another material.",
+        "Comment": {
+          "$ref": "COMMON_MENU/Comment"
+        }
+      },
+      "explain_like_im_five": "You tell the computer step by step how to draw something."
+    }
+  ]
+}
+{
+  "common_menus": {
+    "GLSL Core": {
+      "Load": "This brings in the instructions you wrote so the computer can use them.",
+      "Version": "This tells the computer which rulebook to follow.",
+      "Preprocessor Directives": "Little notes that change how the instructions are read before anything starts.",
+      "Vertex Shader": "Instructions that decide where the shape goes and how it bends.",
+      "Pixel Shader": "Instructions that decide the color of every tiny dot on the screen.",
+      "Geometry Shader": "Extra instructions that can add or remove pieces of a shape.",
+      "Compile Behavior": "Decides when the computer checks the instructions for mistakes.",
+      "Error Behavior": "Decides what the computer does if the instructions are wrong.",
+      "Load Uniform Names": "Brings in outside knobs you can turn.",
+      "Clear Uniform Names": "Removes those knobs.",
+      "Inherit Uniform Samplers From": "Borrows images and settings from another material.",
+      "Lighting Space": "Decides how light direction is understood.",
+      "TD Simplex Noise": "A built-in way to make natural-looking messiness, like clouds or waves.",
+      "Attributes": "Information attached to the object, like notes taped onto it.",
+      "Attribute Name": "The name of that note.",
+      "Type": "What kind of note it is.",
+      "Matrix Attribute Name": "The name of a big grid of numbers.",
+      "Components": "How many parts something has.",
+      "Columns": "How many vertical slices a grid has.",
+      "Samplers": "Ways to look at images.",
+      "Sampler Name": "The name used to talk about an image.",
+      "TOP": "The image being used.",
+      "Colors": "Named colors you can use.",
+      "Premultiply RGB by Alpha": "Mixes color and see-through amount together first.",
+      "Color Name": "The name of a color.",
+      "RGB Alpha": "Red, green, blue, and how see-through it is.",
+      "Vectors": "Directions or positions, like arrows.",
+      "Vector Name": "The name of an arrow.",
+      "Value": "The numbers used.",
+      "Arrays": "Lists of things.",
+      "Array Name": "The name of the list.",
+      "Array Type": "What kind of things are in the list.",
+      "CHOP Array Type": "How lists come from channels.",
+      "Channel Scope": "Which channels are used.",
+      "Matrices": "Big tables of numbers.",
+      "Matrix Name": "The name of the table.",
+      "Matrix": "The table itself.",
+      "Relative Name": "A name based on something else.",
+      "Xform From": "Where movement starts from.",
+      "Xform To": "Where movement ends up.",
+      "Constants": "Numbers that never change.",
+      "Constant Name": "The name of a never-changing number.",
+      "Buffers": "Temporary holding boxes for information.",
+      "Buffer POP": "Particle information.",
+      "Attribute Class": "What kind of thing owns the data.",
+      "Attribute": "The data itself.",
+      "Name": "The label used to find it."
+    },
+    "Comment": {
+      "Comment": "A note for humans that the computer ignores."
+    }
+  },
+  "operators": [
+    {
+      "operator": "GLSL (MAT)",
+      "what_it_is": "A material where you write your own drawing rules.",
+      "mental_model": "Writing instructions for how the computer should color and move things.",
+      "example": "Make a train look like it is melting, glowing, or shaking.",
+      "menu": {
+        "GLSL": {
+          "$ref": "COMMON_MENU/GLSL Core"
+        },
+        "Deform": {
+          "$ref": "COMMON_MENU/Deform"
+        },
+        "MAT": "Lets this material use settings from another material.",
+        "Comment": {
+          "$ref": "COMMON_MENU/Comment"
+        }
+      },
+      "explain_like_im_five": "You tell the computer exactly how to draw, instead of using crayons it already knows."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "In (MAT)",
+      "what_it_is": "A material that brings another material into this one so it can be used or combined.",
+      "mental_model": "A plug that lets one material talk to another material.",
+      "example": "Use one material inside another to build a bigger setup.",
+      "menu": {
+        "In": "Chooses which material is being brought in.",
+        "Label": "A name so humans know what this connection is for.",
+        "Connect Order": "Decides which material connects first when there are many.",
+        "Deform": {
+          "$ref": "COMMON_MENU/Deform"
+        },
+        "Blending": {
+          "$ref": "COMMON_MENU/Blending"
+        }
+      },
+      "explain_like_im_five": "It lets one coloring tool use another coloring tool."
+    }
+  ]
+}
+{
+  "common_menus": {
+    "Line Drawing": {
+      "Draw Lines": "Turns line drawing on or off.",
+      "Line Joint Type": "Decides how corners connect when a line bends.",
+      "Miter Threshold": "Limits how sharp a corner is allowed to be.",
+      "Line Start Cap Type": "Shape used at the beginning of a line.",
+      "Line End Cap Type": "Shape used at the end of a line.",
+      "Line Near Color": "Color of the line when it is close to the camera.",
+      "Line Near Alpha": "How see-through the line is when close.",
+      "Specify Line Far Color": "Allows a different color when far away.",
+      "Line Far Color": "Color of the line when far away.",
+      "Line Far Alpha": "How see-through the line is when far away."
+    },
+    "Point Drawing": {
+      "Draw Points": "Turns point drawing on or off.",
+      "Point Type": "Shape used for points.",
+      "Point Size Multiplier": "Makes points bigger or smaller.",
+      "Point Color": "Color of the points.",
+      "Near Color": "Point color when close.",
+      "Near Alpha": "Point see-through amount when close.",
+      "Far Color": "Point color when far away.",
+      "Far Alpha": "Point see-through amount when far away.",
+      "Point Lift Direction": "Direction points are pushed.",
+      "Point Lift Scale": "How far points are pushed."
+    },
+    "Depth Setup": {
+      "Depth Interpolation Model": "Decides how size and color change with distance.",
+      "Distance Near": "Where close distance starts.",
+      "Distance Far": "Where far distance starts."
+    },
+    "Width Control": {
+      "Width Near": "Line thickness when close.",
+      "Width Far": "Line thickness when far.",
+      "Width Affected by FOV": "Changes width based on camera view.",
+      "Ortho Width": "Width when camera has no perspective.",
+      "Width Bias": "Shifts how width changes.",
+      "Width Steepness": "Controls how fast width changes.",
+      "Width Linearize": "Makes width change evenly.",
+      "Width": "Overall line thickness."
+    },
+    "Color Control": {
+      "Color Bias": "Shifts how color changes.",
+      "Color Steepness": "Controls how fast color changes.",
+      "Color Linearize": "Makes color change evenly."
+    },
+    "Caps": {
+      "Round Width": "Round cap width.",
+      "Round Height": "Round cap height.",
+      "Square Triangle": "Square or triangle cap shape.",
+      "Arrow": "Arrow-shaped cap.",
+      "End Cap": "Shape placed at the end."
+    },
+    "Arrow": {
+      "Arrow Width": "How wide the arrow head is.",
+      "Arrow Height": "How tall the arrow head is.",
+      "Arrow Tail Length": "Length of the arrow stem.",
+      "End Cap Width Multiplier": "Scales arrow width.",
+      "End Cap Height Multiplier": "Scales arrow height.",
+      "Start Caps": "Adds caps to the start.",
+      "Pullback": "Moves arrow back from the end.",
+      "End": "Where the arrow finishes."
+    },
+    "Vectors": {
+      "Lift Direction": "Direction something is pushed.",
+      "Lift Scale": "How far it is pushed.",
+      "Num Points in Circle": "How round circles are."
+    },
+    "Attributes": {
+      "Line Vector Position Attribute": "Where line direction comes from.",
+      "Line Width": "Thickness stored on the object.",
+      "Line Color": "Color stored on the object.",
+      "Point Position": "Where points are located.",
+      "Point Size": "Size stored on the object.",
+      "Point Color": "Color stored on the object.",
+      "Inner Dot Size": "Size of dot inside a point.",
+      "Inner Dot Hue Shift": "Changes dot color slightly.",
+      "Inner Dot Color Multiplier": "Strength of inner dot color.",
+      "Vector Direction": "Direction stored on the object.",
+      "Attribute Type": "What kind of stored information it is."
+    }
+  },
+  "operators": [
+    {
+      "operator": "Line (MAT)",
+      "what_it_is": "A material that draws lines, points, and arrows instead of surfaces.",
+      "mental_model": "Drawing with markers instead of paint.",
+      "example": "Draw glowing train tracks or direction arrows.",
+      "menu": {
+        "Depth Setup": {
+          "$ref": "COMMON_MENU/Depth Setup"
+        },
+        "Width Control": {
+          "$ref": "COMMON_MENU/Width Control"
+        },
+        "Color Control": {
+          "$ref": "COMMON_MENU/Color Control"
+        },
+        "Line": {
+          "$ref": "COMMON_MENU/Line Drawing"
+        },
+        "Point": {
+          "$ref": "COMMON_MENU/Point Drawing"
+        },
+        "Vectors": {
+          "$ref": "COMMON_MENU/Vectors"
+        },
+        "Caps": {
+          "$ref": "COMMON_MENU/Caps"
+        },
+        "Arrow": {
+          "$ref": "COMMON_MENU/Arrow"
+        },
+        "Attributes": {
+          "$ref": "COMMON_MENU/Attributes"
+        },
+        "Deform": {
+          "$ref": "COMMON_MENU/Deform"
+        },
+        "Blending": {
+          "$ref": "COMMON_MENU/Blending"
+        }
+      },
+      "explain_like_im_five": "It draws lines, dots, and arrows instead of coloring shapes."
+    },
+    {
+      "operator": "Null (MAT)",
+      "what_it_is": "A material that does nothing and changes nothing.",
+      "mental_model": "A straight piece of wire.",
+      "example": "Pass a material through unchanged.",
+      "menu": {
+        "Null": "Turns the pass-through on or off.",
+        "Deform": {
+          "$ref": "COMMON_MENU/Deform"
+        },
+        "Blending": {
+          "$ref": "COMMON_MENU/Blending"
+        }
+      },
+      "explain_like_im_five": "It lets things pass through without changing them."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "N (MAT)",
+      "what_it_is": "A material connector that lets materials link together inside a network.",
+      "mental_model": "A labeled plug that helps materials snap together in order.",
+      "example": "Organize several materials so they connect in the right sequence.",
+      "menu": {
+        "N": "Chooses which material connection this is.",
+        "Label": "A name so humans know what this connection is for.",
+        "Connect Order": "Decides which connection happens first if there are many.",
+        "Deform": {
+          "$ref": "COMMON_MENU/Deform"
+        },
+        "Blending": {
+          "$ref": "COMMON_MENU/Blending"
+        }
+      },
+      "explain_like_im_five": "It’s a labeled plug that helps materials connect in the right order."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Out (MAT)",
+      "what_it_is": "Marks which material is the final result that gets used.",
+      "mental_model": "The finish line where the material leaves the network.",
+      "example": "Choose which material is sent to the object.",
+      "menu": {
+        "Out": "Turns this output on or off.",
+        "Select MAT": "Chooses which material is sent out.",
+        "Label": "A name so humans know what this output is.",
+        "Connect Order": "Decides priority if there are multiple outputs.",
+        "Deform": {
+          "$ref": "COMMON_MENU/Deform"
+        },
+        "Blending": {
+          "$ref": "COMMON_MENU/Blending"
+        }
+      },
+      "explain_like_im_five": "It tells TouchDesigner which material to actually use."
+    }
+  ]
+}
+{
+  "common_menus": {
+    "PBR Alpha": {
+      "Alpha Map": "An image that decides which parts are see-through and which parts are solid.",
+      "Uniform Alpha": "One single see-through amount for everything.",
+      "Alpha Front": "How see-through the front-facing parts are.",
+      "Alpha Side": "How see-through the side-facing parts are.",
+      "Alpha Rolloff": "How smoothly see-through changes from front to side."
+    },
+    "PBR Rim": {
+      "Enable": "Turns the rim light on or off.",
+      "Color Map": "An image that decides rim light color.",
+      "Color Center": "The main color of the rim light.",
+      "Width": "How thick the rim light edge is.",
+      "Strength": "How bright the rim light is.",
+      "Edge Strength Map": "An image that controls rim brightness at edges."
+    },
+    "PBR Advanced": {
+      "Shadow Strength": "How dark the shadows are.",
+      "Shadow Color": "The color used for shadows.",
+      "Darkness Emit": "Makes dark areas glow slightly.",
+      "Darkness Emit Color": "The glow color for dark areas.",
+      "Darkness Emit Map": "An image that controls where dark glow happens.",
+      "Right Camera Space Depth To Alpha": "Uses distance from the camera to control see-through.",
+      "Apply Point Color": "Uses color stored on the object.",
+      "Instance Texture": "Uses a different image per object copy.",
+      "Color Buffer": "Reads color from a stored image buffer.",
+      "RGB": "Uses red, green, and blue color data."
+    }
+  },
+  "operators": [
+    {
+      "operator": "PBR (MAT)",
+      "menu_additions": {
+        "Alpha": {
+          "$ref": "COMMON_MENU/PBR Alpha"
+        },
+        "Rim": {
+          "$ref": "COMMON_MENU/PBR Rim"
+        },
+        "Advanced": {
+          "$ref": "COMMON_MENU/PBR Advanced"
+        }
+      }
+    }
+  ]
+}
+{
+  "common_menus": {
+    "Phong RGB": {
+      "Ambient Uses Diffuse": "Uses the main color as the soft background color.",
+      "Diffuse": "The main paint color you see.",
+      "Ambient": "Soft light that fills everything evenly.",
+      "Specular": "Shiny highlights, like light on plastic.",
+      "Emit": "Makes the object glow by itself.",
+      "Constant": "Keeps the color steady no matter the light.",
+      "Shininess": "How tight and sharp the shiny spot is."
+    },
+    "Phong Maps": {
+      "Color Map": "An image that decides color across the surface.",
+      "Normal Map": "An image that fakes bumps and dents.",
+      "Bump Scale": "How strong those fake bumps look.",
+      "Enable Height Map": "Turns on surface pushing using an image.",
+      "Height Map": "An image that pushes the surface up and down.",
+      "Parallax Scale": "How deep the surface illusion looks.",
+      "Parallax Occlusion": "Makes surface depth look more realistic.",
+      "Displace Vertices": "Actually moves the surface points.",
+      "Displace Scale 1": "How far the surface is pushed.",
+      "Displace Midpoint": "The middle level for pushing in or out.",
+      "Diffuse Maps": "Images that control base color.",
+      "Specular Map": "Image that controls shininess.",
+      "Emit Map": "Image that controls glowing areas."
+    },
+    "Phong Environment": {
+      "Environment Map": "An image that pretends the object is inside a world.",
+      "Environment Map Color": "Color tint for the fake world reflection.",
+      "Map Rotate": "Spins the fake world around.",
+      "Map 2D Type": "How the world image is wrapped.",
+      "Polygon Front Faces": "Decides which side of the surface reacts."
+    }
+  },
+  "operators": [
+    {
+      "operator": "Phong (MAT)",
+      "what_it_is": "A classic material that uses simple lighting to make objects look shiny or dull.",
+      "mental_model": "Painting an object and shining a flashlight on it.",
+      "example": "Make a train look like plastic, metal, or rubber.",
+      "menu": {
+        "RGB": {
+          "$ref": "COMMON_MENU/Phong RGB"
+        },
+        "Maps": {
+          "$ref": "COMMON_MENU/Phong Maps"
+        },
+        "Environment": {
+          "$ref": "COMMON_MENU/Phong Environment"
+        },
+        "Rim": {
+          "$ref": "COMMON_MENU/PBR Rim"
+        },
+        "Advanced": {
+          "$ref": "COMMON_MENU/PBR Advanced"
+        },
+        "Deform": {
+          "$ref": "COMMON_MENU/Deform"
+        },
+        "Blending": {
+          "$ref": "COMMON_MENU/Blending"
+        }
+      },
+      "explain_like_im_five": "It colors something and makes it look shiny when light hits it."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Point Sprite (MAT)",
+      "what_it_is": "A material that draws tiny pictures on points instead of drawing surfaces.",
+      "mental_model": "Stickers placed on dots.",
+      "example": "Turn points into glowing sparks or snowflakes.",
+      "menu": {
+        "Color Alpha": "Controls the color and how see-through each point is.",
+        "Color Map": "An image used as the sticker drawn on each point.",
+        "Offset Left": "Moves the sticker left on the point.",
+        "Offset Right": "Moves the sticker right on the point.",
+        "Offset Bottom": "Moves the sticker down on the point.",
+        "Offset Top": "Moves the sticker up on the point.",
+        "Point Scale Attribute": "Uses size information stored on the point.",
+        "Constant": "Uses one fixed size for all points.",
+        "Point Size": "How big each sticker is.",
+        "Sizing Model": "Decides how size is calculated.",
+        "Attenuate Point Scale": "Changes point size based on distance.",
+        "Attenuate Near Distance": "Distance where size change starts.",
+        "Attenuate Far Distance": "Distance where size change ends.",
+        "Near Point Scale": "Point size when close to the camera.",
+        "Far Point Scale": "Point size when far from the camera.",
+        "Size Affected by FOV or Width": "Changes size based on camera view or screen width.",
+        "Deform": {
+          "$ref": "COMMON_MENU/Deform"
+        },
+        "Blending": {
+          "$ref": "COMMON_MENU/Blending"
+        }
+      },
+      "explain_like_im_five": "It puts little pictures on dots and lets them grow or shrink."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Select (MAT)",
+      "what_it_is": "A material that chooses which parts are visible and which parts are hidden.",
+      "mental_model": "A stencil that decides what shows through.",
+      "example": "Only show certain areas of a material.",
+      "menu": {
+        "Select": "Turns selection on or off.",
+        "Select Matte": "Chooses which mask decides visibility.",
+        "Deform": {
+          "$ref": "COMMON_MENU/Deform"
+        },
+        "Blending": {
+          "$ref": "COMMON_MENU/Blending"
+        }
+      },
+      "explain_like_im_five": "It decides what parts you can see and what parts you can’t."
+    },
+    {
+      "operator": "Switch (MAT)",
+      "what_it_is": "A material that switches between different materials.",
+      "mental_model": "A light switch that picks which tool is active.",
+      "example": "Change materials based on a number or condition.",
+      "menu": {
+        "Switch": "Turns switching on or off.",
+        "Index": "Chooses which material is active.",
+        "Extend": "Decides what happens when the index goes out of range.",
+        "Deform": {
+          "$ref": "COMMON_MENU/Deform"
+        },
+        "Blending": {
+          "$ref": "COMMON_MENU/Blending"
+        }
+      },
+      "explain_like_im_five": "It picks one material from a list."
+    },
+    {
+      "operator": "Wireframe (MAT)",
+      "what_it_is": "A material that draws only the lines of a shape instead of filling it.",
+      "mental_model": "A metal cage outline.",
+      "example": "Show the structure of a train without solid surfaces.",
+      "menu": {
+        "Wireframe": "Turns wire drawing on or off.",
+        "Color": "Color of the lines.",
+        "Alpha": "How see-through the lines are.",
+        "Wireframe Mode": "Decides how the lines are drawn.",
+        "Line Width": "How thick the lines are.",
+        "Deform": {
+          "$ref": "COMMON_MENU/Deform"
+        },
+        "Blending": {
+          "$ref": "COMMON_MENU/Blending"
+        }
+      },
+      "explain_like_im_five": "It draws shapes using only lines."
+    }
+  ]
+}

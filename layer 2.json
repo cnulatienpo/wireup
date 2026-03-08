@@ -1,0 +1,1816 @@
+{
+  "layer": "Layer 2 — Signal Flow Glossary",
+  "purpose": "Explain what signal flow is, why it exists, and how it behaves, using plain language for someone with no prior exposure.",
+  "assumptions": [
+    "The reader has never heard the term signal flow",
+    "The reader does not know TouchDesigner",
+    "The reader does not know programming concepts",
+    "The reader understands time, change, and cause-and-effect"
+  ],
+
+  "core_concept": {
+    "name": "Signal Flow",
+    "definition": "Signal flow is the idea that something changes over time and passes through steps that affect it.",
+    "why_it_exists": [
+      "Because things change instead of staying frozen",
+      "Because one change often causes another",
+      "Because complex behavior is easier to understand as a sequence than as a whole"
+    ],
+    "what_it_is_not": [
+      "Not electricity",
+      "Not sound",
+      "Not code",
+      "Not a file format",
+      "Not a wire"
+    ]
+  },
+
+  "flow_laws": [
+    {
+      "law": "Flow moves forward",
+      "meaning": "What happens earlier can affect what happens later.",
+      "does_not_mean": [
+        "Faster",
+        "Straighter",
+        "Better"
+      ]
+    },
+    {
+      "law": "Flow has direction",
+      "meaning": "Influence goes one way, from source to result.",
+      "does_not_mean": [
+        "Physical direction",
+        "Left to right on screen"
+      ]
+    },
+    {
+      "law": "Nothing happens without input",
+      "meaning": "If nothing enters, nothing changes.",
+      "exceptions": [
+        "Generators, which create something on their own"
+      ]
+    },
+    {
+      "law": "Flow does not remember by default",
+      "meaning": "Each moment is treated as new unless something is explicitly stored.",
+      "does_not_mean": [
+        "The system forgets instantly",
+        "History is impossible"
+      ]
+    }
+  ],
+
+  "glossary": [
+    {
+      "term": "Signal",
+      "definition": "Anything that can change over time and affect something else.",
+      "examples": [
+        "A picture updating",
+        "Numbers rising and falling",
+        "Points moving in space",
+        "A moment that says now"
+      ],
+      "common_mistakes": [
+        "Thinking it must be sound",
+        "Thinking it must be physical"
+      ]
+    },
+    {
+      "term": "Flow",
+      "definition": "The ongoing movement of a signal through time and influence.",
+      "examples": [
+        "A picture becoming brighter frame by frame",
+        "Values slowly drifting upward"
+      ],
+      "common_mistakes": [
+        "Assuming flow means smoothness",
+        "Assuming flow means speed"
+      ]
+    },
+    {
+      "term": "State",
+      "definition": "What the signal is like at a single moment.",
+      "examples": [
+        "This exact frame",
+        "This exact value",
+        "This exact position"
+      ],
+      "what_it_does_not_do": [
+        "Store history",
+        "Predict the future"
+      ]
+    },
+    {
+      "term": "Change",
+      "definition": "A difference between one moment and the next.",
+      "examples": [
+        "Higher than before",
+        "Rotated slightly",
+        "More intense"
+      ],
+      "common_mistakes": [
+        "Assuming change must be visible",
+        "Assuming change means motion"
+      ]
+    },
+    {
+      "term": "Transform",
+      "definition": "The signal stays the same thing but appears differently.",
+      "examples": [
+        "Moved",
+        "Scaled",
+        "Rotated"
+      ],
+      "does_not_happen": [
+        "No new detail is created",
+        "The signal is not replaced"
+      ]
+    },
+    {
+      "term": "Modify",
+      "definition": "The signal’s character is altered.",
+      "examples": [
+        "Softer",
+        "Sharper",
+        "Stronger",
+        "Weaker"
+      ],
+      "does_not_happen": [
+        "The signal is not duplicated",
+        "The signal is not relocated"
+      ]
+    },
+    {
+      "term": "Generate",
+      "definition": "Something exists where nothing existed before.",
+      "examples": [
+        "A new image appears",
+        "A pattern begins"
+      ],
+      "does_not_mean": [
+        "Random",
+        "Complex",
+        "Uncontrolled"
+      ]
+    },
+    {
+      "term": "Filter",
+      "definition": "Some parts of the signal are reduced or removed.",
+      "examples": [
+        "Only strong parts remain",
+        "Only slow changes pass through"
+      ],
+      "does_not_happen": [
+        "Nothing new is added",
+        "Nothing is rearranged"
+      ]
+    },
+    {
+      "term": "Combine",
+      "definition": "Multiple signals influence one result.",
+      "examples": [
+        "Two images layered",
+        "Several values averaged"
+      ],
+      "does_not_mean": [
+        "Signals merge histories",
+        "Signals lose identity completely"
+      ]
+    },
+    {
+      "term": "Split",
+      "definition": "One signal produces multiple related results.",
+      "examples": [
+        "Different aspects separated",
+        "Same signal viewed in multiple ways"
+      ],
+      "does_not_mean": [
+        "Duplication of memory",
+        "Independent origins"
+      ]
+    },
+    {
+      "term": "Threshold",
+      "definition": "A point where behavior changes.",
+      "examples": [
+        "Above this value, something happens",
+        "Below this moment, nothing happens"
+      ],
+      "common_mistakes": [
+        "Assuming it is gradual",
+        "Assuming it remembers past crossings"
+      ]
+    },
+    {
+      "term": "Pulse",
+      "definition": "A brief event that happens and then disappears.",
+      "examples": [
+        "A trigger",
+        "A momentary signal"
+      ],
+      "does_not_mean": [
+        "A sustained state",
+        "A value that stays on"
+      ]
+    }
+  ],
+
+  "mental_model": {
+    "summary": "Signal flow is a way of thinking about change over time.",
+    "core_question": "What goes in, what changes, what comes out?",
+    "why_this_matters": [
+      "It lets you predict behavior",
+      "It lets you reason without menus",
+      "It stays stable across versions"
+    ]
+  }
+}
+{
+  "band": "Foundations",
+  "band_goal": "Establish what a signal is, what flow means, and how to think about change before any tools, screens, or systems exist.",
+  "entry_count": 10,
+  "entries": [
+    {
+      "term": "Signal",
+      "definition": "Anything that can change over time and influence something else.",
+      "intuition": "If it can be different now than it was a moment ago, it counts.",
+      "examples": [
+        "A picture updating",
+        "A number rising",
+        "A position shifting",
+        "A moment that says now"
+      ],
+      "not_this": [
+        "Not sound specifically",
+        "Not electricity",
+        "Not a file"
+      ]
+    },
+    {
+      "term": "Flow",
+      "definition": "The forward movement of a signal through time.",
+      "intuition": "One moment leads into the next.",
+      "examples": [
+        "Frame after frame",
+        "Value after value"
+      ],
+      "not_this": [
+        "Not speed",
+        "Not smoothness",
+        "Not physical motion"
+      ]
+    },
+    {
+      "term": "Time",
+      "definition": "The ordering of moments that allows change to exist.",
+      "intuition": "Without time, nothing could be different.",
+      "examples": [
+        "Before and after",
+        "Now versus then"
+      ],
+      "not_this": [
+        "Not a clock",
+        "Not a unit you must measure"
+      ]
+    },
+    {
+      "term": "Moment",
+      "definition": "A single slice of time.",
+      "intuition": "One instant, taken alone.",
+      "examples": [
+        "This frame",
+        "This exact value"
+      ],
+      "not_this": [
+        "Not a duration",
+        "Not a memory"
+      ]
+    },
+    {
+      "term": "State",
+      "definition": "What a signal is like at one moment.",
+      "intuition": "A snapshot of how things stand right now.",
+      "examples": [
+        "Current brightness",
+        "Current position"
+      ],
+      "not_this": [
+        "Not history",
+        "Not intent"
+      ]
+    },
+    {
+      "term": "Change",
+      "definition": "A difference between one moment and the next.",
+      "intuition": "Something did not stay the same.",
+      "examples": [
+        "Higher than before",
+        "Rotated slightly"
+      ],
+      "not_this": [
+        "Not improvement",
+        "Not motion in space by default"
+      ]
+    },
+    {
+      "term": "Source",
+      "definition": "Where a signal begins.",
+      "intuition": "The place change first appears.",
+      "examples": [
+        "A generated pattern",
+        "An external input"
+      ],
+      "not_this": [
+        "Not always visible",
+        "Not always physical"
+      ]
+    },
+    {
+      "term": "Result",
+      "definition": "What exists after the signal has flowed and changed.",
+      "intuition": "What you end up seeing or using.",
+      "examples": [
+        "A final image",
+        "A final value"
+      ],
+      "not_this": [
+        "Not a goal",
+        "Not a decision"
+      ]
+    },
+    {
+      "term": "Influence",
+      "definition": "When one signal affects another without replacing it.",
+      "intuition": "A nudge rather than a takeover.",
+      "examples": [
+        "Brightness affected by a value",
+        "Motion shaped by another motion"
+      ],
+      "not_this": [
+        "Not control",
+        "Not ownership"
+      ]
+    },
+    {
+      "term": "Continuity",
+      "definition": "Whether change feels connected from moment to moment.",
+      "intuition": "Does it feel like one ongoing thing or separate steps?",
+      "examples": [
+        "Smooth drift",
+        "Stepped jumps"
+      ],
+      "not_this": [
+        "Not required for flow",
+        "Not guaranteed"
+      ]
+    }
+  ],
+  "exit_condition": "After this band, the reader understands that signal flow is about time, change, and influence—nothing more."
+}
+{
+  "band": "Motion & Change",
+  "band_goal": "Explain how signals evolve, move, and differ over time, without assuming space, visuals, or mechanics.",
+  "entry_count": 10,
+  "entries": [
+    {
+      "term": "Variation",
+      "definition": "The amount a signal differs from one moment to the next.",
+      "intuition": "How much it refuses to stay the same.",
+      "examples": [
+        "Large swings",
+        "Tiny fluctuations"
+      ],
+      "not_this": [
+        "Not randomness",
+        "Not noise by default"
+      ]
+    },
+    {
+      "term": "Rate",
+      "definition": "How quickly change happens over time.",
+      "intuition": "Fast-changing versus slow-changing.",
+      "examples": [
+        "Rapid flicker",
+        "Gradual drift"
+      ],
+      "not_this": [
+        "Not speed in space",
+        "Not intensity"
+      ]
+    },
+    {
+      "term": "Direction",
+      "definition": "The tendency of change to move one way rather than another.",
+      "intuition": "Upward, downward, increasing, decreasing.",
+      "examples": [
+        "Getting brighter",
+        "Getting smaller"
+      ],
+      "not_this": [
+        "Not a compass direction",
+        "Not spatial movement"
+      ]
+    },
+    {
+      "term": "Momentum",
+      "definition": "The tendency of a signal to keep changing in the same way.",
+      "intuition": "Once it’s going, it keeps going.",
+      "examples": [
+        "Acceleration",
+        "Deceleration"
+      ],
+      "not_this": [
+        "Not memory",
+        "Not intention"
+      ]
+    },
+    {
+      "term": "Oscillation",
+      "definition": "Change that moves back and forth between states.",
+      "intuition": "Repeating swings.",
+      "examples": [
+        "Back and forth",
+        "Up and down"
+      ],
+      "not_this": [
+        "Not instability",
+        "Not error"
+      ]
+    },
+    {
+      "term": "Range",
+      "definition": "The span between the smallest and largest states a signal reaches.",
+      "intuition": "How far it is allowed to go.",
+      "examples": [
+        "Narrow limits",
+        "Wide extremes"
+      ],
+      "not_this": [
+        "Not resolution",
+        "Not precision"
+      ]
+    },
+    {
+      "term": "Drift",
+      "definition": "Slow, accumulated change over time.",
+      "intuition": "It wanders without a sharp push.",
+      "examples": [
+        "Gradual offset",
+        "Long-term shift"
+      ],
+      "not_this": [
+        "Not error",
+        "Not noise"
+      ]
+    },
+    {
+      "term": "Step",
+      "definition": "Change that happens in jumps rather than continuously.",
+      "intuition": "One state, then suddenly another.",
+      "examples": [
+        "Discrete levels",
+        "Sudden switches"
+      ],
+      "not_this": [
+        "Not broken flow",
+        "Not failure"
+      ]
+    },
+    {
+      "term": "Stability",
+      "definition": "Resistance to change over time.",
+      "intuition": "It stays put unless pushed.",
+      "examples": [
+        "Held value",
+        "Flat signal"
+      ],
+      "not_this": [
+        "Not frozen forever",
+        "Not absence of flow"
+      ]
+    },
+    {
+      "term": "Transition",
+      "definition": "The passage from one state to another.",
+      "intuition": "How change is crossed, not just where it starts or ends.",
+      "examples": [
+        "Abrupt transition",
+        "Gradual transition"
+      ],
+      "not_this": [
+        "Not a destination",
+        "Not a trigger"
+      ]
+    }
+  ],
+  "exit_condition": "After this band, the reader can describe how a signal changes over time without referring to tools, space, or implementation."
+}
+{
+  "band": "Decision & Events",
+  "band_goal": "Explain how signals cause moments, switches, and conditional behavior without implying intention, logic, or planning.",
+  "entry_count": 10,
+  "entries": [
+    {
+      "term": "Event",
+      "definition": "Something that happens at a specific moment.",
+      "intuition": "A point in time where behavior changes or is noticed.",
+      "examples": [
+        "A sudden switch",
+        "A detected moment"
+      ],
+      "not_this": [
+        "Not a duration",
+        "Not a continuous state"
+      ]
+    },
+    {
+      "term": "Trigger",
+      "definition": "An event that causes something else to happen.",
+      "intuition": "This happens, so that happens.",
+      "examples": [
+        "A threshold crossed",
+        "A pulse detected"
+      ],
+      "not_this": [
+        "Not sustained influence",
+        "Not gradual change"
+      ]
+    },
+    {
+      "term": "Threshold",
+      "definition": "A boundary where behavior changes when crossed.",
+      "intuition": "Below this, one thing happens. Above it, another.",
+      "examples": [
+        "Minimum required level",
+        "Cutoff point"
+      ],
+      "not_this": [
+        "Not a slope",
+        "Not a transition by itself"
+      ]
+    },
+    {
+      "term": "Condition",
+      "definition": "A requirement that must be met for something to occur.",
+      "intuition": "Only when this is true.",
+      "examples": [
+        "Value is high enough",
+        "Moment is reached"
+      ],
+      "not_this": [
+        "Not a decision-maker",
+        "Not awareness"
+      ]
+    },
+    {
+      "term": "Gate",
+      "definition": "A point where flow is allowed or blocked.",
+      "intuition": "Open or closed.",
+      "examples": [
+        "Passing signal through",
+        "Stopping signal entirely"
+      ],
+      "not_this": [
+        "Not a filter",
+        "Not a delay"
+      ]
+    },
+    {
+      "term": "Pulse",
+      "definition": "A brief signal that exists for a short moment.",
+      "intuition": "It appears, then disappears.",
+      "examples": [
+        "Momentary on",
+        "Single-frame signal"
+      ],
+      "not_this": [
+        "Not a held value",
+        "Not memory"
+      ]
+    },
+    {
+      "term": "Edge",
+      "definition": "The instant when a signal changes state.",
+      "intuition": "The exact moment of change.",
+      "examples": [
+        "Off to on",
+        "Low to high"
+      ],
+      "not_this": [
+        "Not the state itself",
+        "Not duration"
+      ]
+    },
+    {
+      "term": "Comparison",
+      "definition": "Evaluating one signal against another or against a reference.",
+      "intuition": "Is this bigger, smaller, or the same?",
+      "examples": [
+        "Greater than",
+        "Different from before"
+      ],
+      "not_this": [
+        "Not judgment",
+        "Not interpretation"
+      ]
+    },
+    {
+      "term": "Selection",
+      "definition": "Choosing which signal continues forward.",
+      "intuition": "This one goes on, that one does not.",
+      "examples": [
+        "One of many paths",
+        "Active versus inactive"
+      ],
+      "not_this": [
+        "Not preference",
+        "Not intention"
+      ]
+    },
+    {
+      "term": "Switch",
+      "definition": "A change that redirects flow from one path to another.",
+      "intuition": "Flow is rerouted.",
+      "examples": [
+        "Alternate source",
+        "Changed output"
+      ],
+      "not_this": [
+        "Not blending",
+        "Not gradual transition"
+      ]
+    }
+  ],
+  "exit_condition": "After this band, the reader can describe how moments and conditions alter flow without imagining logic, thought, or agency."
+}
+{
+  "band": "Interaction & Influence",
+  "band_goal": "Explain how multiple signals affect each other without implying hierarchy, ownership, or control.",
+  "entry_count": 10,
+  "entries": [
+    {
+      "term": "Interaction",
+      "definition": "When two or more signals affect the same outcome.",
+      "intuition": "They meet and the result reflects both.",
+      "examples": [
+        "One signal shapes another",
+        "Two influences combine"
+      ],
+      "not_this": [
+        "Not conversation",
+        "Not cooperation"
+      ]
+    },
+    {
+      "term": "Control",
+      "definition": "When one signal determines the behavior of another.",
+      "intuition": "This one decides how that one behaves.",
+      "examples": [
+        "A value setting intensity",
+        "A signal deciding when something happens"
+      ],
+      "not_this": [
+        "Not awareness",
+        "Not intention"
+      ]
+    },
+    {
+      "term": "Modulation",
+      "definition": "Using one signal to continuously shape another.",
+      "intuition": "One signal bends the behavior of another over time.",
+      "examples": [
+        "Motion shaping brightness",
+        "Values warping movement"
+      ],
+      "not_this": [
+        "Not replacement",
+        "Not switching"
+      ]
+    },
+    {
+      "term": "Override",
+      "definition": "One signal replaces another when active.",
+      "intuition": "When this is present, the other no longer matters.",
+      "examples": [
+        "Manual input taking precedence",
+        "Fallback behavior being ignored"
+      ],
+      "not_this": [
+        "Not blending",
+        "Not influence"
+      ]
+    },
+    {
+      "term": "Blend",
+      "definition": "Signals contribute together to form a combined result.",
+      "intuition": "Each one adds something to the outcome.",
+      "examples": [
+        "Layered images",
+        "Averaged values"
+      ],
+      "not_this": [
+        "Not switching",
+        "Not choosing one"
+      ]
+    },
+    {
+      "term": "Weight",
+      "definition": "How strongly a signal contributes relative to others.",
+      "intuition": "Some voices count more than others.",
+      "examples": [
+        "Dominant influence",
+        "Subtle influence"
+      ],
+      "not_this": [
+        "Not importance",
+        "Not correctness"
+      ]
+    },
+    {
+      "term": "Dependency",
+      "definition": "When one signal cannot exist meaningfully without another.",
+      "intuition": "This only matters because that exists.",
+      "examples": [
+        "A modifier without a base",
+        "Control without a target"
+      ],
+      "not_this": [
+        "Not hierarchy",
+        "Not ownership"
+      ]
+    },
+    {
+      "term": "Coupling",
+      "definition": "When changes in one signal are mirrored by another.",
+      "intuition": "They move together.",
+      "examples": [
+        "Linked motion",
+        "Synchronized change"
+      ],
+      "not_this": [
+        "Not sameness",
+        "Not duplication"
+      ]
+    },
+    {
+      "term": "Isolation",
+      "definition": "Preventing one signal from affecting another.",
+      "intuition": "This change does not leak over.",
+      "examples": [
+        "Independent behavior",
+        "Separated influence"
+      ],
+      "not_this": [
+        "Not absence",
+        "Not removal"
+      ]
+    },
+    {
+      "term": "Scope",
+      "definition": "Where and how far a signal’s influence applies.",
+      "intuition": "What it reaches and what it does not.",
+      "examples": [
+        "Local effect",
+        "Global effect"
+      ],
+      "not_this": [
+        "Not visibility",
+        "Not priority"
+      ]
+    }
+  ],
+  "exit_condition": "After this band, the reader understands how multiple signals coexist, shape each other, or stay separate without imagining intent or logic."
+}
+{
+  "band": "Memory & Time",
+  "band_goal": "Explain what persists, what does not, and how time affects signals without implying awareness, storage devices, or planning.",
+  "entry_count": 10,
+  "entries": [
+    {
+      "term": "Persistence",
+      "definition": "Whether a signal continues to exist beyond the current moment.",
+      "intuition": "Does it stick around or vanish immediately?",
+      "examples": [
+        "A value that stays",
+        "An image that remains visible"
+      ],
+      "not_this": [
+        "Not permanence",
+        "Not intention"
+      ]
+    },
+    {
+      "term": "Memory",
+      "definition": "The ability to retain past states and use them later.",
+      "intuition": "What happened before can matter now.",
+      "examples": [
+        "Previous position influencing current behavior",
+        "Accumulated change"
+      ],
+      "not_this": [
+        "Not awareness",
+        "Not recall"
+      ]
+    },
+    {
+      "term": "History",
+      "definition": "The sequence of past states a signal has gone through.",
+      "intuition": "The trail behind the current moment.",
+      "examples": [
+        "Earlier values",
+        "Earlier positions"
+      ],
+      "not_this": [
+        "Not automatically accessible",
+        "Not always stored"
+      ]
+    },
+    {
+      "term": "Delay",
+      "definition": "A shift in time between cause and effect.",
+      "intuition": "It happens later than expected.",
+      "examples": [
+        "Lagged response",
+        "Offset reaction"
+      ],
+      "not_this": [
+        "Not smoothing",
+        "Not slowing time itself"
+      ]
+    },
+    {
+      "term": "Accumulation",
+      "definition": "Change that builds up over time.",
+      "intuition": "Each moment adds to the last.",
+      "examples": [
+        "Growing total",
+        "Increasing offset"
+      ],
+      "not_this": [
+        "Not instant change",
+        "Not replacement"
+      ]
+    },
+    {
+      "term": "Decay",
+      "definition": "Gradual loss of influence over time.",
+      "intuition": "It fades instead of stopping suddenly.",
+      "examples": [
+        "Diminishing value",
+        "Fading effect"
+      ],
+      "not_this": [
+        "Not deletion",
+        "Not a trigger"
+      ]
+    },
+    {
+      "term": "Reset",
+      "definition": "Returning a signal to an initial or neutral state.",
+      "intuition": "Back to the beginning.",
+      "examples": [
+        "Cleared value",
+        "Restarted behavior"
+      ],
+      "not_this": [
+        "Not rewind",
+        "Not undo"
+      ]
+    },
+    {
+      "term": "Latency",
+      "definition": "The time it takes for a change to be observed after it occurs.",
+      "intuition": "The wait before you see it.",
+      "examples": [
+        "Delayed visual response",
+        "Late reaction"
+      ],
+      "not_this": [
+        "Not intentional delay",
+        "Not buffering by default"
+      ]
+    },
+    {
+      "term": "Sampling",
+      "definition": "Observing a signal at specific moments rather than continuously.",
+      "intuition": "Checking in at intervals.",
+      "examples": [
+        "Frame-by-frame updates",
+        "Stepped observation"
+      ],
+      "not_this": [
+        "Not averaging",
+        "Not filtering"
+      ]
+    },
+    {
+      "term": "Continuance",
+      "definition": "Whether a signal carries forward unchanged when nothing acts on it.",
+      "intuition": "Does it keep going as-is?",
+      "examples": [
+        "Held value",
+        "Unaltered output"
+      ],
+      "not_this": [
+        "Not guarantee",
+        "Not memory creation"
+      ]
+    }
+  ],
+  "exit_condition": "After this band, the reader understands what aspects of a signal persist across time, what must be stored deliberately, and why past moments do not matter unless explicitly carried forward."
+}
+{
+  "band": "Absence & Limits",
+  "band_goal": "Explain what it means when nothing happens, why expectations fail, and where signals stop mattering.",
+  "entry_count": 10,
+  "entries": [
+    {
+      "term": "Absence",
+      "definition": "When no signal is present at a given moment.",
+      "intuition": "There is nothing to act on.",
+      "examples": [
+        "No image arriving",
+        "No value changing"
+      ],
+      "not_this": [
+        "Not zero",
+        "Not silence by default"
+      ]
+    },
+    {
+      "term": "Zero",
+      "definition": "A signal that exists but has no magnitude.",
+      "intuition": "Something is there, but it has no strength.",
+      "examples": [
+        "Value of zero",
+        "Flat intensity"
+      ],
+      "not_this": [
+        "Not absence",
+        "Not inactivity"
+      ]
+    },
+    {
+      "term": "Silence",
+      "definition": "A state where no noticeable change occurs.",
+      "intuition": "Nothing seems to be happening.",
+      "examples": [
+        "Unchanging output",
+        "Held state"
+      ],
+      "not_this": [
+        "Not absence",
+        "Not failure"
+      ]
+    },
+    {
+      "term": "Inertia",
+      "definition": "The tendency of a signal to remain unchanged unless acted upon.",
+      "intuition": "It keeps doing what it was doing.",
+      "examples": [
+        "Held position",
+        "Stable value"
+      ],
+      "not_this": [
+        "Not resistance by force",
+        "Not intention"
+      ]
+    },
+    {
+      "term": "Limit",
+      "definition": "A boundary beyond which a signal cannot go.",
+      "intuition": "This is as far as it gets.",
+      "examples": [
+        "Maximum value",
+        "Minimum range"
+      ],
+      "not_this": [
+        "Not a suggestion",
+        "Not a preference"
+      ]
+    },
+    {
+      "term": "Saturation",
+      "definition": "When increasing input no longer changes the output.",
+      "intuition": "More effort has no effect.",
+      "examples": [
+        "Clipped intensity",
+        "Maxed-out response"
+      ],
+      "not_this": [
+        "Not stability",
+        "Not correctness"
+      ]
+    },
+    {
+      "term": "Clipping",
+      "definition": "Forcing a signal to stop at a boundary.",
+      "intuition": "It hits a wall.",
+      "examples": [
+        "Values stuck at extremes",
+        "Hard cutoff"
+      ],
+      "not_this": [
+        "Not smoothing",
+        "Not compression"
+      ]
+    },
+    {
+      "term": "Fallback",
+      "definition": "What happens when expected input is missing.",
+      "intuition": "What it does instead.",
+      "examples": [
+        "Default behavior",
+        "Safe output"
+      ],
+      "not_this": [
+        "Not correction",
+        "Not intelligence"
+      ]
+    },
+    {
+      "term": "Failure",
+      "definition": "When a signal cannot produce a meaningful result.",
+      "intuition": "The flow stops making sense.",
+      "examples": [
+        "No visible output",
+        "Invalid state"
+      ],
+      "not_this": [
+        "Not error messaging",
+        "Not moral judgment"
+      ]
+    },
+    {
+      "term": "Expectation Trap",
+      "definition": "A mismatch between what is assumed and what flow actually does.",
+      "intuition": "You expected something to happen, but nothing did.",
+      "examples": [
+        "Expecting memory where none exists",
+        "Expecting motion without change"
+      ],
+      "not_this": [
+        "Not user error",
+        "Not hidden behavior"
+      ]
+    }
+  ],
+  "exit_condition": "After this band, the reader understands why nothing happening is often correct behavior, and where signals naturally stop or lose influence."
+}
+{
+  "layer": "Layer 2 — Signal Flow Glossary",
+  "status": "stitched",
+  "goal": "Unify all six bands into a single coherent mental model with consistent language, clear progression, and no conceptual gaps.",
+
+  "global_rules": {
+    "language_constraints": [
+      "No developer jargon",
+      "No menu or parameter references",
+      "No implementation details",
+      "No implication of intent, intelligence, or agency"
+    ],
+    "reading_order": "Linear, but each band must stand alone",
+    "core_question_everywhere": "What goes in, what changes, what comes out, what does not happen?"
+  },
+
+  "conceptual_spine": [
+    {
+      "step": 1,
+      "band": "Foundations",
+      "role": "Define what exists at all.",
+      "connects_to_next": "Once something exists and flows, it must change."
+    },
+    {
+      "step": 2,
+      "band": "Motion & Change",
+      "role": "Describe how things evolve over time.",
+      "connects_to_next": "Once change exists, moments can matter."
+    },
+    {
+      "step": 3,
+      "band": "Decision & Events",
+      "role": "Explain when change causes noticeable moments.",
+      "connects_to_next": "Once moments exist, signals can affect each other."
+    },
+    {
+      "step": 4,
+      "band": "Interaction & Influence",
+      "role": "Explain coexistence and mutual shaping.",
+      "connects_to_next": "Once signals interact, persistence becomes relevant."
+    },
+    {
+      "step": 5,
+      "band": "Memory & Time",
+      "role": "Explain what carries forward and what does not.",
+      "connects_to_next": "Once persistence is understood, absence becomes meaningful."
+    },
+    {
+      "step": 6,
+      "band": "Absence & Limits",
+      "role": "Explain why nothing happening is often correct.",
+      "connects_to_next": "No further band; this resolves expectations."
+    }
+  ],
+
+  "terminology_alignment": {
+    "signal": {
+      "introduced_in": "Foundations",
+      "referenced_in": [
+        "Motion & Change",
+        "Decision & Events",
+        "Interaction & Influence",
+        "Memory & Time",
+        "Absence & Limits"
+      ],
+      "consistency_note": "Always means something that can change over time and influence something else."
+    },
+    "change": {
+      "introduced_in": "Foundations",
+      "expanded_in": "Motion & Change",
+      "used_in": [
+        "Decision & Events",
+        "Memory & Time"
+      ],
+      "consistency_note": "Never implies improvement or spatial motion."
+    },
+    "event": {
+      "introduced_in": "Decision & Events",
+      "supported_by": [
+        "Threshold",
+        "Pulse",
+        "Edge"
+      ],
+      "consistency_note": "Always momentary, never sustained."
+    },
+    "influence": {
+      "introduced_in": "Foundations",
+      "expanded_in": "Interaction & Influence",
+      "contrasted_with": "Control",
+      "consistency_note": "Influence shapes; it does not decide."
+    },
+    "memory": {
+      "introduced_in": "Memory & Time",
+      "contrasted_with": [
+        "State",
+        "Moment",
+        "Continuance"
+      ],
+      "consistency_note": "Never assumed; always explicit."
+    },
+    "absence": {
+      "introduced_in": "Absence & Limits",
+      "contrasted_with": [
+        "Zero",
+        "Silence",
+        "Inertia"
+      ],
+      "consistency_note": "Means nothing is present, not that nothing exists."
+    }
+  },
+
+  "cross_band_clarifications": [
+    {
+      "potential_confusion": "Stability vs Persistence",
+      "resolution": "Stability describes resistance to change; persistence describes survival across moments."
+    },
+    {
+      "potential_confusion": "Trigger vs Transition",
+      "resolution": "A trigger is a moment; a transition is the passage between states."
+    },
+    {
+      "potential_confusion": "Control vs Override",
+      "resolution": "Control shapes behavior continuously; override replaces behavior when active."
+    },
+    {
+      "potential_confusion": "Zero vs Absence",
+      "resolution": "Zero is something with no magnitude; absence is nothing at all."
+    },
+    {
+      "potential_confusion": "Delay vs Latency",
+      "resolution": "Delay is intentional separation in time; latency is inherent waiting before observation."
+    }
+  ],
+
+  "reader_outcome": {
+    "after_reading": [
+      "The reader can describe any TouchDesigner system without naming tools",
+      "The reader understands why nothing happening is often correct",
+      "The reader does not expect memory unless it is introduced",
+      "The reader can predict behavior by reasoning about flow"
+    ],
+    "what_the_reader_will_not_do": [
+      "Assume intent or intelligence",
+      "Assume history exists by default",
+      "Assume visual motion equals signal change"
+    ]
+  },
+
+  "authoring_rules_for_future_layers": {
+    "layer_2_dependency": "All Layer 2 operator stories must use only glossary terms from this document.",
+    "violation_test": "If a sentence cannot be explained using glossary terms, it does not belong in Layer 2.",
+    "version_safety": "Any sentence here should remain true across future versions."
+  }
+}
+{
+  "layer": "Layer 2 — Signal Flow Glossary",
+  "status": "fully stitched",
+  "intent": "Present signal flow as a single, continuous idea rather than six separate sections. This version removes band boundaries as a learning requirement while preserving them as an internal structure.",
+
+  "how_to_read": {
+    "instruction": "Read top to bottom once. After that, treat this as a reference.",
+    "mental_posture": "Assume nothing is trying to be smart. Nothing wants anything. Things only change when acted on."
+  },
+
+  "conceptual_arc": {
+    "beginning": "Something exists and can change.",
+    "middle": "That change moves through time, sometimes causing moments, sometimes interacting with other change.",
+    "end": "If nothing happens, that is often the correct result."
+  },
+
+  "glossary": [
+    {
+      "term": "Signal",
+      "definition": "Anything that can change over time and influence something else.",
+      "anchors": ["Flow", "Change", "Influence"]
+    },
+    {
+      "term": "Flow",
+      "definition": "The forward progression of a signal through time.",
+      "anchors": ["Time", "Moment"]
+    },
+    {
+      "term": "Time",
+      "definition": "The ordering of moments that allows change to exist.",
+      "anchors": ["Moment", "History"]
+    },
+    {
+      "term": "Moment",
+      "definition": "A single slice of time.",
+      "anchors": ["State"]
+    },
+    {
+      "term": "State",
+      "definition": "What a signal is like at one moment.",
+      "anchors": ["Change"]
+    },
+    {
+      "term": "Change",
+      "definition": "A difference between one moment and the next.",
+      "anchors": ["Variation", "Transition"]
+    },
+    {
+      "term": "Variation",
+      "definition": "How much a signal differs from moment to moment.",
+      "anchors": ["Rate", "Range"]
+    },
+    {
+      "term": "Rate",
+      "definition": "How quickly change happens over time.",
+      "anchors": ["Drift", "Step"]
+    },
+    {
+      "term": "Direction",
+      "definition": "The tendency of change to move one way rather than another.",
+      "anchors": ["Momentum"]
+    },
+    {
+      "term": "Momentum",
+      "definition": "The tendency of change to continue once it has begun.",
+      "anchors": ["Inertia"]
+    },
+    {
+      "term": "Oscillation",
+      "definition": "Change that moves back and forth between states.",
+      "anchors": ["Range"]
+    },
+    {
+      "term": "Transition",
+      "definition": "The passage from one state to another.",
+      "anchors": ["Event"]
+    },
+    {
+      "term": "Event",
+      "definition": "Something that happens at a specific moment.",
+      "anchors": ["Trigger", "Edge"]
+    },
+    {
+      "term": "Trigger",
+      "definition": "An event that causes something else to happen.",
+      "anchors": ["Threshold"]
+    },
+    {
+      "term": "Threshold",
+      "definition": "A boundary where behavior changes when crossed.",
+      "anchors": ["Gate"]
+    },
+    {
+      "term": "Gate",
+      "definition": "A point where flow is allowed or blocked.",
+      "anchors": ["Selection"]
+    },
+    {
+      "term": "Pulse",
+      "definition": "A brief signal that exists for a short moment.",
+      "anchors": ["Event"]
+    },
+    {
+      "term": "Influence",
+      "definition": "When one signal affects another without replacing it.",
+      "anchors": ["Interaction"]
+    },
+    {
+      "term": "Interaction",
+      "definition": "Multiple signals affecting the same outcome.",
+      "anchors": ["Blend", "Modulation"]
+    },
+    {
+      "term": "Control",
+      "definition": "One signal determining how another behaves.",
+      "anchors": ["Override"]
+    },
+    {
+      "term": "Blend",
+      "definition": "Signals contributing together to form a result.",
+      "anchors": ["Weight"]
+    },
+    {
+      "term": "Dependency",
+      "definition": "When one signal only matters because another exists.",
+      "anchors": ["Scope"]
+    },
+    {
+      "term": "Persistence",
+      "definition": "Whether a signal continues beyond the current moment.",
+      "anchors": ["Memory"]
+    },
+    {
+      "term": "Memory",
+      "definition": "The ability for past states to influence the present.",
+      "anchors": ["History"]
+    },
+    {
+      "term": "History",
+      "definition": "The sequence of past states a signal has passed through.",
+      "anchors": ["Accumulation"]
+    },
+    {
+      "term": "Delay",
+      "definition": "A separation in time between cause and effect.",
+      "anchors": ["Latency"]
+    },
+    {
+      "term": "Reset",
+      "definition": "Returning a signal to a neutral or initial state.",
+      "anchors": ["Absence"]
+    },
+    {
+      "term": "Absence",
+      "definition": "No signal is present.",
+      "anchors": ["Zero"]
+    },
+    {
+      "term": "Zero",
+      "definition": "A signal that exists but has no magnitude.",
+      "anchors": ["Silence"]
+    },
+    {
+      "term": "Silence",
+      "definition": "No noticeable change occurs.",
+      "anchors": ["Stability"]
+    },
+    {
+      "term": "Limit",
+      "definition": "A boundary beyond which a signal cannot go.",
+      "anchors": ["Clipping"]
+    },
+    {
+      "term": "Expectation Trap",
+      "definition": "Assuming something should happen when flow says it should not.",
+      "anchors": []
+    }
+  ],
+
+  "unifying_rules": [
+    "Nothing remembers unless memory is introduced.",
+    "Nothing moves unless change is present.",
+    "Nothing happens is often the correct outcome.",
+    "Signals influence; they do not decide.",
+    "Flow explains behavior without explaining implementation."
+  ],
+
+  "ready_for_next_layer": true
+}
+{
+  "layer": "Layer 3 — Operator Families",
+  "purpose": "Describe families of operators by what role they play in signal flow, using only Layer 2 vocabulary. No tools, menus, or implementation details.",
+  "reading_rule": "Each family answers: what goes in, what changes, what comes out, what does not happen.",
+
+  "families": [
+    {
+      "family": "Generators",
+      "role": "Create a signal where none existed.",
+      "what_goes_in": [
+        "Sometimes nothing",
+        "Sometimes guiding values"
+      ],
+      "what_changes": [
+        "A signal begins to exist",
+        "Time starts to matter"
+      ],
+      "what_comes_out": [
+        "A signal with variation over time"
+      ],
+      "what_does_not_happen": [
+        "They do not react to downstream results",
+        "They do not remember unless memory is added"
+      ],
+      "common_expectation_traps": [
+        "Assuming generators respond to later changes",
+        "Assuming generation implies randomness"
+      ]
+    },
+    {
+      "family": "Transforms",
+      "role": "Change how a signal appears without changing what it is.",
+      "what_goes_in": [
+        "An existing signal"
+      ],
+      "what_changes": [
+        "Position, orientation, or scale in a conceptual sense"
+      ],
+      "what_comes_out": [
+        "The same signal, presented differently"
+      ],
+      "what_does_not_happen": [
+        "No new detail is created",
+        "No internal structure is altered"
+      ],
+      "common_expectation_traps": [
+        "Expecting added complexity",
+        "Expecting motion without change"
+      ]
+    },
+    {
+      "family": "Modifiers",
+      "role": "Alter the character of a signal.",
+      "what_goes_in": [
+        "A signal to be altered",
+        "Optional influencing signals"
+      ],
+      "what_changes": [
+        "Intensity, sharpness, smoothness, or emphasis"
+      ],
+      "what_comes_out": [
+        "A signal that feels different but remains continuous"
+      ],
+      "what_does_not_happen": [
+        "They do not replace the signal",
+        "They do not decide behavior"
+      ],
+      "common_expectation_traps": [
+        "Assuming modifiers create structure",
+        "Assuming modifiers store history"
+      ]
+    },
+    {
+      "family": "Filters",
+      "role": "Reduce or emphasize parts of a signal.",
+      "what_goes_in": [
+        "A signal with variation"
+      ],
+      "what_changes": [
+        "Some aspects are reduced or removed"
+      ],
+      "what_comes_out": [
+        "A simplified or focused signal"
+      ],
+      "what_does_not_happen": [
+        "No rearranging",
+        "No generation of new content"
+      ],
+      "common_expectation_traps": [
+        "Expecting enhancement without loss",
+        "Expecting filters to add detail"
+      ]
+    },
+    {
+      "family": "Combiners",
+      "role": "Allow multiple signals to influence one result.",
+      "what_goes_in": [
+        "Two or more signals"
+      ],
+      "what_changes": [
+        "Signals are blended, averaged, or layered"
+      ],
+      "what_comes_out": [
+        "One signal reflecting multiple influences"
+      ],
+      "what_does_not_happen": [
+        "Signals do not merge histories",
+        "Signals do not become aware of each other"
+      ],
+      "common_expectation_traps": [
+        "Expecting hierarchy by default",
+        "Expecting automatic balance"
+      ]
+    },
+    {
+      "family": "Selectors",
+      "role": "Choose which signal continues forward.",
+      "what_goes_in": [
+        "Multiple candidate signals",
+        "A condition or event"
+      ],
+      "what_changes": [
+        "Flow is routed"
+      ],
+      "what_comes_out": [
+        "One active signal"
+      ],
+      "what_does_not_happen": [
+        "No blending occurs",
+        "No gradual transition unless added"
+      ],
+      "common_expectation_traps": [
+        "Expecting soft fades",
+        "Expecting memory of past choices"
+      ]
+    },
+    {
+      "family": "Events & Triggers",
+      "role": "Detect moments that cause behavior to change.",
+      "what_goes_in": [
+        "A changing signal"
+      ],
+      "what_changes": [
+        "Moments are detected"
+      ],
+      "what_comes_out": [
+        "Brief signals indicating something happened"
+      ],
+      "what_does_not_happen": [
+        "They do not hold state",
+        "They do not sustain influence"
+      ],
+      "common_expectation_traps": [
+        "Expecting duration",
+        "Expecting memory"
+      ]
+    },
+    {
+      "family": "Gates",
+      "role": "Allow or block flow.",
+      "what_goes_in": [
+        "A signal",
+        "An enabling condition"
+      ],
+      "what_changes": [
+        "Flow continues or stops"
+      ],
+      "what_comes_out": [
+        "Passed-through signal or absence"
+      ],
+      "what_does_not_happen": [
+        "No modification of content",
+        "No delay by default"
+      ],
+      "common_expectation_traps": [
+        "Expecting filtering",
+        "Expecting smoothing"
+      ]
+    },
+    {
+      "family": "Memory",
+      "role": "Allow past states to influence the present.",
+      "what_goes_in": [
+        "A signal over time"
+      ],
+      "what_changes": [
+        "History is retained"
+      ],
+      "what_comes_out": [
+        "Signals informed by earlier moments"
+      ],
+      "what_does_not_happen": [
+        "They do not predict the future",
+        "They do not decide relevance"
+      ],
+      "common_expectation_traps": [
+        "Assuming memory exists everywhere",
+        "Assuming undo behavior"
+      ]
+    },
+    {
+      "family": "Timing",
+      "role": "Shift when things are observed or acted upon.",
+      "what_goes_in": [
+        "A signal"
+      ],
+      "what_changes": [
+        "When the signal is experienced"
+      ],
+      "what_comes_out": [
+        "The same signal, later or offset"
+      ],
+      "what_does_not_happen": [
+        "They do not change content",
+        "They do not smooth by default"
+      ],
+      "common_expectation_traps": [
+        "Confusing delay with decay",
+        "Confusing latency with intent"
+      ]
+    }
+  ],
+
+  "layer_3_rules": [
+    "Families describe roles, not tools",
+    "Every operator belongs to exactly one primary family",
+    "If an operator seems to belong to multiple families, its signal story is unclear",
+    "Layer 3 must only use Layer 2 terms"
+  ],
+
+  "exit_condition": "The reader can classify any operator by role before learning its details."
+}
+{
+  "layer": "Layer 3 — Family-Level Expectation Traps",
+  "purpose": "Surface the most common incorrect assumptions people bring to each operator family, stated plainly so they can be unlearned early.",
+  "scope_rule": "Traps describe expectations, not errors. Nothing here implies misuse or failure.",
+  "families": [
+    {
+      "family": "Generators",
+      "expectation_traps": [
+        {
+          "assumption": "Generators react to what comes later.",
+          "reality": "They begin flow; they do not look downstream."
+        },
+        {
+          "assumption": "Generated signals are random.",
+          "reality": "Generation can be stable, repeating, or guided."
+        },
+        {
+          "assumption": "Generators remember past runs.",
+          "reality": "They start fresh unless memory is added."
+        },
+        {
+          "assumption": "No input means no control.",
+          "reality": "Guiding influence can exist without a primary input."
+        }
+      ]
+    },
+    {
+      "family": "Transforms",
+      "expectation_traps": [
+        {
+          "assumption": "Transforms add detail.",
+          "reality": "They only change presentation, not substance."
+        },
+        {
+          "assumption": "Transforms cause motion by themselves.",
+          "reality": "Without change over time, nothing moves."
+        },
+        {
+          "assumption": "Transforms affect internal structure.",
+          "reality": "Identity stays intact."
+        }
+      ]
+    },
+    {
+      "family": "Modifiers",
+      "expectation_traps": [
+        {
+          "assumption": "Modifiers replace the signal.",
+          "reality": "They alter character while preserving continuity."
+        },
+        {
+          "assumption": "Modifiers store what happened before.",
+          "reality": "They act only on what arrives now."
+        },
+        {
+          "assumption": "Stronger settings always improve results.",
+          "reality": "More influence can erase nuance."
+        }
+      ]
+    },
+    {
+      "family": "Filters",
+      "expectation_traps": [
+        {
+          "assumption": "Filters enhance without loss.",
+          "reality": "Emphasis always removes something else."
+        },
+        {
+          "assumption": "Filtering rearranges content.",
+          "reality": "Order and structure remain the same."
+        },
+        {
+          "assumption": "Filters add detail.",
+          "reality": "They only reduce or emphasize what exists."
+        }
+      ]
+    },
+    {
+      "family": "Combiners",
+      "expectation_traps": [
+        {
+          "assumption": "Signals merge into one history.",
+          "reality": "Influences combine; histories stay separate."
+        },
+        {
+          "assumption": "Combination implies balance.",
+          "reality": "Some signals can dominate."
+        },
+        {
+          "assumption": "More inputs produce richer results.",
+          "reality": "Crowding can flatten outcomes."
+        }
+      ]
+    },
+    {
+      "family": "Selectors",
+      "expectation_traps": [
+        {
+          "assumption": "Selection blends smoothly.",
+          "reality": "Selection is discrete unless transition is added."
+        },
+        {
+          "assumption": "Past selections matter automatically.",
+          "reality": "Each moment is evaluated independently."
+        },
+        {
+          "assumption": "Inactive paths continue evolving.",
+          "reality": "Only the selected path proceeds."
+        }
+      ]
+    },
+    {
+      "family": "Events & Triggers",
+      "expectation_traps": [
+        {
+          "assumption": "Events last.",
+          "reality": "They occur and disappear."
+        },
+        {
+          "assumption": "Triggers hold influence.",
+          "reality": "They only mark moments."
+        },
+        {
+          "assumption": "Repeated triggers imply memory.",
+          "reality": "Each trigger stands alone."
+        }
+      ]
+    },
+    {
+      "family": "Gates",
+      "expectation_traps": [
+        {
+          "assumption": "Gates soften signals.",
+          "reality": "They pass or block without modification."
+        },
+        {
+          "assumption": "Blocked signals are stored.",
+          "reality": "Blocked flow is absent, not delayed."
+        },
+        {
+          "assumption": "Gates decide importance.",
+          "reality": "They only allow or prevent passage."
+        }
+      ]
+    },
+    {
+      "family": "Memory",
+      "expectation_traps": [
+        {
+          "assumption": "Memory exists everywhere.",
+          "reality": "Memory must be explicitly introduced."
+        },
+        {
+          "assumption": "Memory implies undo.",
+          "reality": "Stored history influences forward flow only."
+        },
+        {
+          "assumption": "All past moments matter equally.",
+          "reality": "Only retained history has influence."
+        }
+      ]
+    },
+    {
+      "family": "Timing",
+      "expectation_traps": [
+        {
+          "assumption": "Timing changes content.",
+          "reality": "Only when content is experienced changes."
+        },
+        {
+          "assumption": "Delay smooths behavior.",
+          "reality": "Delay shifts time, not character."
+        },
+        {
+          "assumption": "Latency is intentional.",
+          "reality": "Latency is inherent waiting."
+        }
+      ]
+    }
+  ],
+  "authoring_rule": "If an operator breaks one of these expectations, call it out explicitly in its Layer 2 story."
+}
