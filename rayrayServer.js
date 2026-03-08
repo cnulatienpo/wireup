@@ -24,6 +24,65 @@ function normalizeOperatorName(name = '') {
   return String(name).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
+function normalizeToken(token = '') {
+  const trimmed = token.trim();
+  if (trimmed.length > 3 && trimmed.endsWith('s')) {
+    return trimmed.slice(0, -1);
+  }
+
+  return trimmed;
+}
+
+function tokenize(text = '') {
+  return normalizeOperatorName(text)
+    .split(/\s+/)
+    .map(normalizeToken)
+    .filter(Boolean);
+}
+
+function findOperatorsInQuestion(question = '') {
+  const questionTokens = tokenize(question);
+  if (!questionTokens.length) {
+    return [];
+  }
+
+  const tokenSet = new Set(questionTokens);
+
+  const matches = operatorNames
+    .map((name) => {
+      const opTokens = tokenize(name);
+      if (!opTokens.length) return null;
+
+      const matched = opTokens.every((token) => tokenSet.has(token));
+      if (!matched) return null;
+
+      const firstIndex = Math.min(
+        ...opTokens
+          .map((token) => questionTokens.indexOf(token))
+          .filter((index) => index >= 0),
+      );
+
+      return {
+        name,
+        firstIndex: Number.isFinite(firstIndex) ? firstIndex : Number.MAX_SAFE_INTEGER,
+        tokenCount: opTokens.length,
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => {
+      if (a.firstIndex !== b.firstIndex) return a.firstIndex - b.firstIndex;
+      if (a.tokenCount !== b.tokenCount) return b.tokenCount - a.tokenCount;
+      return b.name.length - a.name.length;
+    });
+
+  return matches.map((match) => match.name);
+}
+
+function detectComparisonOperators(question = '') {
+  const matches = findOperatorsInQuestion(question);
+  return matches.length >= 2 ? matches.slice(0, 2) : [];
+}
+
 function detectOperator(question = '', state = {}) {
   const nodeType = state?.nodeType;
 
@@ -34,20 +93,8 @@ function detectOperator(question = '', state = {}) {
     return direct || nodeType;
   }
 
-  const normalizedQuestion = normalizeOperatorName(question);
-  if (!normalizedQuestion) return null;
-
-  let bestMatch = null;
-  for (const name of operatorNames) {
-    const normalizedName = normalizeOperatorName(name);
-    if (normalizedName && normalizedQuestion.includes(normalizedName)) {
-      if (!bestMatch || normalizedName.length > normalizeOperatorName(bestMatch).length) {
-        bestMatch = name;
-      }
-    }
-  }
-
-  return bestMatch;
+  const matches = findOperatorsInQuestion(question);
+  return matches[0] || null;
 }
 
 function parseConcatenatedJson(content) {
@@ -162,6 +209,97 @@ function buildKnowledgeContext(operatorName) {
     });
 
   return [`Operator: ${operatorName}`, '', ...fragments].join('\n\n');
+}
+
+const COMPARISON_SECTIONS = ['Identity', 'Signal Story', 'Failure Modes', 'Recipes', 'Reasoning Lens'];
+
+function findSectionValue(entry, sectionName) {
+  if (!entry || typeof entry !== 'object') {
+    return null;
+  }
+
+  const normalizedSection = normalizeOperatorName(sectionName);
+  for (const [key, value] of Object.entries(entry)) {
+    if (normalizeOperatorName(key) === normalizedSection) {
+      return value;
+    }
+  }
+
+  for (const value of Object.values(entry)) {
+    if (value && typeof value === 'object') {
+      const nested = findSectionValue(value, sectionName);
+      if (nested != null) return nested;
+    }
+  }
+
+  return null;
+}
+
+function formatSectionValue(value) {
+  if (value == null) {
+    return 'Not explicitly documented in indexed fragments.';
+  }
+
+  if (typeof value === 'string') {
+    return value;
+  }
+
+  return JSON.stringify(value, null, 2);
+}
+
+function buildOperatorComparisonContext(operatorName) {
+  const sources = getOperatorSources(operatorName);
+  const entries = sources
+    .map((source) => extractSourceEntry(source))
+    .filter((data) => data != null);
+
+  const sectionBlocks = COMPARISON_SECTIONS.map((sectionName) => {
+    const sectionValue = entries
+      .map((entry) => findSectionValue(entry, sectionName))
+      .find((value) => value != null);
+
+    return `${sectionName}:\n${formatSectionValue(sectionValue)}`;
+  });
+
+  if (!entries.length) {
+    sectionBlocks.push('Knowledge Fragments:\nNo indexed knowledge fragments were found.');
+  }
+
+  return sectionBlocks.join('\n\n');
+}
+
+function buildComparisonPrompt(operatorA, operatorB, question, recentHistory = [], followUp = false) {
+  const contextA = buildOperatorComparisonContext(operatorA);
+  const contextB = buildOperatorComparisonContext(operatorB);
+  const recentConversation = buildRecentConversationContext(recentHistory);
+  const followUpInstruction = followUp
+    ? 'This appears to be a follow-up question, so keep continuity with prior context when useful.'
+    : 'Treat this as a standalone comparison unless recent conversation clearly helps.';
+
+  return [
+    'You are Ray Ray, a TouchDesigner tutor.',
+    '',
+    'Explain the practical difference between these operators.',
+    'Keep the answer short and beginner friendly.',
+    'Cover: (1) what each operator does, (2) how they differ, (3) when to use one vs the other.',
+    '',
+    `Operator A: ${operatorA}`,
+    contextA,
+    '',
+    `Operator B: ${operatorB}`,
+    contextB,
+    '',
+    recentConversation,
+    followUpInstruction,
+    '',
+    'User question:',
+    question,
+  ].join('\n');
+}
+
+async function compareOperators(operatorA, operatorB, question, recentHistory = [], followUp = false) {
+  const prompt = buildComparisonPrompt(operatorA, operatorB, question, recentHistory, followUp);
+  return askRayRay(prompt);
 }
 
 function summarizeNeighborhood(nodes = []) {
@@ -352,6 +490,30 @@ app.post('/rayray', async (req, res) => {
       });
     }
 
+    const comparisonOperators = detectComparisonOperators(question);
+    const recentHistory = getRecentHistory(sessionId, 5);
+
+    if (comparisonOperators.length === 2) {
+      const [operatorA, operatorB] = comparisonOperators;
+      const answer = await compareOperators(operatorA, operatorB, question, recentHistory, followUp);
+
+      appendInteraction(sessionId, {
+        question,
+        state: effectiveState,
+        answer,
+        timestamp: Date.now(),
+      });
+
+      return res.json({
+        sessionId,
+        answer,
+        comparison: {
+          operatorA,
+          operatorB,
+        },
+      });
+    }
+
     const operator = detectOperator(question, effectiveState);
 
     if (!operator) {
@@ -366,7 +528,6 @@ app.post('/rayray', async (req, res) => {
       return res.json({ sessionId, answer });
     }
 
-    const recentHistory = getRecentHistory(sessionId, 5);
     const context = buildKnowledgeContext(operator);
     const prompt = buildPrompt(context, question, effectiveState, mode, recentHistory, followUp);
     const answer = await askRayRay(prompt);
