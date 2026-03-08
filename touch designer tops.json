@@ -1,0 +1,3817 @@
+{
+  "operator": "Add (TOP)",
+  "what_it_is": "A TOP that combines images together by adding their pixel values.",
+  "mental_model": "Stacking light from multiple images on top of each other.",
+  "example": "Two train videos layered together so brighter parts add up.",
+  "operator_specific_menus": {
+    "Add": {
+      "meaning": "Controls how input images are combined and positioned.",
+      "items": {
+        "Transform Fixed Layer": "Keeps one layer fixed while others move.",
+        "Input to Input One": "Adds each input relative to the first input.",
+        "Pre-Fit Overlay": "Fits images before combining them.",
+        "Fill": {
+          "Horizontal": "Fills width.",
+          "Vertical": "Fills height.",
+          "Best Fit": "Fits without cropping.",
+          "Outside": "Fills completely, may crop.",
+          "Native Resolution": "Uses original image size."
+        },
+        "Justify Horizontal": "Horizontal alignment of inputs.",
+        "Justify Vertical": "Vertical alignment of inputs.",
+        "Extend Overlay": {
+          "Hold": "Edge pixels repeat outward.",
+          "Zero": "Empty areas are black.",
+          "Repeat": "Image tiles.",
+          "Mirror": "Image mirrors at edges."
+        },
+        "Rotate": "Rotates the image.",
+        "Translate": "Moves the image.",
+        "Scale": "Resizes the image.",
+        "Pivot": "Point used for rotate and scale.",
+        "Legacy Transform": "Uses older transform behavior."
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Common"
+  ],
+  "common_notes": {
+    "Output Resolution": "Final image size.",
+    "Resolution": "Explicit resolution setting.",
+    "Use Global Res Multiplier": "Uses project-wide resolution scale.",
+    "Output Aspect": "Aspect ratio handling.",
+    "Input Smoothness": "Filtering on input images.",
+    "Fill Viewer": "Scales image to viewer.",
+    "Viewer Smoothness": "Filtering in the viewer.",
+    "Passes": "How many times the operation runs.",
+    "Pixel Format": "Color precision and format."
+  }
+}
+{
+  "operator": "Analyze (TOP)",
+  "what_it_is": "A TOP that measures image values instead of changing the image.",
+  "mental_model": "A meter that looks at an image and reports numbers.",
+  "example": "Measuring how bright the train video is overall or finding the brightest pixel.",
+  "operator_specific_menus": {
+    "Analyze": {
+      "meaning": "Chooses what kind of measurement is done.",
+      "items": {
+        "Operation": {
+          "Average": "Finds the average value.",
+          "Minimum Pixel": "Finds the darkest pixel.",
+          "Maximum Pixel": "Finds the brightest pixel.",
+          "Minimum in RGB": "Minimum across red, green, and blue.",
+          "Minimum in RGBA": "Minimum including alpha.",
+          "Maximum in RGB": "Maximum across red, green, and blue.",
+          "Maximum in RGBA": "Maximum including alpha.",
+          "Count Pixels": "Counts how many pixels are considered.",
+          "Sum": "Adds up all pixel values."
+        },
+        "Analyze Channel": "Which channel is analyzed.",
+        "Scope": {
+          "Full Image": "Uses the whole image.",
+          "Rows": "Analyzes row by row.",
+          "Columns": "Analyzes column by column.",
+          "Slices": "Analyzes depth slices."
+        },
+        "Exclude NaNs": "Ignores invalid pixel values.",
+        "Mask": {
+          "None": "Uses all pixels.",
+          "Red": "Uses red channel as a mask.",
+          "Green": "Uses green channel as a mask.",
+          "Blue": "Uses blue channel as a mask.",
+          "Alpha": "Uses alpha channel as a mask.",
+          "RGBA Alpha": "Uses combined alpha information."
+        }
+      }
+    }
+  },
+  "assumed_standard_menus": [
+    "Common (TOP)"
+  ]
+}{
+  "operator": "Anti-Alias (TOP)",
+  "what_it_is": "Smooths jagged edges in an image.",
+  "mental_model": "Softening stair-step edges so lines look smoother.",
+  "example": "Making diagonal rails in a train video look smooth instead of blocky.",
+  "operator_specific_menu": {
+    "Anti-Alias": {
+      "meaning": "Controls how edge smoothing is done.",
+      "items": {
+        "Quality": {
+          "Low": "Fast, least smoothing.",
+          "Medium": "Balanced speed and smoothing.",
+          "High": "More smoothing, slower.",
+          "Ultra": "Maximum smoothing, slowest.",
+          "Custom": "Manual control of settings."
+        },
+        "Edge Detect Source": {
+          "Luminance": "Finds edges based on brightness.",
+          "RGB": "Finds edges based on color changes."
+        },
+        "Edge Threshold": "How strong a change must be to count as an edge.",
+        "Max Search Steps": "How far the algorithm looks for edges.",
+        "Max Diag Search Steps": "How far it looks along diagonals.",
+        "Corner Rounding": "Smooths sharp corners.",
+        "Output Edges": "Shows detected edges instead of the final image."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Blob Track (TOP)",
+  "what_it_is": "Finds and tracks moving shapes (blobs) in an image.",
+  "mental_model": "A tracker that follows moving spots.",
+  "example": "Tracking people or objects moving across a train camera feed.",
+  "operator_specific_menus": {
+    "Blob Track": {
+      "meaning": "Controls how blobs are detected and tracked.",
+      "items": {
+        "Reset": "Clears all current blob tracking.",
+        "Mono Source": {
+          "Luminance": "Uses image brightness to find blobs."
+        },
+        "Draw Blob Bounds": "Draws boxes around detected blobs.",
+        "Blob Bound Color": "Color of the drawn blob boxes.",
+        "Threshold Callback DAT": "Runs a DAT when thresholding happens.",
+        "Mask TOP": "Limits blob detection to a masked area.",
+        "Download Type": "How blob data is output."
+      }
+    },
+    "Constraints": {
+      "meaning": "Rules that decide which blobs are kept or removed.",
+      "items": {
+        "Minimum Blob Size": "Smallest blob allowed.",
+        "Maximum Blob Size": "Largest blob allowed.",
+        "Maximum Move Distance": "How far a blob can move between frames.",
+        "Delete Nearby Blobs": "Removes blobs that are too close together.",
+        "Minimum Distance": "Distance threshold for nearby blobs.",
+        "Delete Area Tolerance": "How much size change is allowed before deletion.",
+        "Delete Overlapping Blobs": "Removes blobs that overlap.",
+        "Delete Overlap Tolerance": "How much overlap is allowed."
+      }
+    },
+    "Revival": {
+      "meaning": "Controls how lost blobs are brought back.",
+      "items": {
+        "Revive Blobs": "Allows blobs to reappear after disappearing.",
+        "Revive Time": "How long a blob can be gone before revival.",
+        "Revive Area Difference": "How similar size must be to revive.",
+        "Revive Distance": "How close the new blob must be.",
+        "Include Lost Blobs in Table": "Keeps lost blobs listed.",
+        "Include Expired Blobs in Table": "Keeps expired blobs listed."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Bloom (TOP)",
+  "what_it_is": "Adds a soft glow around bright parts of an image.",
+  "mental_model": "Bright light bleeding outward.",
+  "example": "Headlights on a train glowing softly into the night.",
+  "operator_specific_menu": {
+    "Bloom": {
+      "meaning": "Controls how glow is created and blended.",
+      "items": {
+        "Pre-Black Level": "Dark cutoff before bloom is calculated.",
+        "Pre-Gamma": "Brightness curve applied before bloom.",
+        "Pre-Brightness": "Overall brightness before bloom.",
+        "Minimum Bloom Radius": "Smallest size of the glow.",
+        "Maximum Bloom Radius": "Largest size of the glow.",
+        "Bloom Threshold": "How bright something must be to glow.",
+        "Bloom S-Curve": "Smoothness of the glow response.",
+        "Bloom Fill": "How much the glow fills outward.",
+        "Bloom Intensity": "Strength of the glow.",
+        "Output": "What result is sent out.",
+        "Input Bloom": "Uses an external image as bloom source.",
+        "Input Preprocess Bloom": "Uses a separate image for pre-bloom processing.",
+        "Bloom with Alpha": "Includes transparency in bloom.",
+        "Input Image": "The main image being processed."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Blur (TOP)",
+  "what_it_is": "Softens an image by spreading pixel values.",
+  "mental_model": "Smearing pixels so details become less sharp.",
+  "example": "Making a moving train look soft and out of focus.",
+  "operator_specific_menu": {
+    "Blur": {
+      "meaning": "Controls how the image is blurred.",
+      "items": {
+        "Type": {
+          "Catmull-Rom": "Smooth blur with sharper detail than Gaussian.",
+          "Gaussian": "Classic soft blur.",
+          "Box": "Simple, blocky blur.",
+          "Bartlett": "Triangle-shaped blur.",
+          "Sinc": "High-quality blur with ringing.",
+          "Hanning": "Smooth blur with gentle edges.",
+          "Blackman": "Strong smoothing with reduced ringing."
+        },
+        "Extend": {
+          "Hold": "Repeats edge pixels outward.",
+          "Repeat": "Tiles the image.",
+          "Mirror": "Mirrors the image at edges."
+        },
+        "Pre-Shrink": "Downscales before blurring for speed.",
+        "Filter Size": "How wide the blur is.",
+        "Filter Scale": "Overall blur strength multiplier.",
+        "Sample Step": "Distance between samples.",
+        "Rotate Kernel": "Rotates the blur direction.",
+        "Dither": "Adds noise to reduce banding."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Cache (TOP)",
+  "what_it_is": "Stores past images so they can be reused later.",
+  "mental_model": "A rolling memory of previous frames.",
+  "example": "Remembering where the train was a few seconds ago.",
+  "operator_specific_menu": {
+    "Cache": {
+      "meaning": "Controls how images are stored and read back.",
+      "items": {
+        "Active": "Turns caching on or off.",
+        "Get One Image on Startup": "Stores a single frame when starting.",
+        "Replace Single": "Replaces one cached image.",
+        "Replace Index": "Replaces a specific cache slot.",
+        "Prefill": "Fills the cache before outputting.",
+        "Cache Size": "How many images are stored.",
+        "Step Size": "How often images are stored.",
+        "Index Units": {
+          "Frames": "Index is measured in frames.",
+          "Seconds": "Index is measured in time.",
+          "Fractions": "Index is a normalized value (0–1)."
+        },
+        "Output Index": "Which cached image is output.",
+        "Interpolate Frames": "Blends between cached images.",
+        "Always Cook": "Keeps updating even if not viewed.",
+        "Reset": "Clears the cache."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Cache Select (TOP)",
+  "what_it_is": "Selects a specific image from a Cache TOP.",
+  "mental_model": "Picking one frame from a stack of saved frames.",
+  "example": "Choosing exactly which past moment of the train to show.",
+  "operator_specific_menu": {
+    "Cache Select": {
+      "meaning": "Chooses which cached image is output.",
+      "items": {
+        "Cache TOP": "Which Cache TOP to read images from.",
+        "Cache Index": "Which stored image to select."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Channel Mix (TOP)",
+  "what_it_is": "Remaps image color channels using simple weights.",
+  "mental_model": "A color mixer with sliders for each channel.",
+  "example": "Turning a color train video into a custom-tinted version.",
+  "operator_specific_menu": {
+    "Channel Mix": {
+      "meaning": "Controls how output color channels are built.",
+      "items": {
+        "Red": "How much red contributes to the output.",
+        "Green": "How much green contributes to the output.",
+        "Blue": "How much blue contributes to the output.",
+        "Alpha": "How transparency contributes to the output.",
+        "Constant": "Adds a fixed value to the output."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "CHOP to TOP",
+  "what_it_is": "Turns numeric channel data into an image.",
+  "mental_model": "Painting numbers into pixels.",
+  "example": "Turning train sensor values into a picture you can see.",
+  "operator_specific_menu": {
+    "CHOP to TOP": {
+      "meaning": "Controls how channel data becomes image data.",
+      "items": {
+        "CHOP": "The CHOP that provides the numbers.",
+        "Data Format": {
+          "RG": "Two channels mapped to red and green.",
+          "RGB": "Three channels mapped to red, green, blue.",
+          "RGBA": "Four channels mapped to red, green, blue, alpha.",
+          "A": "Single channel mapped to alpha.",
+          "Legacy": "Uses older mapping behavior."
+        },
+        "Clamp CHOP Values": "Limits values so they stay in a valid range.",
+        "Image Layout": {
+          "Row per Channel Set": "Each channel set becomes one row.",
+          "Rows per Channel Set Wrapped": "Rows wrap when they reach the edge.",
+          "Rows per Channel Set Cropped": "Extra rows are cut off.",
+          "Fit to Square": "Arranges data into a square image."
+        },
+        "Extra Pixel Values": {
+          "RGBA": "Values used when extra pixels are needed."
+        }
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Chroma Key (TOP)",
+  "what_it_is": "Removes a color from an image and turns it into transparency.",
+  "mental_model": "Cutting out a specific color.",
+  "example": "Removing a green screen behind a train.",
+  "operator_specific_menu": {
+    "Chroma Key": {
+      "meaning": "Controls which color is removed and how soft the edges are.",
+      "items": {
+        "Hue": "The main color to remove.",
+        "Hue Minimum": "Lowest hue value that is removed.",
+        "Hue Maximum": "Highest hue value that is removed.",
+        "Hue Soft Low": "Soft transition at the low end of the hue range.",
+        "Hue Soft High": "Soft transition at the high end of the hue range.",
+        "Saturation Minimum": "Lowest color intensity allowed.",
+        "Saturation Maximum": "Highest color intensity allowed.",
+        "Saturation Soft Low": "Soft transition for low saturation.",
+        "Saturation Soft High": "Soft transition for high saturation.",
+        "Value Minimum": "Lowest brightness allowed.",
+        "Value Maximum": "Highest brightness allowed.",
+        "Value Soft Low": "Soft transition for low brightness.",
+        "Value Soft High": "Soft transition for high brightness."
+      }
+    },
+    "Output": {
+      "meaning": "Controls how the transparency is applied.",
+      "items": {
+        "Invert New Alpha": "Flips transparent and opaque areas.",
+        "RGB Alpha": {
+          "Source RGB + New Alpha": "Keeps original color with new transparency.",
+          "New Alpha": "Outputs only the transparency result."
+        }
+      }
+    },
+    "Alpha Output": {
+      "meaning": "Controls which alpha channel is used.",
+      "items": {
+        "New Alpha": "Uses the generated transparency.",
+        "Source Alpha + New Alpha": "Combines original and new transparency."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Chroma Key (TOP)",
+  "what_it_is": "Removes a color from an image and turns it into transparency.",
+  "mental_model": "Cutting out a specific color.",
+  "example": "Removing a green screen behind a train.",
+  "operator_specific_menu": {
+    "Chroma Key": {
+      "meaning": "Controls which color is removed and how soft the edges are.",
+      "items": {
+        "Hue": "The main color to remove.",
+        "Hue Minimum": "Lowest hue value that is removed.",
+        "Hue Maximum": "Highest hue value that is removed.",
+        "Hue Soft Low": "Soft transition at the low end of the hue range.",
+        "Hue Soft High": "Soft transition at the high end of the hue range.",
+        "Saturation Minimum": "Lowest color intensity allowed.",
+        "Saturation Maximum": "Highest color intensity allowed.",
+        "Saturation Soft Low": "Soft transition for low saturation.",
+        "Saturation Soft High": "Soft transition for high saturation.",
+        "Value Minimum": "Lowest brightness allowed.",
+        "Value Maximum": "Highest brightness allowed.",
+        "Value Soft Low": "Soft transition for low brightness.",
+        "Value Soft High": "Soft transition for high brightness."
+      }
+    },
+    "Output": {
+      "meaning": "Controls how the transparency is applied.",
+      "items": {
+        "Invert New Alpha": "Flips transparent and opaque areas.",
+        "RGB Alpha": {
+          "Source RGB + New Alpha": "Keeps original color with new transparency.",
+          "New Alpha": "Outputs only the transparency result."
+        }
+      }
+    },
+    "Alpha Output": {
+      "meaning": "Controls which alpha channel is used.",
+      "items": {
+        "New Alpha": "Uses the generated transparency.",
+        "Source Alpha + New Alpha": "Combines original and new transparency."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Composite (TOP)",
+  "what_it_is": "Combines multiple images using blend modes.",
+  "mental_model": "A stack of images mixed together with rules.",
+  "example": "Layering train footage with effects using different blend styles.",
+  "operator_specific_menu": {
+    "Composite": {
+      "meaning": "Controls how multiple TOP inputs are combined.",
+      "items": {
+        "TOPs": "The input images being combined.",
+        "Preview Grid": "Shows all inputs in a grid.",
+        "Select Input": "Chooses which input to focus on.",
+        "Input Index": "Which numbered input is used.",
+        "Operation": {
+          "Add": "Adds brightness values together.",
+          "Average": "Averages pixel values.",
+          "Brightest": "Keeps the brighter pixel.",
+          "Burn": "Darkens using color burn math.",
+          "Color Burn Linear": "Stronger burn effect.",
+          "Chroma Difference": "Difference based on color.",
+          "Color": "Uses color from one input.",
+          "Darker Color": "Keeps darker color.",
+          "Difference": "Absolute difference between images.",
+          "Dim Set": "Sets darker pixels.",
+          "Divide": "Divides pixel values.",
+          "Dodge": "Brightens using dodge math.",
+          "Exclude": "Soft difference effect.",
+          "Freeze": "High-contrast freeze effect.",
+          "Glow": "Adds glow-like brightening.",
+          "Hard Light": "Strong contrast blend.",
+          "Hard Mix": "Very high-contrast mix.",
+          "Heat": "Heat-map style blend.",
+          "Hue": "Uses hue from one input.",
+          "Inside": "Shows pixels inside alpha.",
+          "Inside Luminance": "Inside using brightness.",
+          "Inverse": "Inverts based on input.",
+          "Lighter Color": "Keeps lighter color.",
+          "Luminance Difference": "Difference using brightness.",
+          "Maximum": "Keeps max pixel value.",
+          "Minimum": "Keeps min pixel value.",
+          "Multiply": "Multiplies pixel values (darkens).",
+          "Negate": "Inverted multiply effect.",
+          "Outside": "Shows pixels outside alpha.",
+          "Outside Luminance": "Outside using brightness.",
+          "Over": "Places one image over another.",
+          "Overlay": "Contrast-based blend.",
+          "Pin Light": "Extreme contrast blend.",
+          "Reflect": "Bright reflection effect.",
+          "Screen": "Brightens image.",
+          "Soft Light": "Gentle contrast blend.",
+          "Linear Light": "Linear contrast blend.",
+          "Stencil Luminance": "Uses brightness as stencil.",
+          "Subtract": "Subtracts pixel values.",
+          "Subtractive": "Alternative subtract mode.",
+          "Under": "Places image underneath.",
+          "Vivid Light": "Strong contrast blend.",
+          "XOR": "Exclusive-or blend.",
+          "Y Film": "Film-style blend.",
+          "Z Film": "Depth-style film blend."
+        },
+        "Swap Operation Order": "Reverses which input is applied first."
+      }
+    },
+    "Transform": {
+      "meaning": "Controls how inputs are positioned before blending.",
+      "items": {
+        "Fixed Layer": {
+          "Input 1": "Keeps input 1 fixed.",
+          "Input 2": "Keeps input 2 fixed."
+        },
+        "Pre-Fit Overlay": "Fits images before blending."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Constant (TOP)",
+  "what_it_is": "Creates a solid color image.",
+  "mental_model": "A flat sheet of one color.",
+  "example": "A solid background behind the train video.",
+  "operator_specific_menus": {
+    "Constant": {
+      "meaning": "Defines the color that fills the image.",
+      "items": {
+        "Color / Alpha": "The color and transparency of the image.",
+        "Premultiply RGB by Alpha": "Applies transparency directly to the color values.",
+        "RGB Units": {
+          "0–1": "Color values are normalized.",
+          "0–255": "Color values use standard 8-bit range.",
+          "0–65535": "Color values use high-precision range."
+        }
+      }
+    },
+    "Output": {
+      "meaning": "Controls how this solid color interacts with an input image.",
+      "items": {
+        "Combine with Input": "Uses an input image together with the color.",
+        "Composite and Set Resolution": "Composites color with input and sets output size.",
+        "Set Resolution Only": "Uses the color only to define output size.",
+        "Operation": "How the color combines with the input.",
+        "Swap Order": "Reverses which image is applied first."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Convolve (TOP)",
+  "what_it_is": "Applies a custom filter to an image using a table of numbers.",
+  "mental_model": "Sliding a small math stencil across an image.",
+  "example": "Sharpening or embossing details on a train image.",
+  "operator_specific_menu": {
+    "Convolve": {
+      "meaning": "Controls how the custom filter is applied.",
+      "items": {
+        "Coefficients DAT": "Table of numbers that defines the filter shape.",
+        "Normalize Coefficients": "Keeps brightness balanced after filtering.",
+        "Apply to Alpha": "Also applies the filter to transparency.",
+        "Offset": "Shifts the result brighter or darker.",
+        "Scale": "Multiplies the strength of the filter."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Corner Pin (TOP)",
+  "what_it_is": "Warps an image by pinning its four corners.",
+  "mental_model": "Stretching an image by grabbing its corners.",
+  "example": "Pinning a train video onto a tilted wall or screen.",
+  "operator_specific_menu": {
+    "Extract": {
+      "meaning": "Reads corner positions from an input.",
+      "items": {
+        "Bottom Left": {
+          "Units": [
+            "Pixels",
+            "Fraction",
+            "Fraction Aspect"
+          ]
+        },
+        "Bottom Right": {
+          "Units": [
+            "Pixels",
+            "Fraction",
+            "Fraction Aspect"
+          ]
+        },
+        "Top Left": {
+          "Units": [
+            "Pixels",
+            "Fraction",
+            "Fraction Aspect"
+          ]
+        },
+        "Top Right": {
+          "Units": [
+            "Pixels",
+            "Fraction",
+            "Fraction Aspect"
+          ]
+        },
+        "Extend": "How pixels outside the image are handled.",
+        "Mapping": "How extracted coordinates are interpreted."
+      }
+    },
+    "Pin": {
+      "meaning": "Sets where each corner is placed.",
+      "items": {
+        "Bottom Left": "Target position for the bottom-left corner.",
+        "Bottom Right": "Target position for the bottom-right corner.",
+        "Top Left": "Target position for the top-left corner.",
+        "Top Right": "Target position for the top-right corner.",
+        "Grid Refinement": "Adds internal grid points for smoother warping.",
+        "Background Color": "Color used behind the warped image.",
+        "Pre-multiply RGB by Alpha": "Applies transparency to color values.",
+        "Mapping": {
+          "Bilinear": "Simple corner stretching.",
+          "Perspective": "Realistic depth-style warping."
+        }
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "C++ (TOP)",
+  "what_it_is": "Runs a custom C++ plugin to process images.",
+  "mental_model": "A black-box effect written in C++.",
+  "example": "A custom-made image effect applied to a train video.",
+  "operator_specific_menu": {
+    "Load": {
+      "meaning": "Controls loading and managing the C++ plugin.",
+      "items": {
+        "Plugin Path": "Where the compiled C++ plugin file lives.",
+        "Reinit Class": "Resets and reinitializes the plugin code.",
+        "Unload Plugin": "Removes the plugin from memory."
+      }
+    },
+    "Inputs": {
+      "meaning": "Shows which operators are connected.",
+      "items": {
+        "Connected Input OPs": "List of operators feeding data into the plugin."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Crop (TOP)",
+  "what_it_is": "Cuts away parts of an image.",
+  "mental_model": "Trimming the edges of a picture.",
+  "example": "Cropping the edges of a train video to focus on the center.",
+  "operator_specific_menu": {
+    "Crop": {
+      "meaning": "Defines which parts of the image are kept.",
+      "items": {
+        "Crop Left": "Amount removed from the left edge.",
+        "Crop Right": "Amount removed from the right edge.",
+        "Crop Bottom": "Amount removed from the bottom edge.",
+        "Crop Top": "Amount removed from the top edge."
+      }
+    },
+    "Extend": {
+      "meaning": "Controls how empty areas are filled.",
+      "items": {
+        "Repeat": "Repeats the image.",
+        "Hold": "Stretches edge pixels.",
+        "Zero": "Fills with black.",
+        "Mirror": "Mirrors the image."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Cross (TOP)",
+  "what_it_is": "Blends between two images.",
+  "mental_model": "A fade knob between image A and image B.",
+  "example": "Fading from one train shot to another.",
+  "operator_specific_menu": {
+    "Cross": {
+      "meaning": "Controls how much of each input is shown.",
+      "items": {
+        "Cross": "A slider that mixes between the first and second input."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Transform",
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Cross (TOP)",
+  "what_it_is": "Blends between two images.",
+  "mental_model": "A fade knob between image A and image B.",
+  "example": "Fading from one train shot to another.",
+  "operator_specific_menu": {
+    "Cross": {
+      "meaning": "Controls how much of each input is shown.",
+      "items": {
+        "Cross": "A slider that mixes between the first and second input."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Transform",
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Cubemap (TOP)",
+  "what_it_is": "Converts images to and from cubemap layouts.",
+  "mental_model": "Folding and unfolding the six sides of a cube.",
+  "example": "Wrapping a train environment image around a 3D space.",
+  "operator_specific_menu": {
+    "Cubemap": {
+      "meaning": "Controls how images are converted into cube faces.",
+      "items": {
+        "Mode": {
+          "One Input per Side to Cubemap": "Uses six separate images to build a cube.",
+          "Vertical Cross to Cubemap": "Converts a vertical cross layout into a cube.",
+          "Cubemap to Vertical Cross": "Flattens a cube into a vertical cross image.",
+          "Horizontal Cross to Cubemap": "Converts a horizontal cross layout into a cube.",
+          "Cubemap to Horizontal Cross": "Flattens a cube into a horizontal cross image."
+        }
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Depth (TOP)",
+  "what_it_is": "Turns depth information into an image.",
+  "mental_model": "An image where brightness means distance.",
+  "example": "Pixels closer to the camera on the train are bright, farther ones are dark.",
+  "operator_specific_menu": {
+    "Depth": {
+      "meaning": "Controls where depth comes from and how it is mapped to pixels.",
+      "items": {
+        "OP": "The operator that provides depth data.",
+        "Camera Index": "Which camera’s depth is used.",
+        "TOP Layer Index": "Which layer is read if the input has layers.",
+        "Pixel Format": {
+          "Depth Texture": "Uses a depth-specific format.",
+          "Fixed": "Lower precision depth values.",
+          "Float": "Higher precision depth values."
+        },
+        "Depth Space": "Which depth space is used (camera-based depth).",
+        "Range From": "Near distance mapped to one end of the image range.",
+        "Range To": "Far distance mapped to the other end.",
+        "Clamp To": "Limits values so depth stays within range.",
+        "Gamma": "Curves how depth values are distributed."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Difference (TOP)",
+  "what_it_is": "Shows how two images differ from each other.",
+  "mental_model": "Subtracting one picture from another to see what changed.",
+  "example": "Seeing only what changed between two frames of a train video.",
+  "operator_specific_menus": {
+    "Difference": {
+      "meaning": "Computes the pixel-by-pixel difference between inputs.",
+      "items": {}
+    },
+    "Transform": {
+      "meaning": "Controls how the two inputs are aligned before comparison.",
+      "items": {
+        "Transform Fixed Layer": "Keeps one input fixed while the other moves.",
+        "Input to Input One": "Aligns all inputs relative to the first input.",
+        "Pre-Fit Overlay": "Fits images before comparing.",
+        "Fill Modes": "How inputs are scaled to match size.",
+        "Justify Horizontal": "Horizontal alignment before comparison.",
+        "Justify Vertical": "Vertical alignment before comparison.",
+        "Extend": {
+          "Hold": "Repeat edge pixels.",
+          "Zero": "Fill empty areas with black.",
+          "Repeat": "Tile the image.",
+          "Mirror": "Mirror at edges."
+        },
+        "Rotate": "Rotate input before comparing.",
+        "Translate": "Move input before comparing.",
+        "Scale": "Resize input before comparing.",
+        "Pivot": "Point used for rotate and scale."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Direct Display Out (TOP)",
+  "what_it_is": "Sends an image directly to a display device.",
+  "mental_model": "A direct video cable from TouchDesigner to a screen.",
+  "example": "Sending the train visuals straight to a projector or monitor.",
+  "operator_specific_menu": {
+    "Direct Display Out": {
+      "meaning": "Controls how images are sent to a physical display.",
+      "items": {
+        "Display": {
+          "what_it_is": "Which screen or output device is used.",
+          "common_choices": [
+            "Primary Display",
+            "Secondary Display",
+            "Specific GPU Output / Display Index"
+          ],
+          "meaning": {
+            "Primary Display": "The main system monitor.",
+            "Secondary Display": "An additional connected screen.",
+            "Specific GPU Output": "A specific hardware output port."
+          }
+        },
+        "Output Color Space": {
+          "what_it_is": "How colors are interpreted when sent to the display.",
+          "common_choices": [
+            "sRGB",
+            "Rec.709",
+            "Rec.2020",
+            "Linear"
+          ],
+          "meaning": {
+            "sRGB": "Standard computer display colors.",
+            "Rec.709": "HD video color standard.",
+            "Rec.2020": "Wide-gamut HDR video colors.",
+            "Linear": "No gamma correction applied."
+          }
+        },
+        "Output Reference White": {
+          "what_it_is": "Defines how bright pure white is.",
+          "common_choices": [
+            "80 nits",
+            "100 nits",
+            "203 nits",
+            "1000 nits"
+          ],
+          "meaning": {
+            "80 nits": "Older broadcast standard.",
+            "100 nits": "Common SDR display brightness.",
+            "203 nits": "Cinema reference level.",
+            "1000 nits": "HDR reference brightness."
+          }
+        },
+        "Minimum Swap Chain Length": "How many frames are buffered for display output.",
+        "Hardware Frame Lock": "Locks output timing to display hardware."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Displace (TOP)",
+  "what_it_is": "Moves pixels of an image using another image as a map.",
+  "mental_model": "Bending an image based on a height or flow map.",
+  "example": "Making train footage look wavy using a noise image.",
+  "operator_specific_menu": {
+    "Displace": {
+      "meaning": "Controls how pixels are shifted.",
+      "items": {
+        "Resolution Source": "Which input decides the output size.",
+        "Source Image": "The image being moved.",
+        "Displace Image": "The image that tells pixels where to move.",
+        "Horizontal Source": {
+          "Red": "Uses red channel for horizontal movement.",
+          "Green": "Uses green channel for horizontal movement.",
+          "Blue": "Uses blue channel for horizontal movement.",
+          "Alpha": "Uses alpha channel for horizontal movement.",
+          "None": "No horizontal movement."
+        },
+        "Vertical Source": {
+          "Red": "Uses red channel for vertical movement.",
+          "Green": "Uses green channel for vertical movement.",
+          "Blue": "Uses blue channel for vertical movement.",
+          "Alpha": "Uses alpha channel for vertical movement.",
+          "None": "No vertical movement."
+        },
+        "Z Source": "Channel used for depth-style displacement.",
+        "Source Midpoint": "Value treated as ‘no movement’.",
+        "Displace Weight": "Overall strength of the displacement.",
+        "Aspect Correct": "Keeps movement consistent across aspect ratios.",
+        "UV Weight": "How much UV coordinates are affected.",
+        "Offset": "Base shift applied before displacement.",
+        "Offset Weight": "Strength of the offset.",
+        "Extend": "How pixels outside the image are handled."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Edge (TOP)",
+  "what_it_is": "Finds and shows edges in an image.",
+  "mental_model": "Outlining where the image changes sharply.",
+  "example": "Drawing outlines around the train and tracks.",
+  "operator_specific_menu": {
+    "Edge": {
+      "meaning": "Controls how edges are detected.",
+      "items": {
+        "Select": {
+          "Luminance": "Detect edges using brightness.",
+          "Red": "Detect edges from red channel.",
+          "Green": "Detect edges from green channel.",
+          "Blue": "Detect edges from blue channel.",
+          "Alpha": "Detect edges from transparency.",
+          "RGB Average": "Average of RGB channels.",
+          "RGBA Average": "Average including alpha.",
+          "RGB Maximum": "Strongest edge from RGB.",
+          "RGBA Maximum": "Strongest edge including alpha."
+        },
+        "Black Level Strength": "How much dark areas affect edge detection.",
+        "Sample Step": "Distance between samples when detecting edges.",
+        "Edge Color": "Color used for detected edges.",
+        "Pre-multiply RGB by Alpha": "Applies transparency to edge color."
+      }
+    },
+    "Alpha": {
+      "meaning": "Controls how alpha is generated for edges.",
+      "items": {
+        "Edge One": "Edges are fully opaque.",
+        "Edge Zero": "Edges are transparent."
+      }
+    },
+    "Output": {
+      "meaning": "Controls how edges are combined with the image.",
+      "items": {
+        "Combine with Input": {
+          "Edge Only": "Outputs only the edges.",
+          "Composite Edge with Input": "Draws edges over the original image."
+        },
+        "Operation": "Blend mode used when compositing.",
+        "Swap Order": "Reverses which image is applied first."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Emboss (TOP)",
+  "what_it_is": "Turns edges in an image into a raised or carved look.",
+  "mental_model": "Making the image look like it’s stamped into metal.",
+  "example": "Giving the train image a carved, relief-style texture.",
+  "operator_specific_menu": {
+    "Emboss": {
+      "meaning": "Controls how the embossed effect is created.",
+      "items": {
+        "Select": {
+          "Luminance": "Uses brightness to create the emboss effect.",
+          "Red": "Uses the red channel.",
+          "Green": "Uses the green channel.",
+          "Blue": "Uses the blue channel.",
+          "Alpha": "Uses the alpha channel.",
+          "RGB Average": "Uses the average of RGB channels.",
+          "RGBA Average": "Uses the average including alpha.",
+          "RGB Maximum": "Uses the strongest RGB value.",
+          "RGBA Maximum": "Uses the strongest value including alpha."
+        },
+        "Method": {
+          "Use Previous and Next": "Compares pixels before and after the current one.",
+          "Use Previous and Current": "Compares pixels behind the current one.",
+          "Use Current and Next": "Compares pixels ahead of the current one."
+        },
+        "Strength": "How strong the embossed effect appears.",
+        "Sample Step": "Distance between pixels used for embossing.",
+        "Direction": "Direction the embossing appears to come from."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Feedback (TOP)",
+  "what_it_is": "Feeds a previous frame back into the current frame.",
+  "mental_model": "Looking at a screen that shows itself from a moment ago.",
+  "example": "A train image that leaves trails as it moves.",
+  "operator_specific_menu": {
+    "Feedback": {
+      "meaning": "Controls where feedback comes from and when it resets.",
+      "items": {
+        "Target TOP": "Which TOP receives the feedback image.",
+        "Reset": "Clears the feedback so it starts fresh."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Fit (TOP)",
+  "what_it_is": "Resizes and positions an image to fit a target area.",
+  "mental_model": "Fitting a photo into a frame.",
+  "example": "Making a train video fit exactly into a screen or panel.",
+  "operator_specific_menu": {
+    "Fit": {
+      "meaning": "Controls how the image is resized and aligned.",
+      "items": {
+        "Fit Mode": {
+          "Fit": "Resizes the image to fit inside the output area.",
+          "Fit Best": "Chooses the best fit without unnecessary scaling."
+        },
+        "Fill Direction": {
+          "Horizontal": "Fits based on width.",
+          "Vertical": "Fits based on height.",
+          "Outside": "Fills the area completely, may crop.",
+          "Native Resolution": "Keeps original image size."
+        },
+        "Justify Horizontal": {
+          "Center": "Centers the image horizontally.",
+          "Right": "Aligns the image to the right."
+        },
+        "Justify Vertical": {
+          "Center": "Centers the image vertically.",
+          "Top": "Aligns the image to the top."
+        },
+        "Transform Order": {
+          "Translate → Scale → Rotate": "Moves first, then resizes, then rotates.",
+          "Scale → Rotate → Translate": "Resizes first, then rotates, then moves.",
+          "Rotate → Scale → Translate": "Rotates first, then resizes, then moves.",
+          "Translate → Rotate → Scale": "Moves, then rotates, then resizes."
+        },
+        "Rotate": "Rotates the image.",
+        "Scale": "Resizes the image.",
+        "Pivot": "Point used for rotate and scale.",
+        "Background Color": "Color used behind the image.",
+        "Pre-multiply RGB by Alpha": "Applies transparency to color values.",
+        "Legacy Transform": "Uses older transform behavior."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Flip (TOP)",
+  "what_it_is": "Reorients an image by flipping or rotating it.",
+  "mental_model": "Turning a picture over or changing which side is up.",
+  "example": "Flipping a train video upside down or mirroring it left to right.",
+  "operator_specific_menu": {
+    "Flip": {
+      "meaning": "Controls how the image is reoriented.",
+      "items": {
+        "Flip X": "Mirrors the image left to right.",
+        "Flip Y": "Mirrors the image top to bottom.",
+        "Flop": "Swaps image orientation horizontally.",
+        "No Flop": "Leaves orientation unchanged.",
+        "Bottom Left to Top Left": "Moves origin from bottom-left to top-left.",
+        "Right Back Down": "Rotates to a right-facing, downward orientation.",
+        "Right Front Up": "Rotates to a right-facing, upward orientation.",
+        "Back Up Left": "Rotates to a back-facing, upward-left orientation.",
+        "Front Up Right": "Rotates to a front-facing, upward-right orientation."
+      }
+    }
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Function (TOP)",
+  "what_it_is": "Applies math functions to image values.",
+  "mental_model": "A calculator that runs on every pixel.",
+  "example": "Changing how bright the train image feels using math curves.",
+  "operator_specific_menus": {
+    "Function": {
+      "meaning": "Controls how numeric pixel values are transformed.",
+      "items": {
+        "Rearrange Integers": "Reorders numeric values before applying math.",
+        "Input 1": "First value used in the calculation.",
+        "Input 2": "Second value used in the calculation."
+      }
+    },
+    "Function RGB": {
+      "meaning": "Applies math to the red, green, and blue channels together.",
+      "common_functions": [
+        "Constant Value",
+        "Absolute Value",
+        "Square Root",
+        "Sine",
+        "Cosine",
+        "Tangent",
+        "Arc Sine",
+        "Arc Cosine",
+        "Arc Tangent",
+        "Arc Tangent (Input 1, Input 2)",
+        "Hyperbolic Sine",
+        "Hyperbolic Cosine",
+        "Hyperbolic Tangent",
+        "Log Base 10",
+        "Log Base 2",
+        "Log Base N",
+        "Natural Log (e)",
+        "Power (Base, Exponent)",
+        "dB to Power",
+        "Power to dB",
+        "dB to Amplitude",
+        "Amplitude to dB"
+      ]
+    },
+    "Function RGBA": {
+      "meaning": "Applies math to red, green, blue, and alpha together.",
+      "same_functions_as": "Function RGB"
+    },
+    "Function A": {
+      "meaning": "Applies math only to the alpha channel.",
+      "same_functions_as": "Function RGB"
+    }
+  },
+  "plain_language_summary": {
+    "What this really is": "Math on pixels.",
+    "Why it exists": "To reshape brightness, contrast, motion, or signal behavior.",
+    "When to use it": "When sliders are not enough and you need math curves."
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "GLSL (TOP)",
+  "what_it_is": "A place where you write your own GPU code to make images.",
+  "mental_model": "A tiny robot factory on the graphics card that follows instructions you write.",
+  "example": "Telling millions of tiny workers how to color and move every pixel of a train image.",
+  "operator_specific_menu": {
+    "GLSL": {
+      "Version": "Which language rules the robot workers use.",
+      "Mode": {
+        "Vertex Shader": "Runs on points of shapes before images exist.",
+        "Pixel Shader": "Runs on every pixel of the image.",
+        "Compute Shader": "Runs general math jobs, not just images."
+      },
+      "Preprocess Directives": "Extra instructions added before the code starts.",
+      "Vertex Shader Code": "The actual instructions for points.",
+      "Pixel Shader Code": "The actual instructions for pixels."
+    },
+    "Compile Behavior": {
+      "Stall Until Done": "Everything waits until the code is ready.",
+      "Threaded Show Checkerboard Until Done": "Shows a checkerboard while waiting.",
+      "Threaded Show Black Until Done": "Shows black while waiting.",
+      "Threaded Show Previous Shader Until Done": "Keeps showing the last working image."
+    },
+    "Error Behavior": {
+      "Show Checkerboard": "Shows a checkerboard if the code breaks.",
+      "Show Black": "Shows nothing if the code breaks.",
+      "Show Previous Shader": "Keeps the last image that worked."
+    },
+    "Outputs": {
+      "Load Uniform Names": "Finds names in your code automatically.",
+      "Auto Dispatch Size": "Automatically decides how much work to do.",
+      "Auto Size": "Automatically decides image size.",
+      "Output Access": "Decides if the shader can write to the output.",
+      "Output Type": {
+        "2D Texture": "A normal flat image.",
+        "2D Array": "Many images stacked.",
+        "3D Texture": "A box of pixels with depth."
+      },
+      "Custom Depth": "Uses a special depth image.",
+      "Clear Outputs": "Erases outputs before running.",
+      "Clear Value": "What value is used when erasing."
+    },
+    "Inputs": {
+      "Input Mapping": "How inputs are named inside the code.",
+      "End Value": "Fallback number if something is missing.",
+      "Input Extend Mode UV": "What happens at image edges left/right/up/down.",
+      "Input Extend Mode W": "What happens at depth edges.",
+      "Number of Color Buffers": "How many images can be written at once."
+    },
+    "Math_and_Data": {
+      "Colors": {
+        "Color Name": "What the color is called in code.",
+        "RGB": "The color itself.",
+        "Alpha": "How see-through it is."
+      },
+      "Vectors": {
+        "Vector Name": "Name used in code.",
+        "Value": "A small list of numbers."
+      },
+      "Arrays": {
+        "Array Name": "Name used in code.",
+        "Type": {
+          "float": "One number.",
+          "vec2": "Two numbers.",
+          "vec3": "Three numbers.",
+          "vec4": "Four numbers."
+        }
+      },
+      "CHOP Arrays": {
+        "Uniform Array": "Numbers copied into the shader.",
+        "Texture Buffer": "Numbers stored like an image."
+      },
+      "Matrices": {
+        "Matrix Name": "Name used in code.",
+        "Matrix": "A grid of numbers used for transforms."
+      },
+      "Atomic Counters": {
+        "Uniform Name": "Counter name.",
+        "Initial Value Type": {
+          "Single Value": "Starts from one number.",
+          "CHOP Value": "Starts from a CHOP value."
+        },
+        "Initial Value": "The starting count."
+      },
+      "Constants": {
+        "Constant Name": "A fixed number name.",
+        "Value": "A number that never changes."
+      },
+      "Buffers": {
+        "Buffer POP": "Where geometry data comes from.",
+        "Attribute Class": {
+          "Point": "Data per point.",
+          "Primitive": "Data per shape.",
+          "Vertex": "Data per corner."
+        },
+        "Attribute": "Which piece of data to read.",
+        "Name": "What it is called in code."
+      }
+    }
+  },
+  "plain_language_summary": {
+    "What this really is": "You telling the GPU exactly how to think.",
+    "Why it looks scary": "Because it exposes everything.",
+    "Core idea": "Pixels are numbers, and you decide what math happens to them."
+  }
+}
+{
+  "section": "Math Functions (Explain Like I’m Five)",
+  "idea_before_starting": "Every pixel is just a number. These functions change that number.",
+  "functions": {
+    "Constant Value": "Ignore the input and always output the same number.",
+    "Absolute Value": "Makes negative numbers positive.",
+    "Square Root": "Finds a smaller number that multiplies by itself to make the original number.",
+    "Sine": "Makes a smooth up-and-down wave.",
+    "Cosine": "Like sine, but starts at a different point.",
+    "Tangent": "Makes a wave that shoots very high very fast.",
+    "Arc Sine": "Turns a sine value back into an angle.",
+    "Arc Cosine": "Turns a cosine value back into an angle.",
+    "Arc Tangent": "Turns a tangent value back into an angle.",
+    "Arc Tangent (Input 1, Input 2)": "Finds the angle based on two numbers, like X and Y position.",
+    "Hyperbolic Sine": "A curve that grows faster than sine, without looping.",
+    "Hyperbolic Cosine": "Like hyperbolic sine, but shifted up.",
+    "Hyperbolic Tangent": "A curve that smoothly goes from -1 to 1.",
+    "Log Base 10": "Shrinks big numbers using base 10 steps.",
+    "Log Base 2": "Shrinks numbers using base 2 steps.",
+    "Log Base N": "Shrinks numbers using a base you choose.",
+    "Natural Log (e)": "Shrinks numbers using a natural growth rule.",
+    "Power (Base, Exponent)": "Multiplies a number by itself many times.",
+    "dB to Power": "Turns loudness units into raw strength.",
+    "Power to dB": "Turns raw strength into loudness units.",
+    "dB to Amplitude": "Turns loudness units into signal size.",
+    "Amplitude to dB": "Turns signal size into loudness units."
+  },
+  "plain_language_summary": {
+    "What these really are": "Different ways to bend numbers.",
+    "Why they exist": "To shape motion, brightness, sound, or change speed smoothly.",
+    "Key idea": "Pick a curve, numbers follow it."
+  }
+}
+
+{
+  "operator": "GLSL Multi (TOP)",
+  "what_it_is": "A version of GLSL that runs the same shader many times at once.",
+  "mental_model": "One set of instructions, copied across many outputs.",
+  "example": "Using one shader to make several different train images at the same time.",
+  "how_it_is_different_from_GLSL": {
+    "short_answer": "GLSL runs one shader. GLSL Multi runs many copies of the same shader.",
+    "plain_difference": {
+      "GLSL": "One shader → one output image (or set of buffers).",
+      "GLSL Multi": "One shader → many outputs, all running together."
+    },
+    "why_it_exists": "To avoid duplicating shader code when you want many similar outputs.",
+    "what_problem_it_solves": "Running the same shader logic multiple times with different inputs or parameters."
+  },
+  "what_is_the_same_as_GLSL": {
+    "same_ideas": [
+      "You write GPU code.",
+      "Pixels are numbers.",
+      "Uniforms are knobs.",
+      "Buffers are places data lives."
+    ],
+    "same_submenus": [
+      "Version",
+      "Mode (Vertex / Pixel / Compute)",
+      "Preprocessor Directives",
+      "Vertex Shader",
+      "Pixel Shader",
+      "Compile Behavior",
+      "Error Behavior",
+      "Output Type",
+      "Input Extend Mode (UV / W)",
+      "Color",
+      "Vectors",
+      "Arrays",
+      "Matrices",
+      "Atomic Counters",
+      "Constants",
+      "Buffers",
+      "Common"
+    ]
+  },
+  "what_is_actually_new": {
+    "Multi_Behavior": {
+      "meaning": "The shader is evaluated multiple times in parallel.",
+      "effects": {
+        "Number of Color Buffers": "Controls how many outputs are produced.",
+        "TOPs": "Multiple inputs can be mapped per instance.",
+        "T Simplex Noise": "Built-in noise source available per instance."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "GLSL": "You tell one robot how to draw one picture.",
+    "GLSL_Multi": "You tell many robots the same instructions, and they all draw at once.",
+    "why_you_would_care": "You don’t have to rewrite or duplicate the shader."
+  },
+  "when_to_use": {
+    "Use GLSL when": [
+      "You only need one output.",
+      "You are learning shaders.",
+      "You want simple control."
+    ],
+    "Use GLSL Multi when": [
+      "You need many similar outputs.",
+      "You want performance.",
+      "You want to scale one shader to many cases."
+    ]
+  },
+  "important_note": "If you don’t know why you need GLSL Multi, you probably don’t need it yet.",
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "HSV Adjust (TOP)",
+  "what_it_is": "Changes colors by working in hue, saturation, and brightness instead of red, green, and blue.",
+  "mental_model": "Turning color knobs instead of repainting pixels.",
+  "example": "Changing the color of a train so it looks warmer, colder, or brighter as it moves.",
+  "operator_specific_menu": {
+    "HSV Adjust": {
+      "meaning": "Pick which colors are affected and how they change.",
+      "items": {
+        "Start Color": "The color you start adjusting from. This is the center of attention.",
+        "Hue Range": "How wide of a color slice is affected (how many nearby colors get included).",
+        "Hue Falloff": "How softly the effect fades as colors move away from the start color.",
+        "Saturation Range": "Which saturation levels are affected (dull vs vivid colors).",
+        "Saturation Falloff": "How gently the effect fades across saturation.",
+        "Value Range": "Which brightness levels are affected (dark vs bright).",
+        "Value Falloff": "How smoothly the effect fades across brightness.",
+        "Hue Offset": "Shifts the color around the color wheel.",
+        "Saturation Multiplier": "Makes colors more vivid or more dull.",
+        "Value Multiplier": "Makes colors brighter or darker."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "Hue": "What color it is (red, blue, green).",
+    "Saturation": "How colorful it is (gray vs vivid).",
+    "Value": "How bright it is (dark vs light).",
+    "what_this_operator_does": "It finds certain colors and changes them without touching the rest."
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "HSV to RGB (TOP)",
+  "what_it_is": "Converts colors from HSV format into RGB format.",
+  "mental_model": "Translating color instructions into something the screen understands.",
+  "example": "Deciding the train should be 'more blue and brighter' (HSV), then turning that into actual pixel colors (RGB).",
+  "operator_specific_menu": {
+    "HSV to RGB": {
+      "meaning": "Takes hue, saturation, and value and turns them into red, green, blue.",
+      "items": {
+        "Input HSV": "The incoming image is treated as Hue, Saturation, and Value instead of RGB.",
+        "Output RGB": "The result is standard RGB pixels that every TOP understands."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "HSV": {
+      "Hue": "What color it is.",
+      "Saturation": "How colorful it is.",
+      "Value": "How bright it is."
+    },
+    "RGB": {
+      "Red": "How much red light.",
+      "Green": "How much green light.",
+      "Blue": "How much blue light."
+    },
+    "what_this_does": "It turns color ideas into actual light values."
+  },
+  "why_it_exists": [
+    "HSV is easier for humans to think about.",
+    "RGB is what screens actually use.",
+    "This operator bridges the two."
+  ],
+  "when_you_use_it": [
+    "After adjusting colors in HSV space.",
+    "Before sending an image to most other TOPs."
+  ],
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Import Select (TOP)",
+  "what_it_is": "Pulls an image from somewhere else in the project and shows it here.",
+  "mental_model": "A window that looks at another picture without copying it.",
+  "example": "Watching the train video from another room without moving the train.",
+  "operator_specific_menu": {
+    "Import Select": {
+      "meaning": "Chooses where the image comes from and when it refreshes.",
+      "items": {
+        "Import Parent": "Look up to the parent component and grab its image.",
+        "Texture": "Pick exactly which image or texture to pull in.",
+        "Reload": "Re-check the source and update the image."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "what_this_does": "It lets you see an image from somewhere else without making a new one.",
+    "why_thats_useful": "If the original changes, this one changes too.",
+    "what_it_does_not_do": "It does not copy or store the image."
+  },
+  "when_you_use_it": [
+    "You want to reuse an image already made.",
+    "You want to keep things connected.",
+    "You want updates to flow automatically."
+  ],
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "In (TOP)",
+  "what_it_is": "Defines an input slot for a component.",
+  "mental_model": "A plug socket where images come into a box.",
+  "example": "A train enters a tunnel. This is the tunnel entrance.",
+  "operator_specific_menu": {
+    "In": {
+      "meaning": "Controls how this input appears and connects.",
+      "items": {
+        "Label": "The name shown for this input so humans know what it is.",
+        "Connect Order": "Which input number this is (first, second, third, etc.)."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "what_this_is": "A door for pictures to come in.",
+    "label": "A sticky note on the door that says what goes through it.",
+    "connect_order": "Which door is door #1, door #2, and so on."
+  },
+  "important_note": "This operator does not change images. It only receives them.",
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Inside (TOP)",
+  "what_it_is": "Places one image inside another image’s shape or space.",
+  "mental_model": "Putting a photo inside a frame.",
+  "example": "The train video appears only inside the shape of a window.",
+  "operator_specific_menu": {
+    "Inside": {
+      "meaning": "Controls how the inside image is fitted and positioned.",
+      "items": {
+        "Fixed Layer": "Locks which input is treated as the container.",
+        "Pre-Fit Overlay": "Fits the inside image before placing it.",
+        "Extend Overlay": "Decides what happens when the image goes past the edges.",
+        "Translate": "Moves the inside image left, right, up, or down.",
+        "Scale": "Makes the inside image bigger or smaller.",
+        "Pivot": "Sets the point the image scales or rotates around.",
+        "Legacy Transform": "Uses the older transform behavior instead of the newer one."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "what_this_does": "It puts one picture inside another picture.",
+    "translate": "Slide the picture around.",
+    "scale": "Make the picture bigger or smaller.",
+    "pivot": "Choose the point it grows from.",
+    "extend_overlay": "What happens if the picture is too big."
+  },
+  "important_note": "This operator is about placement, not color or effects.",
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Kinect (TOP)",
+  "what_it_is": "Brings images and body data from a Kinect sensor into TouchDesigner.",
+  "mental_model": "A camera that can also see depth and people.",
+  "example": "The Kinect watches a train platform and knows how far things are and where people are standing.",
+  "operator_specific_menu": {
+    "Kinect": {
+      "meaning": "Controls the Kinect hardware and what data it sends.",
+      "items": {
+        "Active": "Turns the Kinect on or off.",
+        "Hardware Version": "Which Kinect model you are using.",
+        "Image": "Turns the camera image on or off.",
+        "Mirror Image": "Flips the image left to right like a mirror.",
+        "Image Camera Remap": "Lines up the color image with the depth view.",
+        "Skeleton": "Tracks people’s bodies and joints.",
+        "Too Close Value": "What value is used when something is too close to the sensor.",
+        "Too Far Value": "What value is used when something is too far away.",
+        "Near Depth Mode": "Allows closer depth sensing than normal.",
+        "Sensor": "Selects which Kinect device is being used."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "what_this_is": "A special camera that can tell how far things are.",
+    "depth": "It knows what is close and what is far.",
+    "skeleton": "It can guess where people’s arms and legs are.",
+    "mirror_image": "Makes it act like a bathroom mirror."
+  },
+  "important_notes": [
+    "Requires Kinect hardware.",
+    "Some options only work on certain Kinect versions."
+  ],
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Layer Mix (TOP)",
+  "what_it_is": "Stacks images on top of each other and controls how they line up and combine.",
+  "mental_model": "Putting photos on a table in layers.",
+  "example": "A background image of train tracks, with a train image placed on top.",
+  "operator_specific_menu": {
+    "Layer Mix": {
+      "meaning": "Controls what the base layer is and how layers are combined.",
+      "items": {
+        "Background": "Chooses what sits behind everything else.",
+        "Constant Layer": "Uses a flat color as the background.",
+        "Background TOP": "Uses another image as the background.",
+        "Off": "No background layer."
+      }
+    },
+    "Size": {
+      "meaning": "Controls how big layers are and how they fit.",
+      "items": {
+        "First Input": "Uses the first image’s size as the reference.",
+        "Background TOP Output Resolution": "Uses the background image size.",
+        "Output Resolution": "Forces a specific output size.",
+        "Background Color": "Color used when areas are empty.",
+        "Enable Crop": "Cuts off parts that go outside the frame.",
+        "Pre-Fit Layer": "Fits each layer before mixing.",
+        "Fit Best": "Scales to fit without stretching.",
+        "Fit Horizontal": "Fits width.",
+        "Fit Vertical": "Fits height.",
+        "Outside": "Allows the layer to go beyond the frame.",
+        "Native Resolution": "Keeps original size."
+      }
+    },
+    "Transform Controls": {
+      "meaning": "Turns on or off ways to move and adjust layers.",
+      "items": {
+        "Enable Justify": "Allows alignment (left, center, right).",
+        "Extend": "Controls what happens past the edges.",
+        "Scale": "Resizes layers.",
+        "Rotate": "Turns layers.",
+        "Translate": "Moves layers.",
+        "Pivot": "Sets the rotation/scale center.",
+        "Opacity": "Controls transparency.",
+        "Brightness": "Makes layers brighter or darker.",
+        "Levels": "Adjusts contrast and range."
+      }
+    },
+    "Composite": {
+      "meaning": "Controls how layers are ordered and blended.",
+      "items": {
+        "Operator": "How layers are blended together.",
+        "Swap": "Reverses layer roles.",
+        "Composite Order": "Which layers are drawn first.",
+        "Back to Front": "Back layers drawn first, top layers last.",
+        "Front to Back": "Top layers drawn first."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "what_this_does": "It stacks pictures and lets you move and size each one.",
+    "background": "The bottom picture.",
+    "layers": "Pictures placed on top.",
+    "composite_order": "Which picture gets drawn first."
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Layout (TOP)",
+  "what_it_is": "Arranges many images into a grid.",
+  "mental_model": "Putting photos into rows and columns on a page.",
+  "example": "Showing many train camera views at once, neatly lined up.",
+  "operator_specific_menu": {
+    "Layout": {
+      "meaning": "Controls how multiple images are arranged together.",
+      "items": {
+        "TOPs": "The list of images to arrange.",
+        "Scale Resolution": "Scales images to match a target size.",
+        "Align": "How images line up inside their grid cells.",
+        "Fit": "How each image fits into its cell (stretch, fit, fill).",
+        "Max Columns": "Maximum number of images per row.",
+        "Border Color": "Color of the lines between images.",
+        "Border": "Thickness of the borders between images.",
+        "Background Color": "Color behind all images.",
+        "Pre-Multiply RGB by Alpha": "Blends color with transparency correctly.",
+        "Comp Over Background Color": "Places images on top of the background color."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "what_this_does": "It lines up pictures in a neat grid.",
+    "max_columns": "How many pictures fit across before starting a new row.",
+    "fit": "Whether pictures stretch or keep their shape.",
+    "border": "Lines between the pictures."
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Leap Motion (TOP)",
+  "what_it_is": "Brings hand-tracking data from a Leap Motion sensor into TouchDesigner.",
+  "mental_model": "A small camera that watches your hands instead of your face.",
+  "example": "Hands moving in the air above the tracks, and the system knows where every finger is.",
+  "operator_specific_menu": {
+    "Leap Motion": {
+      "meaning": "Controls the Leap Motion hardware and how its data is interpreted.",
+      "items": {
+        "Active": "Turns the Leap Motion sensor on or off.",
+        "API": "Chooses which Leap Motion software interface is used.",
+        "Library Folder": "Where the Leap Motion support files live on disk.",
+        "Camera Flip X": "Flips the hand image left to right.",
+        "Camera Flip Y": "Flips the hand image upside down.",
+        "Image Correction": "Fixes distortion so hand positions line up correctly.",
+        "HMD Mode": {
+          "Default On": "Assumes the sensor is mounted on a VR headset.",
+          "Off": "Assumes the sensor is sitting on a desk."
+        }
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "what_this_is": "A tiny camera that sees your hands.",
+    "what_it_tracks": "Hands, fingers, and motion in the air.",
+    "flip_x_flip_y": "Turn the picture around if it looks backwards.",
+    "HMD_mode": "Tells it whether it’s on your head or on a table."
+  },
+  "important_notes": [
+    "Requires Leap Motion hardware.",
+    "HMD mode changes how directions are interpreted."
+  ],
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Lens Distortion (TOP)",
+  "what_it_is": "Fixes or adds camera lens bending effects.",
+  "mental_model": "Straightening or bending a photo taken through a curved lens.",
+  "example": "Making train tracks look straight again after being bent by a wide camera lens.",
+  "operator_specific_menu": {
+    "Lens Distortion": {
+      "meaning": "Controls how the image is bent or straightened.",
+      "items": {
+        "Invert Distortion": "Switches between fixing distortion or adding it.",
+        "K1": "Main strength of barrel or pincushion bend.",
+        "K2": "Extra bending for stronger correction.",
+        "K3": "Fine tuning for extreme edges.",
+        "P1": "Horizontal skew correction.",
+        "P2": "Vertical skew correction.",
+        "Optical Center": "The true center of the lens.",
+        "Focal Lengths": "How wide or zoomed the lens is."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "why_images_bend": "Some lenses curve straight lines.",
+    "K_values": "How much bending happens.",
+    "P_values": "Fix twisting or skewing.",
+    "invert": "Fix the image or break it on purpose."
+  },
+  "assumed_common_menus": [
+    "Layout",
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Levels (TOP)",
+  "what_it_is": "Remaps brightness and color ranges in an image.",
+  "mental_model": "Turning knobs that say what counts as dark, mid, and bright.",
+  "example": "Making the train footage darker at night or boosting contrast so tracks stand out.",
+  "operator_specific_menu": {
+    "Pre": {
+      "meaning": "Controls how incoming values are handled before adjustment.",
+      "items": {
+        "Clamp Input": "Limits incoming values so they don’t go wild.",
+        "Automatic Clamp 0–1": "Forces values to stay between black and white.",
+        "Unclamped": "Lets values go below black or above white."
+      }
+    },
+    "Adjust": {
+      "meaning": "Basic image tone controls.",
+      "items": {
+        "Invert": "Flips dark and light.",
+        "Black Level": "Moves where black starts.",
+        "Brightness": "Shifts everything lighter or darker.",
+        "Gamma": "Changes mid-tones without crushing blacks or whites.",
+        "Contrast": "Increases or decreases difference between dark and light."
+      }
+    },
+    "Range": {
+      "meaning": "Defines what input values map to output values.",
+      "items": {
+        "In Low": "What input value becomes black.",
+        "In High": "What input value becomes white.",
+        "Out Low": "What black turns into after processing.",
+        "Out High": "What white turns into after processing."
+      }
+    },
+    "RGBA": {
+      "meaning": "Do range control per color channel.",
+      "items": {
+        "Low R / High R": "Red channel range.",
+        "Low G / High G": "Green channel range.",
+        "Low B / High B": "Blue channel range.",
+        "Low A / High A": "Alpha (transparency) range."
+      }
+    },
+    "Step": {
+      "meaning": "Turns smooth gradients into chunks.",
+      "items": {
+        "Apply Stepping": "Turns stepping on.",
+        "Step Size Threshold": "How big each step is.",
+        "Clamp Low": "Locks the darkest step.",
+        "Clamp High": "Locks the brightest step.",
+        "Soften": "Smooths the edges between steps."
+      }
+    },
+    "Post": {
+      "meaning": "Final polish after all adjustments.",
+      "items": {
+        "Gamma 2": "Extra gamma adjustment at the end.",
+        "Opacity": "Controls transparency of the result.",
+        "Brightness": "Final brightness tweak.",
+        "Clamp Off": "Allows values beyond black/white again.",
+        "Pre-Multiply RGB by Alpha": "Keeps transparency blending correct."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "what_this_does": "It decides what counts as black, gray, and white.",
+    "range": "Tells the picture where darkness starts and light ends.",
+    "gamma": "Fixes how gray feels without breaking shadows.",
+    "step": "Turns smooth shading into poster-like blocks."
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Limit (TOP)",
+  "what_it_is": "Restricts, wraps, or reshapes numeric image values so they stay within rules.",
+  "mental_model": "Guard rails for numbers.",
+  "example": "Keeping the brightness of the train image from getting too dark or too bright.",
+  "operator_specific_menu": {
+    "Limit": {
+      "meaning": "Controls how values are stopped, wrapped, or bounced.",
+      "items": {
+        "Limit Type (Minimum)": {
+          "Clamp": "Stops values at the minimum.",
+          "Loop": "Wraps values back to the top when they go too low.",
+          "Zigzag": "Bounces values back upward."
+        },
+        "Limit Type (Maximum)": {
+          "Clamp": "Stops values at the maximum.",
+          "Loop": "Wraps values back to the bottom.",
+          "Zigzag": "Bounces values downward."
+        },
+        "Minimum Value": "Lowest value allowed.",
+        "Maximum Value": "Highest value allowed.",
+        "Positive Only": "Removes negative values.",
+        "Normalize": "Rescales values to fit evenly between min and max."
+      }
+    },
+    "Quantize": {
+      "meaning": "Snaps values to fixed steps.",
+      "items": {
+        "Quantize Value": "Turns snapping on or off.",
+        "Value Step": "Size of each snap step.",
+        "Value Offset": "Shifts where snapping starts.",
+        "Quantize Position": "Controls whether snapping happens before or after limiting."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "clamp": "Hit the wall and stop.",
+    "loop": "Fall off one side and come back on the other.",
+    "zigzag": "Bounce like a ball.",
+    "quantize": "Snap to stairs instead of using a ramp."
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}{{
+  "operator": "Luma Level (TOP)",
+  "what_it_is": "Adjusts brightness using only luminance (how light or dark something is), not color.",
+  "mental_model": "Editing a black-and-white version of the image, then applying it back.",
+  "example": "Making the bright parts of the train stand out while leaving colors alone.",
+  "operator_specific_menu": {
+    "Pre": {
+      "meaning": "Decides what brightness data is used and how it starts.",
+      "items": {
+        "Source": "Which channel or calculation is used to get brightness.",
+        "Invert": "Flips bright and dark.",
+        "Black Level": "Moves where black begins.",
+        "Brightness": "Shifts everything lighter or darker.",
+        "Gamma": "Adjusts mid-tones without crushing blacks or whites.",
+        "Contrast": "Increases or decreases difference between dark and light."
+      }
+    },
+    "Range": {
+      "meaning": "Maps input brightness to output brightness.",
+      "items": {
+        "In Low": "What input brightness becomes black.",
+        "In High": "What input brightness becomes white.",
+        "Out Low": "What black turns into after processing.",
+        "Out High": "What white turns into after processing."
+      }
+    },
+    "Step": {
+      "meaning": "Turns smooth brightness into chunks.",
+      "items": {
+        "Step Size": "How big each brightness step is.",
+        "Threshold": "When stepping begins.",
+        "Clamp Low": "Locks darkest step.",
+        "Clamp High": "Locks brightest step.",
+        "Soften": "Smooths edges between steps."
+      }
+    },
+    "Post": {
+      "meaning": "Final adjustment after all changes.",
+      "items": {
+        "Gamma 2.0": "Extra gamma tweak at the end.",
+        "Opacity": "How strong the effect is overall."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "luma": "How light or dark something is.",
+    "what_this_does": "It changes brightness without changing color.",
+    "step": "Turns smooth shading into stair steps.",
+    "range": "Decides what counts as dark and bright."
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+
+  "operator": "Luma Blur (TOP)",
+  "what_it_is": "Blurs an image based on how bright or dark it is.",
+  "mental_model": "Bright parts blur one way, dark parts blur another way.",
+  "example": "Bright headlights on a train blur more than the dark tracks.",
+  "operator_specific_menu": {
+    "Luma Blur": {
+      "meaning": "Controls how brightness affects blur.",
+      "items": {
+        "Type": "The blur style or kernel shape.",
+        "Kernel Width Channel": "Which channel decides how strong the blur is.",
+        "Black Value": "How much blur dark areas get.",
+        "White Value": "How much blur bright areas get.",
+        "Black Filter Width": "Blur size for dark pixels.",
+        "White Filter Width": "Blur size for bright pixels.",
+        "Extend": "What happens at the edges (hold, repeat, mirror)."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "luma": "How bright something is.",
+    "what_this_does": "Bright parts get blurred differently than dark parts.",
+    "why_it_matters": "You can make glow-like effects without blurring everything equally."
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+
+{
+  "operator": "Lookup (TOP)",
+  "what_it_is": "Uses one image to decide how to read colors from another image.",
+  "mental_model": "A color dictionary.",
+  "example": "The brightness of the train image is used to look up new colors from a color strip.",
+  "operator_specific_menu": {
+    "Lookup": {
+      "meaning": "Controls how values from one image are used to pick values from another.",
+      "items": {
+        "Method": "How the lookup is performed (how values are read and matched).",
+        "Index Range": "The range of values used to look up colors (for example, dark to bright).",
+        "Index Channel": "Which channel is used as the lookup key.",
+        "Dark UV": "Where dark values point to in the lookup image.",
+        "Light UV": "Where bright values point to in the lookup image."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "what_this_does": "One picture tells another picture what colors to use.",
+    "index_channel": "The number used to point at a color.",
+    "dark_uv": "Where very dark values look.",
+    "light_uv": "Where very bright values look."
+  },
+  "important_note": "This operator replaces colors based on values, not position.",
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Math (TOP)",
+  "what_it_is": "Does math to the numbers inside an image.",
+  "mental_model": "A calculator that works on every pixel.",
+  "example": "Changing how bright the train image is by adding, multiplying, or reshaping its numbers.",
+  "operator_specific_menu": {
+    "Fix / Safety": {
+      "meaning": "Decides how to handle broken or weird numbers.",
+      "items": {
+        "OP Fix": "Turns number-fixing on or off.",
+        "Invalid Values": "What to do with bad numbers.",
+        "NaN to Zero": "Replace undefined numbers with zero.",
+        "INF to One": "Replace infinite numbers with one.",
+        "Both": "Apply both fixes."
+      }
+    },
+    "Color Space": {
+      "meaning": "Controls how color math is interpreted.",
+      "items": {
+        "Convert Incoming sRGB to Linear": "Prepare colors for correct math.",
+        "Convert Outgoing Linear to sRGB": "Convert back for display."
+      }
+    },
+    "Channel Pre-Op": {
+      "meaning": "Math done to each channel before combining.",
+      "items": {
+        "Off": "Do nothing.",
+        "Negative": "Flip the sign.",
+        "Positive": "Force values to be positive.",
+        "Root": "Square root.",
+        "Square": "Square the value.",
+        "Inverse": "1 divided by the value."
+      }
+    },
+    "Combine Channels": {
+      "meaning": "How R, G, B, A are mixed together.",
+      "items": {
+        "Add": "Add channels together.",
+        "Subtract": "Subtract channels.",
+        "Multiply": "Multiply channels.",
+        "Divide": "Divide channels.",
+        "Average": "Average all channels.",
+        "Minimum": "Pick the smallest value.",
+        "Maximum": "Pick the largest value.",
+        "Length": "Distance-style combine (vector length)."
+      }
+    },
+    "Channel Post-Op": {
+      "meaning": "Math done after combining.",
+      "items": {
+        "Negative": "Flip sign again.",
+        "Positive": "Force positive.",
+        "Root": "Square root.",
+        "Square": "Square.",
+        "Inverse": "Invert."
+      }
+    },
+    "Integer": {
+      "meaning": "Forces values to whole numbers.",
+      "items": {
+        "Off": "Allow decimals.",
+        "Ceiling": "Round up.",
+        "Floor": "Round down.",
+        "Round": "Round to nearest."
+      }
+    },
+    "Channel Routing": {
+      "meaning": "Which channels are used in and out.",
+      "items": {
+        "Combine Channels Input": "RGBa",
+        "Combine Channels Output": "RGBa"
+      }
+    },
+    "Multi-Add": {
+      "meaning": "A standard math chain.",
+      "items": {
+        "Pre-Add": "Add before multiply.",
+        "Multiply": "Scale values.",
+        "Post-Add": "Add after multiply.",
+        "Operation": "Enable or disable this chain.",
+        "No Operation": "Skip the chain.",
+        "Pre-Multiply RGB by Alpha": "Scale color by transparency.",
+        "Divide RGB by Alpha": "Undo pre-multiply.",
+        "Divide RGB by Alpha and Fill": "Undo and fill missing values."
+      }
+    },
+    "Range": {
+      "meaning": "Remaps numbers from one range to another.",
+      "items": {
+        "From Range": "Original number range.",
+        "To Range": "New number range."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "what_this_does": "It changes the numbers that make the picture.",
+    "why_numbers_matter": "Pictures are just grids of numbers.",
+    "pre_op_vs_post_op": "One happens before mixing colors, one after.",
+    "range": "Tell the picture what numbers mean dark and light."
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Matte (TOP)",
+  "what_it_is": "Uses one image to cut holes in another image.",
+  "mental_model": "A stencil that decides what parts you can see.",
+  "example": "The train is only visible where the matte image is bright.",
+  "operator_specific_menu": {
+    "Matte": {
+      "meaning": "Controls how the masking image is used.",
+      "items": {
+        "Switch Inputs": "Swaps which image is the picture and which image is the mask.",
+        "Matte Channel": {
+          "Alpha": "Use transparency as the mask.",
+          "Luminance": "Use brightness as the mask.",
+          "Red": "Use the red channel as the mask.",
+          "Green": "Use the green channel as the mask.",
+          "Blue": "Use the blue channel as the mask.",
+          "RGB Average": "Average red, green, and blue for the mask.",
+          "RGBA Average": "Average red, green, blue, and alpha.",
+          "RGB Maximum": "Use the brightest color channel.",
+          "RGB Minimum": "Use the darkest color channel."
+        }
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "what_this_does": "One picture decides where another picture is visible.",
+    "bright_parts": "Show the image.",
+    "dark_parts": "Hide the image.",
+    "switch_inputs": "Decides which picture is doing the hiding."
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}{
+  "operator": "Mirror (TOP)",
+  "what_it_is": "Flips and reflects an image across a line.",
+  "mental_model": "Looking at the image in a mirror.",
+  "example": "The train appears reflected as if there is a mirror along the tracks.",
+  "operator_specific_menu": {
+    "Mirror": {
+      "meaning": "Controls how the reflection happens.",
+      "items": {
+        "Pivot": "Where the mirror line is placed.",
+        "Rotate": "Turns the mirror line.",
+        "Extend": {
+          "Mirror": "Reflect the image across the edge.",
+          "Hold": "Freeze the edge pixels.",
+          "Zero": "Fill outside with black.",
+          "Repeat": "Tile the image."
+        },
+        "Flip X": "Flip the image left to right.",
+        "Flip Y": "Flip the image top to bottom."
+      }
+    }
+  },
+  "explain_like_im_five": {
+    "mirror": "Flip the picture like a reflection.",
+    "pivot": "Where the mirror sits.",
+    "rotate": "Turn the mirror line.",
+    "flip_x_flip_y": "Turn the picture sideways or upside down."
+  },
+  "assumed_common_menus": [
+    "Common (TOP)"
+  ]
+}
+{
+  "operator": "Monochrome (TOP)",
+  "what_it_is": "Turns a color image into a single grayscale image.",
+  "mental_model": "Turning a color photo into black and white.",
+  "example": "The train image becomes light or dark only, no color.",
+  "operator_specific_menu": {
+    "Monochrome": {
+      "meaning": "Controls how color turns into brightness.",
+      "items": {
+        "Monochrome": "Use a weighted mix of colors to make grayscale.",
+        "RGB": "Use the red, green, and blue channels together.",
+        "Alpha": "Use transparency as brightness.",
+        "Clamp To": "Limits the output so it stays in a valid range."
+      }
+    }
+  }
+}
+{
+  "operator": "MOSIS (TOP)",
+  "what_it_is": "Bridges CHOP data into image processing.",
+  "mental_model": "Using numbers to drive pixels.",
+  "example": "Train speed values from a CHOP affect image brightness.",
+  "operator_specific_menu": {
+    "MOSIS": {
+      "meaning": "Chooses which CHOP provides the data.",
+      "items": {
+        "CHOP Node": "The CHOP that supplies numeric values."
+      }
+    }
+  }
+}
+
+{
+  "operator": "Movie File In (TOP)",
+  "what_it_is": "Loads video files or image sequences into TouchDesigner.",
+  "mental_model": "A video player inside the network.",
+  "example": "Playing a video of a train moving down the tracks.",
+  "operator_specific_menus": {
+    "Play": {
+      "meaning": "Controls how the video plays.",
+      "items": {
+        "File": "The video or image sequence to load.",
+        "Reload": "Reloads the file from disk.",
+        "Play Mode": "How playback behaves (play once, loop, etc.).",
+        "Sequential": "Plays frames in order.",
+        "Lock to Timeline": "Syncs playback to the main timeline.",
+        "Specify Index": "Manually choose which frame to show.",
+        "Timecode Object CHOP/DAT": "Uses external timecode.",
+        "Play Speed": "How fast the video plays.",
+        "Queue": "Lines up another clip to play next.",
+        "Queue Point": "Where queuing starts.",
+        "Queue Behavior": {
+          "On Release": "Plays when released.",
+          "Play Next Frame": "Steps one frame forward.",
+          "On Release Repeat": "Repeats on release.",
+          "Repeat Queued Frame": "Loops queued frame.",
+          "Loop Crossfade": "Smoothly loops.",
+          "Step Size": "Frame step size."
+        },
+        "Audio Loop": "Loops audio with the video.",
+        "Fade Silence": "Smooths audio edges.",
+        "Match Start to End": "Aligns first and last frame."
+      }
+    },
+    "Image Sequence Indexing": {
+      "meaning": "How image sequences are counted.",
+      "items": {
+        "Zero-Based": "Starts counting at 0.",
+        "File Name-Based": "Uses numbers in file names."
+      }
+    },
+    "Image": {
+      "meaning": "Controls how frames are decoded.",
+      "items": {
+        "Interpolate Frames": "Smooths between frames.",
+        "Deinterlace": "Fixes interlaced video.",
+        "Bottom Half is Alpha": "Uses lower half as transparency.",
+        "Premultiply RGB by Alpha": "Correct blending.",
+        "Input Color Space": "Color interpretation of the file.",
+        "Input Reference White": "Brightness reference.",
+        "HLG Peak Nits": "HDR brightness level.",
+        "Loading Error Image": "Image shown if loading fails.",
+        "Decode Pixel Format": "How pixels are decoded."
+      }
+    },
+    "Trim": {
+      "meaning": "Cuts or extends playback range.",
+      "items": {
+        "Trim": "Enable trimming.",
+        "Extend Right": "What happens past the end.",
+        "Override Sample Rate": "Force playback rate."
+      }
+    },
+    "Tune": {
+      "meaning": "Performance and loading behavior.",
+      "items": {
+        "Pre-Read Frames": "Loads frames early.",
+        "Read Frames Timeout": "Wait limit for reading.",
+        "Frame Timeout Strategy": "What to do if loading stalls.",
+        "Always Load Initial Frame": "Guarantees first frame loads.",
+        "File Open Timeout": "Wait limit for opening files.",
+        "Pre-Download HTTP Addresses": "Download online files first.",
+        "Update Images": "Refreshes loaded frames.",
+        "Max Decode CPUs": "CPU limit for decoding.",
+        "High Performance Read": "Faster disk access.",
+        "Hardware Decode": "Use GPU decoding if available.",
+        "Callbacks DAT": "DAT for playback events."
+      }
+    }
+  }
+}
+{
+  "operators": [
+    {
+      "operator": "MPCDI (TOP)",
+      "what_it_is": "Loads a projection-mapping configuration file.",
+      "mental_model": "A map that tells projectors where to put pixels.",
+      "example": "Making a train image line up perfectly across multiple projectors.",
+      "menu": {
+        "Configuration File": "The MPCDI file that describes the projector layout.",
+        "Reload Pulse": "Reloads the file if it changes.",
+        "Output by Single Region": "Outputs one region at a time instead of all.",
+        "Near-Far": "Controls depth range for projection.",
+        "Alpha-Beta Blending": "Smoothly blends overlapping projector edges.",
+        "Gamma Blending": "Blends edges using brightness correction."
+      },
+      "explain_like_im_five": "It’s a blueprint for where pictures should land in the real world."
+    },
+    {
+      "operator": "Multiply (TOP)",
+      "what_it_is": "Multiplies images together pixel by pixel.",
+      "mental_model": "Darkening one picture using another picture.",
+      "example": "A shadow image darkens the train footage.",
+      "menu": {
+        "Fixed Layer": "Locks which input is treated as the base.",
+        "Fit Overlay": "Fits one image onto the other.",
+        "Extend Overlay": "What happens past the edges.",
+        "Rotate": "Turns the overlay image.",
+        "Translate": "Moves the overlay image.",
+        "Scale": "Resizes the overlay image.",
+        "Pivot": "Point the image rotates or scales around.",
+        "Legacy Transform": "Uses older transform behavior."
+      },
+      "explain_like_im_five": "White shows everything, black hides everything."
+    },
+    {
+      "operator": "NCam (TOP)",
+      "what_it_is": "Brings camera-tracking data into TouchDesigner.",
+      "mental_model": "A camera that knows where it is in space.",
+      "example": "The virtual train camera moves exactly like a real camera.",
+      "menu": {
+        "Active": "Turns NCam tracking on or off.",
+        "NCam CHOP": "The CHOP that provides tracking data.",
+        "Output": "Which data is sent out."
+      },
+      "explain_like_im_five": "It tells the computer where the camera is and how it moves."
+    },
+    {
+      "operator": "NDI In (TOP)",
+      "what_it_is": "Receives live video over the network.",
+      "mental_model": "A live video cable over Ethernet.",
+      "example": "Receiving a live train camera feed from another computer.",
+      "menu": {
+        "Active": "Turns the NDI stream on or off.",
+        "Source Name": "Which NDI stream to receive.",
+        "Search IPs": "Where to look for NDI sources.",
+        "Bandwidth": "How much network data to use.",
+        "Hardware Decode": "Uses GPU to decode video if available.",
+        "Input Pixel Format": "How incoming pixels are interpreted.",
+        "Group Name Tables": "Organizes NDI sources.",
+        "Audio Buffer Length": "How much audio is buffered."
+      },
+      "explain_like_im_five": "It’s like watching another computer’s screen in real time."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Noise (TOP)",
+      "what_it_is": "Generates procedural textures made from math instead of images.",
+      "mental_model": "A pattern generator.",
+      "example": "Making moving fog or static around the train.",
+      "menu": {
+        "Type": {
+          "Perlin": "Smooth, cloudy noise.",
+          "Simplex": "Like Perlin but smoother and faster.",
+          "Random": "Pure static.",
+          "Sparse": "Mostly empty with spots.",
+          "Hermite": "Smooth blended noise.",
+          "Alligator": "Chunky, cell-like noise."
+        },
+        "Seed": "Changes the random starting point.",
+        "Period": "How often the pattern repeats.",
+        "Harmonics": "How many detail layers are stacked.",
+        "Harmonic Spread": "How far apart detail layers are.",
+        "Harmonic Gain": "How strong each detail layer is.",
+        "Exponent": "Shapes contrast of the noise.",
+        "Amplitude": "Overall strength.",
+        "Offset": "Shifts brightness.",
+        "Monochromatic": "Same value for all colors.",
+        "Aspect Correct": "Keeps noise from stretching.",
+        "Transform": {
+          "Transform Order": "Order of movement math.",
+          "Rotate Order": "Order rotations are applied.",
+          "Translate": "Moves the pattern.",
+          "Rotate": "Turns the pattern.",
+          "Scale": "Zooms the pattern.",
+          "Pivot": "Center point for rotate/scale."
+        }
+      },
+      "explain_like_im_five": "It makes patterns out of math instead of pictures."
+    },
+    {
+      "operator": "Normal Map (TOP)",
+      "what_it_is": "Turns height information into surface direction data.",
+      "mental_model": "Fake bumps using colors.",
+      "example": "Making the train tracks look bumpy without adding geometry.",
+      "menu": {
+        "Source Method": "How height data is read.",
+        "Sample Step": "How far apart samples are taken.",
+        "Height Map": "Uses brightness as height.",
+        "Alpha Channel": "Uses transparency as height.",
+        "Z Scale": "How tall the bumps appear."
+      },
+      "explain_like_im_five": "It makes flat pictures look bumpy."
+    },
+    {
+      "operator": "Notch (TOP)",
+      "what_it_is": "Plays back and manages cached GPU image data.",
+      "mental_model": "A GPU video recorder/player.",
+      "example": "Recording frames of a train effect and replaying them.",
+      "menu": {
+        "Active Block": "Turns recording/playback on or off.",
+        "Clear Parameters": "Resets internal settings.",
+        "On File Change": "Reloads when source changes.",
+        "Layer": "Which layer is used.",
+        "Play Mode": "How playback behaves.",
+        "Initialize": "Resets playback state.",
+        "Start": "Begins playback.",
+        "Play Speed": "How fast it plays.",
+        "Index": "Which frame to show.",
+        "Purge GPU": "Clears cached GPU memory."
+      },
+      "explain_like_im_five": "It remembers pictures on the graphics card."
+    },
+    {
+      "operator": "Null (TOP)",
+      "what_it_is": "Passes an image through unchanged.",
+      "mental_model": "A wire.",
+      "example": "Letting the train image pass through untouched.",
+      "menu": {},
+      "explain_like_im_five": "It does nothing, on purpose."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "OCSelect (TOP)",
+      "what_it_is": "Selects and outputs data from an OpenColorIO device or stream.",
+      "mental_model": "Picking one color stream out of many.",
+      "example": "Choosing one color-corrected train feed from several options.",
+      "menu": {
+        "Active": "Turns the operator on or off.",
+        "OCDevice CHOP": "CHOP that provides OpenColorIO device data.",
+        "Stream": "Which stream to read from.",
+        "Cache Size": "How much data is stored for reuse.",
+        "Output Index": "Which item in the stream to output.",
+        "Limit Max": "Caps the maximum output value.",
+        "Output Data Format": "How the output data is structured.",
+        "Output Format": "Pixel format of the output."
+      },
+      "explain_like_im_five": "It chooses which color data you want to look at."
+    },
+    {
+      "operator": "OpenColorIO (TOP)",
+      "what_it_is": "Applies professional color-management rules.",
+      "mental_model": "A translator between different color worlds.",
+      "example": "Making the train video look correct on different screens.",
+      "menu": {
+        "Setup": "Main color-management settings.",
+        "Configuration File": "The color rules file.",
+        "Reload Config": "Reloads the configuration."
+      },
+      "submenus": {
+        "Pre-XTransform": {
+          "Pre-Transform Operation": "What color math happens first.",
+          "Color Space": "Which color space is assumed.",
+          "Inverse Display": "Undo a display transform."
+        },
+        "File Transform": {
+          "Use File Information": "Reads color data from the file."
+        },
+        "CDL Transform": {
+          "CDL Mode": "Which color correction style to use.",
+          "Slope": "Brightens or darkens colors.",
+          "Offset": "Shifts colors up or down.",
+          "Power": "Adjusts contrast.",
+          "Saturation": "Controls color strength.",
+          "Direction": "Apply or undo the correction."
+        },
+        "Color Space Post-XForm": {
+          "Use Post Transform": "Apply color conversion after processing."
+        },
+        "OP Viewer": {
+          "Operator Viewer": "Shows the result in the viewer.",
+          "Preserve Alpha": "Keeps transparency unchanged."
+        }
+      },
+      "explain_like_im_five": "It makes sure colors look right everywhere."
+    },
+    {
+      "operator": "OpenVR (TOP)",
+      "what_it_is": "Outputs images to VR headsets.",
+      "mental_model": "A window into virtual reality.",
+      "example": "Seeing the train scene inside a VR headset.",
+      "menu": {
+        "Active": "Turns VR output on or off.",
+        "Output Color Space": "Color format sent to the headset."
+      },
+      "explain_like_im_five": "It sends pictures to VR goggles."
+    },
+    {
+      "operator": "Optical Flow (TOP)",
+      "what_it_is": "Detects motion between frames.",
+      "mental_model": "Seeing which way pixels are moving.",
+      "example": "Detecting how fast the train is moving across the screen.",
+      "menu": {
+        "Grid Size": "How detailed the motion grid is.",
+        "Quality": "Accuracy of motion detection.",
+        "Cost Output": "Outputs confidence data.",
+        "Gain Threshold": "Minimum motion needed to count.",
+        "Gamma": "Adjusts motion sensitivity.",
+        "Pre-Shrink": "Downscales input for speed.",
+        "Manual Timing": "Manually control frame timing."
+      },
+      "explain_like_im_five": "It watches how pixels move from frame to frame."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Orbex Select (TOP)",
+      "what_it_is": "Selects different kinds of data coming from an Orbex sensor.",
+      "mental_model": "Choosing which camera view you want from one device.",
+      "example": "Picking the depth view instead of the color view of a train scene.",
+      "menu": {
+        "Active": "Turns the output on or off.",
+        "Orbex TOP": "The Orbex source this operator reads from.",
+        "Image": "Outputs the regular camera image.",
+        "Point Cloud": "Outputs 3D point data.",
+        "Color": "Outputs color data.",
+        "Depth": "Outputs distance-from-camera data.",
+        "IR": "Outputs infrared image data."
+      },
+      "explain_like_im_five": "One sensor can see many things. This lets you choose which one you want."
+    },
+    {
+      "operator": "Ouster (TOP)",
+      "what_it_is": "Connects to an Auster LiDAR device and brings its data into TouchDesigner.",
+      "mental_model": "A laser scanner that sees the world in dots.",
+      "example": "Scanning a train platform with lasers to get a 3D picture.",
+      "menu": {
+        "Connection": "Controls how the device connects.",
+        "Active": "Turns the device on or off.",
+        "Device Address": "IP address of the Auster device.",
+        "LIDAR Port": "Network port for laser data.",
+        "IMU Port": "Network port for motion sensor data.",
+        "Target Address": "Where the data is sent.",
+        "Scan Mode": "How the laser scans.",
+        "Operating Mode": "How the device runs.",
+        "Azimuth Window": "Which horizontal angles are scanned.",
+        "Singular Signal Multiplier": "Scales the laser signal strength.",
+        "Data Format": "How incoming data is packaged.",
+        "Red": "Maps data to the red channel.",
+        "Green": "Maps data to the green channel.",
+        "Blue": "Maps data to the blue channel.",
+        "Alpha": "Maps data to transparency."
+      },
+      "note": "There is also a Timing menu, but it was not visible.",
+      "explain_like_im_five": "It shoots lasers, listens for the bounce, and draws dots where things are."
+    },
+    {
+      "operator": "Ouster Select (TOP)",
+      "what_it_is": "Chooses which data from an Auster scan to output.",
+      "mental_model": "Picking which part of the laser scan you want to see.",
+      "example": "Using only the depth information from a LiDAR scan of a train.",
+      "menu": {
+        "Auster TOP": "The Auster source to read from.",
+        "Red": "Output mapped to red channel.",
+        "Green": "Output mapped to green channel.",
+        "Blue": "Output mapped to blue channel.",
+        "Alpha": "Output mapped to transparency."
+      },
+      "explain_like_im_five": "The laser gives lots of numbers. This picks which ones become a picture."
+    },
+    {
+      "operator": "out (TOP)",
+      "what_it_is": "Defines an output slot for a component.",
+      "mental_model": "An exit door for images.",
+      "example": "Sending the processed train image out of a component.",
+      "menu": {
+        "Select TOP": "Which image is sent out.",
+        "Label": "Name shown for this output.",
+        "Connect Order": "Which output number this is."
+      },
+      "explain_like_im_five": "It says which picture leaves the box, and through which door."
+    }
+  ]{
+  "operators": [
+    {
+      "operator": "Orbex Select (TOP)",
+      "what_it_is": "Selects different kinds of data coming from an Orbex sensor.",
+      "mental_model": "Choosing which camera view you want from one device.",
+      "example": "Picking the depth view instead of the color view of a train scene.",
+      "menu": {
+        "Active": "Turns the output on or off.",
+        "Orbex TOP": "The Orbex source this operator reads from.",
+        "Image": "Outputs the regular camera image.",
+        "Point Cloud": "Outputs 3D point data.",
+        "Color": "Outputs color data.",
+        "Depth": "Outputs distance-from-camera data.",
+        "IR": "Outputs infrared image data."
+      },
+      "explain_like_im_five": "One sensor can see many things. This lets you choose which one you want."
+    },
+    {
+      "operator": "Auster (TOP)",
+      "what_it_is": "Connects to an Auster LiDAR device and brings its data into TouchDesigner.",
+      "mental_model": "A laser scanner that sees the world in dots.",
+      "example": "Scanning a train platform with lasers to get a 3D picture.",
+      "menu": {
+        "Connection": "Controls how the device connects.",
+        "Active": "Turns the device on or off.",
+        "Device Address": "IP address of the Auster device.",
+        "LIDAR Port": "Network port for laser data.",
+        "IMU Port": "Network port for motion sensor data.",
+        "Target Address": "Where the data is sent.",
+        "Scan Mode": "How the laser scans.",
+        "Operating Mode": "How the device runs.",
+        "Azimuth Window": "Which horizontal angles are scanned.",
+        "Singular Signal Multiplier": "Scales the laser signal strength.",
+        "Data Format": "How incoming data is packaged.",
+        "Red": "Maps data to the red channel.",
+        "Green": "Maps data to the green channel.",
+        "Blue": "Maps data to the blue channel.",
+        "Alpha": "Maps data to transparency."
+      },
+      "note": "There is also a Timing menu, but it was not visible.",
+      "explain_like_im_five": "It shoots lasers, listens for the bounce, and draws dots where things are."
+    },
+    {
+      "operator": "Auster Select (TOP)",
+      "what_it_is": "Chooses which data from an Auster scan to output.",
+      "mental_model": "Picking which part of the laser scan you want to see.",
+      "example": "Using only the depth information from a LiDAR scan of a train.",
+      "menu": {
+        "Auster TOP": "The Auster source to read from.",
+        "Red": "Output mapped to red channel.",
+        "Green": "Output mapped to green channel.",
+        "Blue": "Output mapped to blue channel.",
+        "Alpha": "Output mapped to transparency."
+      },
+      "explain_like_im_five": "The laser gives lots of numbers. This picks which ones become a picture."
+    },
+    {
+      "operator": "Aout (TOP)",
+      "what_it_is": "Defines an output slot for a component.",
+      "mental_model": "An exit door for images.",
+      "example": "Sending the processed train image out of a component.",
+      "menu": {
+        "Select TOP": "Which image is sent out.",
+        "Label": "Name shown for this output.",
+        "Connect Order": "Which output number this is."
+      },
+      "explain_like_im_five": "It says which picture leaves the box, and through which door."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Outside (TOP)",
+      "what_it_is": "Shows everything except the overlapping area of two images.",
+      "mental_model": "Everything outside the frame stays visible.",
+      "example": "Only the area outside the train silhouette shows.",
+      "menu": {
+        "Fixed Layer": "Locks which input is the reference.",
+        "Fit": "How the overlay fits.",
+        "Pre-Fit Overlay": "Fits before combining.",
+        "Extend Overlay": {
+          "Hold": "Freeze edge pixels.",
+          "Zero": "Fill with black.",
+          "Repeat": "Tile the image.",
+          "Mirror": "Reflect the image."
+        },
+        "Rotate": "Turns the overlay.",
+        "Translate": "Moves the overlay.",
+        "Scale": "Resizes the overlay.",
+        "Pivot": "Center for rotate/scale.",
+        "Legacy Transform": "Older transform behavior."
+      },
+      "explain_like_im_five": "You see everything except where the pictures overlap."
+    },
+    {
+      "operator": "Over (TOP)",
+      "what_it_is": "Places one image on top of another.",
+      "mental_model": "Stacking photos.",
+      "example": "The train sits on top of the background.",
+      "menu": {
+        "Transform": "Move/scale/rotate the top image.",
+        "Fixed Layer": "Choose which input is on top.",
+        "Pre-Fit Overlay": "Fit before stacking.",
+        "Extend Overlay": "Edge behavior.",
+        "Rotate": "Turn the image.",
+        "Translate": "Move the image.",
+        "Scale": "Resize the image.",
+        "Pivot": "Center for transforms.",
+        "Legacy Transform": "Older transform behavior."
+      },
+      "explain_like_im_five": "One picture goes on top of another."
+    },
+    {
+      "operator": "Pack (TOP)",
+      "what_it_is": "Groups images into a packed format.",
+      "mental_model": "Putting items into a box.",
+      "example": "Bundling several train images together.",
+      "menu": {},
+      "explain_like_im_five": "It packs pictures together without changing them."
+    },
+    {
+      "operator": "Photoshop In (TOP)",
+      "what_it_is": "Connects to Adobe Photoshop and pulls images live.",
+      "mental_model": "A live window into Photoshop.",
+      "example": "Editing the train image in Photoshop and seeing updates instantly.",
+      "menu": {
+        "Active": "Turns the connection on or off.",
+        "Address": "Where Photoshop is running.",
+        "Password": "Connection password.",
+        "Image Format": "How images are sent.",
+        "Locked Document Name": "Specific document to follow.",
+        "Locked to Current Document": "Follow the active file.",
+        "Unlock": "Release the lock.",
+        "Update Mode": "How updates are triggered.",
+        "Update": "Force an update.",
+        "Max Update Rate": "Limits update speed."
+      },
+      "explain_like_im_five": "It watches Photoshop and copies the picture into TouchDesigner."
+    },
+    {
+      "operator": "Point File In (TOP)",
+      "what_it_is": "Loads point-based image data from a file.",
+      "mental_model": "Reading dots from a file and turning them into pixels.",
+      "example": "Loading point data that draws the outline of a train.",
+      "menu": {
+        "Point Data": "The file containing points.",
+        "File Reload": "Reloads the file.",
+        "Red": "Map data to red channel.",
+        "Green": "Map data to green channel.",
+        "Blue": "Map data to blue channel.",
+        "Alpha": "Map data to transparency."
+      },
+      "play_and_trim": {
+        "Play Mode": "Same as Movie File In.",
+        "Trim": {
+          "Trim": "On or off.",
+          "Extend Right": "What happens past the end.",
+          "Override Sample Rate": "Force playback rate."
+        },
+        "Tune": {
+          "Pre-Read Frames": "Load frames early.",
+          "Frame Read Timeout": "Wait limit per frame.",
+          "Frame Timeout Strategy": "What to do if loading stalls.",
+          "Always Load Initial Frame": "Guarantee first frame.",
+          "File Open Timeout": "Wait limit for opening.",
+          "Update Image": "Refresh output.",
+          "Max Decode CPUs": "CPU limit.",
+          "High Performance Read": "Faster disk reads.",
+          "Hardware Decode": "Use GPU decoding if available."
+        }
+      },
+      "explain_like_im_five": "It reads dots from a file and turns them into a picture."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Point File Select (TOP)",
+      "what_it_is": "Selects color data from a Point File In TOP.",
+      "mental_model": "Picking which color values the dots should use.",
+      "example": "Choosing how point data colors a train outline.",
+      "menu": {
+        "Point File In TOP": "The point-file source.",
+        "Red": "Use this data for red.",
+        "Green": "Use this data for green.",
+        "Blue": "Use this data for blue.",
+        "Alpha": "Use this data for transparency."
+      },
+      "explain_like_im_five": "The dots have numbers. This decides which numbers become colors."
+    },
+    {
+      "operator": "Point Transform (TOP)",
+      "what_it_is": "Moves or rotates point-based image data.",
+      "mental_model": "Moving dots around in space.",
+      "example": "Rotating or scaling a point-based train image.",
+      "menu": {
+        "In-Point Type": {
+          "Position": "Treat points as locations.",
+          "Vector": "Treat points as directions."
+        },
+        "Transform Order": "Order transforms happen.",
+        "Rotate Order": "Order rotations happen.",
+        "Translate": "Move points.",
+        "Rotate": "Turn points.",
+        "Scale": "Resize point layout.",
+        "Pivot": "Center of rotate/scale.",
+        "Uniform Scale": "Scale equally in all directions.",
+        "Look At": "Aim points toward something.",
+        "Transform TOP": "Optional TOP used as a transform source."
+      },
+      "explain_like_im_five": "It moves and turns the dots."
+    },
+    {
+      "operator": "Point Transform – Weights",
+      "what_it_is": "Controls how strongly transforms affect points.",
+      "mental_model": "Some dots move more than others.",
+      "menu": {
+        "Weight Channel": "Which channel controls strength.",
+        "Weight Range": "Minimum and maximum strength."
+      },
+      "explain_like_im_five": "Some dots listen more than others."
+    },
+    {
+      "operator": "Point Transform – Align",
+      "what_it_is": "Lines up point data with something else.",
+      "mental_model": "Snapping dots into place.",
+      "example": "Aligning point data to a 3D model of a train.",
+      "menu": {
+        "Align Transform": "Turn alignment on.",
+        "Reference SOP": "3D shape used as reference.",
+        "Reference TOP": "Image used as reference.",
+        "Align Operation Order": "Order alignment steps happen.",
+        "Align Translate X/Y/Z": "Match position.",
+        "Align Scale": "Match size.",
+        "Align Scale X/Y/Z": "Match scale per axis."
+      },
+      "explain_like_im_five": "It helps dots line up with something else."
+    },
+    {
+      "operator": "POP2 (TOP)",
+      "what_it_is": "Turns particle (POP) data into an image.",
+      "mental_model": "Drawing particles as pixels.",
+      "example": "Showing particle motion around a train.",
+      "menu": {
+        "POP Mode": {
+          "Position and Active": "Use particle position and on/off state.",
+          "Custom": "Use custom data."
+        },
+        "Pixel Layout": {
+          "Fit Square": "Pack into a square.",
+          "Fit to Square Image": "Match square image size.",
+          "One Row": "All data in one row.",
+          "Wrap to Specified Resolution": "Wrap into rows.",
+          "Use POP Dimension": "Match particle dimensions."
+        },
+        "Extra Pixel Values": "Fill unused pixels."
+      },
+      "explain_like_im_five": "It turns moving dots into a picture."
+    },
+    {
+      "operator": "Prefilter Map (TOP)",
+      "what_it_is": "Prepares environment maps for lighting.",
+      "mental_model": "Getting a light map ready before use.",
+      "example": "Preparing sky lighting for a train scene.",
+      "menu": {
+        "Output Environment Light Diffuse Map": "For soft light.",
+        "Output Environment Light Specular Map": "For shiny reflections."
+      },
+      "explain_like_im_five": "It gets light maps ready for lighting."
+    },
+    {
+      "operator": "Projection (TOP)",
+      "what_it_is": "Converts images between projection formats.",
+      "mental_model": "Changing how a picture wraps around space.",
+      "example": "Turning a flat train panorama into a dome projection.",
+      "menu": {
+        "Input": {
+          "Cube Map": "Six-sided cube image.",
+          "Equirectangular": "Wide panoramic image.",
+          "Fisheye": "Circular wide-angle image.",
+          "Dual Paraboloid": "Two curved hemispheres."
+        },
+        "Output": {
+          "Equirectangular": "Panorama output.",
+          "Cube Map": "Cube faces output.",
+          "Fisheye": "Circular output."
+        },
+        "Rotate": "Rotate the projection."
+      },
+      "explain_like_im_five": "It changes how a picture is wrapped around a shape."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Ramp (TOP)",
+      "what_it_is": "Creates a smooth transition between values or colors.",
+      "mental_model": "A gradient strip.",
+      "example": "The sky behind the train slowly fades from dark to light.",
+      "menu": {
+        "DAT": "Optional DAT that defines ramp points.",
+        "Hue": "Color around the color wheel.",
+        "Saturation": "How colorful the ramp is.",
+        "Value": "How bright the ramp is.",
+        "Alpha": "Transparency across the ramp.",
+        "Type": "Shape of the ramp (linear, radial, etc.).",
+        "Phase": "Shifts where the ramp starts.",
+        "Period": "How often the ramp repeats.",
+        "Extend Left": "What happens before the ramp starts.",
+        "Extend Right": "What happens after the ramp ends.",
+        "Interpolate Notches": "Smooths between defined points.",
+        "Dither": "Adds tiny noise to reduce banding.",
+        "Premultiply RGB by Alpha": "Keeps transparency blending correct."
+      },
+      "explain_like_im_five": "It makes smooth color fades."
+    },
+    {
+      "operator": "RealSense (TOP)",
+      "what_it_is": "Brings depth-camera data from Intel RealSense devices into TouchDesigner.",
+      "mental_model": "A camera that sees distance.",
+      "example": "Knowing how far the train is from the camera.",
+      "menu": {
+        "Apply Filter": "Turns filtering on or off.",
+        "Decimation": "Reduces resolution for speed.",
+        "Decimation Magnitude": "How much detail is removed.",
+        "Spatial": "Smooths noise across the image.",
+        "Spatial Magnitude": "Strength of spatial smoothing.",
+        "Spatial Smooth Alpha": "How much smoothing happens.",
+        "Spatial Smooth Delta": "How quickly smoothing changes.",
+        "Spatial Hole Filling": "Fills missing depth areas.",
+        "Temporal": "Smooths changes over time.",
+        "Temporal Smooth Alpha": "Strength of time smoothing.",
+        "Temporal Smooth Delta": "How fast smoothing adapts.",
+        "Temporal Persistence Index": "How long data is remembered.",
+        "Hole Filling": "Fills gaps in depth data.",
+        "Hole Filling Mode": "Method used to fill gaps."
+      },
+      "setup": {
+        "Active": "Turns the camera on or off.",
+        "Model Sensor Image": "Which camera model is used.",
+        "Color Camera Resolution": "Resolution of the color camera.",
+        "Mirror Image": "Flips the image like a mirror.",
+        "Use Default Tradeoff": "Balances quality vs speed.",
+        "Options CHOP": "Extra control data."
+      },
+      "explain_like_im_five": "It’s a camera that knows how far things are."
+    },
+    {
+      "operator": "Rectangle (TOP)",
+      "what_it_is": "Draws a rectangle shape.",
+      "mental_model": "A colored box.",
+      "example": "A flat sign behind the train.",
+      "menu": {
+        "Size": "Width and height of the rectangle.",
+        "Rotate": "Turns the rectangle.",
+        "Center": "Where the rectangle is placed.",
+        "Justify Horizontal": "Left, center, or right alignment.",
+        "Justify Vertical": "Top, center, or bottom alignment.",
+        "Fill Color": "Inside color.",
+        "Fill Alpha": "Inside transparency.",
+        "Border Color": "Outline color.",
+        "Border Alpha": "Outline transparency.",
+        "Background Color": "Color behind the rectangle.",
+        "Background Alpha": "Background transparency.",
+        "Premultiply RGB by Alpha": "Correct blending.",
+        "Border Width": "Thickness of the outline.",
+        "Offset": "Moves the rectangle.",
+        "Corner Radius": "Rounds the corners.",
+        "Anti-Alias": "Smooths edges.",
+        "Softness": "Softens the edge."
+      },
+      "output": {
+        "Combine with Input": "Mixes with incoming image.",
+        "Composite": "How it blends.",
+        "Set Resolution": "Forces output size.",
+        "Set Resolution Only": "Only changes size, not content."
+      },
+      "explain_like_im_five": "It draws a box you can color and move."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Remap (TOP)",
+      "what_it_is": "Moves pixels around based on other images or rules.",
+      "mental_model": "A map that tells each pixel where to go.",
+      "example": "The train image bends as if viewed through warped glass.",
+      "menu": {
+        "Resolution Source": "Where output size comes from.",
+        "Depth Resolution Source": "Where depth size comes from (if used).",
+        "Horizontal Source": "What controls left–right movement.",
+        "Vertical Source": "What controls up–down movement.",
+        "Flip Horizontal Direction": "Reverse left–right movement.",
+        "Flip Vertical Direction": "Reverse up–down movement.",
+        "Extend": "What happens when pixels go past edges.",
+        "Interpolation": "How smoothly pixels are sampled."
+      },
+      "explain_like_im_five": "Each pixel asks a map where it should move."
+    },
+    {
+      "operator": "Render (TOP)",
+      "what_it_is": "Draws 3D scenes into a 2D image.",
+      "mental_model": "A camera taking a picture of 3D stuff.",
+      "example": "Rendering a 3D train scene into an image.",
+      "menu": {
+        "Render": {
+          "Camera": "Which camera sees the scene.",
+          "Multi-Camera Hint": "Hints when using multiple cameras.",
+          "Geometry": "What objects are drawn.",
+          "Lights": "What lights affect the scene.",
+          "Anti-Aliasing": "Smooths jagged edges.",
+          "Background Color": "Color behind the scene.",
+          "Premultiply RGB by Alpha": "Correct transparency blending.",
+          "Render Mode": "How the scene is drawn.",
+          "Transparency": "How transparent objects are handled.",
+          "Depth Peel": "Improves layered transparency."
+        },
+        "Advanced": {
+          "Render Dither": "Adds tiny noise to reduce banding.",
+          "Color Output Needed": "Whether color buffers are required.",
+          "Draw Depth Only": "Only draw depth, not color.",
+          "Number of Color Buffers": "How many color outputs are made.",
+          "Depth Buffer Format": "Precision of depth storage.",
+          "Cull Face": "Skip drawing hidden faces.",
+          "Override Material": "Force one material on everything.",
+          "Polygon Depth Offset": "Adjust depth to avoid z-fighting.",
+          "Display Override": "Overrides viewer display settings.",
+          "Overdraw Limit": "Limits how much overlapping draw happens."
+        }
+      },
+      "explain_like_im_five": "It takes a picture of a 3D world."
+    },
+    {
+      "operator": "Render – Supporting Menus",
+      "what_it_is": "Extra inputs used by the Render TOP.",
+      "menu": {
+        "Crop": "Cuts the rendered image to a region.",
+        "Vector": "Extra vector-based inputs for rendering.",
+        "Samplers": {
+          "Sampler": "Defines a texture input.",
+          "Sampler Name": "Name used in shaders.",
+          "TOP": "Image used as the texture."
+        },
+        "Image": "Image-related render settings.",
+        "Common": "Shared TOP settings."
+      },
+      "explain_like_im_five": "Extra knobs that help rendering work."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Render Pass (TOP)",
+      "what_it_is": "Renders a 3D scene in multiple steps instead of all at once.",
+      "mental_model": "Taking several photos of the same scene, each for a different purpose.",
+      "example": "One pass for the train color, another for depth, another for lighting.",
+      "menu": {
+        "Render": {
+          "Render": "Turns this render pass on or off.",
+          "Render Pass TOP": "Where this pass sends its result.",
+          "Camera": "Which camera is used.",
+          "Geometry": "Which 3D objects are drawn.",
+          "Lights": "Which lights affect this pass.",
+          "Clear Color Buffer": "Wipe the color before drawing.",
+          "Clear Depth Buffer": "Wipe depth before drawing.",
+          "Transparency": "How transparent objects are handled.",
+          "Depth Peel": "Better handling of layered transparency."
+        },
+        "Advanced": {
+          "Render Dither": "Adds tiny noise to avoid color banding.",
+          "Color Output Needed": "Whether this pass outputs color.",
+          "Draw Depth Only": "Only output depth data.",
+          "Allow Blending for Extra Buffers": "Enable blending on extra outputs.",
+          "Cull Face": "Skip drawing back-facing polygons.",
+          "Override Material": "Force one material on everything.",
+          "Polygon Depth Offset": "Avoid depth fighting.",
+          "Display Overdraw": "Show how much drawing overlaps.",
+          "Overdraw Limit": "Cap how much overlap is allowed."
+        }
+      },
+      "explain_like_im_five": "It splits drawing into layers so each job is easier."
+    },
+    {
+      "operator": "Render Select (TOP)",
+      "what_it_is": "Chooses a specific output from a Render or Render Pass.",
+      "mental_model": "Picking one photo out of a stack.",
+      "example": "Selecting just the depth image from a train render.",
+      "menu": {
+        "TOP": "The render source.",
+        "Mode": "How selection is done.",
+        "Image Output": "Which image type to output.",
+        "Buffer Index": "Which color buffer to use.",
+        "Camera Index": "Which camera output to use.",
+        "P Layer Index": "Which layer to select."
+      },
+      "explain_like_im_five": "It picks which render result you want."
+    },
+    {
+      "operator": "Render Simple (TOP)",
+      "what_it_is": "A simplified 3D renderer with fewer controls.",
+      "mental_model": "A point-and-shoot camera for 3D.",
+      "example": "Quickly rendering a simple 3D train without setup.",
+      "menu": {
+        "Orthographic FOV": "Field of view for ortho view.",
+        "Ortho Width": "Size of ortho camera view.",
+        "Camera Distance": "How far the camera is from objects.",
+        "Background Color": "Color behind the scene.",
+        "POP": "Particle input.",
+        "Normalized Geometry": "Auto-scale geometry.",
+        "Geometry Translate": "Move geometry.",
+        "Geometry Rotate": "Rotate geometry.",
+        "Geometry Scale": "Scale geometry.",
+        "Light Translate": "Move the light.",
+        "Material Source": "Where material comes from.",
+        "Wireframe": "Draw geometry as lines.",
+        "Constant": "Flat color shading.",
+        "Diffuse": "Basic lighting.",
+        "Color Map": "Use texture color."
+      },
+      "explain_like_im_five": "It draws 3D fast, without many knobs."
+    },
+    {
+      "operator": "Render Stream In (TOP)",
+      "what_it_is": "Receives rendered images from another process or machine.",
+      "mental_model": "A live render feed coming in.",
+      "example": "Receiving a train render from another computer.",
+      "menu": {
+        "Active": "Turns the stream on or off.",
+        "Name": "Which stream to receive."
+      },
+      "explain_like_im_five": "It listens for a render being sent to you."
+    },
+    {
+      "operator": "Render Stream Out (TOP)",
+      "what_it_is": "Sends rendered images to another process or machine.",
+      "mental_model": "Broadcasting a render.",
+      "example": "Sending the train render to another system.",
+      "menu": {
+        "Active": "Turns streaming on or off.",
+        "Stream Index": "Which stream number to send.",
+        "Profile": "Streaming performance profile.",
+        "Output": "What image is sent.",
+        "CHOP": "Optional control data.",
+        "Debug Image": "Shows stream diagnostics."
+      },
+      "explain_like_im_five": "It sends your picture somewhere else."
+    }
+  ]
+}
+
+}
+{
+  "operators": [
+    {
+      "operator": "Reorder (TOP)",
+      "what_it_is": "Reassigns which input channel goes to each output channel.",
+      "mental_model": "Rewiring which pipes feed red, green, blue, and alpha.",
+      "example": "Swap channels so the train image's red comes from input 2 instead of input 1.",
+      "menu": {
+        "Output Red": "Choose Input 1, Input 2, Input 3, or Input 4 for the red output.",
+        "Output Green": "Choose Input 1, Input 2, Input 3, or Input 4 for the green output.",
+        "Output Blue": "Choose Input 1, Input 2, Input 3, or Input 4 for the blue output.",
+        "Output Alpha": "Choose Input 1, Input 2, Input 3, or Input 4 for the alpha output."
+      },
+      "explain_like_im_five": "You decide which input becomes red, green, blue, and see-through."
+    },
+    {
+      "operator": "Resolution (TOP)",
+      "what_it_is": "Controls how resizing is done.",
+      "mental_model": "A resize switch: careful vs fast.",
+      "example": "Resize the train image with better quality.",
+      "menu": {
+        "High Quality Resize": "On or Off."
+      },
+      "explain_like_im_five": "On looks nicer. Off is faster."
+    },
+    {
+      "operator": "RGB Key (TOP)",
+      "what_it_is": "Creates a mask by keeping or removing pixels based on their RGB values.",
+      "mental_model": "A color bouncer that decides which pixels stay.",
+      "example": "Remove a green screen behind the train by keying out green ranges.",
+      "menu": {
+        "Red": {
+          "Minimum": "Lowest red value allowed.",
+          "Maximum": "Highest red value allowed.",
+          "Soft Low": "Soft edge on the low side of red.",
+          "Soft High": "Soft edge on the high side of red."
+        },
+        "Green": {
+          "Minimum": "Lowest green value allowed.",
+          "Maximum": "Highest green value allowed.",
+          "Soft Low": "Soft edge on the low side of green.",
+          "Soft High": "Soft edge on the high side of green."
+        },
+        "Blue": {
+          "Minimum": "Lowest blue value allowed.",
+          "Maximum": "Highest blue value allowed.",
+          "Soft Low": "Soft edge on the low side of blue.",
+          "Soft High": "Soft edge on the high side of blue."
+        },
+        "Output": {
+          "Invert New Alpha": "Flips the mask so kept becomes removed and removed becomes kept.",
+          "RGB Output": "Chooses what RGB is output.",
+          "Alpha Output": "Chooses what alpha is output."
+        }
+      },
+      "explain_like_im_five": "You set color ranges you want, and everything else gets cut out."
+    },
+    {
+      "operator": "RGB to HSV (TOP)",
+      "what_it_is": "Converts RGB color into HSV color.",
+      "mental_model": "Changing the way the same color is described.",
+      "example": "Turn the train image into HSV so you can adjust hue more easily.",
+      "menu": {},
+      "explain_like_im_five": "Same colors, different labels."
+    },
+    {
+      "operator": "Scalable Display (TOP)",
+      "what_it_is": "Uses a configuration file to map an image to a scalable display setup.",
+      "mental_model": "A blueprint for putting one picture across one or more displays.",
+      "example": "Make the train image line up across multiple screens.",
+      "menu": {
+        "Setup": {
+          "Configuration File": "File that defines the display mapping.",
+          "Reload Pulse": "Reloads the configuration file.",
+          "Near": "Near distance setting.",
+          "Far": "Far distance setting.",
+          "Apply Camera Offset": "Applies an offset to the camera.",
+          "Eye Point": "Sets the viewer position.",
+          "Input Resolution Source": "Where the input resolution is taken from."
+        }
+      },
+      "explain_like_im_five": "It helps one picture fit correctly on a big or multi-screen setup."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Screen (TOP)",
+      "what_it_is": "Places an image onto the screen with basic positioning controls.",
+      "mental_model": "Laying a photo onto a table and adjusting how it sits.",
+      "example": "Rotate and scale a train image so it fits the screen.",
+      "menu": {
+        "Transform": {
+          "Fixed Layer": "Locks which input layer is transformed.",
+          "Pre-Fit Overlay": "Fits the image before other transforms happen.",
+          "Extend Overlay": "Decides what happens outside the image edges.",
+          "Rotate": "Turns the image.",
+          "Translate": "Moves the image.",
+          "Scale": "Resizes the image.",
+          "Pivot": "Sets the point the image rotates and scales around.",
+          "Legacy Transform": "Uses older transform behavior."
+        }
+      },
+      "explain_like_im_five": "It lets you move, turn, and resize the picture on the screen."
+    },
+    {
+      "operator": "Screen Grab (TOP)",
+      "what_it_is": "Captures pixels directly from a display or window.",
+      "mental_model": "Taking a screenshot over and over.",
+      "example": "Grab the desktop showing a moving train video.",
+      "menu": {
+        "Active": "Turns screen grabbing on or off.",
+        "Source": "Which screen or window to grab.",
+        "Fresh Sources": "Forces a fresh capture source.",
+        "Left / Right": "Horizontal crop area.",
+        "Bottom / Top": "Vertical crop area.",
+        "Delayed": "Adds a delay before grabbing.",
+        "Limit FPS": "Caps how often the screen is captured."
+      },
+      "explain_like_im_five": "It copies what’s on your screen into TouchDesigner."
+    },
+    {
+      "operator": "Script (TOP)",
+      "what_it_is": "Runs Python code that controls how the TOP behaves.",
+      "mental_model": "A little robot following written instructions.",
+      "example": "Change the train image using custom code.",
+      "menu": {
+        "Callbacks": "Functions that run on specific events.",
+        "DAT": "Where the script code lives.",
+        "Setup Parameters": "Creates parameters from the script.",
+        "Modify Outside of Cook": "Allows changes without forcing a full update."
+      },
+      "explain_like_im_five": "It lets you control the picture using code."
+    },
+    {
+      "operator": "Select (TOP)",
+      "what_it_is": "Chooses one TOP to pass through.",
+      "mental_model": "Picking one picture from many.",
+      "example": "Select the train image from several inputs.",
+      "menu": {
+        "TOP": "The TOP that gets passed through."
+      },
+      "explain_like_im_five": "It chooses which picture you want."
+    },
+    {
+      "operator": "Shared Mem In (TOP)",
+      "what_it_is": "Receives images from shared memory.",
+      "mental_model": "Reading a picture from a shared clipboard.",
+      "example": "Receive a train image sent from another app.",
+      "menu": {
+        "Shared Mem Name": "Name of the shared memory block.",
+        "TOP SHM": "Which shared memory object to use.",
+        "Shared Mem Type": "Type of shared memory format.",
+        "Input Color Space": "How colors are interpreted.",
+        "Input Reference White": "Brightness reference for the image."
+      },
+      "explain_like_im_five": "It takes a picture that another program shared with you."
+    },
+    {
+      "operator": "Shared Mem Out (TOP)",
+      "what_it_is": "Sends images into shared memory.",
+      "mental_model": "Putting a picture onto a shared clipboard.",
+      "example": "Send the train image to another program.",
+      "menu": {
+        "Active": "Turns sharing on or off.",
+        "Shared Mem Name": "Name of the shared memory block.",
+        "Type": "General output type.",
+        "SHM": "Shared memory object used.",
+        "Shared Mem Type": "Format of the shared memory.",
+        "Download Type": "How data is written.",
+        "Output Color Space": "Color format of the output.",
+        "Output Reference White": "Brightness reference for output."
+      },
+      "explain_like_im_five": "It shares your picture so other programs can use it."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "SICK (TOP)",
+      "what_it_is": "Receives image or data streams from a SICK sensor device.",
+      "mental_model": "A live camera feed coming from a special machine sensor.",
+      "example": "Getting a depth or intensity image of a train from a SICK scanner.",
+      "menu": {
+        "Active": "Turns the device connection on or off.",
+        "Launch File": "File used to start or configure the device connection.",
+        "Device Address": "Network address of the SICK device.",
+        "Port": "Network port used for communication.",
+        "Customer Arrangements": "Device-specific configuration setup.",
+        "Red": "Which data goes into the red channel.",
+        "Green": "Which data goes into the green channel.",
+        "Blue": "Which data goes into the blue channel.",
+        "Alpha": "Which data goes into the alpha channel."
+      },
+      "explain_like_im_five": "It listens to a special camera machine and turns what it sees into a picture."
+    },
+    {
+      "operator": "Slope (TOP)",
+      "what_it_is": "Highlights how quickly image values change, like detecting edges or slopes.",
+      "mental_model": "Feeling how steep a hill is by walking on it.",
+      "example": "Detect the sharp edges of a train by seeing where brightness changes fast.",
+      "menu": {
+        "Red": "Apply slope detection to the red channel.",
+        "Green": "Apply slope detection to the green channel.",
+        "Blue": "Apply slope detection to the blue channel.",
+        "Alpha": "Apply slope detection to the alpha channel.",
+        "Method": "How the slope is calculated.",
+        "Zero Point": "Value treated as the center or neutral point.",
+        "Strength": "How strong the slope effect is.",
+        "Sample Step": "How far apart pixels are checked.",
+        "Extend": "What happens at the image edges."
+      },
+      "explain_like_im_five": "It shows where the picture changes fast, like finding edges."
+    },
+    {
+      "operator": "Spectrum (TOP)",
+      "what_it_is": "Converts image data into a frequency-style representation.",
+      "mental_model": "Turning sound into a music equalizer, but for images.",
+      "example": "Analyze repeating patterns in a moving train image.",
+      "menu": {
+        "Mode": "How the spectrum is calculated.",
+        "Coordinate System": "How the spectrum is laid out.",
+        "Channel": "Which color channel is analyzed.",
+        "Transform Rows": "How rows are transformed into spectrum data."
+      },
+      "explain_like_im_five": "It shows patterns inside the picture instead of the picture itself."
+    },
+    {
+      "operator": "SSAO (TOP)",
+      "what_it_is": "Adds soft shadowing to 3D renders based on nearby surfaces.",
+      "mental_model": "Shadows that appear where objects are close together.",
+      "example": "Add soft shadows under a train to make it look more real.",
+      "menu": {
+        "Camera Index": "Which camera view is used.",
+        "Quality": "How detailed the shadow calculation is.",
+        "Sample Directions": "How many directions are checked for shadowing.",
+        "Sample Step": "Distance between samples.",
+        "Surface Avoid Angle": "Avoids sampling flat surfaces.",
+        "SSAO Pass Resolution": "Resolution of the shadow pass.",
+        "SSAO Radius": "How far shadows spread.",
+        "Contrast": "How strong the shadows appear.",
+        "Attenuation": "How shadows fade with distance.",
+        "Edge Threshold": "Limits shadow bleeding on edges.",
+        "Blur Radius": "How much the shadow is blurred.",
+        "Blur Sharpness": "How crisp the blurred shadow edges are.",
+        "Combine With Color": "Mix shadows back into the color image."
+      },
+      "explain_like_im_five": "It adds soft shadows so things don’t look flat."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "SICK (TOP)",
+      "what_it_is": "Receives image or data streams from a SICK sensor device.",
+      "mental_model": "A live camera feed coming from a special machine sensor.",
+      "example": "Getting a depth or intensity image of a train from a SICK scanner.",
+      "menu": {
+        "Active": "Turns the device connection on or off.",
+        "Launch File": "File used to start or configure the device connection.",
+        "Device Address": "Network address of the SICK device.",
+        "Port": "Network port used for communication.",
+        "Customer Arrangements": "Device-specific configuration setup.",
+        "Red": "Which data goes into the red channel.",
+        "Green": "Which data goes into the green channel.",
+        "Blue": "Which data goes into the blue channel.",
+        "Alpha": "Which data goes into the alpha channel."
+      },
+      "explain_like_im_five": "It listens to a special camera machine and turns what it sees into a picture."
+    },
+    {
+      "operator": "Slope (TOP)",
+      "what_it_is": "Highlights how quickly image values change, like detecting edges or slopes.",
+      "mental_model": "Feeling how steep a hill is by walking on it.",
+      "example": "Detect the sharp edges of a train by seeing where brightness changes fast.",
+      "menu": {
+        "Red": "Apply slope detection to the red channel.",
+        "Green": "Apply slope detection to the green channel.",
+        "Blue": "Apply slope detection to the blue channel.",
+        "Alpha": "Apply slope detection to the alpha channel.",
+        "Method": "How the slope is calculated.",
+        "Zero Point": "Value treated as the center or neutral point.",
+        "Strength": "How strong the slope effect is.",
+        "Sample Step": "How far apart pixels are checked.",
+        "Extend": "What happens at the image edges."
+      },
+      "explain_like_im_five": "It shows where the picture changes fast, like finding edges."
+    },
+    {
+      "operator": "Spectrum (TOP)",
+      "what_it_is": "Converts image data into a frequency-style representation.",
+      "mental_model": "Turning sound into a music equalizer, but for images.",
+      "example": "Analyze repeating patterns in a moving train image.",
+      "menu": {
+        "Mode": "How the spectrum is calculated.",
+        "Coordinate System": "How the spectrum is laid out.",
+        "Channel": "Which color channel is analyzed.",
+        "Transform Rows": "How rows are transformed into spectrum data."
+      },
+      "explain_like_im_five": "It shows patterns inside the picture instead of the picture itself."
+    },
+    {
+      "operator": "SSAO (TOP)",
+      "what_it_is": "Adds soft shadowing to 3D renders based on nearby surfaces.",
+      "mental_model": "Shadows that appear where objects are close together.",
+      "example": "Add soft shadows under a train to make it look more real.",
+      "menu": {
+        "Camera Index": "Which camera view is used.",
+        "Quality": "How detailed the shadow calculation is.",
+        "Sample Directions": "How many directions are checked for shadowing.",
+        "Sample Step": "Distance between samples.",
+        "Surface Avoid Angle": "Avoids sampling flat surfaces.",
+        "SSAO Pass Resolution": "Resolution of the shadow pass.",
+        "SSAO Radius": "How far shadows spread.",
+        "Contrast": "How strong the shadows appear.",
+        "Attenuation": "How shadows fade with distance.",
+        "Edge Threshold": "Limits shadow bleeding on edges.",
+        "Blur Radius": "How much the shadow is blurred.",
+        "Blur Sharpness": "How crisp the blurred shadow edges are.",
+        "Combine With Color": "Mix shadows back into the color image."
+      },
+      "explain_like_im_five": "It adds soft shadows so things don’t look flat."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Switch (TOP)",
+      "what_it_is": "Chooses one input image from many, with optional blending.",
+      "mental_model": "A TV switcher that flips between channels.",
+      "example": "Switch between different camera views of the train.",
+      "menu": {
+        "Index": "Which input is currently selected.",
+        "Blend Between Inputs": "Smoothly blends when switching instead of cutting.",
+        "Extend": "What happens when the index goes outside the input range."
+      },
+      "explain_like_im_five": "It decides which picture you’re looking at right now."
+    },
+    {
+      "operator": "Syphon / Spout In (TOP)",
+      "what_it_is": "Receives a live image stream from another application.",
+      "mental_model": "A live video pipe coming from another program.",
+      "example": "Bring a train video from another app into TouchDesigner.",
+      "menu": {
+        "Use Spout": "Choose Spout instead of Syphon (Windows vs macOS style).",
+        "Active": "Turns receiving on or off.",
+        "Sender": "Which app or stream to listen to.",
+        "Sender Name": "Name of the stream."
+      },
+      "explain_like_im_five": "It listens for a picture another app is sharing."
+    },
+    {
+      "operator": "Syphon / Spout Out (TOP)",
+      "what_it_is": "Sends an image to another application in real time.",
+      "mental_model": "Sharing your screen with another app.",
+      "example": "Send the train render to a VJ or projection app.",
+      "menu": {
+        "Active": "Turns sharing on or off.",
+        "Sender Name": "Name other apps will see."
+      },
+      "explain_like_im_five": "It shares your picture so other apps can use it."
+    },
+    {
+      "operator": "Text (TOP)",
+      "what_it_is": "Renders text as an image.",
+      "mental_model": "Typing words onto a picture.",
+      "example": "Put the train name or speed as text on screen.",
+      "menu": {
+        "Text": {
+          "Field Component": "Pull text from a UI field.",
+          "DAT": "Pull text from a table or script.",
+          "Specification DAT": "Advanced formatting source.",
+          "Text": "Manual text input.",
+          "Legacy Parsing": "Use older text rules.",
+          "Append Value": "Add a number to the text.",
+          "Value Total Digits": "Total digits shown.",
+          "Decimal Digits": "Digits after the decimal.",
+          "Leading Zero": "Pads numbers with zeros.",
+          "Post Text": "Text added after values.",
+          "CHOP Value": "Pull numeric values from CHOPs.",
+          "Percentage": "Display values as percentages.",
+          "Replace": "Replace parts of text dynamically.",
+          "Word Wrap": "Wrap text onto multiple lines.",
+          "Smart Punctuation": "Automatically fix quotes and punctuation."
+        },
+        "Font": "Font family, size, spacing, and style.",
+        "Color": "Text color and alpha.",
+        "Output": "How the text image is output."
+      },
+      "explain_like_im_five": "It turns words into a picture."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Texture 3D (TOP)",
+      "what_it_is": "Stores multiple images as layers inside a single 3D texture.",
+      "mental_model": "A flipbook where each page is stacked into depth.",
+      "example": "Store many frames of a train animation inside one texture.",
+      "menu": {
+        "Cache Type": "How images are stored internally.",
+        "Active": "Turns the operator on or off.",
+        "Replace Single": "Replace only one slice of the texture.",
+        "Replace Index": "Which slice gets replaced.",
+        "Prefill Cache Size": "How many slices are prepared ahead of time.",
+        "Step Size": "How slices advance through the cache.",
+        "Reset": "Clears and restarts the cache."
+      },
+      "explain_like_im_five": "It stacks lots of pictures into one deep picture."
+    },
+    {
+      "operator": "Threshold (TOP)",
+      "what_it_is": "Turns parts of an image on or off based on brightness or color.",
+      "mental_model": "A yes-or-no gate for pixels.",
+      "example": "Keep only the bright parts of a train image.",
+      "menu": {
+        "Comparator": "How values are compared (greater, less, etc.).",
+        "RGB Threshold": "Threshold applied to RGB values.",
+        "Alpha": "Threshold applied to alpha.",
+        "Soften": "Blurs the hard edge of the threshold."
+      },
+      "explain_like_im_five": "Pixels brighter than the line stay. Others disappear."
+    },
+    {
+      "operator": "Tile (TOP)",
+      "what_it_is": "Repeats or rearranges an image across space.",
+      "mental_model": "Stamp the same picture over and over.",
+      "example": "Repeat a train texture across the screen.",
+      "menu": {
+        "Crop": "Cuts the image before tiling.",
+        "Tile": {
+          "Transpose": "Swap X and Y layout.",
+          "Repeat X": "Repeat horizontally.",
+          "Repeat Y": "Repeat vertically.",
+          "Flip X": "Flip tiles horizontally.",
+          "Flip Y": "Flip tiles vertically.",
+          "Reflect X": "Mirror tiles horizontally.",
+          "Reflect Y": "Mirror tiles vertically.",
+          "Overlap U": "Overlap tiles in U direction.",
+          "Overlap V": "Overlap tiles in V direction."
+        }
+      },
+      "explain_like_im_five": "It copies the same picture many times to fill space."
+    },
+    {
+      "operator": "Time Machine (TOP)",
+      "what_it_is": "Samples images over time using a third (W) dimension.",
+      "mental_model": "Scrubbing backward and forward through time.",
+      "example": "Look at earlier frames of a moving train.",
+      "menu": {
+        "Black Offset": "Offset for dark values.",
+        "White Offset": "Offset for bright values.",
+        "Sampling Mode": "How time is sampled.",
+        "Sampling Units": "Units used for time lookup.",
+        "W Coordinate": "Which moment in time is sampled."
+      },
+      "explain_like_im_five": "It lets you look at pictures from the past."
+    },
+    {
+      "operator": "Tone Map (TOP)",
+      "what_it_is": "Converts high-brightness images into viewable brightness ranges.",
+      "mental_model": "Squeezing very bright light into something your eyes can see.",
+      "example": "Make a very bright train render look right on a normal screen.",
+      "menu": {
+        "Type": "Which tone-mapping method is used.",
+        "Mid-Input Nits": "Brightness level coming in.",
+        "Mid-Output Nits": "Brightness level going out.",
+        "Peak Input Nits": "Maximum incoming brightness.",
+        "Exposure Bias": "Overall brightness adjustment."
+      },
+      "explain_like_im_five": "It makes super-bright pictures comfortable to look at."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Touch In (TOP)",
+      "what_it_is": "Receives image data sent over the network from another TouchDesigner system.",
+      "mental_model": "A network inbox for pictures.",
+      "example": "Receive a train image being sent from another computer.",
+      "menu": {
+        "Computer Name": "Name or address of the sending computer.",
+        "Network Port": "Which port to listen on.",
+        "Active": "Turns receiving on or off.",
+        "Minimum Target": "Lowest allowed target frame rate.",
+        "Maximum Target": "Highest allowed target frame rate.",
+        "Maximum Queue": "How many incoming frames can wait in line."
+      },
+      "explain_like_im_five": "It listens for pictures coming from another computer."
+    },
+    {
+      "operator": "Touch Out (TOP)",
+      "what_it_is": "Sends image data over the network to another TouchDesigner system.",
+      "mental_model": "A network mailbox that sends pictures.",
+      "example": "Send the train image to another computer.",
+      "menu": {
+        "Network": "Where the image is sent.",
+        "Post Active": "Whether sending happens after rendering.",
+        "FPS": "How many frames per second are sent.",
+        "Video Codec": "How the image is compressed.",
+        "Cook Always": "Always sends frames, even if nothing changes."
+      },
+      "explain_like_im_five": "It sends your picture to another computer."
+    },
+    {
+      "operator": "Transform (TOP)",
+      "what_it_is": "Moves, rotates, scales, and colors an image.",
+      "mental_model": "Picking up a photo and moving it around.",
+      "example": "Rotate and scale the train image and change its background.",
+      "menu": {
+        "Transform Order": "The order that move, rotate, and scale happen.",
+        "Translate": "Moves the image.",
+        "Rotate": "Turns the image.",
+        "Scale": "Resizes the image.",
+        "Grow": "Expands the image outward.",
+        "Shrink": "Pulls the image inward.",
+        "Pivot": "Point used for rotate and scale.",
+        "Background Color": "Color behind the image.",
+        "Pre-Multiply RGB by Alpha": "Adjusts color using transparency.",
+        "Comp Over Background Color": "Blends image over the background.",
+        "Tile": "Controls tiling behavior.",
+        "Common": "Shared output and resolution settings."
+      },
+      "explain_like_im_five": "It lets you move, turn, and resize the picture."
+    },
+    {
+      "operator": "Under (TOP)",
+      "what_it_is": "Places one image underneath another using transform controls.",
+      "mental_model": "Sliding a picture under another picture.",
+      "example": "Put one train image behind another.",
+      "menu": {
+        "Transform": {
+          "Fixed Layer": "Which input stays fixed.",
+          "Pre-Fit Overlay": "Fits the image before transforming.",
+          "Extend Overlay": "What happens outside the image edges.",
+          "Rotate": "Turns the image.",
+          "Translate": "Moves the image.",
+          "Scale": "Resizes the image.",
+          "Pivot": "Point used for rotate and scale.",
+          "Legacy Transform": "Uses older transform behavior."
+        }
+      },
+      "explain_like_im_five": "It puts one picture underneath another."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Video Device In (TOP)",
+      "what_it_is": "Brings live video from a physical capture device into TouchDesigner.",
+      "mental_model": "A camera cable plugged straight into TouchDesigner.",
+      "example": "Capture a live camera pointed at a moving train.",
+      "menu": {
+        "Video In": {
+          "Active": "Turns video capture on or off.",
+          "Driver": "Which capture driver is used.",
+          "Device": "Which physical camera or capture card is used.",
+          "Allow Fallback Selection": "Automatically choose another device if the main one fails.",
+          "Options": "Advanced device-specific settings.",
+          "Deinterlace": "Converts interlaced video into full frames.",
+          "Signal Format": "Format of the incoming video signal.",
+          "Transfer Mode": "How video data is transferred internally.",
+          "Memory Mode": "How memory buffering is handled.",
+          "Specify IP": "Use a specific IP address for network devices.",
+          "Field Precedence": "Which field comes first in interlaced video.",
+          "Quad Link": "Uses multiple cables for high-resolution video.",
+          "Input Bit Depth": "Color precision of incoming video.",
+          "Input Color Space": "How incoming colors are interpreted.",
+          "Input Reference White": "Brightness reference level.",
+          "Sync Input": "Enable synchronization with other devices.",
+          "Sync Group Index": "Group used for synchronization.",
+          "Max Sync Offset": "Maximum allowed sync difference.",
+          "Sync Timeout": "How long to wait for sync.",
+          "Reset Stats": "Clears performance statistics."
+        },
+        "Options": {
+          "Auto Gain / Exposure": "Automatically adjust brightness.",
+          "Gain": "Manual brightness amplification.",
+          "Maximum Exposure": "Caps how long the sensor gathers light.",
+          "Luminosity": "Overall brightness control.",
+          "Auto White Balance": "Automatically balance colors.",
+          "Bandwidth Limit": "Limits data rate from the device."
+        }
+      },
+      "explain_like_im_five": "It lets TouchDesigner see what a real camera sees."
+    },
+    {
+      "operator": "Video Device Out (TOP)",
+      "what_it_is": "Sends video from TouchDesigner to a physical output device.",
+      "mental_model": "A video cable going out to a monitor or broadcast system.",
+      "example": "Send the train image to an external display or recorder.",
+      "menu": {
+        "Active": "Turns video output on or off.",
+        "Driver": "Which output driver is used.",
+        "Device": "Which physical output device is used.",
+        "Signal Format": "Format of the outgoing video signal.",
+        "Output Bit Depth": "Color precision of the output video.",
+        "Manual Field Control": "Manually control interlaced fields.",
+        "First Field": "Which field is sent first.",
+        "Memory Mode": "How output buffering is handled.",
+        "Sync Output": "Enable synchronization with other devices.",
+        "Sync Group Index": "Group used for synchronization.",
+        "Reset Stats": "Clears performance statistics.",
+        "Quad Link Mode": "Uses multiple cables for high-resolution output.",
+        "Custom Resolution": "Manually define output resolution.",
+        "Output Color Format": "Color format of the output video.",
+        "Reference Source": "Clock or sync reference.",
+        "Audio CHOP": "Audio data sent with the video.",
+        "Object CHOP": "Extra control data.",
+        "DAT Timecode": "Timecode data source."
+      },
+      "explain_like_im_five": "It sends your picture out to a real screen or system."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Vioso (TOP)",
+      "what_it_is": "Applies projector calibration and blending using a VIOSO configuration.",
+      "mental_model": "A map that tells projectors exactly where to put pixels.",
+      "example": "Correctly align and blend multiple projectors showing a long train scene.",
+      "menu": {
+        "Configuration File": "The VIOSO calibration file.",
+        "Reload Pulse": "Reloads the calibration file.",
+        "Output by Projector Index": "Outputs one projector’s view at a time.",
+        "Layout Grid Size": "Grid used for mapping precision.",
+        "Filter Render Offset": "Shifts rendering for calibration.",
+        "Render Resolution": "Resolution used for calibrated output."
+      },
+      "explain_like_im_five": "It helps projectors line up perfectly like puzzle pieces."
+    },
+    {
+      "operator": "Web Render (TOP)",
+      "what_it_is": "Renders a web page or web app into an image.",
+      "mental_model": "A web browser turned into a picture.",
+      "example": "Display a live train schedule webpage inside TouchDesigner.",
+      "menu": {
+        "Active": "Turns web rendering on or off.",
+        "Source": "URL or local file to load.",
+        "Reload Source": "Reloads the page source.",
+        "Reload Current Page": "Refreshes the page.",
+        "Reset Update Count": "Resets internal refresh counter.",
+        "Only Update When Loaded": "Updates only after page finishes loading.",
+        "Cook Always": "Always updates every frame.",
+        "Transparent Background": "Removes page background.",
+        "Audio Options": "Controls webpage audio.",
+        "Enable Media Stream": "Allows camera/mic access.",
+        "Redirect Pop-ups": "Handles pop-up windows.",
+        "Maximum Render Frame Rate": "Caps page update speed.",
+        "Number of Frame Buffers": "Buffers used for rendering.",
+        "DPI Scaling Factor": "Scales page resolution.",
+        "Use Shared Texture": "Shares GPU textures.",
+        "User Cache Directory": "Folder for browser cache.",
+        "Modify Header DAT Options": "Custom HTTP headers.",
+        "Restart if Process Died": "Restarts browser if it crashes."
+      },
+      "explain_like_im_five": "It turns a website into a live picture."
+    },
+    {
+      "operator": "ZED (TOP)",
+      "what_it_is": "Receives video and depth data from a ZED stereo camera.",
+      "mental_model": "A camera that sees depth, not just color.",
+      "example": "Capture a train with real depth information.",
+      "menu": {
+        "Active": "Turns the camera on or off.",
+        "Reboot": "Restarts the camera.",
+        "Import Source": "Camera, file, or network stream.",
+        "Stream IP": "Network stream address.",
+        "Stream Port": "Network stream port.",
+        "Initialize": "Prepares the camera.",
+        "Start": "Starts capture.",
+        "Play": "Plays camera feed.",
+        "Queue": "Controls playback queue.",
+        "Queue Point": "Playback position.",
+        "Perspective": "Perspective image output.",
+        "Image": "Color image output.",
+        "Camera Resolution": "Resolution of the camera.",
+        "Camera FPS": "Frames per second.",
+        "Sensing Mode": "Depth sensing behavior.",
+        "Depth Quality": "Quality of depth calculation.",
+        "Minimum Depth": "Closest detectable depth.",
+        "Maximum Depth": "Farthest detectable depth.",
+        "Too Close Value": "Value used when objects are too close.",
+        "Too Far Value": "Value used when objects are too far.",
+        "Unknown Value": "Value for invalid depth.",
+        "Depth Stabilization": "Smooths depth over time.",
+        "Rear Range": "Depth range behind camera.",
+        "Reference Frame": "Frame used as reference.",
+        "Camera Transform": "Position and rotation of camera.",
+        "Mirror Image": "Flips the image.",
+        "Disable Self-Calibration": "Turns off auto calibration.",
+        "Region of Interest Mask": "Limits depth processing area.",
+        "Region of Interest Channel": "Channel used for ROI."
+      },
+      "settings": {
+        "Brightness": "Image brightness.",
+        "Contrast": "Image contrast.",
+        "Hue": "Color hue.",
+        "Saturation": "Color intensity.",
+        "Sharpness": "Image sharpness.",
+        "Gamma": "Brightness curve.",
+        "Auto Gain Exposure": "Automatic brightness control.",
+        "Gain Exposure": "Manual exposure control.",
+        "Region of Interest": "Enable ROI.",
+        "ROI Coordinate": "ROI position.",
+        "ROI Dimension": "ROI size.",
+        "Auto White Balance": "Automatic color balance.",
+        "White Balance": "Manual color balance.",
+        "LED Status": "Camera LED indicator."
+      },
+      "explain_like_im_five": "It’s a camera that knows how far away things are."
+    },
+    {
+      "operator": "ZED Select (TOP)",
+      "what_it_is": "Selects specific outputs from a ZED camera feed.",
+      "mental_model": "Choosing which part of the camera you want to see.",
+      "example": "Use only the depth image from the train capture.",
+      "menu": {
+        "Active": "Turns selection on or off.",
+        "ZED TOP": "Source ZED operator.",
+        "Perspective": "Selects perspective view.",
+        "Image": "Selects color image.",
+        "Maximum Depth": "Maximum depth output.",
+        "Too Close Value": "Value for near objects.",
+        "Too Far Value": "Value for far objects.",
+        "Unknown Value": "Value for invalid depth.",
+        "Rear Range": "Rear depth range.",
+        "Mirror Image": "Flips output image."
+      },
+      "explain_like_im_five": "It picks which camera view you want."
+    }
+  ]
+}

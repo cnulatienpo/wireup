@@ -1,0 +1,3168 @@
+{
+  "operator": "Accumulate (POP)",
+  "what_it_is": "Accumulates particle attributes over time based on class and scope.",
+  "mental_model": "Keeping a running total or history of particle data as frames advance.",
+  "example": "Build up position offsets, counts, or custom attributes across frames.",
+  "menu": {
+    "Accumulate": {
+      "Accumulate": "Enables accumulation of attributes over time.",
+      "Attribute Class": "Selects the attribute class to operate on (e.g. point, primitive).",
+      "Input Attribute Class Type": "Defines how the incoming attribute class is interpreted.",
+      "Attribute Scope": "Controls which attributes are included in the accumulation."
+    },
+    "Common": {
+      "Bypass": "Disables the operator without removing it from the network.",
+      "Free Extra GPU Memory": "Releases unused GPU memory held by the operator.",
+      "Delete Input Attributes": "Removes incoming attributes after processing.",
+      "Parameter Color Space": "Color space used for interpreting parameter values.",
+      "Parameter Reference White": "Reference white point for parameter color space."
+    }
+  },
+  "explain_like_im_five": "It remembers particle information from before and adds the new stuff on top."
+}
+{
+  "operators": [
+    {
+      "operator": "Alembic In (POP)",
+      "what_it_is": "Imports geometry, animation, and attributes from Alembic files into POPs.",
+      "mental_model": "Loading a pre-baked 3D scene or animation into the particle system.",
+      "example": "Bring animated geometry from another DCC tool into a POP network.",
+      "menu": {
+        "Alembic": {
+          "Alembic File": "Path to the Alembic (.abc) file.",
+          "Object Path": "Specifies which object inside the Alembic file to load.",
+          "Transform": "Applies transforms from the Alembic data.",
+          "Time": "Controls which time in the Alembic animation is sampled.",
+          "FPS": "Frames-per-second used to interpret time.",
+          "Interpolation": "Interpolation method between Alembic samples.",
+          "Unload": "Unloads the Alembic file from memory."
+        }
+      },
+      "explain_like_im_five": "It brings a saved 3D animation into your particles."
+    },
+    {
+      "operator": "Analyze (POP)",
+      "what_it_is": "Computes statistical and structural information from particle attributes.",
+      "mental_model": "Measuring and summarizing particle data to extract facts about it.",
+      "example": "Find the centroid of particles or the minimum and maximum values of an attribute.",
+      "menu": {
+        "Analyze": {
+          "Analyze Attribute Class": "Selects which attribute class is analyzed.",
+          "Group": "Limits analysis to a specific group.",
+          "Number of Elements in Group": "Counts elements in the selected group.",
+          "Input Attributes": "Attributes used as inputs for analysis.",
+          "Append Attrib Names to Output": "Adds attribute names to output results.",
+          "Combine Components": "Combines multi-component attributes before analysis.",
+          "Average": "Computes the mean value.",
+          "Centroid": "Computes the center position.",
+          "Minimum": "Finds the smallest value.",
+          "Maximum Size": "Finds the largest size or value.",
+          "Index of Minimum": "Index of the element with the minimum value.",
+          "Index of Maximum": "Index of the element with the maximum value.",
+          "Sum": "Computes the total sum.",
+          "RMS": "Computes root-mean-square.",
+          "Power": "Computes signal power.",
+          "Num Points": "Outputs number of points.",
+          "Vertices": "Outputs number of vertices.",
+          "Primitives": "Outputs number of primitives.",
+          "Num Prims": "Outputs primitive count.",
+          "Verts Per Type": "Outputs vertex counts per primitive type.",
+          "Dimension": "Outputs dimensionality of attributes.",
+          "P Attribute Values": "Analyzes position attribute values."
+        }
+      },
+      "explain_like_im_five": "It looks at all the particles and tells you facts about them."
+    },
+    {
+      "operator": "Attribute Create (POP)",
+      "what_it_is": "Creates new attributes on particles.",
+      "mental_model": "Adding new data fields to particles.",
+      "example": "Create a custom float or color attribute for particles.",
+      "menu": {
+        "Create": {
+          "Attribute Class": "Selects the attribute class to create.",
+          "Group": "Limits creation to a group.",
+          "Notification If Attribute Exists": "Notifies if the attribute already exists.",
+          "Override If Attribute Exists": "Replaces existing attribute if enabled.",
+          "Pre-Multiply RGB by Alpha": "Pre-multiplies color values by alpha.",
+          "New Attribute": "Enables creation of a new attribute.",
+          "Name": "Name of the new attribute.",
+          "Type": "Data type of the attribute.",
+          "Array": "Creates an array attribute.",
+          "Value": "Initial value of the attribute."
+        }
+      },
+      "explain_like_im_five": "It gives particles a new piece of information."
+    },
+    {
+      "operator": "Matrix (POP)",
+      "what_it_is": "Creates or modifies matrix-type attributes.",
+      "mental_model": "Attaching transformation tables to particles.",
+      "example": "Store custom transformation matrices per particle.",
+      "menu": {
+        "Matrix": {
+          "Matrix Attribute": "Enables matrix attribute processing.",
+          "Matrix Name": "Name of the matrix attribute.",
+          "Rows": "Number of rows in the matrix.",
+          "Column": "Number of columns in the matrix.",
+          "Array": "Stores matrices as arrays.",
+          "Qualifier": "Additional matrix qualifiers."
+        }
+      },
+      "explain_like_im_five": "It gives particles little math tables they can use."
+    },
+    {
+      "operator": "Rename (POP)",
+      "what_it_is": "Renames existing particle attributes.",
+      "mental_model": "Changing the label on particle data without changing the data itself.",
+      "example": "Rename an imported attribute to match your system.",
+      "menu": {
+        "Rename": {
+          "Rename Attribute": "Enables attribute renaming.",
+          "From Attribute": "Original attribute name.",
+          "To Attribute": "New attribute name."
+        }
+      },
+      "explain_like_im_five": "It changes the name of particle information."
+    },
+    {
+      "operator": "Duplicate (POP)",
+      "what_it_is": "Duplicates existing particle attributes.",
+      "mental_model": "Copying particle data into a new attribute.",
+      "example": "Duplicate position data before modifying it.",
+      "menu": {
+        "Duplicate": {
+          "Duplicate Attribute": "Selects the attribute to duplicate.",
+          "New Attribute Name": "Name of the duplicated attribute."
+        }
+      },
+      "explain_like_im_five": "It makes a copy of particle information."
+    },
+    {
+      "operator": "Delete (POP)",
+      "what_it_is": "Removes attributes from particles.",
+      "mental_model": "Stripping away data you no longer need.",
+      "example": "Delete temporary attributes after processing.",
+      "menu": {
+        "Delete": {
+          "Delete Point Attributes": "Removes point attributes.",
+          "Delete Vertex Attributes": "Removes vertex attributes.",
+          "Delete Primitive Attributes": "Removes primitive attributes."
+        }
+      },
+      "explain_like_im_five": "It throws away particle information you don’t want."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Attribute Convert (POP)",
+      "what_it_is": "Converts existing particle attributes into new attributes using defined operations.",
+      "mental_model": "Rewriting particle data into a different form or format.",
+      "example": "Convert a float attribute into a vector or remap values into a new attribute.",
+      "menu": {
+        "Attribute Convert": {
+          "Convert Operations": "Defines how input attributes are converted.",
+          "Input Attributes": "Attributes to be converted.",
+          "New Attributes": "Names of the resulting attributes.",
+          "Delete Original": "Removes the original attributes after conversion.",
+          "Notification If Attribute Exists": "Notifies if the target attribute already exists.",
+          "Override If Attribute Exists": "Replaces existing attributes if enabled."
+        }
+      },
+      "explain_like_im_five": "It changes particle information into a new kind of information."
+    },
+    {
+      "operator": "Blend (POP)",
+      "what_it_is": "Blends attributes from multiple POP inputs together.",
+      "mental_model": "Mixing particle data from different sources.",
+      "example": "Blend positions or colors from two particle streams.",
+      "menu": {
+        "Blend": {
+          "Blend": "Enables attribute blending.",
+          "Blend Type": "Method used to blend attributes.",
+          "Length Mismatch": "How to handle differing attribute lengths.",
+          "Point Attribute Scope": "Scope for point attributes.",
+          "Primitive Attribute Scope": "Scope for primitive attributes.",
+          "Vertex Attribute Scope": "Scope for vertex attributes.",
+          "Input": "Primary POP input.",
+          "Input POPs": "Additional POP inputs to blend."
+        }
+      },
+      "explain_like_im_five": "It mixes particle information together."
+    },
+    {
+      "operator": "Map (POP)",
+      "what_it_is": "Maps particle attributes to operator parameters or targets.",
+      "mental_model": "Using particle data to drive other values.",
+      "example": "Map a particle attribute to control another operator’s parameter.",
+      "menu": {
+        "Mapping": {
+          "OP Element": "Target operator element.",
+          "Target": "Specific parameter or target to drive.",
+          "Parameter": "Parameter being mapped.",
+          "Combine Operation": "How multiple mappings are combined."
+        }
+      },
+      "explain_like_im_five": "It lets particle data control other things."
+    },
+    {
+      "operator": "Box (POP)",
+      "what_it_is": "Generates box geometry within POPs.",
+      "mental_model": "Creating simple box-shaped geometry for particles.",
+      "example": "Spawn particles as box shapes with adjustable size and orientation.",
+      "menu": {
+        "Box": {
+          "Box": "Enables box generation.",
+          "Connectivity": "Controls how points are connected.",
+          "Unique Points": "Uses unique points per box.",
+          "Modify Bounds": "Adjusts the bounding box.",
+          "Size": "Dimensions of the box.",
+          "Round Corners": "Enables rounded edges.",
+          "Corner Radius": "Radius of rounded corners.",
+          "Subdivision Depth": "Subdivision level for geometry.",
+          "Anchor": "Anchor position of the box.",
+          "UV and W": "Controls UV and W coordinates.",
+          "Translate": "Position offset.",
+          "Rotate": "Rotation of the box.",
+          "Uniform Scale": "Uniform scaling factor.",
+          "Normal": "Normal generation settings.",
+          "Texture Coordinates": "Controls texture coordinate generation.",
+          "Texture Method": "Method for applying textures.",
+          "Color": "Color assigned to the box."
+        }
+      },
+      "explain_like_im_five": "It makes little box shapes for particles."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Cache (POP)",
+      "what_it_is": "Stores particle states over time and allows indexed access to cached frames.",
+      "mental_model": "Recording particle history so you can look backward or step through time.",
+      "example": "Freeze particles at a previous frame or scrub through their motion.",
+      "menu": {
+        "Cache": {
+          "Cache": "Enables particle caching.",
+          "Active Cache Size": "Number of frames stored in the cache.",
+          "Step Size": "Frame step interval between cached samples.",
+          "Output Index": "Selects which cached frame is output.",
+          "Interpolate Frames": "Interpolates between cached frames.",
+          "Reset": "Clears the cache."
+        }
+      },
+      "explain_like_im_five": "It remembers what the particles did before so you can replay it."
+    },
+    {
+      "operator": "Cache Blend (POP)",
+      "what_it_is": "Blends particle data between cached frames using weights or channels.",
+      "mental_model": "Mixing different moments in particle history together.",
+      "example": "Smoothly blend between past particle states.",
+      "menu": {
+        "Cache Blend": {
+          "Cache Blend": "Enables cache blending.",
+          "Cache POP": "POP providing cached data.",
+          "CHOP": "CHOP used to drive blending.",
+          "Index Channel": "Channel defining cache index.",
+          "Index Channel Unit": "Units for the index channel.",
+          "Weight Channel": "Channel defining blend weights.",
+          "Interpolate Frames": "Interpolates between cache frames.",
+          "Cache": "Selects the cache source.",
+          "Cache Index": "Index into the cache.",
+          "Cache Weight": "Blend weight for the cache."
+        }
+      },
+      "explain_like_im_five": "It mixes different remembered moments of particles."
+    },
+    {
+      "operator": "Cache Select (POP)",
+      "what_it_is": "Selects specific frames from a particle cache.",
+      "mental_model": "Picking one moment from recorded particle history.",
+      "example": "Output only the particles from a specific cached frame.",
+      "menu": {
+        "Cache Select": {
+          "Cache Select": "Enables cache selection.",
+          "Cache POP": "POP providing the cache.",
+          "Cache Index": "Index of the cached frame.",
+          "Interpolate Frames": "Interpolates between cache frames."
+        }
+      },
+      "explain_like_im_five": "It chooses one saved moment of the particles."
+    },
+    {
+      "operator": "CHOP 2 (POP)",
+      "what_it_is": "Converts CHOP channel data into particle attributes.",
+      "mental_model": "Turning timelines of numbers into particle information.",
+      "example": "Use audio or motion channels to drive particle attributes.",
+      "menu": {
+        "CHOP 2": {
+          "CHOP 2": "Enables CHOP-to-particle conversion.",
+          "CHOP": "Source CHOP operator.",
+          "Connectivity": "Defines how channels map to points.",
+          "Override Number of Points": "Overrides point count based on channel data.",
+          "Interpolate": "Interpolates channel values.",
+          "Specify Position": "Explicitly defines particle positions.",
+          "Start Position": "Starting position for generated points.",
+          "End Position": "Ending position for generated points.",
+          "Close": "Closes the generated shape.",
+          "Channel Selection": "Selects which channels are used.",
+          "Channel Scope": "Defines scope of channel usage.",
+          "Attributes Scope": "Defines which attributes are affected.",
+          "Attributes": "Attributes created from channels.",
+          "New Attribute": "Enables creation of new attributes.",
+          "New Attribute Name": "Name of the created attribute.",
+          "Attribute Type": "Data type of the attribute.",
+          "Default Type": "Fallback type if unspecified."
+        }
+      },
+      "explain_like_im_five": "It turns number tracks into particle information."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Circle (POP)",
+      "what_it_is": "Generates circular or arc-based geometry inside POPs.",
+      "mental_model": "Drawing rings or arcs that particles can follow or become.",
+      "example": "Create particles arranged in a circle or partial arc.",
+      "menu": {
+        "Circle": {
+          "Circle": "Enables circle generation.",
+          "Connectivity": "Defines how points are connected.",
+          "Orientation": "Orientation of the circle plane.",
+          "Modify Bounds": "Adjusts bounding behavior.",
+          "Radius": "Radius of the circle.",
+          "Division": "Number of segments.",
+          "Close": "Closes the circle or arc.",
+          "Arc Angles": "Start and end angles for arcs.",
+          "Arc U": "Arc parameterization along U.",
+          "Anchor U": "U anchor point.",
+          "Anchor V": "V anchor point.",
+          "Translate": "Position offset.",
+          "Rotate": "Rotation of the circle.",
+          "Uniform Scale": "Uniform scaling factor.",
+          "Normal": "Normal generation.",
+          "Normal Direction": "Direction of generated normals.",
+          "Tangent": "Tangent generation.",
+          "Tangent Direction": "Direction of tangents.",
+          "Texture Coordinates": "Texture coordinate generation."
+        }
+      },
+      "explain_like_im_five": "It makes particles sit in a circle or arc."
+    },
+    {
+      "operator": "Connectivity (POP)",
+      "what_it_is": "Controls point and vertex connectivity and ordering.",
+      "mental_model": "Deciding how points are linked and ordered.",
+      "example": "Reorder points or change how primitives are built.",
+      "menu": {
+        "Connectivity": {
+          "Connectivity": "Connectivity mode.",
+          "First Dimension Index": "Indexing for first dimension.",
+          "First Dimension Closed": "Closes the first dimension.",
+          "Reorder Points by Prim": "Reorders points based on primitives.",
+          "Vertex Order": "Controls vertex ordering."
+        }
+      },
+      "explain_like_im_five": "It decides how points are connected together."
+    },
+    {
+      "operator": "Convert (POP)",
+      "what_it_is": "Converts particle data between representations.",
+      "mental_model": "Changing how particle data is treated.",
+      "example": "Convert one particle form into another.",
+      "menu": {
+        "Convert": {
+          "Convert": "Enables conversion."
+        }
+      },
+      "explain_like_im_five": "It changes how particle data is used."
+    },
+    {
+      "operator": "Copy (POP)",
+      "what_it_is": "Creates multiple transformed copies of particles or geometry.",
+      "mental_model": "Duplicating particles and moving each copy.",
+      "example": "Make multiple rotated copies of a particle shape.",
+      "menu": {
+        "Copy": {
+          "Copy": "Enables copying.",
+          "Number of Copies": "How many copies to create.",
+          "Transform Order": "Order of transforms.",
+          "Rotate Order": "Rotation order.",
+          "Translate": "Translation applied per copy.",
+          "Rotate": "Rotation applied per copy.",
+          "Scale": "Scale applied per copy.",
+          "Pivot": "Pivot point.",
+          "Uniform Scale": "Uniform scaling.",
+          "Copy ID Attribute": "Stores copy index as an attribute.",
+          "Look At": "Orients copies toward a target.",
+          "Up Vector": "Up direction reference.",
+          "Forward Direction": "Forward direction reference.",
+          "Vectors Maintain Length": "Preserves vector magnitude.",
+          "Append Dimension": "Appends a new dimension."
+        }
+      },
+      "explain_like_im_five": "It makes many copies and moves them around."
+    },
+    {
+      "operator": "Template (POP)",
+      "what_it_is": "Uses template data to drive transforms and orientation of particles.",
+      "mental_model": "Letting one set of data tell another how to move and rotate.",
+      "example": "Orient particles using normals from template points.",
+      "menu": {
+        "Template": {
+          "Template Matrix": "Matrix used from template.",
+          "Transform": "Enables template-based transforms.",
+          "Template Transform Order": "Order of template transforms.",
+          "Template": "Template source.",
+          "Template Rotate Order": "Rotation order for template.",
+          "Template Translate": "Template translation.",
+          "Template Rotate": "Template rotation.",
+          "Template Scale": "Template scale.",
+          "Template Pivot": "Template pivot.",
+          "Template Rotate to Vector": "Rotate using vector alignment.",
+          "Rotate to Vector Forward Direction": "Forward direction for alignment.",
+          "Rotate to Vector Attribute N": "Normal attribute used for rotation.",
+          "Up Vector Type": "Source of up vector.",
+          "Up Attribute": "Attribute used as up vector.",
+          "Up Constant": "Constant up vector.",
+          "Template ID Attribute": "Attribute identifying template index"
+        },
+        "Template Attribute": {
+          "Template Attribute Operation": "Operation applied using template attributes.",
+          "Destination": "Destination for template attribute results.",
+          "Use Template Point Attribs": "Uses point attributes from template."
+        }
+      },
+      "explain_like_im_five": "It lets one set of particles tell another how to move."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "C++ (POP)",
+      "what_it_is": "Runs a custom C++ POP plugin for particle processing.",
+      "mental_model": "Dropping compiled C++ code into the POP network as an operator.",
+      "example": "Use a custom POP plugin to implement a specialized simulation step.",
+      "menu": {
+        "C++": {
+          "C++ Plugin Path": "Path to the compiled C++ POP plugin.",
+          "Reinit Class": "Reinitializes the plugin class.",
+          "Unload Plugin": "Unloads the plugin from memory."
+        }
+      },
+      "explain_like_im_five": "It lets you use your own C++ tool inside the particles."
+    },
+    {
+      "operator": "Curve (POP)",
+      "what_it_is": "Generates or evaluates curve data for particles using curve parameters.",
+      "mental_model": "Making a controllable curve shape or curve-based values over a parameter.",
+      "example": "Generate a curve and sample along it to drive particle motion or attributes.",
+      "menu": {
+        "Curve": {
+          "Curve Total Length": "Total curve length used for parameterization.",
+          "Output Curve": "Outputs the curve result.",
+          "Normalize U": "Normalizes the U parameter range.",
+          "Symmetric": "Keeps curve behavior symmetric where applicable.",
+          "Parameter Size": "Size/extent of the parameter domain.",
+          "Start U": "Starting U position.",
+          "Segment Curve Type": "Type of curve segment used.",
+          "U": "Curve parameter position.",
+          "Specify Start Value": "Enables explicit start value.",
+          "Start Value": "Value at the start of the curve.",
+          "End Value": "Value at the end of the curve.",
+          "Alpha": "Curve shaping parameter.",
+          "Beta": "Curve shaping parameter.",
+          "Slope In": "Incoming slope control.",
+          "Slope Out": "Outgoing slope control."
+        }
+      },
+      "explain_like_im_five": "It makes a bendy line you can use to control things."
+    },
+    {
+      "operator": "Look Up (POP)",
+      "what_it_is": "Applies a lookup/remap to particle attributes using an index attribute and range mapping.",
+      "mental_model": "Using an attribute as a pointer into a remap table and converting values from one range to another.",
+      "example": "Map an index attribute to output values, then scale and offset the result.",
+      "menu": {
+        "Look Up": {
+          "Apply Lookup": "Enables the lookup operation.",
+          "Lookup Index Attribute": "Attribute used as the lookup index.",
+          "From Low": "Lower bound of input range.",
+          "From High": "Upper bound of input range.",
+          "To Low": "Lower bound of output range.",
+          "To High": "Upper bound of output range.",
+          "Extend Left and Right": "Behavior outside the defined range.",
+          "Lookup Multiply": "Multiplier applied after lookup.",
+          "Add": "Additive offset applied after lookup.",
+          "Combine Operation": "How lookup results combine with existing values.",
+          "Operation": "Lookup operation mode.",
+          "Output Attributes": "Attributes written by the lookup.",
+          "Slope": "Slope handling for lookup interpolation."
+        }
+      },
+      "explain_like_im_five": "It uses a number to pick a value, then remaps it how you want."
+    },
+    {
+      "operator": "DAT 2 (POP)",
+      "what_it_is": "Converts data from a DAT into particle attributes.",
+      "mental_model": "Reading a table of values and turning its columns into particle data.",
+      "example": "Use a Points DAT to create per-particle attributes from spreadsheet-like data.",
+      "menu": {
+        "DAT 2": {
+          "Points": "Enables points import from DAT.",
+          "Points DAT": "Source DAT containing point data.",
+          "New Attribute": "Creates a new attribute from DAT data.",
+          "Select Columns By": "Method for choosing columns.",
+          "Columns": "Which columns to use.",
+          "Output Attributes Scope": "Scope for created attributes.",
+          "Override Automatic Attribute": "Overrides automatic attribute inference.",
+          "Attribute Type": "Type for created attributes.",
+          "Array": "Creates array attributes from columns."
+        }
+      },
+      "explain_like_im_five": "It reads a table and gives the particles that information."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Dimension (POP)",
+      "what_it_is": "Changes or restructures the dimensional layout of particle data.",
+      "mental_model": "Reorganizing particle data across dimensions.",
+      "example": "Reorder or collapse dimensions for downstream POP processing.",
+      "menu": {
+        "Dimension": {
+          "Dimension": "Enables dimension processing.",
+          "Mode": "Method used to modify dimensions.",
+          "Dimension Order": "Order of dimensions after processing.",
+          "Dimension": "Target dimension index.",
+          "Number": "Number of dimensions or elements."
+        }
+      },
+      "explain_like_im_five": "It rearranges how particle data is laid out."
+    },
+    {
+      "operator": "DMX Fixture (POP)",
+      "what_it_is": "Defines and manages DMX fixtures driven by particle data.",
+      "mental_model": "Turning particles into lighting fixtures with addresses and channels.",
+      "example": "Drive multiple light fixtures using particle attributes.",
+      "menu": {
+        "Fixture": {
+          "Fixture Active": "Enables the fixture.",
+          "Auto Layout": "Automatically assigns fixture layout.",
+          "Routing Table": "Maps fixtures to DMX routing.",
+          "Net Subnet": "DMX network subnet.",
+          "Universe": "DMX universe index.",
+          "Channel": "Starting DMX channel.",
+          "Channel Gap": "Gap between channel blocks.",
+          "Quantize Universe": "Aligns universes to fixed boundaries."
+        }
+      },
+      "explain_like_im_five": "It turns particles into controllable lights."
+    },
+    {
+      "operator": "DMX Profile (POP)",
+      "what_it_is": "Defines DMX channel profiles for fixtures.",
+      "mental_model": "Describing what each DMX channel does.",
+      "example": "Label DMX channels for intensity, color, or movement.",
+      "menu": {
+        "DMX Profile": {
+          "DMX Channel": "Channel number in the profile.",
+          "Name": "Name of the channel function."
+        }
+      },
+      "explain_like_im_five": "It names what each light channel means."
+    },
+    {
+      "operator": "DMX Out (POP)",
+      "what_it_is": "Outputs DMX data from particles to lighting interfaces.",
+      "mental_model": "Sending particle-driven values out to real lights.",
+      "example": "Transmit particle values to a DMX lighting rig.",
+      "menu": {
+        "DMX": {
+          "Active Interface": "Enables the DMX interface.",
+          "Interface": "Selected DMX interface.",
+          "Rate": "Output update rate."
+        }
+      },
+      "explain_like_im_five": "It sends particle values to real lights."
+    },
+    {
+      "operator": "Fixtures (POP)",
+      "what_it_is": "Manages collections of DMX fixtures driven by POPs.",
+      "mental_model": "Grouping and controlling multiple fixtures at once.",
+      "example": "Control many lights using one particle system.",
+      "menu": {
+        "Fixtures": {
+          "Fixture Active": "Enables fixture control.",
+          "DMX Fixture": "Referenced DMX fixture definition.",
+          "POPs": "POP operators driving the fixtures."
+        }
+      },
+      "explain_like_im_five": "It manages groups of lights together."
+    },
+    {
+      "operator": "Serial (POP)",
+      "what_it_is": "Outputs DMX or control data over a serial connection.",
+      "mental_model": "Sending particle data through a physical cable.",
+      "example": "Send DMX data to a serial-based lighting device.",
+      "menu": {
+        "Serial": {
+          "Serial Port": "Selected serial port.",
+          "DMX": "Enables DMX over serial.",
+          "King Port": "King DMX port selection.",
+          "Device": "Target serial device."
+        }
+      },
+      "explain_like_im_five": "It sends particle data through a cable."
+    },
+    {
+      "operator": "Network (POP)",
+      "what_it_is": "Configures network-based DMX output protocols.",
+      "mental_model": "Sending lighting data over the network.",
+      "example": "Output Art-Net or KiNet data driven by particles.",
+      "menu": {
+        "Network": {
+          "Multicast": "Enables multicast sending.",
+          "Network Address": "Destination network address.",
+          "Local Address": "Local network interface address.",
+          "Local Port": "Local network port.",
+          "Use Custom Port": "Overrides default port.",
+          "Network Port Priority": "Priority for network ports.",
+          "Send ArtNet": "Enables Art-Net output.",
+          "Sync": "Enables synchronization packets.",
+          "ArtNet Sync Timeout": "Timeout for sync packets.",
+          "CID": "Controller identifier.",
+          "Source": "Source identifier.",
+          "KiNet Version": "KiNet protocol version.",
+          "Use Custom KiNet Port": "Overrides KiNet port.",
+          "Routing Table": "Maps data to network outputs."
+        }
+      },
+      "explain_like_im_five": "It sends lighting data over the network."
+    },
+    {
+      "operator": "Multipliers (POP)",
+      "what_it_is": "Applies per-channel multipliers to DMX output.",
+      "mental_model": "Scaling light values before they are sent.",
+      "example": "Dim specific DMX channels using multipliers.",
+      "menu": {
+        "Multipliers": {
+          "Use Multipliers": "Enables multiplier usage.",
+          "Multiplier": "Multiplier index.",
+          "DMX Channel": "Target DMX channel.",
+          "Multiplier Value": "Scaling value applied."
+        }
+      },
+      "explain_like_im_five": "It scales how strong each light value is."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Extrude (POP)",
+      "what_it_is": "Extrudes particle geometry along a direction or distance.",
+      "mental_model": "Pulling faces outward to give particles thickness or depth.",
+      "example": "Extrude particle surfaces to create volume.",
+      "menu": {
+        "Extrude": {
+          "Extrude Group": "Group of elements to extrude.",
+          "Distance": "Extrusion distance.",
+          "Use Distance Attribute": "Uses an attribute to control extrusion distance.",
+          "Inset Keep Faces Connected": "Maintains face connectivity during inset.",
+          "Copy Topology Info Back to CPU": "Copies topology data from GPU back to CPU."
+        }
+      },
+      "explain_like_im_five": "It pulls shapes outward to make them stick out."
+    },
+    {
+      "operator": "Facet (POP)",
+      "what_it_is": "Modifies geometry by splitting, smoothing, or cleaning facets.",
+      "mental_model": "Adjusting how faces and points are organized and simplified.",
+      "example": "Remove unused points or refine geometry structure.",
+      "menu": {
+        "Facet": {
+          "Facet Group": "Group of elements to process.",
+          "Operation": "Facet operation mode.",
+          "Angle": "Angle threshold for operations.",
+          "Distance": "Distance threshold for merging or splitting.",
+          "Max Tries": "Maximum processing attempts.",
+          "Remove Degenerate": "Removes degenerate geometry.",
+          "Remove Unused Points": "Deletes points not used by primitives.",
+          "Technique": "Facet processing technique.",
+          "Voxels": "Voxel-based processing toggle.",
+          "Grid Resolution": "Resolution for voxel/grid operations.",
+          "Specify Bounding Box": "Uses a custom bounding box.",
+          "Bounding Box": "Bounding box definition.",
+          "Compute Point Formats": "Recomputes point formats.",
+          "Copy Topology Info Back to CPU": "Copies topology data from GPU back to CPU."
+        }
+      },
+      "explain_like_im_five": "It fixes and cleans up the shape."
+    },
+    {
+      "operator": "Feedback (POP)",
+      "what_it_is": "Feeds particle data back into itself over time.",
+      "mental_model": "Letting particles remember and reuse their past state.",
+      "example": "Create iterative or accumulating particle behavior.",
+      "menu": {
+        "Feedback": {
+          "Feedback Target POP": "POP that receives feedback.",
+          "Initialize": "Initializes the feedback state.",
+          "Start": "Starts feedback processing.",
+          "Play": "Plays feedback updates.",
+          "Pre-Roll": "Runs feedback before output.",
+          "Go To Done": "Jumps feedback to completion.",
+          "Use Memory Limit": "Limits memory used for feedback.",
+          "Input Multiplier": "Scales incoming feedback data."
+        }
+      },
+      "explain_like_im_five": "It lets particles use what they did before."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Field (POP)",
+      "what_it_is": "Generates spatial fields that influence particles using distance, range, and directional controls.",
+      "mental_model": "Invisible forces in space that push, pull, or weight particles.",
+      "example": "Apply a falloff force between two points that affects nearby particles.",
+      "menu": {
+        "Field": {
+          "Field": "Enables field processing.",
+          "Attribute Class": "Attribute class the field operates on.",
+          "Field Attribute Scopes": "Scopes for attributes affected by the field.",
+          "Specification POP": "POP defining field specifications.",
+          "Mode": "Field computation mode.",
+          "Size": "Overall field size.",
+          "Radius": "Radius of influence.",
+          "Merge": "Merges multiple field contributions.",
+          "Roundness": "Controls edge softness.",
+          "Point A": "First reference point.",
+          "Point B": "Second reference point.",
+          "Strength": "Field strength.",
+          "Exponent": "Falloff exponent."
+        },
+        "Transition": {
+          "Transition Range": "Range over which the transition occurs.",
+          "Transition": "Enables transition behavior.",
+          "Align": "Alignment mode for transition.",
+          "Transition Type": "Type of transition curve.",
+          "Absolute Value": "Uses absolute values.",
+          "Invert to Range": "Inverts values into the range.",
+          "Delete Zeros": "Removes zero-valued results.",
+          "Line Strip Behavior": "Behavior for line strip geometry."
+        },
+        "Transform": {
+          "Transform Order": "Order of transformations.",
+          "Rotate Order": "Rotation order.",
+          "Translate": "Position offset.",
+          "Rotate": "Rotation values.",
+          "Scale": "Scaling values.",
+          "Pivot": "Pivot point."
+        },
+        "Output": {
+          "Output Weight": "Outputs field weight.",
+          "Signed Distance": "Outputs signed distance field.",
+          "Per Field Weights": "Outputs weights per field.",
+          "Per Field Distances": "Outputs distances per field.",
+          "Combine Operation": "How multiple fields combine.",
+          "Combine Entry": "Entry used for combination.",
+          "Combine Attribute Color": "Color attribute used for combination.",
+          "Combine Output Attribute": "Attribute receiving combined output."
+        }
+      },
+      "explain_like_im_five": "It makes invisible forces in space that affect particles."
+    },
+    {
+      "operator": "File In (POP)",
+      "what_it_is": "Loads geometry data from files into POPs.",
+      "mental_model": "Bringing saved shapes into the particle system.",
+      "example": "Import geometry from a file to use as particle sources.",
+      "menu": {
+        "File In": {
+          "File In": "Enables file loading.",
+          "Geometry File": "Path to the geometry file.",
+          "File Primitive Faces": "Controls primitive face handling.",
+          "Refresh": "Reloads the file.",
+          "Input Color Space": "Color space of incoming data.",
+          "Input Reference White": "Reference white for input color space."
+        }
+      },
+      "explain_like_im_five": "It loads shapes from a file."
+    },
+    {
+      "operator": "File Out (POP)",
+      "what_it_is": "Writes particle geometry and attributes to disk.",
+      "mental_model": "Recording particle results to files.",
+      "example": "Export particle geometry per frame to disk.",
+      "menu": {
+        "File Out": {
+          "File Out": "Enables file output.",
+          "Type": "Output file type.",
+          "Object File Type": "Specific object format.",
+          "Unique Suffix": "Adds a unique suffix to filenames.",
+          "N": "Frame or index number.",
+          "Leading Zero Digits": "Number of leading zeros.",
+          "File": "Output file path.",
+          "FPS": "Frames per second for output.",
+          "Limit Length": "Limits recording length.",
+          "Length": "Maximum length to record.",
+          "Record": "Starts recording.",
+          "Pause": "Pauses recording.",
+          "Add Frame": "Manually adds a frame.",
+          "Max Active Saves": "Maximum simultaneous saves.",
+          "Include Primitives": "Includes primitives in output.",
+          "Text Chord Attribute": "Attribute used for text output.",
+          "Output Color Space": "Color space for output data.",
+          "Attribute": "Attribute output toggle.",
+          "Attribute Name": "Name of attribute to output.",
+          "Fields": "Field data included in output."
+        }
+      },
+      "explain_like_im_five": "It saves what the particles look like to a file."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Force (POP)",
+      "what_it_is": "Applies directional forces to particles using configurable falloff and modes.",
+      "mental_model": "Pushing or pulling particles through space with adjustable force shapes.",
+      "example": "Apply a radial force with falloff to attract particles toward a point.",
+      "menu": {
+        "Force": {
+          "Force": "Enables force processing.",
+          "Specification POP": "POP defining force specifications.",
+          "Position Direction": "Direction or position reference for the force.",
+          "Falloff Radius": "Radius over which the force falls off.",
+          "Plateau": "Flat region before falloff begins.",
+          "Steepness": "Sharpness of the falloff.",
+          "Bias": "Bias applied to force distribution.",
+          "Exponent": "Exponent shaping the falloff curve.",
+          "Limit Near Range": "Limits force close to the source.",
+          "Enable Radial": "Enables radial force mode.",
+          "Radial Strength": "Strength of radial force.",
+          "Enable Planar": "Enables planar force mode.",
+          "Planar Exponent": "Exponent for planar falloff.",
+          "Planar Strength": "Strength of planar force.",
+          "Enable Axial": "Enables axial force mode.",
+          "Axial Rotation": "Rotation for axial force.",
+          "Axial Strength": "Strength of axial force.",
+          "Enable Spiral": "Enables spiral force mode.",
+          "Spiral Rotation": "Rotation amount for spiral force.",
+          "Spiral Strength": "Strength of spiral force."
+        },
+        "Global": {
+          "Global Force": "Applies a global force to all particles.",
+          "Global Force Multiplier": "Scales the global force.",
+          "Wind Speed": "Base wind speed applied globally.",
+          "Wind Speed Multiplier": "Scales the wind speed."
+        },
+        "Map": {
+          "Mapping OP Element": "Target operator element for mapping.",
+          "Target Parameter": "Parameter being driven by mapping.",
+          "Combine Operation": "How mapped values combine."
+        }
+      },
+      "explain_like_im_five": "It pushes particles around in different ways, like wind or spinning."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "GLSL Compute Shader (POP)",
+      "what_it_is": "Runs a GPU compute shader to read and write particle attributes in parallel.",
+      "mental_model": "A programmable GPU worker that processes particle data in massive parallel batches.",
+      "example": "Use a compute shader to update positions, velocities, or custom attributes with custom GLSL logic.",
+      "menu": {
+        "GLSL Compute Shader": {
+          "Attribute Class": "Selects which attribute class is processed (Point, Primitive, or Vertex).",
+          "Number of Threads": "Threading mode (Auto, Number of Elements and Other Input, Manual Number of Elements, Number of Elements From Attribute and Manual).",
+          "Threads Input": "Input source used to derive thread counts.",
+          "Number of Elements": "Element count to process.",
+          "POP": "POP used as an input reference for element counts.",
+          "Num Elements Attribute": "Attribute that defines number of elements.",
+          "Workgroup Size": "Compute shader local workgroup size.",
+          "Dispatch Size": "Compute shader dispatch size.",
+          "Output Attributes": "Attributes written by the shader.",
+          "Output Access": "Write-only or Read/Write access mode.",
+          "Initialize Output Attributes": "Initializes output attributes.",
+          "Copy Previous Pass": "Copies results from the previous pass.",
+          "Output to Input": "Feeds shader output back as input.",
+          "Passes": "Number of compute passes.",
+          "Input": "Primary input.",
+          "Input POPs": "Additional POP inputs.",
+          "TD Simplex Noise": "Enables TD simplex noise helpers for shader use."
+        },
+        "Create Attributes": {
+          "New Attributes": "Enables creation of new attributes.",
+          "New Attribute Name": "Name of the attribute to create.",
+          "Custom and Color": "Creates custom attributes and color attributes.",
+          "Text": "Text used for attribute creation or labeling.",
+          "Point Scale": "Point scale setting for generated attributes.",
+          "Line Width": "Line width setting for generated attributes."
+        },
+        "Matrix Attributes": {
+          "Custom Attribute Name": "Name of the matrix attribute.",
+          "Rows": "Matrix row count.",
+          "Columns": "Matrix column count.",
+          "Array": "Stores matrices as arrays.",
+          "Qualifier": "Additional matrix qualifiers."
+        },
+        "Colors": {
+          "Pre-Multiply RGB by Alpha": "Pre-multiplies RGB values by alpha.",
+          "Color Name": "Name of the color attribute.",
+          "RGB and Alpha": "Color and alpha values."
+        },
+        "Vectors": {
+          "Vector Name": "Name of the vector attribute.",
+          "Type": "Vector type.",
+          "Value": "Vector value."
+        },
+        "Samplers": {
+          "Sample Name": "Name of the sampler uniform.",
+          "TOP": "TOP used as the sampler source."
+        },
+        "Arrays": {
+          "Array Name": "Name of the array uniform.",
+          "Type": "Element type (float, vec2, vec3, vec4).",
+          "CHOP and Uniform": "Source for array data.",
+          "Array Type": "Uniform Array or Texture Buffer."
+        },
+        "Matrices": {
+          "Matrix Name": "Name of the matrix uniform.",
+          "Matrix": "Matrix value."
+        },
+        "Temp Buffers": {
+          "Temp Buffer Name": "Name of the temporary buffer.",
+          "Initial Value": "Initial value for the buffer."
+        },
+        "Constants": {
+          "Constants Name": "Name of the constant.",
+          "Value": "Constant value."
+        },
+        "Collision": {
+          "Name": "Collision entry name.",
+          "Collision POP": "POP providing collision data.",
+          "Build Flag": "Builds collision data/acceleration structures.",
+          "Opaque Collision Geometry": "Treats collision geometry as opaque."
+        }
+      },
+      "explain_like_im_five": "It lets the GPU run your math on particle data really fast."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "GLSL Compute Shader (POP)",
+      "what_it_is": "Runs custom GPU code that can read and change particle data.",
+      "mental_model": "A very fast worker that runs the same instructions on lots of particles at once.",
+      "example": "Use GPU code to move particles, change their color, or make new attributes.",
+      "menu": {
+        "GLSL Compute Shader": {
+          "Attribute Class": "Which kind of data is being worked on (point, primitive, or vertex).",
+          "Number of Threads": "How many GPU workers are used (automatic or manually set).",
+          "Threads Input": "Where the thread count comes from.",
+          "Number of Elements": "How many items are processed.",
+          "POP": "POP used to decide how many items there are.",
+          "Num Elements Attribute": "Attribute that tells how many items to process.",
+          "Workgroup Size": "How GPU workers are grouped together.",
+          "Dispatch Size": "How many worker groups are launched.",
+          "Output Attributes": "Which particle attributes get written to.",
+          "Output Access": "Whether the shader only writes or can also read and write.",
+          "Initialize Output Attributes": "Sets starting values for outputs.",
+          "Copy Previous Pass": "Starts with results from the last pass.",
+          "Output to Input": "Feeds the result back into the next pass.",
+          "Passes": "How many times the shader runs.",
+          "Input": "Main input.",
+          "Input POPs": "Other POP inputs.",
+          "TD Simplex Noise": "Gives the shader built-in noise tools."
+        },
+        "Create Attributes": {
+          "New Attributes": "Turns on creating new attributes.",
+          "New Attribute Name": "Name of the new attribute.",
+          "Custom and Color": "Creates custom or color attributes.",
+          "Text": "Text used for labels or setup.",
+          "Point Scale": "Size of points.",
+          "Line Width": "Thickness of lines."
+        },
+        "Matrix Attributes": {
+          "Custom Attribute Name": "Name of the matrix attribute.",
+          "Rows": "Number of rows.",
+          "Columns": "Number of columns.",
+          "Array": "Stores more than one matrix.",
+          "Qualifier": "Extra rules for the matrix."
+        },
+        "Colors": {
+          "Pre-Multiply RGB by Alpha": "Scales color by transparency.",
+          "Color Name": "Name of the color attribute.",
+          "RGB and Alpha": "Color and transparency values."
+        },
+        "Vectors": {
+          "Vector Name": "Name of the vector.",
+          "Type": "Type of vector.",
+          "Value": "Vector values."
+        },
+        "Samplers": {
+          "Sample Name": "Name used in the shader.",
+          "TOP": "Image or texture used by the shader."
+        },
+        "Arrays": {
+          "Array Name": "Name of the array.",
+          "Type": "What the array holds (numbers or vectors).",
+          "CHOP and Uniform": "Where the array data comes from.",
+          "Array Type": "Regular list or texture-based list."
+        },
+        "Matrices": {
+          "Matrix Name": "Name of the matrix.",
+          "Matrix": "Matrix values."
+        },
+        "Temp Buffers": {
+          "Temp Buffer Name": "Name of the temporary storage.",
+          "Initial Value": "Starting value."
+        },
+        "Constants": {
+          "Constants Name": "Name of the constant value.",
+          "Value": "The constant number."
+        },
+        "Collision": {
+          "Name": "Name of the collision setup.",
+          "Collision POP": "POP that provides collision shapes.",
+          "Build Flag": "Builds collision data.",
+          "Opaque Collision Geometry": "Treats shapes as solid."
+        }
+      },
+      "explain_like_im_five": "It lets the GPU do fast math on particles all at once."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "GLSL Advanced (POP)",
+      "what_it_is": "Runs advanced GPU shader code that can create and control particle geometry and attributes.",
+      "mental_model": "A powerful GPU machine where you decide exactly how many workers run, what they touch, and what geometry comes out.",
+      "example": "Use GPU code to generate new points, lines, or primitives and fully control their attributes.",
+      "menu": {
+        "GLSL Advanced": {
+          "Compute Shader": "The shader code that runs on the GPU.",
+          "Shader Dispatch Mode": "How the shader is launched (single dispatch or per-primitive batch).",
+          "Number of Threads Per Input": "How many GPU workers are used per input item.",
+          "Per Input Point": "Threads per input point.",
+          "Per Input Vertex": "Threads per input vertex.",
+          "Per Input Primitive": "Threads per input primitive.",
+          "Per Max Output Point": "Threads per maximum output point.",
+          "Per Max Output Vertex": "Threads per maximum output vertex.",
+          "Per Max Output Primitives": "Threads per maximum output primitive.",
+          "Manual Number of Elements": "Manually sets how many items are processed.",
+          "Number of Elements From Attribute": "Uses an attribute to decide element count.",
+          "Manual Number of Threads": "Manually sets how many GPU threads run.",
+          "Number of Elements": "Total number of items to process.",
+          "POP": "POP used to determine counts.",
+          "Number of Elements Attribute": "Attribute that defines how many elements exist.",
+          "Work Group Size": "How GPU workers are grouped.",
+          "Dispatch Size": "How many groups are launched.",
+          "Number of Threads Per Batch": "Threads used for each batch.",
+          "Point Output Attributes": "Attributes written to points.",
+          "Prim Output Attributes": "Attributes written to primitives.",
+          "Vert Output Attributes": "Attributes written to vertices.",
+          "Output Access": "Controls whether data is written or read and written.",
+          "Initialize Output Attributes": "Sets starting values for outputs.",
+          "Copy Previous Pass Output to Input": "Uses last pass results as input.",
+          "Passes": "How many times the shader runs.",
+          "Input": "Main input.",
+          "Input POPs": "Additional POP inputs.",
+          "TD Simplex Noise": "Built-in noise tools for the shader."
+        },
+        "Output": {
+          "Render": "Enables geometry output.",
+          "Max Points From Input or Custom": "Uses input limits or custom limits.",
+          "Point Count Info": "Enables point count tracking.",
+          "Point Count": "Maximum number of points.",
+          "Point Count POP": "POP that provides point count.",
+          "Point Count Attribute": "Attribute that defines point count.",
+          "Max Triangles": "Maximum triangles allowed.",
+          "Max Quads": "Maximum quads allowed.",
+          "Line Strips": "Enables line strip output.",
+          "Line Strip Verts": "Maximum vertices per line strip.",
+          "Max Lines": "Maximum line primitives.",
+          "Max Point Prims": "Maximum point primitives.",
+          "Line Strip Info Update": "Updates line strip info.",
+          "Line Strip Info POP": "POP providing line strip data.",
+          "Line Strip Info Attribute": "Attribute with line strip info.",
+          "Line Strip Index Per Vert POP": "POP providing per-vertex strip index.",
+          "Line Strip Index Per Vert Attribute": "Attribute with per-vertex strip index.",
+          "Max Verts Per Line Strip": "Maximum vertices per strip.",
+          "Initialize Output Primitives": "Initializes output geometry.",
+          "Topology Info": "Outputs topology data."
+        },
+        "Extra Outputs": {
+          "Extra Output Name POP": "POP used to name extra outputs"
+        },
+        "Colors": "Same as GLSL Compute Shader colors setup.",
+        "Vectors": "Same as GLSL Compute Shader vectors setup.",
+        "Samplers": "Same as GLSL Compute Shader samplers setup.",
+        "Arrays": "Same as GLSL Compute Shader arrays setup.",
+        "Matrices": "Same as GLSL Compute Shader matrices setup.",
+        "Temp Buffers": {
+          "Temp Buffer Name": "Name of temporary storage.",
+          "Initial Value": "Starting value."
+        },
+        "Constants": {
+          "Constant Name": "Name of the constant.",
+          "Value": "Constant value."
+        },
+        "Collisions": {
+          "Name": "Collision setup name.",
+          "Collision POP": "POP that provides collision geometry.",
+          "Build Flag": "Builds collision data.",
+          "Opaque Collision Geometry": "Treats collision shapes as solid."
+        }
+      },
+      "explain_like_im_five": "It lets you use the GPU to build and control particles and shapes exactly how you want."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "GLSL Copy (POP)",
+      "what_it_is": "Uses GPU code to make many copies of particles or geometry.",
+      "mental_model": "A fast copy machine on the GPU that duplicates things and can change each copy.",
+      "example": "Create many GPU-driven copies of points and modify each one differently.",
+      "menu": {
+        "GLSL Copy": {
+          "GLSL Number of Copies": "How many copies are created.",
+          "Point Compute Shader": "GPU code that runs for each point copy.",
+          "Point Compute Attributes": "Attributes used by the point shader.",
+          "Verts Compute Method": "How vertex data is handled on the GPU.",
+          "Prim Compute Method": "How primitive data is handled on the GPU.",
+          "Append Dimension": "Adds an extra dimension for copies.",
+          "TD Simplex Noise": "Built-in noise tools for GPU code."
+        },
+        "Create Attributes": {
+          "New Attribute": "Turns on creating a new attribute.",
+          "New Attribute Class": "Where the attribute lives (point, primitive, or vertex).",
+          "New Attribute Name": "Name of the new attribute.",
+          "Matrix Attribute": "Creates a matrix attribute.",
+          "Matrix Attribute Class": "Where the matrix attribute lives.",
+          "Custom Matrix Name": "Name of the custom matrix."
+        },
+        "Colors": "Controls color attributes used by the GPU.",
+        "Vectors": "Controls vector attributes used by the GPU.",
+        "Samplers": "Images or textures used by the GPU.",
+        "Arrays": "Lists of values used by the GPU.",
+        "Matrices": "Matrix values used by the GPU.",
+        "Temp Buffers": {
+          "Temp Buffer Name": "Name of temporary GPU storage.",
+          "Initial Value": "Starting value for the buffer."
+        },
+        "Constants": {
+          "Constant Name": "Name of a fixed value.",
+          "Value": "The fixed number."
+        },
+        "POP Buffers": {
+          "Buffer POP": "POP that provides buffer data.",
+          "Attribute Class": "Type of data (point, primitive, or vertex).",
+          "Attribute": "Attribute being read.",
+          "Name": "Name used in the shader."
+        }
+      },
+      "explain_like_im_five": "It makes lots of copies really fast using the GPU."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "GLSL Select (POP)",
+      "what_it_is": "Selects data coming out of a GLSL operator and names it.",
+      "mental_model": "Picking one GPU result and giving it a label.",
+      "example": "Choose a specific GLSL output to use later in the network.",
+      "menu": {
+        "GLSL Select": {
+          "GLSL Select POP": "Which GLSL POP to pull data from.",
+          "Output Name": "Name of the selected output."
+        }
+      },
+      "explain_like_im_five": "It picks one GPU result and names it."
+    },
+    {
+      "operator": "Grid (POP)",
+      "what_it_is": "Creates a grid of points or primitives.",
+      "mental_model": "Laying down a flat checkerboard made of particles.",
+      "example": "Make a grid of points to use as a base shape.",
+      "menu": {
+        "Grid": {
+          "Grid": "Enables grid creation.",
+          "Connectivity": "How points are connected.",
+          "Modify Bounds": "Changes the grid bounds.",
+          "Size": "Overall size of the grid.",
+          "Column": "Number of columns.",
+          "Row": "Number of rows.",
+          "Slices": "Depth slices.",
+          "Unique Points": "Uses unique points.",
+          "Seed": "Random seed.",
+          "Random": "Adds randomness.",
+          "Random Size Fit": "Fits random size to bounds.",
+          "Line and Plane": "Outputs lines or planes.",
+          "Anchor": "Anchor position.",
+          "UV and W": "UV and W coordinates.",
+          "Translate": "Moves the grid.",
+          "Rotate": "Rotates the grid.",
+          "Uniform Scale": "Scales the grid evenly.",
+          "Normal": "Normal generation.",
+          "Point Vertex or Primitive": "Output type.",
+          "Texture Coordinates": "Texture coordinates.",
+          "Append Dimensions": "Adds extra dimensions."
+        }
+      },
+      "explain_like_im_five": "It makes a flat grid of points."
+    },
+    {
+      "operator": "Group (POP)",
+      "what_it_is": "Creates and edits groups of points, vertices, or primitives.",
+      "mental_model": "Tagging particles so you can work on only some of them.",
+      "example": "Put certain points into a group for later use.",
+      "menu": {
+        "Create": {
+          "Create": "Turns on group creation.",
+          "Group Name": "Name of the group.",
+          "Entity": "What kind of thing is grouped.",
+          "Debug Color": "Color used for debugging.",
+          "Attribute": "Attribute used to define the group.",
+          "Combine": "How this group combines with others.",
+          "Attribute Function Value": "Rule for attribute-based grouping.",
+          "Invert": "Flips what is included."
+        },
+        "Thin": {
+          "Enabled": "Turns thinning on.",
+          "Combine": "How thinning combines with other rules.",
+          "Thin Out Range": "Range used for thinning.",
+          "Thin Range Start": "Start of thinning range.",
+          "Thin Range Length": "Length of thinning range.",
+          "Thin Step": "Step size for thinning.",
+          "Thin Random": "Random thinning.",
+          "Thin Seed": "Seed for random thinning.",
+          "Invert": "Flips thinning result."
+        },
+        "Pattern": {
+          "Combine": "How pattern combines.",
+          "Invert": "Flips the pattern."
+        },
+        "Group": {
+          "Group": "Uses an existing group.",
+          "Combine": "How groups combine.",
+          "Invert": "Flips the group."
+        },
+        "Bounding": {
+          "Bound": "Uses a bounding rule.",
+          "Enabled": "Turns bounding on.",
+          "Combine": "How bounding combines.",
+          "Position Attribute P": "Position attribute used.",
+          "Bounding Type": "Type of bounding shape.",
+          "Translate": "Moves the bound.",
+          "Rotate": "Rotates the bound.",
+          "Scale": "Scales the bound.",
+          "Invert": "Flips the bound."
+        },
+        "Edit": {
+          "Convert Type": "Changes group type.",
+          "Primitive to Point Group": "Converts prim group to point group.",
+          "Point to Primitive Group": "Converts point group to prim group."
+        },
+        "Convert Group": {
+          "Convert Name": "Turns on group renaming.",
+          "Preserve Original": "Keeps the old group.",
+          "Old Group Name": "Original group name.",
+          "New Group Name": "New group name.",
+          "Delete Group": "Deletes the group."
+        }
+      },
+      "explain_like_im_five": "It lets you pick which particles belong together."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Histogram (POP)",
+      "what_it_is": "Counts how many values fall into ranges.",
+      "mental_model": "Sorting numbers into buckets and counting how many land in each one.",
+      "example": "Count how many particles fall into different value ranges.",
+      "menu": {
+        "Histogram": {
+          "Attribute Class": "Which data type is used (point, primitive, or vertex).",
+          "Input Attribute Scope": "Which attributes are read.",
+          "Input Range": "Value range to measure.",
+          "Quantize": "Snaps values into steps.",
+          "Outside Range": "How values outside the range are handled.",
+          "Number of Bins": "How many buckets are used.",
+          "Count Attribute": "Attribute that stores the counts."
+        }
+      },
+      "explain_like_im_five": "It counts how many things fall into each number bucket."
+    },
+    {
+      "operator": "Import Select (POP)",
+      "what_it_is": "Pulls geometry and animation from another operator.",
+      "mental_model": "Choosing what to bring in from another place.",
+      "example": "Import animated geometry from a parent operator.",
+      "menu": {
+        "General": {
+          "Import Parent": "Where the data comes from.",
+          "GeoPath": "Path to the geometry.",
+          "Reload": "Reloads the imported data.",
+          "Blend Shape": "Enables blend shapes.",
+          "Compute Tangents": "Computes tangents for geometry."
+        },
+        "Playback": {
+          "Use Parent Animation": "Uses animation from the parent.",
+          "Shift Animation Start": "Offsets when animation begins.",
+          "Sample Rate Mode": "How animation is sampled.",
+          "Sample Rate Play Mode": "How playback speed is handled.",
+          "Initialize Start": "Resets playback start.",
+          "Queue": "Queues playback.",
+          "Key Point Play": "Plays using key points.",
+          "Index Speed": "Playback speed control.",
+          "Trim": "Limits playback range.",
+          "Trim Start": "Playback start trim.",
+          "Trim End": "Playback end trim.",
+          "Extend Left": "Behavior before start.",
+          "Extend Right": "Behavior after end."
+        }
+      },
+      "explain_like_im_five": "It brings shapes and animation in from somewhere else."
+    },
+    {
+      "operator": "In (POP)",
+      "what_it_is": "Defines an input connection.",
+      "mental_model": "A labeled plug where data comes in.",
+      "example": "Name and order inputs coming into a POP network.",
+      "menu": {
+        "In": {
+          "In": "Enables the input.",
+          "Label": "Name of the input.",
+          "Connector Order": "Order of the input connection."
+        }
+      },
+      "explain_like_im_five": "It names where the data comes in."
+    },
+    {
+      "operator": "Limit (POP)",
+      "what_it_is": "Clamps values so they stay within limits.",
+      "mental_model": "Putting guard rails on numbers so they don’t go too far.",
+      "example": "Keep an attribute between a minimum and maximum value.",
+      "menu": {
+        "Limit": {
+          "Limit": "Turns limiting on.",
+          "Attribute Class": "Which data type is limited.",
+          "Group": "Which group is affected.",
+          "Input Attribute Scope": "Which attributes are read.",
+          "Parameter Size": "Size of the data.",
+          "Limit Type Minimum": "Applies a minimum limit.",
+          "Limit Type Maximum": "Applies a maximum limit.",
+          "Minimum Value": "Lowest allowed value.",
+          "Maximum Value": "Highest allowed value.",
+          "Positive Only": "Forces values to be positive.",
+          "Cast To": "Changes the data type.",
+          "Automatic": "Automatically chooses type.",
+          "Float": "Outputs float values.",
+          "Int": "Outputs integer values.",
+          "Output Attribute Scope": "Where the result is written."
+        }
+      },
+      "explain_like_im_five": "It stops numbers from going too high or too low."
+    },
+    {
+      "operator": "Quantize (POP)",
+      "what_it_is": "Snaps values to fixed steps.",
+      "mental_model": "Rounding numbers to even steps.",
+      "example": "Snap particle values to a grid of steps.",
+      "menu": {
+        "Quantize": {
+          "Quantize Value": "Turns quantizing on.",
+          "Step": "Size of each step.",
+          "Value Offset": "Offset applied before snapping."
+        }
+      },
+      "explain_like_im_five": "It rounds numbers to neat steps."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Line (POP)",
+      "what_it_is": "Builds lines from points and controls how smooth or detailed they are.",
+      "mental_model": "Connecting dots to make lines, then deciding how smooth and detailed those lines become.",
+      "example": "Turn moving points into smooth trails or paths.",
+      "menu": {
+        "Setup": {
+          "Setup": "Turns line building on.",
+          "Subdivided Lines": "Uses subdivided lines instead of straight segments.",
+          "Control Points": "Uses control points to shape the line.",
+          "Multiple Line Strips": "Creates more than one line strip.",
+          "Interpolation Method Per Segment": "Allows different smoothing per segment.",
+          "Interpolation Method": "How the line is smoothed.",
+          "Tension": "How tight or loose the curve is.",
+          "Enable Weights": "Uses weights to affect curve shape.",
+          "Enable Tangents": "Uses tangents for smoother curves.",
+          "Enable Point Repeat": "Repeats points when building lines.",
+          "Closed": "Closes the line into a loop."
+        },
+        "Output": {
+          "Output": "Turns line output on.",
+          "Premultiply RGB by Alpha": "Scales color by transparency.",
+          "New Attribute": "Creates a new attribute on the line.",
+          "Name": "Name of the new attribute.",
+          "Type": "Type of the attribute.",
+          "Default Value": "Starting value for the attribute."
+        },
+        "Points": {
+          "Point Position": "Uses point positions to build lines.",
+          "Position": "Attribute used for position."
+        },
+        "Division": {
+          "Division Method": "How points are added along the line.",
+          "Divisions Per Segment": "Number of divisions for each segment.",
+          "None": "No extra divisions.",
+          "Divisions Per Line Strip": "Divisions applied per whole line.",
+          "Divisions Defined Per Segment": "Each segment controls its own divisions.",
+          "Distance Between Points": "Spaces points by distance.",
+          "Divisions Distance": "Distance used for divisions.",
+          "Add Control Point Attribute": "Adds an attribute to control points.",
+          "Post Resample Method": "What happens after resampling.",
+          "Division Distance Between Points": "Spacing after resample.",
+          "Points as Keyframes": "Treats points like animation keys.",
+          "Independent Variable Attribute": "Attribute used as the driver.",
+          "Independent Variable Attribute Maximum Number of Vertices": "Limits how many points can be created.",
+          "Max Times for Binary Steps": "Limits how many refinement steps are used."
+        }
+      },
+      "explain_like_im_five": "It connects dots to make lines and smooths them how you want."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Line Break (POP)",
+      "what_it_is": "Breaks lines into separate pieces based on rules.",
+      "mental_model": "Deciding where a long line should snap into smaller lines.",
+      "example": "Split a trail into separate line strips when points get too far apart.",
+      "menu": {
+        "Line Break": {
+          "Line Break Mode": "How lines are broken.",
+          "One Line Per Strip": "Each strip becomes its own line.",
+          "No Connectivity Input Line Strips": "Ignores incoming line connections.",
+          "Line Break Attribute": "Attribute used to decide where to break.",
+          "Line Strip Index Attribute": "Attribute that defines which strip a point belongs to.",
+          "Every End Point": "Breaks at every end point.",
+          "End by Distance Threshold": "Breaks when points are too far apart.",
+          "Distance Threshold": "Distance that triggers a break.",
+          "Output Line Break Attribute": "Writes out where breaks happened.",
+          "Output Lines": "Outputs the broken lines.",
+          "Line Type": "Type of line output.",
+          "Line Strip": "Outputs line strips.",
+          "Copy Topology Info Back to CPU": "Sends line structure info back to the CPU."
+        }
+      },
+      "explain_like_im_five": "It cuts long lines into smaller lines when rules say so."
+    },
+    {
+      "operator": "Line Divide (POP)",
+      "what_it_is": "Adds more points along lines to make them smoother or more detailed.",
+      "mental_model": "Filling in extra dots along a line.",
+      "example": "Add evenly spaced points along a line strip.",
+      "menu": {
+        "Divide": {
+          "Divide": "Turns line dividing on.",
+          "Divide Method": "How new points are added.",
+          "None": "Adds no extra points.",
+          "Divisions Per Line Strip": "Adds points evenly per line.",
+          "Divisions Per Segment": "Adds points per segment.",
+          "Distance Between Points": "Spaces points by distance.",
+          "Distance by Curvature": "Adds more points where the line bends.",
+          "Divisions": "Number of divisions.",
+          "Minimum Division": "Smallest number of divisions.",
+          "Maximum Division": "Largest number of divisions.",
+          "Minimum Blue Bias": "Bias toward fewer divisions.",
+          "Minimum Max Bias": "Bias limits for division.",
+          "By Edge": "Divides based on edges.",
+          "Add Control Point Attribute": "Marks control points.",
+          "Maximum Number of Vertices": "Limits how many points can be created."
+        },
+        "Interpolate": {
+          "Interpolation Method": "How points are smoothed.",
+          "Per Segment": "Allows different smoothing per segment.",
+          "Linear": "Straight lines.",
+          "Cardinal": "Smooth curves.",
+          "B-Spline": "Very smooth curves.",
+          "Cubic Bezier with Tangents": "Bezier curves using tangents.",
+          "Cubic Bezier": "Bezier curves.",
+          "Quadratic Bezier": "Simpler Bezier curves.",
+          "Weight Attribute": "Attribute that affects curve shape.",
+          "In Tangent Attribute": "Controls curve entry.",
+          "Out Tangent Attribute": "Controls curve exit.",
+          "In Tangent Constraint Attribute": "Limits tangent behavior.",
+          "Clamped": "Limits curve overshoot.",
+          "Tension": "How tight the curve is."
+        },
+        "Post Resample": {
+          "Post Resample Method": "What happens after dividing.",
+          "None": "No extra processing.",
+          "Divisions Per Line Strip": "Resample per line.",
+          "Distance Between Points": "Resample by distance.",
+          "End Points as Keyframes": "Keeps end points fixed.",
+          "Divisions": "Number of resample divisions.",
+          "Max Distance": "Maximum spacing allowed.",
+          "Independent Variable Attribute": "Attribute used to drive resampling.",
+          "Independent Variable Step": "Step size for the driver.",
+          "Maximum Number of Vertices": "Hard limit on points.",
+          "Max Tries for Binary Search": "Limits refinement passes.",
+          "Remove Unused Points": "Deletes extra points."
+        }
+      },
+      "explain_like_im_five": "It adds more dots along a line so it looks smoother."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Metrics (POP)",
+      "what_it_is": "Measures distances, directions, and shape changes along points or vertices.",
+      "mental_model": "Looking at each point and asking how far and which way its neighbors are.",
+      "example": "Find how sharp a line bends or how far each point is from the next one.",
+      "menu": {
+        "Metrics": {
+          "Neighbor": "Which nearby point is used.",
+          "Attribute Class": "Which data type is measured (point or vertex).",
+          "Displacement to Next": "Vector from this point to the next one.",
+          "Displacement to Previous": "Vector from this point to the previous one.",
+          "Distance to Next": "Distance to the next point.",
+          "Distance to Previous": "Distance to the previous point.",
+          "Direction to Next": "Direction pointing to the next point.",
+          "Direction to Previous": "Direction pointing to the previous point.",
+          "Tangent": "Direction of the line at the point.",
+          "Curvature": "How much the line bends.",
+          "Angle per Distance": "How fast the angle changes.",
+          "Continuous Direction": "Keeps directions from flipping.",
+          "Max Neighbor": "Limits how far neighbors are checked."
+        }
+      },
+      "explain_like_im_five": "It measures how far points are and which way the line bends."
+    },
+    {
+      "operator": "Line Strip (POP)",
+      "what_it_is": "Computes distances and lengths along line strips.",
+      "mental_model": "Measuring how far along a line each point is.",
+      "example": "Give each point a value from start to end of the line.",
+      "menu": {
+        "Line Strip": {
+          "Distance from Start": "Distance from the beginning of the line.",
+          "Distance from End": "Distance from the end of the line.",
+          "Distance from Start Normalized": "Start distance scaled from 0 to 1.",
+          "Distance from End Normalized": "End distance scaled from 0 to 1.",
+          "Line Strip Length": "Total length of the line.",
+          "Length Attribute": "Attribute that stores length.",
+          "Primitive Attribute": "Writes results to primitives."
+        }
+      },
+      "explain_like_im_five": "It tells you how far along the line each point is."
+    },
+    {
+      "operator": "Index (POP)",
+      "what_it_is": "Gives points their position numbers inside line strips.",
+      "mental_model": "Numbering the points along a line.",
+      "example": "Know which point comes first, second, or last.",
+      "menu": {
+        "Index": {
+          "Vert Index in Line Strip": "Index of the point in the line.",
+          "Number of Verts in Line Strip": "How many points are in the line.",
+          "Vert Index in Line Strip Normalized": "Index scaled from 0 to 1.",
+          "Line Strip Index": "Which line strip the point belongs to.",
+          "Line Strip Index Normalized": "Strip index scaled from 0 to 1."
+        }
+      },
+      "explain_like_im_five": "It numbers the dots along each line."
+    },
+    {
+      "operator": "Line Resample (POP)",
+      "what_it_is": "Rebuilds lines with evenly spaced or rule-based points.",
+      "mental_model": "Redrawing a line so the dots are spaced the way you want.",
+      "example": "Make points evenly spaced along a curve.",
+      "menu": {
+        "Line Resample": {
+          "Resample": "Turns resampling on.",
+          "Resample Method": "How points are added or spaced.",
+          "None": "Leaves the line unchanged.",
+          "Divisions Per Line Strip": "Adds a fixed number of points.",
+          "Distance Between Points by Curvature": "Adds more points where the line bends.",
+          "Points as Keyframes": "Keeps original points locked.",
+          "Divisions": "Number of divisions.",
+          "Max Minimum Distance": "Minimum spacing allowed.",
+          "Min Max Bias": "Bias between min and max spacing.",
+          "Control Points Attribute": "Marks control points.",
+          "Independent Variables Attribute": "Attribute used to drive spacing.",
+          "Independent Variable Step": "Step size for spacing control.",
+          "Maximum Number of Vertices": "Hard limit on points.",
+          "Max Tries for Binary Search": "Limits refinement passes."
+        }
+      },
+      "explain_like_im_five": "It redraws the line so the dots are spaced better."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Line Smooth (POP)",
+      "what_it_is": "Smooths lines so they bend more gently and evenly.",
+      "mental_model": "Rubbing out sharp corners so the line feels softer.",
+      "example": "Smooth noisy line strips so motion looks more fluid.",
+      "menu": {
+        "Line Smooth": {
+          "Is Line Smooth": "Turns line smoothing on.",
+          "Attribute Class": "Which data is smoothed (point, primitive, or vertex).",
+          "Input Attribute Class": "Which input data type is read.",
+          "Pre-Divide": "Adds points before smoothing.",
+          "Max Distance": "Limits how far points can move.",
+          "Max Number of Vertices": "Caps how many points the line can have.",
+          "Filter Method": "How smoothing is applied.",
+          "Smooth by Edge Distance": "Smooths based on distance between edges.",
+          "Smooth by Point Steps": "Smooths by stepping through points.",
+          "Filter Type": "Type of smoothing filter.",
+          "Edge Distance": "Distance used for edge-based smoothing.",
+          "Affect End Point": "Allows endpoints to move.",
+          "Fixed End": "Locks the start or end of the line.",
+          "Output Attribute Scope": "Where the smoothed result is written."
+        },
+        "Resample": {
+          "Is Resample Method": "Turns resampling on.",
+          "None": "No resampling.",
+          "Distance Between Points by Curvature": "Spaces points based on how much the line bends.",
+          "Minimum Distance": "Smallest allowed spacing.",
+          "Maximum Distance": "Largest allowed spacing.",
+          "Minimum Bias": "Bias toward smaller spacing.",
+          "Maximum Bias": "Bias toward larger spacing.",
+          "Max Tries for Binary Search": "Limits refinement passes."
+        }
+      },
+      "explain_like_im_five": "It makes wiggly lines smoother and nicer."
+    },
+    {
+      "operator": "Map (POP)",
+      "what_it_is": "Uses values to drive other parameters.",
+      "mental_model": "Turning one number into control for something else.",
+      "example": "Use a line value to control force strength.",
+      "menu": {
+        "Map": {
+          "Mapping OP Element": "What thing is being controlled.",
+          "Target Parameter": "Which setting is changed.",
+          "Combine Operations": "How the new value is applied.",
+          "Set": "Replaces the value.",
+          "Multiply": "Scales the value.",
+          "Add": "Adds to the value."
+        }
+      },
+      "explain_like_im_five": "It lets one value control another thing."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Look Up Attribute (POP)",
+      "what_it_is": "Uses one attribute to look up values from another attribute.",
+      "mental_model": "Using a number as a pointer to grab another value.",
+      "example": "Use an index attribute to pick values from a list of attributes.",
+      "menu": {
+        "Look Up Attribute": {
+          "Attribute Class": "Which data is used (point, primitive, or vertex).",
+          "Point": "Uses point data.",
+          "Group": "Limits the lookup to a group.",
+          "Lookup Index Attribute": "Attribute used as the index.",
+          "Lookup Index Units": "How the index is interpreted.",
+          "Normalize or Point Index": "Treats index as normalized or as a point index.",
+          "Cyclic Index": "Wraps the index around.",
+          "Interpolate": "Smooths between values.",
+          "From Low": "Low end of input range.",
+          "From High": "High end of input range.",
+          "To Low": "Low end of output range.",
+          "To High": "High end of output range.",
+          "Extend Left": "Behavior below range.",
+          "Extend Right": "Behavior above range.",
+          "Lookup Value Attributes": "Attributes being read.",
+          "Output Attribute Scope": "Where the result is written."
+        }
+      },
+      "explain_like_im_five": "It uses one number to pick another value."
+    },
+    {
+      "operator": "Look Up Channel (POP)",
+      "what_it_is": "Uses a CHOP channel to look up values for particles.",
+      "mental_model": "Reading values from a timeline using an index.",
+      "example": "Use animation channels to drive particle attributes.",
+      "menu": {
+        "Look Up Channel": {
+          "Lookup Channel Is": "Enables channel lookup.",
+          "Lookup Attribute Class": "Which data type is affected.",
+          "Group": "Limits the lookup to a group.",
+          "CHOP": "CHOP used as the source.",
+          "Lookup Index Attribute": "Attribute used as the index.",
+          "Lookup Index Units": "How the index is measured.",
+          "Cyclic Index": "Wraps around the channel.",
+          "Interpolate": "Smooths between samples.",
+          "Extend Left": "Behavior before the channel start.",
+          "Extend Right": "Behavior after the channel end.",
+          "Scope From Low": "Low input range.",
+          "Scope From High": "High input range.",
+          "To Low": "Low output range.",
+          "To High": "High output range.",
+          "Output Attribute Scope": "Where the result is written."
+        }
+      },
+      "explain_like_im_five": "It uses a timeline to give particles values."
+    },
+    {
+      "operator": "Look Up Texture (POP)",
+      "what_it_is": "Looks up values from an image or texture.",
+      "mental_model": "Reading colors from an image using coordinates.",
+      "example": "Sample a texture to color particles.",
+      "menu": {
+        "Look Up Texture": {
+          "Lookup": "Turns texture lookup on.",
+          "Attribute Class": "Which data is affected.",
+          "Group": "Limits lookup to a group.",
+          "TOP": "Image or texture source.",
+          "Lookup Index Attribute": "Attribute used as lookup coordinates.",
+          "UV and W": "Uses UV or UVW coordinates.",
+          "Lookup Index Offset": "Offsets lookup position.",
+          "Lookup Index Units": "How coordinates are interpreted.",
+          "Pixel-Centered Sampling Location": "Samples from pixel centers.",
+          "Cycle Index": "Wraps texture lookup.",
+          "Input Extend Mode": "How edges of the texture behave.",
+          "Interpolate": "Smooths sampling.",
+          "Use Depth Offset": "Offsets lookup by depth.",
+          "Channel Mask": "Which texture channels are used.",
+          "From Low": "Low input range.",
+          "From High": "High input range.",
+          "To Low": "Low output range.",
+          "To High": "High output range.",
+          "Output Attribute Scope": "Where the sampled result is written."
+        }
+      },
+      "explain_like_im_five": "It reads colors from a picture and gives them to particles."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Math (POP)",
+      "what_it_is": "Does basic math on particle attributes.",
+      "mental_model": "Taking numbers on particles and adjusting them with math.",
+      "example": "Scale, offset, remap, or round an attribute value.",
+      "menu": {
+        "Math": {
+          "Math": "Turns math processing on.",
+          "Attribute Class": "Which data is changed (point, primitive, or vertex).",
+          "Group": "Limits math to a group.",
+          "Input Attribute Scope": "Which attributes are read.",
+          "Angle Units": "How angles are measured.",
+          "Degrees": "Uses degrees.",
+          "Radians": "Uses radians.",
+          "Cycles": "Uses cycles.",
+          "Parameter Size": "How many values are processed.",
+          "Pre-Operation": "Math done before mapping.",
+          "Pre-Add": "Adds a value before other math.",
+          "Pre-Multiply": "Multiplies before other math.",
+          "Post-Add": "Adds a value after other math.",
+          "Post-Operation": "Math done after mapping.",
+          "Map From Low": "Low end of input range.",
+          "Map From High": "High end of input range.",
+          "Map To Low": "Low end of output range.",
+          "Map To High": "High end of output range.",
+          "Quantize": "Snaps values to steps.",
+          "Off": "No snapping.",
+          "Floor": "Rounds down.",
+          "Round": "Rounds to nearest.",
+          "Ceiling": "Rounds up.",
+          "Cast To": "Changes number type.",
+          "Automatic": "Lets the system choose.",
+          "Float": "Outputs decimal numbers.",
+          "Int": "Outputs whole numbers.",
+          "Output Attribute Scope": "Where the result is written."
+        }
+      },
+      "explain_like_im_five": "It changes numbers on particles using math."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Math Combine (POP)",
+      "what_it_is": "Combines values from multiple inputs and runs math on them.",
+      "mental_model": "Taking a few numbers, mixing them together, then adjusting the result.",
+      "example": "Add two attributes together, then remap and round the result.",
+      "menu": {
+        "Math Combine": {
+          "Inputs": "Which inputs are used.",
+          "Combine Operation": "How the inputs are mixed.",
+          "Scope A": "First input scope.",
+          "Scope B": "Second input scope.",
+          "Scope C": "Third input scope.",
+          "Result Scope": "Where the combined result is written."
+        },
+        "Uniforms": {
+          "Vector Name": "Name of the uniform value.",
+          "Type": "Type of value.",
+          "Value": "The number or vector used.",
+          "Pre-Multiply RGB by Alpha": "Scales color by transparency.",
+          "Color Name": "Name of the color.",
+          "RGB by Alpha": "Color multiplied by alpha."
+        },
+        "New": {
+          "New Attribute": "Creates a new attribute.",
+          "Name": "Name of the attribute.",
+          "Custom N": "Custom normal attribute.",
+          "Color": "Creates a color attribute.",
+          "Text": "Text attribute.",
+          "Point Scale": "Point size attribute.",
+          "Line Width": "Line thickness attribute."
+        },
+        "Pre": {
+          "Pre": "Turns pre-math on.",
+          "Scope": "Where pre-math applies.",
+          "Parameter Size": "How many values are affected.",
+          "Order": "Order of operations.",
+          "Multiply": "Multiply before combining.",
+          "Add": "Add before combining.",
+          "Operation": "Type of math used.",
+          "Quantize": "Snap values to steps.",
+          "Result Scope": "Where pre-math results go."
+        },
+        "Combine": {
+          "Combine": "Turns combining on.",
+          "Operation": "How values are combined (add, subtract, multiply, etc.)."
+        },
+        "Post": {
+          "Post": "Turns post-math on.",
+          "Scope": "Where post-math applies.",
+          "Parameter Size": "How many values are affected.",
+          "Map From Low": "Low input range.",
+          "Map From High": "High input range.",
+          "Map To Low": "Low output range.",
+          "Map To High": "High output range.",
+          "Quantize": "Snap result to steps.",
+          "Cast To": "Change number type.",
+          "Result Scope": "Where the final result goes."
+        },
+        "Output": {
+          "Output": "Final output settings for the result."
+        }
+      },
+      "explain_like_im_five": "It mixes numbers together and fixes them up before sending them out."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Inputs (POP)",
+      "what_it_is": "Controls how multiple inputs are read and matched together.",
+      "mental_model": "Deciding how different input streams line up when doing math or combining data.",
+      "example": "Tell the system what to do when one input has more points than another.",
+      "menu": {
+        "Inputs": {
+          "Attribute Class": "Which data type is used (point, primitive, or vertex).",
+          "Length Mismatch": "What happens when inputs don’t match in size.",
+          "Ignore": "Does nothing about the mismatch.",
+          "Warning": "Shows a warning.",
+          "Error": "Stops with an error.",
+          "Repeat": "Repeats values to match.",
+          "Hold 0": "Holds the first value.",
+          "Hold 1": "Holds the second value.",
+          "None": "No special handling.",
+          "Group": "Limits which elements are used.",
+          "Angle Units": "How angles are measured.",
+          "Degrees": "Uses degrees.",
+          "Radians": "Uses radians.",
+          "Cycles": "Uses cycles.",
+          "Input": "Main input.",
+          "Input POP": "POP used as an input."
+        },
+        "Uniforms": {
+          "Vector Name": "Name of the fixed value.",
+          "Type": "Type of value.",
+          "Value": "The value used.",
+          "Pre-Multiply RGB by Alpha": "Scales color by transparency.",
+          "Color Name": "Name of the color.",
+          "RGB": "Color values.",
+          "Alpha": "Transparency value."
+        },
+        "Combine": {
+          "Combine Operation": "How inputs are combined.",
+          "Scope A": "First input scope.",
+          "Scope B": "Second input scope.",
+          "Scope C": "Third input scope."
+        },
+        "Output": {
+          "Output": "Where the combined result goes."
+        }
+      },
+      "explain_like_im_five": "It decides how different inputs line up and mix together."
+    },
+    {
+      "operator": "Merge (POP)",
+      "what_it_is": "Joins groups or geometry from multiple inputs.",
+      "mental_model": "Putting piles of particles together into one pile.",
+      "example": "Merge points from several POPs into one stream.",
+      "menu": {
+        "Merge": {
+          "Merge": "Turns merging on.",
+          "Unique Group Name": "Keeps group names unique.",
+          "Entity": "What is merged (points or primitives).",
+          "Points or Primitives": "Choose what kind of data to merge.",
+          "Group Input": "Group used for merging.",
+          "Input POPs": "POPs being merged.",
+          "Group": "Group name used.",
+          "Entity Type": "Type of entity merged."
+        }
+      },
+      "explain_like_im_five": "It puts multiple particle groups together."
+    },
+    {
+      "operator": "Neighbor (POP)",
+      "what_it_is": "Finds nearby points and measures relationships between them.",
+      "mental_model": "Looking around each point to see who its neighbors are.",
+      "example": "Find the closest points and average their values.",
+      "menu": {
+        "Neighbor": {
+          "Neighbors Type": "How neighbors are found.",
+          "By Distance": "Finds neighbors by distance.",
+          "Connected": "Uses connected points.",
+          "Max Neighbors": "Maximum neighbors to check.",
+          "Distribution": "How neighbors are chosen.",
+          "Default": "Standard behavior.",
+          "Unique": "Unique neighbors only.",
+          "Closeness": "Prefers closer neighbors.",
+          "Num Hash Buckets": "Buckets used for fast lookup.",
+          "Output Hash Attrib": "Outputs hash data.",
+          "Output": "Controls what is output.",
+          "Neighbors": "Outputs neighbor data.",
+          "Average": "Averages neighbor values.",
+          "Inverse Distance": "Weights by inverse distance.",
+          "Weighted Average": "Uses weights when averaging.",
+          "Num Neighbors": "Outputs neighbor count.",
+          "Add Distance Attribute": "Stores distance to neighbors.",
+          "Max Neighbors for Average": "Limits neighbors used for averaging.",
+          "Include Query Point": "Includes the point itself.",
+          "Add Prefix": "Adds a prefix to output names.",
+          "Casts": "Changes number types.",
+          "Integers to Floats": "Converts ints to floats.",
+          "Neighbor Point Attributes": "Attributes read from neighbors."
+        }
+      },
+      "explain_like_im_five": "It looks at nearby points and uses their values."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Noise (POP)",
+      "what_it_is": "Adds noise values to particle data.",
+      "mental_model": "Filling space with controlled randomness and giving particles values from it.",
+      "example": "Use noise to wiggle positions, vary colors, or add organic motion.",
+      "menu": {
+        "Noise": {
+          "Noise Lookup Attribute": "Attribute used to sample the noise.",
+          "Type": "Kind of noise used.",
+          "Simplex 4D": "Smooth 4D noise.",
+          "Simplex 3D": "Smooth 3D noise.",
+          "Perlin 2D": "Classic 2D noise.",
+          "Perlin 3D": "Classic 3D noise.",
+          "Perlin 4D": "Classic 4D noise.",
+          "Noise Size": "Overall scale of the noise.",
+          "Seed": "Random seed.",
+          "Period": "Repeats the noise over a fixed range.",
+          "Harmonics": "Number of noise layers.",
+          "Harmonic Speed": "Speed of higher noise layers.",
+          "Harmonic Gain": "Strength of higher noise layers.",
+          "Parameter Size": "How many values are affected.",
+          "Amplitude": "Strength of the noise.",
+          "Exponent": "Shapes the noise curve.",
+          "Offset": "Shifts noise values.",
+          "Positive Only": "Forces noise to stay positive.",
+          "Attribute Class": "Where noise is applied (point, primitive, or vertex).",
+          "Group": "Limits noise to a group."
+        },
+        "Transform": {
+          "Transform": "Moves or rotates the noise space."
+        },
+        "Output": {
+          "Noise Gradient": "Outputs the slope of the noise.",
+          "Curl 3D": "Outputs swirling 3D motion.",
+          "Curl 2D": "Outputs swirling 2D motion.",
+          "Combine Operation": "How noise mixes with existing values.",
+          "None": "Replaces values.",
+          "Add": "Adds noise.",
+          "Multiply": "Multiplies by noise.",
+          "Translate Along Normal": "Moves points along their normals.",
+          "Combine Entity": "What kind of data is combined.",
+          "Noise Curl 3D": "3D curl noise output.",
+          "Noise 2D": "2D noise output.",
+          "Combine Attribute": "Attribute used for combining.",
+          "Scope": "Where the result is written.",
+          "Output Attribute Scope": "Final output location.",
+          "Compute Point Normals": "Creates normals if needed.",
+          "Mode": "Performance or quality setting."
+        },
+        "Mapping": {
+          "Mapping OP Element": "What the noise drives.",
+          "Target Parameter": "Which parameter is controlled.",
+          "Combine Operation": "How the value is applied."
+        },
+        "Normals": {
+          "Normals": "Normal handling options.",
+          "Normals Action": "What to do with normals.",
+          "Always Compute": "Always make normals.",
+          "No Action": "Do nothing.",
+          "Compute If Doesn’t Exist": "Only make normals if missing.",
+          "Remove Input Position Attribute": "Removes position after use.",
+          "Attribute Class": "Where normals live.",
+          "Normals Weighting": "How normals are averaged.",
+          "Compute Normals Technique": "Method used to compute normals.",
+          "Max Number of Primitives per Point": "Limits normal calculation.",
+          "Normal Output Attribute Scope": "Where normals are written."
+        },
+        "Tangents": {
+          "Tangent Action": "What to do with tangents.",
+          "Input Position Attribute": "Position used (P or N).",
+          "Input Texture Coordinate Attribute": "Texture coords used (TEX).",
+          "Compute Tangent Techniques": "Method used to compute tangents."
+        }
+      },
+      "explain_like_im_five": "It adds controlled randomness so things look less stiff."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Normalize (POP)",
+      "what_it_is": "Scales values so they fit nicely into a range.",
+      "mental_model": "Squishing numbers so they fit between two limits.",
+      "example": "Normalize an attribute so it stays between 0 and 1.",
+      "menu": {
+        "Normalize": {
+          "Attribute Class": "Which data is changed (point, primitive, or vertex).",
+          "Input Attribute Scope": "Which attributes are read.",
+          "Parameter Size": "How many values are processed.",
+          "Aspect Correct": "Keeps proportions correct.",
+          "Replace Errors": "Fixes bad values like NaN or infinity.",
+          "Mode Bias": "Biases how values are distributed.",
+          "Lookup Curve": "Uses a curve to shape the result.",
+          "Exponent": "Changes how fast values rise or fall.",
+          "Map To Low": "Low end of output range.",
+          "Map To High": "High end of output range.",
+          "Output Attribute Scope": "Where the result is written."
+        }
+      },
+      "explain_like_im_five": "It squishes numbers so they fit between two ends."
+    },
+    {
+      "operator": "Null (POP)",
+      "what_it_is": "Does nothing except pass data through.",
+      "mental_model": "A placeholder or pause point in the network.",
+      "example": "Use it to organize or temporarily disable part of a network.",
+      "menu": {
+        "Null": {
+          "Bypass": "Turns the operator off.",
+          "Free Extra GPU Memory": "Releases unused GPU memory.",
+          "Delete Input Attributes": "Removes incoming attributes."
+        }
+      },
+      "explain_like_im_five": "It passes things through without changing them."
+    },
+    {
+      "operator": "OAK Select (POP)",
+      "what_it_is": "Selects data from an OAK camera or device.",
+      "mental_model": "Choosing which camera stream to use.",
+      "example": "Pull depth or image data from an OAK device.",
+      "menu": {
+        "OAK Select": {
+          "OAK Active": "Turns the OAK device on.",
+          "OAK Device": "Which device is used.",
+          "CHOP": "CHOP used for control or sync.",
+          "Stream": "Which data stream is selected.",
+          "Cache Size": "How much data is buffered."
+        }
+      },
+      "explain_like_im_five": "It picks data from a camera."
+    },
+    {
+      "operator": "Out (POP)",
+      "what_it_is": "Marks the output of a POP network.",
+      "mental_model": "The exit door for particle data.",
+      "example": "Send particles out of a network to be used elsewhere.",
+      "menu": {
+        "Out": {
+          "Out Select": "Selects the output.",
+          "POP": "POP being output.",
+          "Label": "Name of the output.",
+          "Connect Order": "Order of connections."
+        }
+      },
+      "explain_like_im_five": "It sends the particles out."
+    },
+    {
+      "operator": "Particle (POP)",
+      "what_it_is": "Creates and simulates particles over time.",
+      "mental_model": "A particle factory that makes, moves, and ages particles.",
+      "example": "Emit particles that move, slow down, and die.",
+      "menu": {
+        "Particles": {
+          "Particles": "Turns particle simulation on.",
+          "Target Feedback Loop": "Feedback POP used for simulation.",
+          "POP": "POP providing feedback.",
+          "Create Point Primitive": "Creates points as primitives.",
+          "Point ID Reuse": "Reuses particle IDs.",
+          "Maximum Particles": "Hard limit on particle count.",
+          "Emission From": "Where particles are born from.",
+          "Birth Rate": "How many particles are born.",
+          "Randomize Input Points": "Adds randomness to spawn points.",
+          "Life Expect": "How long particles live.",
+          "Life Variance": "Random variation in life.",
+          "Random Seed": "Seed for randomness.",
+          "Enable Time Integration": "Moves particles over time.",
+          "Initial Velocity": "Starting speed and direction.",
+          "Initial Mass": "Starting mass.",
+          "Drag": "Air resistance.",
+          "Velocity Dampening": "Slows particles over time.",
+          "Initialize Start": "Resets the simulation.",
+          "Play": "Runs the simulation.",
+          "Speed": "Simulation speed.",
+          "Pre-Roll": "Runs simulation before output.",
+          "Go To Done": "Jumps to the end state."
+        },
+        "Attributes": {
+          "Input Attributes": "Attributes read by particles.",
+          "Rename To": "Renames attributes.",
+          "Use Death Attribute": "Marks when particles die.",
+          "New Attribute": "Creates a new attribute.",
+          "Name": "Name of the attribute."
+        },
+        "Map": {
+          "Mapping OP Element": "What parameter is driven.",
+          "Target Parameter": "Which setting is controlled.",
+          "Combine Operation": "How values are applied."
+        }
+      },
+      "explain_like_im_five": "It makes particles that move around and disappear."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Pattern (POP)",
+      "what_it_is": "Creates repeating patterns along points or lines.",
+      "mental_model": "Stamping a rhythm or pattern over points or along a line.",
+      "example": "Make a repeating wave or on/off pattern along a line strip.",
+      "menu": {
+        "Pattern": {
+          "Pattern": "Turns the pattern on.",
+          "Number of Points": "How many points the pattern uses.",
+          "Cyclic": "Repeats the pattern in a loop.",
+          "Connectivity": "How points are connected.",
+          "Parameter Size": "How many values are affected.",
+          "Type": "Kind of pattern used.",
+          "Speed": "How fast the pattern moves.",
+          "Number of Cycles": "How many times the pattern repeats.",
+          "Steps Per Cycle": "How detailed each cycle is.",
+          "Phase": "Offset of the pattern.",
+          "Exponent": "Shapes the pattern curve.",
+          "Map From Low": "Low input value.",
+          "Map From High": "High input value.",
+          "Map To Low": "Low output value.",
+          "Map To High": "High output value.",
+          "Reverse": "Flips the pattern direction.",
+          "Line Breaking Cycle": "Breaks lines based on the pattern.",
+          "Closed": "Closes the pattern into a loop.",
+          "Output Line Break Attribute": "Outputs where line breaks happen.",
+          "Texture Coordinates": "Outputs texture coordinates."
+        }
+      },
+      "explain_like_im_five": "It makes repeating shapes or rhythms along points."
+    },
+    {
+      "operator": "Phaser (POP)",
+      "what_it_is": "Offsets values along a range, like sliding a phase over data.",
+      "mental_model": "Sliding values forward or backward along a line.",
+      "example": "Offset an effect so it travels along points over time.",
+      "menu": {
+        "Phaser": {
+          "Phaser": "Turns the phaser on.",
+          "Attribute Class": "Which data is changed (point, primitive, or vertex).",
+          "Phase": "How much the values are shifted.",
+          "Attribute Scope": "Which attributes are affected.",
+          "Fraction": "Uses fractional phase values.",
+          "Parameter Size": "How many values are affected.",
+          "Edge One": "Special handling for one edge.",
+          "Reverse Phase": "Flips the phase direction.",
+          "From Low": "Low input range.",
+          "From High": "High input range.",
+          "Smooth Step": "Smooths the transition.",
+          "To Low": "Low output range.",
+          "To High": "High output range.",
+          "Cast To": "Changes number type.",
+          "Output Attribute Scope": "Where the result is written."
+        }
+      },
+      "explain_like_im_five": "It slides values along so effects move smoothly."
+    },
+    {
+      "operator": "Plane (POP)",
+      "what_it_is": "Creates a flat plane made of points or primitives.",
+      "mental_model": "Making a flat sheet like graph paper.",
+      "example": "Create a flat surface for particles to sit on.",
+      "menu": {
+        "Plane": {
+          "Plane": "Turns plane creation on.",
+          "Connectivity": "How points are connected.",
+          "Line Type": "Type of lines used.",
+          "Orientation": "Which way the plane faces.",
+          "Modify Bounds": "Changes the plane size behavior.",
+          "Size": "Overall plane size.",
+          "Columns": "Number of columns.",
+          "Rows": "Number of rows.",
+          "Anchor UV": "Anchor point for UVs.",
+          "Translate": "Moves the plane.",
+          "Rotate": "Rotates the plane.",
+          "Uniform Scale": "Scales evenly.",
+          "Normal": "Normal direction.",
+          "Texture Coordinates": "Texture mapping."
+        }
+      },
+      "explain_like_im_five": "It makes a flat sheet of points."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Points (POP)",
+      "what_it_is": "Creates points and basic point attributes.",
+      "mental_model": "Making dots and giving them names and positions.",
+      "example": "Create points and store their positions in an attribute.",
+      "menu": {
+        "Setup": {
+          "Setup": "Turns point creation on.",
+          "Create P Attribute": "Creates the position attribute.",
+          "Create Point Primitives": "Creates point primitives instead of loose points.",
+          "New Attribute": "Creates a new attribute.",
+          "Name": "Name of the new attribute."
+        },
+        "Points": {
+          "Point": "Uses point data.",
+          "Position": "Position values for the points."
+        }
+      },
+      "explain_like_im_five": "It makes dots and remembers where they are."
+    },
+    {
+      "operator": "Point File In (POP)",
+      "what_it_is": "Loads points and their attributes from a file.",
+      "mental_model": "Reading dots from a saved file.",
+      "example": "Load point positions and colors from disk.",
+      "menu": {
+        "Point File In": {
+          "File Reload": "Reloads the file.",
+          "Create Point Primitives": "Creates point primitives.",
+          "Max Number of Points": "Limits how many points are loaded.",
+          "Position Fields": "Fields used for position.",
+          "Normal Fields": "Fields used for normals.",
+          "Texture Fields": "Fields used for texture coordinates.",
+          "Color Fields": "Fields used for color.",
+          "Attribute Fields": "Fields used for other attributes.",
+          "Attribute Name": "Name of the attribute.",
+          "Qualifier": "Extra rules for reading data."
+        }
+      },
+      "explain_like_im_five": "It loads dots from a file."
+    },
+    {
+      "operator": "Thin (POP)",
+      "what_it_is": "Removes points based on a pattern or spacing.",
+      "mental_model": "Keeping some dots and throwing others away.",
+      "example": "Thin points so there are fewer of them.",
+      "menu": {
+        "Thin": {
+          "Thin Out Range": "Range where thinning happens.",
+          "Thin Range Start": "Where thinning starts.",
+          "Thin Range Length": "How wide the thinning range is.",
+          "Thin Step": "Keeps every Nth point.",
+          "Thin Random": "Randomly removes points.",
+          "Random Seed": "Seed for random thinning."
+        }
+      },
+      "explain_like_im_five": "It removes some dots so there aren’t too many."
+    },
+    {
+      "operator": "Rerange (POP)",
+      "what_it_is": "Remaps values from one range to another.",
+      "mental_model": "Stretching or squishing numbers into a new range.",
+      "example": "Remap values from 0–100 into 0–1.",
+      "menu": {
+        "Rerange": {
+          "Rerange": "Turns reranging on.",
+          "Scope": "Which attributes are affected.",
+          "Parameter Size": "How many values are processed.",
+          "Map From Low": "Low input value.",
+          "Map From High": "High input value.",
+          "Map To Low": "Low output value.",
+          "Map To High": "High output value."
+        }
+      },
+      "explain_like_im_five": "It moves numbers from one scale to another."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Point Generator (POP)",
+      "what_it_is": "Creates points inside simple shapes.",
+      "mental_model": "Sprinkling dots inside a shape.",
+      "example": "Generate random points inside a sphere or along a line.",
+      "menu": {
+        "Point Generator": {
+          "Point Generator": "Turns point generation on.",
+          "Shape": "Which shape points are generated in.",
+          "Sphere": "Points inside a sphere.",
+          "Box": "Points inside a box.",
+          "Torus": "Points inside a donut shape.",
+          "Tube": "Points inside a tube.",
+          "Rectangle": "Points inside a rectangle.",
+          "Circle": "Points inside a circle.",
+          "Line": "Points along a line.",
+          "Create Point Primitives": "Creates point primitives.",
+          "Number of Points": "How many points to create.",
+          "Distribution": "How points are spread out.",
+          "Random": "Random distribution.",
+          "Seed": "Random seed.",
+          "Orientation": "Orientation of the shape.",
+          "Size": "Overall size.",
+          "Radius": "Radius of the shape.",
+          "Height": "Height of the shape.",
+          "Point A": "Start point for line shapes.",
+          "Point B": "End point for line shapes.",
+          "Normal": "Normal direction.",
+          "Normal Direction": "Direction normals face.",
+          "Tangent": "Tangent direction."
+        },
+        "Transform": {
+          "Transform": "Moves, rotates, and scales the shape."
+        }
+      },
+      "explain_like_im_five": "It makes dots inside shapes."
+    },
+    {
+      "operator": "Polygonize (POP)",
+      "what_it_is": "Turns image data into geometry.",
+      "mental_model": "Tracing shapes out of an image.",
+      "example": "Create geometry from a black-and-white image.",
+      "menu": {
+        "Polygonize": {
+          "TOP": "Image used to create shapes.",
+          "Resolution": "Detail level of the result.",
+          "Multiplier": "Scales the output.",
+          "Inside Threshold": "What counts as inside the shape.",
+          "Extend": "Edge handling.",
+          "Unique Points": "Uses unique points.",
+          "Normals Method": "How normals are made.",
+          "Fraction of Max Allocation": "Memory usage limit."
+        }
+      },
+      "explain_like_im_five": "It turns pictures into shapes."
+    },
+    {
+      "operator": "Primitive (POP)",
+      "what_it_is": "Creates or edits primitives made from points.",
+      "mental_model": "Deciding how dots are connected into shapes.",
+      "example": "Build lines or faces from points.",
+      "menu": {
+        "Setup": {
+          "Setup": "Turns primitive building on.",
+          "Delete Primitives": "Removes primitives.",
+          "Keep Points": "Keeps points after deleting primitives.",
+          "Add Points": "Adds points for primitives.",
+          "Pre-Multiply RGB by Alpha": "Scales color by transparency.",
+          "New Attribute": "Creates a new attribute."
+        },
+        "Points": {
+          "Points": "Uses points as input."
+        },
+        "Primitives": {
+          "Method": "How primitives are created.",
+          "None": "Creates no primitives.",
+          "By Set": "Creates primitives by sets.",
+          "By Pattern": "Creates primitives by a pattern.",
+          "Primitive Type": "Type of primitive created.",
+          "Set": "Set used for creation.",
+          "Point Index Pattern": "Pattern for connecting points."
+        },
+        "Post": {
+          "Unused Points": "Removes unused points.",
+          "Copy Topology Info Back to CPU": "Sends structure info back to CPU."
+        }
+      },
+      "explain_like_im_five": "It connects dots into shapes."
+    },
+    {
+      "operator": "Projection (POP)",
+      "what_it_is": "Projects points from one space into another.",
+      "mental_model": "Flattening or mapping points using a camera view.",
+      "example": "Project 3D points into screen space.",
+      "menu": {
+        "Projection": {
+          "Projection": "Turns projection on.",
+          "Attribute Class": "Which data is projected.",
+          "Group": "Limits projection to a group.",
+          "End Point": "End position for projection.",
+          "Attribute Scope": "Which attributes are affected.",
+          "From Coordinate System": "Source space.",
+          "To Coordinate System": "Target space.",
+          "Angle Units": "How angles are measured.",
+          "Camera": "Camera used for projection.",
+          "Aspect Correct UVs": "Keeps UVs from stretching.",
+          "Aspect Ratio": "Aspect ratio used.",
+          "Horizontal Point of View": "Camera field of view.",
+          "Near Depth": "Near clipping distance.",
+          "Far Depth": "Far clipping distance.",
+          "Output Attributes": "Attributes written by projection."
+        }
+      },
+      "explain_like_im_five": "It maps points through a camera view."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Proximity (POP)",
+      "what_it_is": "Creates connections or values based on how close points are to each other.",
+      "mental_model": "Looking around each point to see which other points are nearby.",
+      "example": "Draw lines between points that are close together.",
+      "menu": {
+        "Proximity": {
+          "Proximity": "Turns proximity processing on.",
+          "Max Distance": "Farthest distance allowed.",
+          "Min Distance": "Closest distance allowed.",
+          "Max Lines Per Point": "Limits how many connections one point can make.",
+          "Uniform Distribution": "Spreads connections evenly.",
+          "Max Temp": "Limits temporary memory use.",
+          "Neighbors": "Uses nearby points.",
+          "Duplicate Lines": "Allows repeated connections.",
+          "Num Hash Buckets": "Speed setting for neighbor searches."
+        },
+        "Attributes": {
+          "Attribute Class": "Which data is affected (point, primitive, or vertex).",
+          "Group": "Limits which points are used.",
+          "Input": "Input attribute source.",
+          "Attribute Scope": "Which attributes are read.",
+          "Parameter Size": "How many values are processed."
+        },
+        "Quantize": {
+          "Quantize": "Turns snapping on.",
+          "Value Step": "Step size.",
+          "Value Offset": "Offset before snapping.",
+          "Value Compare": "How values are compared."
+        },
+        "Output": {
+          "Cast To": "Changes number type.",
+          "Output Attribute Scope": "Where results are written."
+        }
+      },
+      "explain_like_im_five": "It connects points that are close to each other."
+    },
+    {
+      "operator": "Random (POP)",
+      "what_it_is": "Generates random values or extra points.",
+      "mental_model": "Rolling dice to get new numbers or points.",
+      "example": "Add random offsets or spawn extra random points.",
+      "menu": {
+        "Random": {
+          "As Random": "Uses pure randomness.",
+          "Extra Points Per Source Point": "Adds more points per input point.",
+          "Type": "Type of random output.",
+          "CHOP": "CHOP used as a random source.",
+          "Random Size": "Scale of randomness.",
+          "Seed": "Random seed.",
+          "Parameter Size": "How many values are created.",
+          "Amplitude": "Strength of the random values.",
+          "Exponent": "Shapes randomness.",
+          "Offset": "Shifts random values.",
+          "Value A": "First random value.",
+          "Value B": "Second random value.",
+          "Value B Probability": "Chance of using value B."
+        },
+        "Clamp": {
+          "Clamp Volume": "Limits values to a range.",
+          "Clamp Min": "Lowest allowed value.",
+          "Clamp Max": "Highest allowed value."
+        },
+        "Cone": {
+          "Cone Direction": "Direction randomness points toward.",
+          "Cone Angle": "Spread angle."
+        },
+        "Combine": {
+          "Combined Operations": "How random values mix with existing ones.",
+          "Combine Attribute Scope": "Which attributes are combined.",
+          "Output Attribute Scope": "Where results go.",
+          "Attribute Class": "Which data type is affected.",
+          "Group": "Limits which elements are affected."
+        },
+        "Map": {
+          "Mapping OP Element": "What parameter is driven.",
+          "Target Parameter": "Which setting is controlled.",
+          "Combine Operation": "How values are applied."
+        }
+      },
+      "explain_like_im_five": "It adds randomness so things don’t look the same."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Ray (POP)",
+      "what_it_is": "Shoots rays into geometry and reports what they hit.",
+      "mental_model": "Throwing invisible sticks into the world and seeing what they touch.",
+      "example": "Detect where particles hit a surface and get the hit position and normal.",
+      "menu": {
+        "Ray": {
+          "Ray": "Turns ray casting on.",
+          "Ray Attribute": "Attribute that defines ray direction.",
+          "Negate Ray": "Flips the ray direction.",
+          "Number of Bounces": "How many times the ray can bounce.",
+          "Connect Points": "Connects hit points with lines.",
+          "Limit Ray Length": "Caps how far rays can travel.",
+          "Hardware Ray Tracing": "Uses GPU ray tracing if available.",
+          "Opaque Geometry": "Treats geometry as solid.",
+          "Any Hit": "Stops at the first hit.",
+          "Hit Normal": "Outputs the surface direction at the hit.",
+          "Reflected Ray": "Outputs the bounced ray direction.",
+          "Point Intersection Distance": "Distance from start to hit.",
+          "Farthest Hit": "Uses the farthest hit instead of nearest.",
+          "Number of Hits": "How many hits occurred.",
+          "Inside Hit Primitive Index": "Which shape was hit.",
+          "Barycentric Coordinates": "Hit location inside a triangle.",
+          "Scale": "Scales hit results.",
+          "Lift Hit Points": "Moves hit points off the surface.",
+          "Attribute Scope": "Where ray results are written.",
+          "Hit Primitive Attribute Scope": "Where primitive hit data goes.",
+          "Hit Vertex Attribute Scope": "Where vertex hit data goes."
+        }
+      },
+      "explain_like_im_five": "It shoots invisible lines and tells you what they hit."
+    },
+    {
+      "operator": "Rectangle (POP)",
+      "what_it_is": "Creates a flat rectangular shape.",
+      "mental_model": "Making a flat card or screen in space.",
+      "example": "Create a flat surface for projection or particles.",
+      "menu": {
+        "Rectangle": {
+          "Connectivity": "How points are connected.",
+          "Modify Bounds": "Controls how size is applied.",
+          "Orientation": "Which way the rectangle faces.",
+          "Camera": "Camera used for alignment.",
+          "Distance from Camera": "How far the rectangle sits.",
+          "Camera Aspect": "Matches camera proportions.",
+          "Size": "Overall width and height.",
+          "Round Corners": "Enables rounded corners.",
+          "Corner Radius": "How round the corners are.",
+          "Corner Sides": "Detail of rounded corners.",
+          "Anchor U": "Horizontal anchor point.",
+          "Anchor V": "Vertical anchor point.",
+          "Translate": "Moves the rectangle.",
+          "Rotate": "Rotates the rectangle.",
+          "Uniform Scale": "Scales evenly.",
+          "Normal": "Direction the rectangle faces.",
+          "Texture Coordinates": "UV mapping.",
+          "Texture Fit": "How textures are fit."
+        }
+      },
+      "explain_like_im_five": "It makes a flat rectangle."
+    },
+    {
+      "operator": "Rearrange (POP)",
+      "what_it_is": "Reorders or remaps attribute values.",
+      "mental_model": "Shuffling numbers into a new order.",
+      "example": "Reorder attribute values across points.",
+      "menu": {
+        "Rearrange": {
+          "Rearrange": "Turns rearranging on.",
+          "Attribute Class": "Which data is changed.",
+          "Group": "Limits which elements are used.",
+          "Input": "Source of values.",
+          "Attribute Scope": "Which attributes are read.",
+          "Parameter Size": "How many values are processed.",
+          "Map From Low": "Low input range.",
+          "Map From High": "High input range.",
+          "Map To Low": "Low output range.",
+          "Map To High": "High output range.",
+          "Cast To": "Changes number type.",
+          "Output Attribute Scope": "Where results are written."
+        }
+      },
+      "explain_like_im_five": "It rearranges numbers into a new order."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Activity Division (POP)",
+      "what_it_is": "Splits activity or motion into parts and outputs related surface data.",
+      "mental_model": "Breaking movement into pieces and labeling how each piece behaves.",
+      "example": "Divide motion and output normals or texture coordinates.",
+      "menu": {
+        "Activity Division": {
+          "Activity Division": "Turns activity division on.",
+          "Texture Coordinates": "Outputs UVs.",
+          "Normal": "Outputs surface direction."
+        }
+      },
+      "explain_like_im_five": "It breaks motion into parts and tells you which way things face."
+    },
+    {
+      "operator": "Select (POP)",
+      "what_it_is": "Chooses which attributes are passed through.",
+      "mental_model": "Picking which information is allowed to continue.",
+      "example": "Only pass point attributes and ignore the rest.",
+      "menu": {
+        "Select": {
+          "Select POP": "Turns selection on.",
+          "Point Attribute Scope": "Which point attributes are kept.",
+          "Primitive Attribute Scope": "Which primitive attributes are kept.",
+          "Vertex Attribute Scope": "Which vertex attributes are kept."
+        }
+      },
+      "explain_like_im_five": "It decides what information gets through."
+    },
+    {
+      "operator": "Skin (POP)",
+      "what_it_is": "Connects points into a surface, like wrapping skin over a shape.",
+      "mental_model": "Stretching fabric over a frame.",
+      "example": "Create a surface between multiple curves.",
+      "menu": {
+        "Skin": {
+          "Skin": "Turns skinning on.",
+          "Skin Closed": "Closes the surface.",
+          "Output Quads": "Outputs four-sided faces."
+        }
+      },
+      "explain_like_im_five": "It stretches a surface over points."
+    },
+    {
+      "operator": "Skin Deform (POP)",
+      "what_it_is": "Deforms points using a skeleton or bones.",
+      "mental_model": "Bending a mesh using a puppet skeleton.",
+      "example": "Animate points using bone movement.",
+      "menu": {
+        "Skin Deform": {
+          "Deform": "Turns deformation on.",
+          "Mode": "How deformation is applied.",
+          "Attribute Class": "Which data is affected.",
+          "Input Attribute": "Position data used.",
+          "Bone Paths Attribute": "Where bone paths come from.",
+          "Bone Bind Poses Attribute": "Original bone positions.",
+          "Delete Capture Attribute": "Removes capture data after use.",
+          "Skeleton Root Path": "Top bone in the hierarchy.",
+          "Vectors Maintain Length": "Keeps bones from stretching."
+        }
+      },
+      "explain_like_im_five": "It bends points using bones."
+    },
+    {  
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "SOP to (POP)",
+      "what_it_is": "Brings geometry from SOPs into a POP network.",
+      "mental_model": "Taking shapes made somewhere else and handing them to particles.",
+      "example": "Use a SOP mesh as input data for a particle system.",
+      "menu": {
+        "SOP to": {
+          "SOP to": "Turns SOP input on.",
+          "SOP": "Which SOP is being imported.",
+          "Five Points": "Imports five-point geometry data.",
+          "Polygons": "Imports polygon data.",
+          "Meshes": "Imports mesh data.",
+          "Input Color Space": "How incoming colors are interpreted.",
+          "Input Reference White": "Reference white used for color conversion."
+        }
+      },
+      "explain_like_im_five": "It takes shapes from somewhere else and gives them to particles."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Sort (POP – Point)",
+      "what_it_is": "Reorders points based on a rule.",
+      "mental_model": "Lining dots up in a specific order.",
+      "example": "Sort points by height, distance, or a custom value.",
+      "menu": {
+        "Point": {
+          "Point Method": "How points are sorted.",
+          "Attribute": "Attribute used for sorting.",
+          "Attribute in Uint": "Treats the attribute as whole numbers.",
+          "Seed Point": "Starting point for sorting.",
+          "Vector Object": "Object used for directional sorting.",
+          "Reverse": "Flips the order.",
+          "Shift": "Shifts the order forward or backward.",
+          "Offset": "Offsets the final order."
+        }
+      },
+      "explain_like_im_five": "It puts the dots in a new order."
+    },
+    {
+      "operator": "Sort (POP – Primitive)",
+      "what_it_is": "Reorders primitives based on a rule.",
+      "mental_model": "Lining shapes up in a specific order.",
+      "example": "Sort faces or lines by size or position.",
+      "menu": {
+        "Primitive": {
+          "Primitive Method": "How primitives are sorted.",
+          "Attribute": "Attribute used for sorting.",
+          "Attribute in Uint": "Treats the attribute as whole numbers.",
+          "Seed Point": "Starting primitive for sorting.",
+          "Vector Object": "Object used for directional sorting.",
+          "Reverse": "Flips the order.",
+          "Shift": "Shifts the order forward or backward.",
+          "Offset": "Offsets the final order."
+        }
+      },
+      "explain_like_im_five": "It puts shapes in a new order."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Sphere (POP)",
+      "what_it_is": "Creates a spherical shape made of points or lines.",
+      "mental_model": "Making a ball out of dots.",
+      "example": "Generate a sphere of points to emit particles from.",
+      "menu": {
+        "Sphere": {
+          "Sphere": "Turns sphere creation on.",
+          "Type": "Type of sphere built.",
+          "Geodesic Connectivity": "Triangle-based sphere.",
+          "Grid Connectivity": "Grid-based sphere.",
+          "Shared Poles Connectivity": "Shares points at the poles.",
+          "Line Type": "How lines are drawn.",
+          "Orientation": "Which way the sphere faces.",
+          "Modify Bounds": "Controls how size is applied.",
+          "Radius": "Size of the sphere.",
+          "Frequency": "Detail level.",
+          "Fuse": "Merges nearby points.",
+          "Fuse Technique": "How points are merged.",
+          "Columns": "Horizontal divisions.",
+          "Rows": "Vertical divisions.",
+          "Anchor U": "Horizontal anchor.",
+          "Anchor V": "Vertical anchor.",
+          "Anchor W": "Depth anchor.",
+          "Translate": "Moves the sphere.",
+          "Rotate": "Rotates the sphere.",
+          "Uniform Scale": "Scales evenly.",
+          "Normal": "Direction points face.",
+          "Texture Coordinates": "UV mapping.",
+          "Texture Method": "How UVs are generated."
+        },
+        "Detail": {
+          "U Closed": "Closes the shape horizontally.",
+          "Angle U": "Horizontal angle coverage.",
+          "Texture Coordinates Range U": "UV range horizontally.",
+          "Angle V": "Vertical angle coverage.",
+          "Texture Coordinates Range V": "UV range vertically."
+        }
+      },
+      "explain_like_im_five": "It makes a ball out of dots."
+    },
+    {
+      "operator": "Sprinkle (POP)",
+      "what_it_is": "Randomly places points on or inside geometry.",
+      "mental_model": "Sprinkling dots like salt.",
+      "example": "Scatter points across a surface.",
+      "menu": {
+        "Sprinkle": {
+          "Sprinkle": "Turns sprinkling on.",
+          "Create Point Primitives": "Creates point primitives.",
+          "Seed": "Random seed.",
+          "Method": "How points are placed.",
+          "Number of Points": "How many points to add.",
+          "Attempts Per Point": "Tries per placement.",
+          "Ray Direction Mode": "How rays are cast.",
+          "Ray Direction": "Direction used for placement.",
+          "Hardware Ray Tracing": "Uses GPU ray tracing.",
+          "Point Attributes Scope": "Where point data is written.",
+          "Primitive Attributes Scope": "Where primitive data is written.",
+          "Vertex Attributes Scope": "Where vertex data is written."
+        }
+      },
+      "explain_like_im_five": "It scatters dots around."
+    },
+    {
+      "operator": "Subdivide (POP)",
+      "what_it_is": "Adds more detail by splitting geometry.",
+      "mental_model": "Cutting shapes into smaller pieces.",
+      "example": "Smooth geometry by adding more points.",
+      "menu": {
+        "Subdivide": {
+          "Subdivide": "Turns subdividing on.",
+          "Depth": "How many times to subdivide.",
+          "Crease Weight": "Keeps sharp edges.",
+          "Simple Coefficients": "Uses simpler math.",
+          "Copy Topology Info Back to CPU": "Sends structure info to the CPU."
+        }
+      },
+      "explain_like_im_five": "It cuts shapes into smaller pieces."
+    },
+    {
+      "operator": "Switch (POP)",
+      "what_it_is": "Chooses between multiple inputs.",
+      "mental_model": "A fork in the road where you pick one path.",
+      "example": "Switch between different particle sources.",
+      "menu": {
+        "Switch": {
+          "Switch Index": "Which input is used.",
+          "Extend": "How out-of-range indices behave.",
+          "Blend Between Inputs": "Smoothly blends inputs.",
+          "Length Mismatch": "How different sizes are handled.",
+          "Point Attribute Scope": "Which point data is passed.",
+          "Input": "Main input.",
+          "Input POPs": "POPs being switched."
+        }
+      },
+      "explain_like_im_five": "It picks which input to use."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Texture Map (POP)",
+      "what_it_is": "Applies image textures to geometry using coordinates or projection.",
+      "mental_model": "Wrapping a picture onto shapes.",
+      "example": "Project a texture onto points or primitives.",
+      "menu": {
+        "Texture": {
+          "Texture": "Turns texture mapping on.",
+          "Primitive Group": "Limits which primitives get textured.",
+          "Transform Input": "Uses transformed positions.",
+          "Texture Coordinates": "Attribute used for UVs.",
+          "Texture Method": "How the texture is applied.",
+          "Position Attribute": "Position used for projection.",
+          "Projection Axis": "Axis used for projecting the texture.",
+          "FOV Angle": "Field of view for projection.",
+          "Center Mode": "How the projection is centered.",
+          "Center": "Center point for projection.",
+          "Camera": "Camera used for projection.",
+          "Camera Aspect": "Aspect ratio from the camera.",
+          "Apply To": "What data type gets the texture.",
+          "Scale Offset": "Scales and offsets the texture.",
+          "Rotate": "Rotates the texture.",
+          "Fix Face Seams": "Reduces visible seams."
+        },
+        "Transform": {
+          "Transform": "Moves, rotates, or scales the texture space."
+        }
+      },
+      "explain_like_im_five": "It sticks a picture onto shapes."
+    },
+    {
+      "operator": "TOP to (POP)",
+      "what_it_is": "Turns image data into particle attributes.",
+      "mental_model": "Reading pixels from a picture and giving them to points.",
+      "example": "Use image brightness to control particle size or color.",
+      "menu": {
+        "Inputs": {
+          "First": "Which input is used first.",
+          "RGBA Contains": "Which color channels are read.",
+          "TOP": "Image source.",
+          "Channel Scope": "Which channels are used.",
+          "Filter": "How pixels are sampled.",
+          "New Attribute": "Creates an attribute from the image.",
+          "New Attribute Name": "Name of the new attribute."
+        },
+        "Detail": {
+          "Connectivity": "How data is laid out.",
+          "Center": "Centers sampling.",
+          "Override Size": "Overrides output size.",
+          "Override Resolution": "Overrides resolution.",
+          "Pixel Sampling": "How pixels are read.",
+          "Location": "Where sampling happens.",
+          "Texture Coordinates": "UVs used for lookup.",
+          "Append Dimension": "Adds an extra dimension."
+        },
+        "Depth": {
+          "Rearrange From Low to High": "Remaps depth values.",
+          "Camera": "Camera used for depth reference.",
+          "View Angle Method": "How view angle is calculated.",
+          "Delete Near Points": "Removes points too close to camera.",
+          "Height": "Uses depth as displacement scale."
+        }
+      },
+      "explain_like_im_five": "It turns picture pixels into numbers for dots."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Topology (POP)",
+      "what_it_is": "Controls how points are turned into renderable geometry.",
+      "mental_model": "Deciding how dots become lines, faces, or strips.",
+      "example": "Tell the system how to build triangles or lines from points.",
+      "menu": {
+        "Points": {
+          "Points": "Uses points as the base.",
+          "Max Points": "Maximum number of points allowed.",
+          "Point Count Info": "Outputs information about point count.",
+          "Point Count Attribute": "Attribute that stores point count."
+        },
+        "Topology": {
+          "Render": "Turns topology rendering on.",
+          "Primitive Source Mode": "Where primitive data comes from.",
+          "Primitive Mode": "Type of primitives created.",
+          "Primitive POP": "POP used as primitive source.",
+          "Point Index Attribute Class": "Which attribute class stores point indices.",
+          "Vertex Attribute Mode": "How vertex attributes are handled.",
+          "Prim Attribute Mode": "How primitive attributes are handled.",
+          "Topology": "Topology output settings.",
+          "Max Triangles": "Maximum triangles allowed.",
+          "Max Quads": "Maximum quads allowed.",
+          "Strips": "Maximum strip primitives.",
+          "Strip Verts": "Maximum vertices per strip.",
+          "Max Lines": "Maximum line primitives.",
+          "Point Prims": "Maximum point primitives.",
+          "Prim Source": "Source used to build primitives."
+        }
+      },
+      "explain_like_im_five": "It decides how dots turn into shapes."
+    },
+    {
+      "operator": "Torus (POP)",
+      "what_it_is": "Creates a donut-shaped form.",
+      "mental_model": "Making a ring out of dots.",
+      "example": "Generate a torus of points for effects or emission.",
+      "menu": {
+        "Torus": {
+          "Torus": "Turns torus creation on.",
+          "Connectivity": "How points are connected.",
+          "Orientation": "Which way the torus faces.",
+          "Radius": "Size of the torus.",
+          "Columns": "Number of divisions around the ring.",
+          "Rows": "Number of divisions across the tube.",
+          "Anchors": "Anchor points for positioning.",
+          "Translate": "Moves the torus.",
+          "Normal": "Direction points face."
+        },
+        "Details": {
+          "U Closed": "Closes the torus around U.",
+          "V Closed": "Closes the torus around V."
+        }
+      },
+      "explain_like_im_five": "It makes a donut shape."
+    },
+    {
+      "operator": "Trail (POP)",
+      "what_it_is": "Builds trails from moving points over time.",
+      "mental_model": "Leaving a breadcrumb trail behind moving dots.",
+      "example": "Show the path particles have traveled.",
+      "menu": {
+        "Trail": {
+          "Trail": "Turns trail creation on.",
+          "Active": "Enables trail output.",
+          "Always Cook": "Updates every frame.",
+          "Length": "How long the trail is.",
+          "Increment": "How often new points are added.",
+          "Reset Attribute": "Attribute used to reset trails.",
+          "Oldest Point First": "Orders trail points from oldest to newest.",
+          "Filter Miss Names": "Ignores unmatched points.",
+          "Matched by Attribute": "Matches points by attribute.",
+          "Connectivity": "How trail points are connected."
+        },
+        "Transform": {
+          "Transform": "Moves, rotates, or scales the trails."
+        }
+      },
+      "explain_like_im_five": "It shows where dots have been."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Transform (POP)",
+      "what_it_is": "Moves, rotates, or scales geometry or attributes.",
+      "mental_model": "Picking something up and moving or turning it.",
+      "example": "Move points upward and rotate them over time.",
+      "menu": {
+        "Transform": {
+          "Transform": "Turns transforming on.",
+          "Mode": "How the transform is applied.",
+          "Attribute Class": "What kind of data is affected.",
+          "Group": "Limits which elements are changed.",
+          "Weight Attribute": "Controls how strong the transform is.",
+          "Transform Order": "Order of translate, rotate, scale.",
+          "Rotate Order": "Order rotations are applied.",
+          "Translate": "Moves things.",
+          "Rotate": "Turns things.",
+          "Scale": "Resizes things.",
+          "Pivot": "Point things rotate around.",
+          "Uniform Scale": "Scales evenly.",
+          "Invert": "Reverses the transform.",
+          "Vectors Maintain Length": "Stops vectors from stretching.",
+          "Look At": "Points things toward a target.",
+          "Xform Matrix CHOP DAT": "Uses a matrix from CHOP or DAT."
+        },
+        "Align": {
+          "Align": "Turns alignment on.",
+          "Transform Order": "Order alignment happens.",
+          "Operation Order": "When alignment is applied.",
+          "Translate X": "Aligns position in X.",
+          "Translate Y": "Aligns position in Y.",
+          "Align Scale X": "Aligns scale in X.",
+          "Align Scale Y": "Aligns scale in Y.",
+          "Align Scale Z": "Aligns scale in Z."
+        },
+        "Mapping": {
+          "Mapping OP Element": "External value used for control.",
+          "Target Parameter": "What parameter is controlled.",
+          "Combine Operation": "How values are combined."
+        }
+      },
+      "explain_like_im_five": "It moves and turns things."
+    },
+    {
+      "operator": "Trig (POP)",
+      "what_it_is": "Applies trigonometry math to attributes.",
+      "mental_model": "Using sine and cosine to make waves.",
+      "example": "Turn a value into a smooth oscillation.",
+      "menu": {
+        "Trigonometry": {
+          "Trigonometry": "Turns trig math on.",
+          "Attribute Class": "What data is affected.",
+          "Group": "Limits which elements are changed.",
+          "Input Attribute Scope": "Which values are used.",
+          "Operation": "Trig function used.",
+          "From Angle Units": "Original angle units.",
+          "To Angle Units": "New angle units.",
+          "Output Attribute Scope": "Where results are written."
+        }
+      },
+      "explain_like_im_five": "It makes smooth math waves."
+    },
+    {
+      "operator": "Tube (POP)",
+      "what_it_is": "Creates a tube or cylinder shape.",
+      "mental_model": "Making a pipe out of dots.",
+      "example": "Generate a vertical tube for particles.",
+      "menu": {
+        "Tube": {
+          "Tube": "Turns tube creation on.",
+          "Connectivity": "How points are connected.",
+          "Orientation": "Which way the tube faces.",
+          "Radius": "How thick the tube is.",
+          "Height": "How tall the tube is.",
+          "Columns": "Divisions around the tube.",
+          "Rows": "Divisions along the height.",
+          "Anchor": "Where the tube is anchored.",
+          "UV": "Texture mapping.",
+          "W": "Depth texture coordinate.",
+          "Translate": "Moves the tube.",
+          "Rotate": "Rotates the tube.",
+          "Uniform Scale": "Scales evenly.",
+          "Normal": "Direction points face.",
+          "Texture Coordinates": "UV output."
+        },
+        "Detail": {
+          "Detail": "Extra shape controls."
+        }
+      },
+      "explain_like_im_five": "It makes a pipe shape."
+    },
+    {
+      "operator": "Twist (POP)",
+      "what_it_is": "Twists geometry around an axis.",
+      "mental_model": "Twisting a towel.",
+      "example": "Add a spiral twist to points.",
+      "menu": {
+        "Twist": {
+          "Twist": "Turns twisting on.",
+          "Attribute Class": "What data is twisted.",
+          "Input Attribute Scope": "Which values control the twist.",
+          "Weight Attribute": "Controls twist strength.",
+          "Operation": "How twisting is applied.",
+          "Primary Axis": "Axis used for twisting.",
+          "Pivot Strength": "Strength around the center.",
+          "Roll-Off": "How twist fades out."
+        }
+      },
+      "explain_like_im_five": "It twists things like a towel."
+    },
+    {
+      "operator": "ZED (POP)",
+      "what_it_is": "Uses ZED camera depth and image data.",
+      "mental_model": "Turning what a depth camera sees into points.",
+      "example": "Create point clouds from a ZED camera.",
+      "menu": {
+        "ZED": {
+          "ZED": "Turns ZED input on.",
+          "Active ZED TOP": "Which ZED feed is used.",
+          "Output Mode": "What kind of data is output.",
+          "Connectivity": "How points connect.",
+          "Initialize": "Resets the system.",
+          "Start Play": "Starts processing.",
+          "Go to Done": "Stops processing.",
+          "Preview": "Shows preview data.",
+          "Maximum Memory": "Limits memory use.",
+          "Resolution Range": "Depth resolution.",
+          "Normals": "Outputs surface direction.",
+          "Colors": "Outputs color data.",
+          "Filter": "Reduces noise.",
+          "Perspective": "Camera perspective settings.",
+          "Camera": "Camera used.",
+          "View Angle Method": "How view angle is calculated."
+        }
+      },
+      "explain_like_im_five": "It turns a camera view into dots."
+    }
+  ]
+}

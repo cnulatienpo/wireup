@@ -1,0 +1,2719 @@
+{
+  "operators": [
+    {
+      "operator": "Add (SOP)",
+      "what_it_is": "Creates or modifies geometry by adding points and building polygons procedurally.",
+      "mental_model": "A geometry builder that can place dots in space and connect them into shapes.",
+      "example": "Generate a line of points along a path and automatically connect them into a polygonal rail.",
+      "menu": {
+        "Points": {
+          "PointStat": "Uses statistics or external data to define point creation.",
+          "NamedAttributes": "Uses named attributes as sources for point data.",
+          "DeleteGeometry": "Removes incoming geometry before adding new points.",
+          "KeepPoints": "Preserves existing points while adding new ones.",
+          "AddPoints": "Enables adding new points.",
+          "Point": "Specifies point index or behavior.",
+          "Position": "Defines the position of added points.",
+          "Weight": "Controls weighting or influence of points."
+        },
+        "Polygon": {
+          "Method": "Determines how polygons are constructed from points.",
+          "Group": "Specifies which point group is used for polygon creation.",
+          "Add": "Adds polygons based on current settings.",
+          "Close Polygon": "Closes the polygon by connecting last point to first.",
+          "Table": "Uses a DAT table to define polygon structure.",
+          "Polygon Pattern": "Defines a repeating or patterned polygon structure.",
+          "Closed": "Forces polygons to be closed."
+        },
+        "Post": {
+          "RemoveUnusedPoints": "Deletes points not used by any primitive.",
+          "ComputeNormals": "Generates surface normals after geometry creation."
+        }
+      },
+      "explain_like_im_five": "It puts dots in space and draws lines between them to make shapes."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Alembic (SOP)",
+      "what_it_is": "Imports geometry from Alembic cache files into TouchDesigner.",
+      "mental_model": "A time-aware loader for baked 3D scenes.",
+      "example": "Load a cached character animation exported from Maya for playback and processing.",
+      "menu": {
+        "File": {
+          "Alembic File": "Path to the Alembic cache file.",
+          "Object Path": "Path inside the Alembic hierarchy to load.",
+          "Transform Time": "Time used to evaluate transforms.",
+          "FPS": "Frames per second for time evaluation.",
+          "Interpolation": "How animation frames are interpolated.",
+          "Direct to GPU": "Uploads geometry directly to the GPU.",
+          "Compute Normal": "Generates normals on import.",
+          "Unload": "Releases the Alembic file from memory."
+        }
+      },
+      "explain_like_im_five": "It plays back a saved 3D movie of shapes."
+    },
+    {
+      "operator": "Align (SOP)",
+      "what_it_is": "Aligns and offsets geometry or UVs based on bounding rules.",
+      "mental_model": "A ruler that lines things up exactly where you want.",
+      "example": "Center multiple meshes or align UV islands consistently.",
+      "menu": {
+        "Align": {
+          "Group": "Specifies which geometry is aligned.",
+          "Align and Bias Left UV": "Aligns and biases UVs to the left.",
+          "Right UV": "Aligns UVs to the right.",
+          "Right UV End": "Aligns UVs to the right boundary.",
+          "Individual Alignment": "Aligns each piece independently.",
+          "Translate": "Offsets geometry after alignment.",
+          "Rotate": "Rotates geometry after alignment."
+        },
+        "Transform": {
+          "Transform Order": "Order of transform operations.",
+          "Rotate Order": "Order rotations are applied.",
+          "Translate": "Translation values.",
+          "Rotate": "Rotation values.",
+          "Scale": "Scaling values.",
+          "Pivot": "Pivot point for transforms."
+        }
+      },
+      "explain_like_im_five": "It lines shapes up neatly like blocks on a shelf."
+    },
+    {
+      "operator": "Arm (SOP)",
+      "what_it_is": "Creates and controls an inverse-kinematics arm rig.",
+      "mental_model": "A bendy robot arm that knows where its hand should go.",
+      "example": "Pose a character arm by dragging the hand target.",
+      "menu": {
+        "Arm": {
+          "Arm": "Enables arm solving.",
+          "Capture Time": "Time used for capture evaluation.",
+          "Arm Axis": "Primary axis of the arm.",
+          "Radius": "Influence radius of the arm.",
+          "Rotate Hand": "Allows hand rotation control.",
+          "Auto Elbow": "Automatically positions the elbow.",
+          "Wrist": "Wrist behavior control.",
+          "Auto Elbow Twist": "Automatically twists the elbow.",
+          "Flip Elbow": "Flips elbow orientation."
+        },
+        "Lengths": {
+          "Clavicle": "Length of the clavicle.",
+          "Humerus": "Length of the upper arm.",
+          "Ulna": "Length of the forearm.",
+          "Hand": "Length of the hand.",
+          "Shoulder Joint": "Shoulder joint position.",
+          "Elbow Joint": "Elbow joint position.",
+          "Wrist Joint": "Wrist joint position."
+        },
+        "Transforms": {
+          "Shoulder": "Shoulder transform.",
+          "Elbow": "Elbow transform.",
+          "Wrist": "Wrist transform.",
+          "1": "Additional transform slot 1.",
+          "2": "Additional transform slot 2.",
+          "3": "Additional transform slot 3.",
+          "4": "Additional transform slot 4.",
+          "5": "Additional transform slot 5."
+        },
+        "End Effector": {
+          "Effector Object": "Target object for the hand.",
+          "Translate": "End effector translation.",
+          "Rotate": "End effector rotation.",
+          "Scale": "End effector scale."
+        }
+      },
+      "explain_like_im_five": "You move the hand, and the arm bends to follow."
+    },
+    {
+      "operator": "Attribute (SOP)",
+      "what_it_is": "Deletes or renames geometry attributes at different levels.",
+      "mental_model": "A label eraser and relabeler for geometry data.",
+      "example": "Remove unused point attributes before exporting geometry.",
+      "menu": {
+        "Point": {
+          "Delete Attributes": "Removes selected point attributes.",
+          "Rename From Attribute": "Source attribute name.",
+          "Rename To Attribute": "New attribute name."
+        },
+        "Vertex": {
+          "Delete Attributes": "Removes selected vertex attributes.",
+          "Rename From Attribute": "Source attribute name.",
+          "Rename To Attribute": "New attribute name."
+        },
+        "Primitive": {
+          "Delete Attributes": "Removes selected primitive attributes.",
+          "Prim Rename From Attribute": "Source attribute name.",
+          "Rename To Attribute": "New attribute name."
+        },
+        "Detail": {
+          "Delete Attributes": "Removes selected detail attributes.",
+          "Detail Rename From Attribute": "Source attribute name.",
+          "Rename To Attribute": "New attribute name."
+        }
+      },
+      "explain_like_im_five": "It changes or removes the names stuck to parts of a shape."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Attribute Create (SOP)",
+      "what_it_is": "Creates new geometry attributes or computes derived attributes like normals and tangents.",
+      "mental_model": "A calculator that writes new data onto points, vertices, or faces.",
+      "example": "Add custom point attributes or generate normals for lighting.",
+      "menu": {
+        "Attribute Create": {
+          "Attribute Create": "Creates a new attribute with specified values.",
+          "Compute Normals": "Generates normal vectors.",
+          "Compute Tangents": "Generates tangent vectors."
+        }
+      },
+      "explain_like_im_five": "It adds new information to shapes, like arrows that show which way they face."
+    },
+    {
+      "operator": "Basis (SOP)",
+      "what_it_is": "Generates and manipulates curve bases and parameterized directions.",
+      "mental_model": "A math ruler that defines directions along a curve.",
+      "example": "Create U and V directions along a surface for deformation.",
+      "menu": {
+        "Basis": {
+          "Basis": "Selects the basis type.",
+          "Group": "Limits operation to a group."
+        },
+        "U": {
+          "Edit the U": "Enables editing of the U basis.",
+          "Basis": "Basis type for U.",
+          "Parameterization": "Controls parameter spacing.",
+          "Not Sequence": "Disables sequential ordering.",
+          "Read Basis": "Reads an existing basis.",
+          "Range Bias": "Biases the U range.",
+          "Concatenate": "Concatenates U bases.",
+          "Origin": "Sets U origin.",
+          "Length": "Sets U length.",
+          "Scale": "Scales U values.",
+          "Raise To": "Raises U values by a power."
+        },
+        "V": {
+          "Edit the V": "Enables editing of the V basis.",
+          "Basis": "Basis type for V.",
+          "Parameterization": "Controls parameter spacing.",
+          "Not Sequence": "Disables sequential ordering.",
+          "Read Basis": "Reads an existing basis.",
+          "Range Bias": "Biases the V range.",
+          "Concatenate": "Concatenates V bases.",
+          "Origin": "Sets V origin.",
+          "Length": "Sets V length.",
+          "Scale": "Scales V values.",
+          "Raise To": "Raises V values by a power."
+        }
+      },
+      "explain_like_im_five": "It tells shapes how to count along a line in two directions."
+    },
+    {
+      "operator": "Blend (SOP)",
+      "what_it_is": "Blends multiple geometry inputs together based on weights.",
+      "mental_model": "A crossfader for shapes.",
+      "example": "Morph one mesh smoothly into another.",
+      "menu": {
+        "Blend": {
+          "Blend": "Enables blending.",
+          "Group": "Limits blending to a group.",
+          "Differencing": "Uses difference-based blending.",
+          "Blend Position": "Blends point positions.",
+          "Blend Colors": "Blends color attributes.",
+          "Blend Normals": "Blends normals.",
+          "Blend Texture": "Blends texture coordinates.",
+          "Blend Up": "Blends up vectors."
+        },
+        "Inputs": {
+          "Input": "Selects input geometry.",
+          "Weight": "Controls blend weight per input."
+        }
+      },
+      "explain_like_im_five": "It mixes shapes together like sliding a volume knob."
+    },
+    {
+      "operator": "Bone Group (SOP)",
+      "what_it_is": "Groups bones for skeletal deformation constraints.",
+      "mental_model": "A rulebook for how many bones can affect a point.",
+      "example": "Limit character skinning to a fixed number of bones.",
+      "menu": {
+        "Bone Group": {
+          "Bone Group": "Defines bone grouping.",
+          "Max Bones per Group": "Maximum bones allowed in a group.",
+          "Max Bones per Point": "Maximum bones influencing a point."
+        }
+      },
+      "explain_like_im_five": "It decides how many bones are allowed to pull on a shape."
+    },
+    {
+      "operator": "Boolean (SOP)",
+      "what_it_is": "Combines or subtracts geometry using boolean operations.",
+      "mental_model": "Cookie cutters for 3D shapes.",
+      "example": "Cut windows out of a wall mesh.",
+      "menu": {
+        "Boolean": {
+          "Boolean Operation": "Type of boolean operation.",
+          "Accurate Attributes": "Preserves attribute accuracy.",
+          "Interpolation": "Controls attribute interpolation.",
+          "Create Groups": "Creates output groups.",
+          "Group A": "First geometry group.",
+          "Group B": "Second geometry group."
+        }
+      },
+      "explain_like_im_five": "It cuts, adds, or overlaps shapes like clay."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Box (SOP)",
+      "what_it_is": "Generates a box primitive with configurable orientation, size, and topology.",
+      "mental_model": "A parametric cardboard box you can resize, rotate, and subdivide.",
+      "example": "Create a modular building block for architectural layouts.",
+      "menu": {
+        "Box": {
+          "Orient": "Sets the orientation of the box.",
+          "Bounds": "Defines bounding behavior.",
+          "Modify Bounds": "Adjusts bounds after creation.",
+          "Rotate Order": "Order rotations are applied.",
+          "Size Center": "Sets size relative to center.",
+          "Rotate": "Rotation values.",
+          "Scale": "Scaling values.",
+          "Reverse Anchors": "Flips anchor orientation.",
+          "Anchor": "Anchor point selection."
+        },
+        "UV and W": {
+          "Use Divisions": "Uses divisions for UV generation.",
+          "Enforcement": "Controls UV enforcement rules.",
+          "Bars": "UV bar layout control.",
+          "Consolidate Corner Points": "Merges corner UVs.",
+          "Texture Coordinates": "Generates texture coordinates."
+        },
+        "Post": {
+          "Compute Normals": "Generates surface normals."
+        }
+      },
+      "explain_like_im_five": "It makes a box you can stretch and turn."
+    },
+    {
+      "operator": "Bridge (SOP)",
+      "what_it_is": "Connects separate edge groups by generating faces between them.",
+      "mental_model": "A zipper that stitches two edges together.",
+      "example": "Bridge the gap between two open mesh borders.",
+      "menu": {
+        "Bridge": {
+          "Bridge": "Enables bridging operation.",
+          "Group Bridge": "Specifies edge groups to bridge.",
+          "N Order": "Controls normal computation order."
+        }
+      },
+      "explain_like_im_five": "It fills the gap between two edges."
+    },
+    {
+      "operator": "Surface (SOP)",
+      "what_it_is": "Creates surfaces from curves with controllable smoothing and curvature.",
+      "mental_model": "Stretching a sheet over curved wires.",
+      "example": "Generate a smooth surface from profile curves.",
+      "menu": {
+        "Surface Properties": {
+          "Math": "Surface math method.",
+          "Minimum X Sections": "Minimum surface subdivisions.",
+          "Use Circular Arc": "Uses circular arc interpolation.",
+          "Fillet": "Rounds surface transitions.",
+          "Rotate Tangents": "Rotates tangent vectors.",
+          "Scale Tangents": "Scales tangent vectors.",
+          "Use Curvature": "Bases shape on curvature."
+        },
+        "Profile Extraction": {
+          "Divisions per Span": "Subdivision count per span.",
+          "Tolerance": "Approximation tolerance.",
+          "Preserve Sharp Corners": "Keeps hard edges."
+        }
+      },
+      "explain_like_im_five": "It stretches a smooth skin over lines."
+    },
+    {
+      "operator": "Cache (SOP)",
+      "what_it_is": "Stores geometry over time for playback or reuse.",
+      "mental_model": "A recorder for shapes over time.",
+      "example": "Cache a simulation to scrub it back and forth.",
+      "menu": {
+        "Cache": {
+          "Active": "Enables caching.",
+          "Pre-Fill Cache Size": "Initial cache capacity.",
+          "Step Size": "Frame step between cached samples.",
+          "Output Index": "Selects cached frame.",
+          "Cache Points Only": "Caches only point data.",
+          "Blend Position": "Interpolates between cached frames.",
+          "Reset": "Clears the cache."
+        }
+      },
+      "explain_like_im_five": "It remembers shapes so you can rewind them."
+    },
+    {
+      "operator": "Cap (SOP)",
+      "what_it_is": "Closes open surfaces or curves by generating caps.",
+      "mental_model": "Putting lids on open ends.",
+      "example": "Cap the ends of an open tube surface.",
+      "menu": {
+        "Cap": {
+          "Cap": "Enables capping.",
+          "Group": "Limits capping to a group."
+        },
+        "U": {
+          "First U Cap Division Scale": "Scales first U cap divisions.",
+          "Last U Cap Division Scale": "Scales last U cap divisions.",
+          "Preserve NURB Shape": "Maintains NURB continuity."
+        },
+        "U and V": {
+          "First U Cap Division Scale": "Scales first U cap divisions.",
+          "Last U Cap Division Scale": "Scales last U cap divisions.",
+          "Preserve NURB Shape": "Maintains NURB continuity."
+        }
+      },
+      "explain_like_im_five": "It closes the open ends of a shape."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Capture (SOP)",
+      "what_it_is": "Captures geometry over time or by region and optionally saves capture data to files.",
+      "mental_model": "A net that grabs geometry data and can store it for later use.",
+      "example": "Capture deformation data from an animated mesh and save selected points to disk.",
+      "menu": {
+        "Capture": {
+          "Capture": "Enables geometry capture.",
+          "Group Hierarchy": "Uses hierarchical grouping during capture.",
+          "Wait From Capture Frame": "Delays capture starting from a specified frame.",
+          "Point Coloring": "Colors points based on capture state."
+        },
+        "Override": {
+          "Override File": "Overrides the default capture file.",
+          "Save File Increment": "Automatically increments saved filenames.",
+          "Save File": "Saves capture data to a file.",
+          "Save All Data to File": "Writes all captured data to disk.",
+          "Save Selected Points to File": "Writes only selected points to disk."
+        },
+        "Capture Region": {
+          "Region": "Defines the capture region.",
+          "Orientation": "Orientation of the capture region.",
+          "Center": "Center of the capture region.",
+          "Top Height": "Height of the top region.",
+          "Top Cap": "Caps the top of the region.",
+          "Bottom Height": "Height of the bottom region.",
+          "Bottom Cap": "Caps the bottom of the region.",
+          "Minimum": "Minimum capture threshold.",
+          "Maximum": "Maximum capture threshold.",
+          "Weight": "Weighting of captured points."
+        },
+        "Display": {
+          "Display Color": "Color used to display capture visualization."
+        }
+      },
+      "explain_like_im_five": "It grabs parts of a shape and remembers them."
+    },
+    {
+      "operator": "Carve (SOP)",
+      "what_it_is": "Cuts curves or surfaces by parameter ranges and extraction rules.",
+      "mental_model": "A sliding window that slices parts out of a surface or curve.",
+      "example": "Extract a segment of a NURBS surface between two U values.",
+      "menu": {
+        "Carve": {
+          "Carve Group": "Limits carving to a group.",
+          "First U": "Starting U parameter.",
+          "Second U": "Ending U parameter.",
+          "First V": "Starting V parameter.",
+          "Second V": "Ending V parameter."
+        },
+        "Method": {
+          "Carve Method": "Defines how carving is performed.",
+          "Keep Inside": "Keeps geometry inside the carve range.",
+          "Keep Outside": "Keeps geometry outside the carve range.",
+          "Extract Type": "Determines extracted geometry type.",
+          "Keep Original": "Preserves original geometry.",
+          "Location": "Placement of carved result.",
+          "U Division": "Subdivision along U.",
+          "V Division": "Subdivision along V.",
+          "Cut at all Interval U Breakpoints": "Cuts at all U interval breakpoints.",
+          "Cut at all Interval V Breakpoints": "Cuts at all V interval breakpoints."
+        }
+      },
+      "explain_like_im_five": "It cuts out just the part of a shape you want."
+    },
+    {
+      "operator": "Chop To (SOP)",
+      "what_it_is": "Maps CHOP channel data onto geometry attributes.",
+      "mental_model": "A translator that turns numbers into shape changes.",
+      "example": "Drive point positions using animation channels.",
+      "menu": {
+        "Chop To": {
+          "Chop To": "Enables CHOP-to-geometry mapping.",
+          "Group": "Specifies affected geometry group.",
+          "Chop Start Position": "Starting channel position.",
+          "End Position": "Ending channel position.",
+          "Channel Scope": "Which channels are used.",
+          "Attribute Scope": "Which attributes receive data.",
+          "Mapping": "Defines channel-to-attribute mapping.",
+          "Compute Normals": "Recomputes normals after mapping.",
+          "Compute Tangents": "Recomputes tangents after mapping."
+        }
+      },
+      "explain_like_im_five": "It uses moving numbers to wiggle shapes."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Circle (SOP)",
+      "what_it_is": "Creates circular or arc-based primitives with configurable orientation and resolution.",
+      "mental_model": "A compass that draws perfect or partial circles in space.",
+      "example": "Generate a circular profile to be used for sweeping a tube.",
+      "menu": {
+        "Circle": {
+          "Primitive Type": "Type of circle primitive created.",
+          "Orientation": "Orientation of the circle.",
+          "Modify Bounds": "Adjusts bounds after creation.",
+          "Radius": "Radius of the circle.",
+          "Center": "Center position of the circle.",
+          "Reverse Anchors": "Flips anchor directions.",
+          "Anchor U": "U anchor position.",
+          "Anchor V": "V anchor position.",
+          "Order": "Curve order.",
+          "Divisions": "Number of curve divisions.",
+          "Arc Type": "Defines full or partial arc.",
+          "Arc Angles": "Start and end angles.",
+          "Imperfect": "Introduces slight irregularity.",
+          "Texture Coordinates": "Generates texture coordinates.",
+          "Compute Normal": "Computes surface normals."
+        }
+      },
+      "explain_like_im_five": "It draws a circle or part of a circle."
+    },
+    {
+      "operator": "Clay (SOP)",
+      "what_it_is": "Deforms geometry as if it were soft material being pushed or pulled.",
+      "mental_model": "Hands squishing and shaping soft clay.",
+      "example": "Create organic dents and bulges on a mesh.",
+      "menu": {
+        "Clay": {
+          "Clay Group": "Group affected by clay deformation.",
+          "Warp Method": "Type of deformation warp.",
+          "Transform Order": "Order of transforms.",
+          "Rotate Order": "Rotation order.",
+          "Translate": "Translation values.",
+          "Rotate": "Rotation values.",
+          "Scale": "Scaling values.",
+          "Pivot": "Pivot point.",
+          "Distance": "Deformation distance.",
+          "Normal Direction": "Uses surface normals for direction.",
+          "Coordinates": "Coordinate system used.",
+          "U and V": "Enables UV-based deformation."
+        },
+        "U": {
+          "Deform Along U": "Enables deformation along U.",
+          "U": "U position.",
+          "U Bias": "Bias along U.",
+          "U Sharpness": "Sharpness of U deformation."
+        },
+        "V": {
+          "Deform Along V": "Enables deformation along V.",
+          "V": "V position.",
+          "V Bias": "Bias along V.",
+          "V Sharpness": "Sharpness of V deformation."
+        }
+      },
+      "explain_like_im_five": "It lets you squish shapes like soft clay."
+    },
+    {
+      "operator": "Clip (SOP)",
+      "what_it_is": "Cuts geometry using a plane and keeps selected sides.",
+      "mental_model": "A slicing plane that cuts shapes in half.",
+      "example": "Slice a model and keep only the top portion.",
+      "menu": {
+        "Clip": {
+          "Clip Group": "Geometry group to clip.",
+          "Keep": "Specifies which side to keep.",
+          "Distance": "Plane distance offset.",
+          "Direction": "Plane direction.",
+          "Create Groups Above Plane": "Creates group above clip plane.",
+          "Below Plane": "Creates group below clip plane."
+        }
+      },
+      "explain_like_im_five": "It cuts a shape and keeps one side."
+    },
+    {
+      "operator": "Convert (SOP)",
+      "what_it_is": "Converts geometry between different primitive types.",
+      "mental_model": "Changing one kind of shape math into another.",
+      "example": "Convert NURBS surfaces into polygons for rendering.",
+      "menu": {
+        "Convert": {
+          "Convert Group": "Group to convert.",
+          "From Type": "Source primitive type.",
+          "Convert To": "Target primitive type.",
+          "Connectivity Method": "How connectivity is preserved.",
+          "UV": "Preserves or generates UVs.",
+          "Trim Curve": "Uses trim curves.",
+          "U Order": "Order in U direction.",
+          "V Order": "Order in V direction.",
+          "Preserve Original": "Keeps original geometry.",
+          "Interpolate Through Holes": "Interpolates missing areas.",
+          "Particle Type": "Particle conversion type."
+        }
+      },
+      "explain_like_im_five": "It turns one kind of shape into another."
+    },
+    {
+      "operator": "Copy (SOP)",
+      "what_it_is": "Duplicates geometry using templates, points, or transforms.",
+      "mental_model": "A stamp machine that repeats shapes.",
+      "example": "Scatter copies of an object onto points.",
+      "menu": {
+        "Copy": {
+          "Copy": "Enables copying.",
+          "Source Group": "Source geometry group.",
+          "Template Group": "Template geometry group.",
+          "Number of Copies": "Total copies created.",
+          "Primitive Per Point": "Copies per point.",
+          "Rotate to Normal": "Aligns copies to normals.",
+          "Transform Cumulative": "Accumulates transforms.",
+          "Transform Order": "Order of transforms.",
+          "Rotate Order": "Rotation order.",
+          "Translate": "Translation values.",
+          "Rotate": "Rotation values.",
+          "Scale": "Scaling values.",
+          "Pivot": "Pivot point.",
+          "Uniform Scale": "Uniform scaling control.",
+          "Normals": "Normal handling.",
+          "Maintain Length": "Maintains original length.",
+          "Create Output Groups": "Generates output groups.",
+          "Copy Groups": "Copies group data.",
+          "Look At": "Orients copies toward a target.",
+          "Up Vector": "Defines up direction."
+        },
+        "Stamp": {
+          "Stamp Inputs": "Enables stamping.",
+          "Copy": "Stamp copy index.",
+          "Param": "Stamped parameter.",
+          "Value": "Stamped value."
+        },
+        "Attributes": {
+          "Use Template": "Uses template attributes.",
+          "Point": "Point attributes.",
+          "Attributes": "Attribute list.",
+          "Copy to Point": "Copies attributes to points.",
+          "Copy to Primitive": "Copies attributes to primitives.",
+          "Copy to Vertex": "Copies attributes to vertices.",
+          "Multiply Point": "Multiplies point attributes.",
+          "Multiply Primitive": "Multiplies primitive attributes.",
+          "Multiply Vertex": "Multiplies vertex attributes.",
+          "Add Point": "Adds to point attributes.",
+          "Add Primitive": "Adds to primitive attributes.",
+          "Add Vertex": "Adds to vertex attributes.",
+          "Subtract Point": "Subtracts from point attributes.",
+          "Subtract Primitive": "Subtracts from primitive attributes.",
+          "Subtract Vertex": "Subtracts from vertex attributes."
+        }
+      },
+      "explain_like_im_five": "It makes lots of copies of a shape."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "C++ (SOP)",
+      "what_it_is": "Loads and executes a custom C++ SOP plugin inside TouchDesigner.",
+      "mental_model": "A doorway that lets your own compiled code become an operator.",
+      "example": "Run a custom geometry deformation written in C++.",
+      "menu": {
+        "C++": {
+          "Plugin Path": "Filesystem path to the compiled SOP plugin.",
+          "Reinit Class": "Reinitializes the loaded class.",
+          "Unload Plugin": "Unloads the plugin from memory."
+        }
+      },
+      "explain_like_im_five": "It lets TouchDesigner use your own code as a tool."
+    },
+    {
+      "operator": "Creep (SOP)",
+      "what_it_is": "Gradually moves geometry along a surface or direction over time.",
+      "mental_model": "A slow crawl that slides shapes across space.",
+      "example": "Make points slowly creep along a surface.",
+      "menu": {
+        "Creep": {
+          "Creep": "Enables creeping behavior.",
+          "Reset": "Resets the creep state.",
+          "Reset Method": "Defines how reset is performed."
+        },
+        "Transform": {
+          "$ref": "Common.Transform"
+        }
+      },
+      "explain_like_im_five": "It makes shapes slowly crawl forward."
+    },
+    {
+      "operator": "Curve Clay (SOP)",
+      "what_it_is": "Deforms curves and surfaces interactively with localized control.",
+      "mental_model": "Pushing and smoothing clay along drawn lines.",
+      "example": "Sculpt a curve directly on a surface.",
+      "menu": {
+        "Curve Clay": {
+          "Curve Clay": "Enables curve-based deformation.",
+          "Face Group": "Faces affected by the deformation.",
+          "Surface Group": "Surface constraint group.",
+          "Divisions on Face": "Subdivision resolution.",
+          "Sharpness": "Controls deformation sharpness.",
+          "Refinement": "Controls smoothing refinement."
+        }
+      },
+      "explain_like_im_five": "You draw on a shape and it bends where you touch it."
+    },
+    {
+      "operator": "Displace (SOP)",
+      "what_it_is": "Offsets geometry based on projection or displacement rules.",
+      "mental_model": "Pushing geometry outward using invisible forces.",
+      "example": "Displace a surface using profile-based offsets.",
+      "menu": {
+        "Projection": {
+          "Projection Access": "Defines projection source or method."
+        },
+        "Displacement": {
+          "Displacement": "Enables displacement.",
+          "Access Distance": "Distance used for displacement.",
+          "Deform Inside of Loop": "Applies deformation inside closed loops.",
+          "Consider Profiles Individually": "Treats profiles independently."
+        }
+      },
+      "explain_like_im_five": "It pushes parts of a shape in or out."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Check (SOP)",
+      "what_it_is": "Analyzes curve/surface relationships and can extract intersection-related results.",
+      "mental_model": "A geometry inspector that compares one set of pieces against another and reports the cuts.",
+      "example": "Check where cutter curves intersect faces and keep only the resulting side pieces.",
+      "menu": {
+        "Check": {
+          "Curve Set": "Selects the curve set being analyzed.",
+          "Face Group": "Face group to evaluate against.",
+          "Cutter Group": "Group used as the cutter/reference.",
+          "Find All Intersections": "Finds all intersection points.",
+          "Tolerance Method": "How tolerance is computed/applied.",
+          "Left Face": "Defines which side is treated as left.",
+          "Left Face Pieces": "Outputs the left-side face pieces.",
+          "Right Face Pieces": "Outputs the right-side face pieces.",
+          "Effect": "Controls what result is produced.",
+          "Extract Point": "Extracts intersection points.",
+          "Keep Original": "Preserves the original geometry."
+        }
+      },
+      "explain_like_im_five": "It checks where shapes touch or cross and tells you what happened."
+    },
+    {
+      "operator": "DAT to (SOP)",
+      "what_it_is": "Builds geometry from a DAT table by mapping columns to points, vertices, primitives, and detail attributes.",
+      "mental_model": "A spreadsheet that turns rows into geometry parts.",
+      "example": "Generate point clouds and attributes from a table of positions and weights.",
+      "menu": {
+        "DAT to": {
+          "DAT to": "Enables DAT-driven geometry building.",
+          "PointStat": "Uses point statistics or point mapping behavior.",
+          "Vertices": "Vertex creation/mapping controls.",
+          "Primitives": "Primitive creation/mapping controls.",
+          "Details DAT": "DAT used for detail-level attributes.",
+          "Add Float Attributes": "Adds float attributes from DAT columns.",
+          "Add Int Attributes": "Adds integer attributes from DAT columns.",
+          "Add String Attributes": "Adds string attributes from DAT columns.",
+          "Build": "Builds geometry from the DAT.",
+          "End": "Ends the build operation.",
+          "Close U": "Closes geometry in U direction.",
+          "Close V": "Closes geometry in V direction.",
+          "Connectivity": "Controls how elements are connected.",
+          "Particle Type": "Specifies particle type when emitting particles."
+        }
+      },
+      "explain_like_im_five": "It turns a table of numbers into a shape."
+    },
+    {
+      "operator": "Deform (SOP)",
+      "what_it_is": "Applies deformation using capture/rig data and can manage capture-related attributes.",
+      "mental_model": "A puppet system that moves geometry using rig rules.",
+      "example": "Deform a skinned mesh using a skeleton and stored capture weights.",
+      "menu": {
+        "Deform": {
+          "Group": "Limits deformation to a group.",
+          "Delete Capture Attributes": "Removes capture attributes after deforming.",
+          "Delete Point Colors": "Removes point color attributes.",
+          "Deform Normals": "Deforms or recomputes normals with the geometry.",
+          "Skeleton Root Path": "Root path used to locate the skeleton."
+        }
+      },
+      "explain_like_im_five": "It bends the shape using the rules from a rig."
+    },
+    {
+      "operator": "Delete (SOP)",
+      "what_it_is": "Deletes or keeps geometry elements based on groups, patterns, numbering, bounds, and directional tests.",
+      "mental_model": "A bouncer that decides what stays and what gets removed.",
+      "example": "Delete everything outside a bounding volume or remove unused groups and geometry.",
+      "menu": {
+        "Delete": {
+          "Delete": "Enables deletion.",
+          "Group": "Group used for selection.",
+          "Operation": "Keep vs delete behavior.",
+          "Entity": "Entity level affected (points/vertices/primitives).",
+          "Geometry Type": "Limits deletion by geometry type.",
+          "Delete Unused Groups": "Removes groups that no longer contain members.",
+          "Delete Geometry": "Deletes selected geometry.",
+          "Keep Points": "Keeps points even if attached elements are deleted."
+        },
+        "Number": {
+          "Used Number": "Uses element numbering for selection.",
+          "Operation": "Number-based selection operation.",
+          "Patterns": "Number pattern rules.",
+          "Start": "Start index.",
+          "End": "End index.",
+          "Select": "Selection mode for numbers.",
+          "Filter Expression": "Expression-based filtering for numbers."
+        },
+        "Bounding Volume": {
+          "Use Bounds": "Enables bounds-based selection.",
+          "Bounding Type": "Type of bounding volume.",
+          "Size": "Bounding volume size.",
+          "Center": "Bounding volume center."
+        },
+        "Normal": {
+          "Direction": "Normal direction reference.",
+          "Spread Angle": "Allowed angular spread from direction.",
+          "Backspace From": "Offset/backspace reference for the normal test."
+        }
+      },
+      "explain_like_im_five": "It removes the parts you don’t want."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Divide (SOP)",
+      "what_it_is": "Subdivides and re-builds polygons, including triangulation and topology refinement options.",
+      "mental_model": "A geometry re-cutter that can split faces into smaller, more useful faces.",
+      "example": "Triangulate a mesh and remove shared edges for a more uniform surface.",
+      "menu": {
+        "Divide": {
+          "Divide Group": "Group to operate on.",
+          "Convex Polygons": "Forces polygons to be convex.",
+          "Maximum Edges": "Maximum edges allowed per polygon.",
+          "Triangulate": "Converts polygons into triangles.",
+          "Non-Planar": "Handling for non-planar polygons.",
+          "Smooth Polygons": "Smooths polygon results.",
+          "Weight Division": "Weights how division is applied.",
+          "Bricker Polygons": "Converts polygons into a bricked pattern.",
+          "Size Offset Angle": "Controls size/offset/angle behavior for division.",
+          "Remove Shared Edges": "Removes edges shared between adjacent polygons.",
+          "Compute Dual": "Computes the dual of the mesh."
+        }
+      },
+      "explain_like_im_five": "It cuts big faces into smaller faces in smarter ways."
+    },
+    {
+      "operator": "Extrude (SOP)",
+      "what_it_is": "Extrudes geometry to add thickness or depth and can generate front/back/side meshes and groups.",
+      "mental_model": "Pulling a flat shape into a 3D solid.",
+      "example": "Extrude a profile curve to create a thick panel with side walls.",
+      "menu": {
+        "Extrude": {
+          "Extrude Source Group": "Group used as the source for extrusion.",
+          "X Section Group": "Group used as cross-section input."
+        },
+        "Values": {
+          "Fuse Points": "Fuses points created by extrusion.",
+          "Front Face": "Creates the front face.",
+          "Back Face": "Creates the back face.",
+          "Side Mesh": "Creates the side mesh.",
+          "Initialize Extrusion": "Initializes extrusion state.",
+          "Thickness Translate": "Translation applied to thickness.",
+          "Thickness Scale": "Scale applied to thickness.",
+          "Depth Translate": "Translation applied to depth.",
+          "Depth Scale": "Scale applied to depth.",
+          "Vertex": "Vertex handling for generated geometry.",
+          "Cusp": "Cusps edges for sharpness.",
+          "Polygonal Sides": "Uses polygonal sides instead of smooth.",
+          "Consolidate Faces to Mesh": "Consolidates faces into a single mesh.",
+          "Remove Shared Sides": "Removes shared side faces/edges.",
+          "Compute Normals": "Computes normals for the result."
+        },
+        "Groups": {
+          "Create Output Groups": "Creates output groups.",
+          "Front": "Front group output.",
+          "Back": "Back group output.",
+          "Side": "Side group output."
+        }
+      },
+      "explain_like_im_five": "It takes a flat shape and makes it thick."
+    },
+    {
+      "operator": "Face Track (SOP)",
+      "what_it_is": "Uses CHOP-driven tracking data to drive or align geometry, with GPU and preprocessing options.",
+      "mental_model": "A tracker hookup that lets motion data steer a mesh.",
+      "example": "Drive a face mesh using a Face Track CHOP stream.",
+      "menu": {
+        "Face Track": {
+          "Face Track CHOP": "CHOP providing face tracking data.",
+          "Direct to GPU": "Uploads/operates on GPU where possible.",
+          "Pre-Transform Mesh": "Applies a pre-transform to the mesh.",
+          "Compute Normals": "Computes normals on the result."
+        }
+      },
+      "explain_like_im_five": "It uses tracking data to move a face-shaped mesh."
+    },
+    {
+      "operator": "Facet (SOP)",
+      "what_it_is": "Edits mesh topology and normals, including cusp, unique points, consolidation, and cleanup operations.",
+      "mental_model": "A mesh fixer that can sharpen edges or smooth shading.",
+      "example": "Cusp polygons for hard edges and remove degenerate geometry.",
+      "menu": {
+        "Facet": {
+          "Group": "Group to operate on.",
+          "Make Normals Unit Length": "Normalizes normals to unit length.",
+          "Compute Normals": "Computes normals.",
+          "Unique Points": "Splits shared points to make them unique.",
+          "Consolidate": "Merges points based on distance.",
+          "Distance": "Distance threshold for consolidation.",
+          "Remove Inline Points": "Removes collinear points.",
+          "Orient Polygons": "Orients polygon winding consistently.",
+          "Cusp Polygons": "Creates hard edges by splitting normals.",
+          "Remove Degenerate": "Removes degenerate primitives.",
+          "Compute Normals": "Computes normals (post-ops)."
+        }
+      },
+      "explain_like_im_five": "It fixes a mesh and decides whether edges look sharp or smooth."
+    },
+    {
+      "operator": "File In (SOP)",
+      "what_it_is": "Loads geometry from a file and controls primitive interpretation and normal generation.",
+      "mental_model": "A file loader for 3D shapes.",
+      "example": "Load an OBJ/FBX mesh and compute normals if missing.",
+      "menu": {
+        "File In": {
+          "Geometry File": "Path to the geometry file.",
+          "File Primitive Faces": "How primitive faces are interpreted from the file.",
+          "Compute Normals if None Exists": "Computes normals only if the file has none.",
+          "Refresh": "Reloads the file."
+        }
+      },
+      "explain_like_im_five": "It opens a saved 3D shape file."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Fillet (SOP)",
+      "what_it_is": "Rounds or bevels edges and curves by inserting smooth transitional geometry.",
+      "mental_model": "A corner-rounder that softens sharp edges.",
+      "example": "Add rounded corners to a hard-edged model for smoother highlights.",
+      "menu": {
+        "Fillet": {
+          "Fillet Group": "Group of edges or primitives to fillet.",
+          "Fillet": "Enables filleting.",
+          "Wrap Last to First": "Wraps fillet from last element to first.",
+          "Direction": "Direction used for filleting.",
+          "Fillet Type": "Type of fillet operation.",
+          "Primitive Type": "Primitive type used for fillet geometry.",
+          "Order": "Curve/surface order for fillets.",
+          "Left UV": "Left-side UV handling.",
+          "Right UV": "Right-side UV handling.",
+          "LR Width": "Left/right fillet width.",
+          "LR Scale": "Left/right scale factor.",
+          "LR Offset": "Left/right offset.",
+          "Match Input to Fillets": "Matches input geometry to fillet output.",
+          "Cut Primitives": "Cuts original primitives at fillet locations."
+        }
+      },
+      "explain_like_im_five": "It rounds off sharp corners so they aren’t pointy."
+    },
+    {
+      "operator": "Fit (SOP)",
+      "what_it_is": "Fits curves or surfaces to new parameterizations and continuity rules.",
+      "mental_model": "A reshaper that makes curves behave more evenly.",
+      "example": "Refit a curve to have smoother parameter spacing.",
+      "menu": {
+        "Fit": {
+          "Fit Group": "Group to fit.",
+          "Method": "Fitting method used.",
+          "Primitive Type": "Primitive type being fit.",
+          "Conductivity": "Controls how influence spreads.",
+          "U Order": "Order in U direction.",
+          "V Order": "Order in V direction."
+        },
+        "Approximation": {
+          "Tolerance": "Allowed deviation from original shape.",
+          "Smoothness": "Amount of smoothing applied.",
+          "U Multiple Knots": "Allows multiple knots in U.",
+          "V Multiple Knots": "Allows multiple knots in V."
+        },
+        "Interpolation": {
+          "Scope": "Which parts are interpolated.",
+          "U and V Data Parameter": "Data parameters used for U/V.",
+          "U and V Rep": "Representation mode for U/V.",
+          "Fit Corners": "Preserves corner behavior."
+        }
+      },
+      "explain_like_im_five": "It redraws a curve so it’s smoother and more even."
+    },
+    {
+      "operator": "Force (SOP)",
+      "what_it_is": "Applies procedural force fields to geometry.",
+      "mental_model": "Invisible pushes and pulls acting on a shape.",
+      "example": "Apply a directional or spiral force to deform points.",
+      "menu": {
+        "Force": {
+          "Force Radio Force": "Radial force control.",
+          "Force One": "Primary force magnitude.",
+          "Directional Force Direction": "Direction of directional force.",
+          "Axle Vertex": "Vertex used as force axle.",
+          "Spiral": "Applies spiral force behavior."
+        }
+      },
+      "explain_like_im_five": "It pushes or pulls a shape like wind or magnetism."
+    },
+    {
+      "operator": "Fractal (SOP)",
+      "what_it_is": "Adds fractal-based displacement or detail to geometry.",
+      "mental_model": "Noise that makes shapes rough and natural.",
+      "example": "Add rocky, uneven detail to a surface.",
+      "menu": {
+        "Fractal": {
+          "Fractal Group": "Group affected by fractal deformation.",
+          "Divisions": "Subdivision level for fractal detail.",
+          "Smoothness": "Smoothness of the fractal effect.",
+          "Scale": "Scale of the fractal pattern.",
+          "Seed": "Random seed value.",
+          "Fixed Boundary": "Keeps boundary points fixed.",
+          "Use Vertex Normals": "Uses normals for displacement direction.",
+          "Direction": "Overall displacement direction."
+        }
+      },
+      "explain_like_im_five": "It makes shapes bumpy and natural-looking."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Grid (SOP)",
+      "what_it_is": "Generates a planar grid with controllable resolution, orientation, and UVs.",
+      "mental_model": "Graph paper laid out in 3D space.",
+      "example": "Create a ground plane with evenly spaced rows and columns.",
+      "menu": {
+        "Grid": {
+          "Grid": "Enables grid generation.",
+          "Primitive Type": "Type of primitives generated.",
+          "Connectivity": "How grid elements connect.",
+          "Orientation": "Plane orientation.",
+          "Modify Bounds": "Adjust bounds after creation.",
+          "Size": "Overall grid size.",
+          "Center": "Grid center position.",
+          "Reverse Anchors": "Flips anchor directions.",
+          "Anchor U": "U anchor position.",
+          "Anchor V": "V anchor position.",
+          "Rows": "Number of rows.",
+          "Columns": "Number of columns.",
+          "UV Order": "U direction order.",
+          "V Order": "V direction order.",
+          "Endpoint Interpolate in U": "Interpolates endpoints in U.",
+          "Endpoint Interpolate in V": "Interpolates endpoints in V.",
+          "Texture Coordinates": "Generates texture coordinates.",
+          "Compute Normals": "Computes normals."
+        }
+      },
+      "explain_like_im_five": "It makes a flat checkerboard of squares."
+    },
+    {
+      "operator": "Group (SOP)",
+      "what_it_is": "Creates and manages geometry groups using rules, patterns, bounds, and directional tests.",
+      "mental_model": "Sticky notes that label parts of a shape.",
+      "example": "Create groups for edges facing upward or points inside a box.",
+      "menu": {
+        "Group": {
+          "Group": "Enables grouping.",
+          "Group Name": "Name of the group.",
+          "Entity": "Entity type affected.",
+          "Geometry Type": "Limits grouping by geometry type."
+        },
+        "Create": {
+          "Number": "Creates groups by number.",
+          "Created Order": "Order groups are created.",
+          "Operation": "Union/intersect/subtract behavior.",
+          "Pattern": "Pattern-based selection.",
+          "Transfer Section to Pattern": "Transfers sections into patterns.",
+          "Start": "Start index.",
+          "Select": "Selection mode.",
+          "Filter Expression": "Expression-based filtering."
+        },
+        "Bounds": {
+          "$ref": "Delete.Bounding Volume"
+        },
+        "Normal": {
+          "$ref": "Delete.Normal"
+        },
+        "Edges": {
+          "Edges": "Enables edge-based grouping.",
+          "Edges Angle": "Angle threshold for edges.",
+          "Depth": "Depth used for edge testing.",
+          "Point Number": "Point count criteria.",
+          "Unshared Edges": "Selects unshared edges.",
+          "Create Bounding Groups": "Creates groups based on bounds."
+        }
+      },
+      "explain_like_im_five": "It lets you tag parts of a shape so you can use them later."
+    },
+    {
+      "operator": "Edit (SOP)",
+      "what_it_is": "Edits group membership and group definitions, including renaming, converting, and destroying groups.",
+      "mental_model": "An eraser and rename tool for group labels.",
+      "example": "Rename a group or remove it after use.",
+      "menu": {
+        "Edit": {
+          "Group Equals Not Group One": "Group comparison rule.",
+          "Operation and Not": "Boolean operation control."
+        },
+        "Edit Menu": {
+          "Convert Type": "Converts group type.",
+          "Convert Group": "Group to convert.",
+          "Convert Name": "Name after conversion.",
+          "Preserve Original": "Keeps original group.",
+          "Old Group Name": "Existing group name.",
+          "New Group Name": "New group name.",
+          "Destroy Group": "Deletes the group."
+        }
+      },
+      "explain_like_im_five": "It changes or removes group names on a shape."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Hole (SOP)",
+      "what_it_is": "Identifies and processes holes in polygonal geometry, optionally snapping them to outlines.",
+      "mental_model": "Finding gaps in a mesh and deciding how they should be treated.",
+      "example": "Detect open holes in a mesh before filling or bridging them.",
+      "menu": {
+        "Hole": {
+          "Hole Group": "Group used to identify holes.",
+          "Unbridge Hole Distance Tolerance": "Distance tolerance for separating holes.",
+          "Angle Tolerance": "Angular tolerance when evaluating hole edges.",
+          "Snap Holes to Outline": "Snaps detected holes to an outline."
+        }
+      },
+      "explain_like_im_five": "It finds holes in a shape and helps line them up."
+    },
+    {
+      "operator": "Import Select (SOP)",
+      "what_it_is": "Selects and imports geometry from parent or external operator hierarchies with animation handling.",
+      "mental_model": "A selective doorway that pulls in shapes and motion from elsewhere.",
+      "example": "Import animated geometry from a parent COMP while controlling playback.",
+      "menu": {
+        "Import Select": {
+          "General": "General import settings.",
+          "Import Parent": "Imports geometry from the parent.",
+          "GeoPath Reload": "Reloads the geometry path.",
+          "Compute Tangents": "Computes tangents on import."
+        },
+        "Playback": {
+          "Use Parent Animation": "Uses the parent’s animation timing.",
+          "Shift Animation Start": "Offsets animation start time.",
+          "Sample Rate Mode": "How sampling rate is determined.",
+          "Sample Rate Play Mode": "Playback behavior for sampling.",
+          "Initialize Start Q": "Initializes start quaternion/state.",
+          "Q Point": "Quaternion or state point used.",
+          "Play Index Speed": "Playback speed control.",
+          "Trim": "Enables trimming.",
+          "Trim Start": "Start trim position.",
+          "Trim End": "End trim position.",
+          "Extend Left": "Extension behavior before start.",
+          "Extend Right": "Extension behavior after end."
+        }
+      },
+      "explain_like_im_five": "It brings in shapes from somewhere else and plays their motion."
+    },
+    {
+      "operator": "In (SOP)",
+      "what_it_is": "Defines an input connector for SOP networks, controlling order and labeling.",
+      "mental_model": "An input plug that lets geometry flow into a network.",
+      "example": "Label and order incoming geometry connections.",
+      "menu": {
+        "In": {
+          "In": "Enables the input.",
+          "Label": "Label for the input.",
+          "Connect Order": "Order in which inputs are connected."
+        }
+      },
+      "explain_like_im_five": "It’s where shapes come into the network."
+    },
+    {
+      "operator": "Inverse Curve (SOP)",
+      "what_it_is": "Generates inverse mappings from curves, often driven by CHOP data.",
+      "mental_model": "Figuring out where a point would land if you ran a curve backward.",
+      "example": "Map CHOP values back onto a curve’s parameter space.",
+      "menu": {
+        "Inverse Curve": {
+          "Inverse Curve": "Enables inverse curve processing.",
+          "CHOP": "CHOP used as the driving source."
+        }
+      },
+      "explain_like_im_five": "It runs along a curve in reverse to find positions."
+    },
+    {
+      "operator": "Isosurface (SOP)",
+      "what_it_is": "Extracts a surface from an implicit volumetric function.",
+      "mental_model": "Finding the skin of a cloud of math.",
+      "example": "Create a blobby surface from an implicit field.",
+      "menu": {
+        "Isosurface": {
+          "Isosurface": "Enables isosurface extraction.",
+          "Implicit Function": "Defines the scalar field.",
+          "Minimum Bound": "Minimum sampling bound.",
+          "Maximum Bound": "Maximum sampling bound.",
+          "Divisions": "Resolution of the sampling grid.",
+          "Compute Normals": "Computes surface normals."
+        }
+      },
+      "explain_like_im_five": "It finds the outside skin of an invisible blob."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Joint (SOP)",
+      "what_it_is": "Builds jointed geometry along curves or paths with control over twist, orientation, and scaling.",
+      "mental_model": "Placing bendable joints along a hose.",
+      "example": "Create evenly spaced joints along a spine curve for deformation.",
+      "menu": {
+        "Joint": {
+          "Joint Group": "Group used to place joints.",
+          "Divisions": "Number of joints created.",
+          "Preserve First Input": "Keeps the first input intact.",
+          "Preserve Last Output": "Keeps the last output intact.",
+          "Orient Circle": "Orients joints using a circular frame.",
+          "Smooth Path": "Smooths the joint path.",
+          "Smooth Twist": "Smooths twisting along the path.",
+          "Align Major Axis": "Aligns joints to the major axis.",
+          "Minimum Twist": "Sets minimum twist constraint.",
+          "LR Scale": "Left/right scale factor.",
+          "Offset": "Offsets joints along the path."
+        }
+      },
+      "explain_like_im_five": "It puts bendy joints along a line."
+    },
+    {
+      "operator": "Connect (SOP)",
+      "what_it_is": "Connects geometry to external hardware or sensor-driven skeleton data.",
+      "mental_model": "A live cable from sensors to shapes.",
+      "example": "Drive a mesh using a depth sensor skeleton.",
+      "menu": {
+        "Connect": {
+          "Connect": "Enables connection.",
+          "Hardware Version": "Selects hardware version.",
+          "Sensor Skeleton": "Skeleton source from sensor.",
+          "Near Depth Mode": "Uses near-depth sensing.",
+          "Compute Normals": "Computes normals on output."
+        }
+      },
+      "explain_like_im_five": "It lets sensors move a shape."
+    },
+    {
+      "operator": "Lattice (SOP)",
+      "what_it_is": "Deforms geometry using a lattice-based control structure.",
+      "mental_model": "A flexible cage you push to bend what’s inside.",
+      "example": "Warp a mesh smoothly by adjusting lattice points.",
+      "menu": {
+        "Lattice": {
+          "Group": "Group affected by the lattice.",
+          "Deform Type": "Type of lattice deformation.",
+          "Division": "Lattice resolution.",
+          "Kernel Function": "Falloff kernel used.",
+          "Radius One": "Primary influence radius."
+        }
+      },
+      "explain_like_im_five": "It bends shapes by pushing a soft cage."
+    },
+    {
+      "operator": "Limit (SOP)",
+      "what_it_is": "Limits geometry attributes using CHOP channels, including transforms and color.",
+      "mental_model": "Guard rails that stop values from going too far.",
+      "example": "Clamp rotations and colors driven by animation channels.",
+      "menu": {
+        "Limit": {
+          "Channels": "Channels used for limiting.",
+          "CHOP": "CHOP source.",
+          "Rotate Order": "Rotation order.",
+          "X Channel": "X transform channel.",
+          "Y Channel": "Y transform channel.",
+          "Z Channel": "Z transform channel.",
+          "Rotate Channel X": "Rotation X channel.",
+          "Rotate Channel Y": "Rotation Y channel.",
+          "Rotate Channel Z": "Rotation Z channel.",
+          "Radius Channel": "Radius channel.",
+          "Radius Channel X": "Radius X channel.",
+          "Radius Channel Y": "Radius Y channel.",
+          "Radius Channel Z": "Radius Z channel.",
+          "Alpha": "Alpha channel.",
+          "Red": "Red color channel.",
+          "Green": "Green color channel.",
+          "Blue": "Blue color channel.",
+          "Texture W": "Texture W channel."
+        }
+      },
+      "explain_like_im_five": "It stops numbers from going past the edges."
+    },
+    {
+      "operator": "Custom (SOP)",
+      "what_it_is": "Creates custom deformation or control behavior driven by user-defined channels.",
+      "mental_model": "A build-your-own control panel for shapes.",
+      "example": "Drive deformation using four custom channels.",
+      "menu": {
+        "Custom": {
+          "Custom Attribute Name": "Name of the custom attribute.",
+          "Channel 0": "First custom channel.",
+          "Channel 1": "Second custom channel.",
+          "Channel 2": "Third custom channel.",
+          "Channel 3": "Fourth custom channel."
+        },
+        "Output": {
+          "Output Type": "Type of output generated.",
+          "Division": "Subdivision level.",
+          "Radius": "Output radius.",
+          "Smooth Flip": "Smooths flipped output.",
+          "Limit": "Applies limits.",
+          "X Limit": "X-axis limit.",
+          "Y Limit": "Y-axis limit.",
+          "Z Limit": "Z-axis limit.",
+          "Apply Texture": "Applies texture mapping.",
+          "Scale": "Output scale.",
+          "Offset": "Output offset.",
+          "Orient to Path": "Orients output along a path.",
+          "Look At Object": "Targets an object for orientation.",
+          "Rotate Polys": "Rotates polygons.",
+          "Rotate": "Rotation values.",
+          "Compute Normals": "Computes normals."
+        }
+      },
+      "explain_like_im_five": "It lets you make your own rules for moving shapes."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Line (SOP)",
+      "what_it_is": "Creates a straight line primitive defined by two points or a set number of points.",
+      "mental_model": "A ruler that draws a straight line between two dots.",
+      "example": "Draw a guide line between two positions in space.",
+      "menu": {
+        "Line": {
+          "Point A": "Starting point of the line.",
+          "Point B": "Ending point of the line.",
+          "Number of Points": "Number of points along the line.",
+          "Texture Coordinates": "Generates texture coordinates along the line."
+        }
+      },
+      "explain_like_im_five": "It draws a straight line from here to there."
+    },
+    {
+      "operator": "Line Thick (SOP)",
+      "what_it_is": "Generates a thickened line or ribbon from a curve or line.",
+      "mental_model": "Turning a thin line into a strip or band.",
+      "example": "Create a ribbon-like trail from a path.",
+      "menu": {
+        "Line Thick": {
+          "Group": "Group to thicken.",
+          "Start With": "Starting thickness behavior.",
+          "End With": "Ending thickness behavior.",
+          "Divisions": "Subdivision count.",
+          "Rows": "Row resolution.",
+          "Domain": "Parameter domain.",
+          "Shape": "Thickness profile shape.",
+          "Symmetric": "Keeps thickness symmetric."
+        }
+      },
+      "explain_like_im_five": "It makes a skinny line into a wide strip."
+    },
+    {
+      "operator": "LOD (SOP)",
+      "what_it_is": "Reduces geometry complexity based on distance or thresholds.",
+      "mental_model": "A detail knob that turns down shapes when they’re far away.",
+      "example": "Automatically simplify distant meshes to improve performance.",
+      "menu": {
+        "LOD": {
+          "LOD": "Enables level-of-detail processing.",
+          "Step": "Reduction step size.",
+          "Percentage": "Target percentage of geometry.",
+          "Dist": "Distance used for LOD switching.",
+          "Threshold": "Threshold for reduction.",
+          "Minimum Percentage": "Lowest allowed detail percentage.",
+          "Stiffen Border": "Preserves border edges.",
+          "Equalize Edges": "Balances edge lengths.",
+          "Pre-Triangulate": "Triangulates before reduction.",
+          "Optimize": "Optimizes geometry.",
+          "Rendering": "Rendering-related controls.",
+          "Only After Polygons": "Applies only after polygon conversion."
+        }
+      },
+      "explain_like_im_five": "It makes shapes simpler when you don’t need detail."
+    },
+    {
+      "operator": "LS System (SOP)",
+      "what_it_is": "Generates geometry using an L-system procedural growth model.",
+      "mental_model": "Growing plants using rules and instructions.",
+      "example": "Create branching tree-like structures procedurally.",
+      "menu": {
+        "LS System": {
+          "Geometry": "Type of geometry generated.",
+          "Type": "L-system type.",
+          "Generations": "Number of growth iterations.",
+          "Random Scale": "Random variation scale.",
+          "Random Seed": "Seed for randomness.",
+          "Continuous Angles": "Smooth angle transitions.",
+          "Continuous Length": "Smooth length transitions.",
+          "Continuous Width": "Smooth width transitions.",
+          "Apply Color": "Applies color during generation.",
+          "Image File": "Image used as a rule source.",
+          "UV Increment": "UV offset per segment.",
+          "Point Width Attribute": "Attribute controlling width."
+        },
+        "Tube": {
+          "Rows": "Tube row resolution.",
+          "Columns": "Tube column resolution.",
+          "Tensions": "Tube tension control.",
+          "Branch Blend Thickness": "Blends thickness at branches.",
+          "Thickness Scale": "Overall tube thickness scale.",
+          "Apply Tube Texture Coordinates": "Generates tube UVs.",
+          "Vertical Increment": "Vertical UV increment."
+        },
+        "Values": {
+          "Step Size": "Base step length.",
+          "Step Size Scale": "Scale factor for step size.",
+          "Angle": "Base turning angle.",
+          "Angle Scale": "Scale factor for angle.",
+          "Variable B": "Custom variable B.",
+          "Variable C": "Custom variable C.",
+          "Variable D": "Custom variable D.",
+          "Gravity": "Gravity influence."
+        },
+        "Funcs": {
+          "Pick Image Top": "Samples image from top.",
+          "Group Prefix": "Prefix for generated groups.",
+          "Channel Prefix": "Prefix for generated channels.",
+          "Leaf Param": "Leaf-specific parameter.",
+          "A": "Rule parameter A.",
+          "B": "Rule parameter B.",
+          "C": "Rule parameter C.",
+          "Rules": "L-system rewrite rules."
+        }
+      },
+      "explain_like_im_five": "It grows shapes like plants using rules."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Magnet (SOP)",
+      "what_it_is": "Deforms geometry by pulling or pushing points toward a magnetic influence region.",
+      "mental_model": "A magnet that tugs on nearby parts of a shape.",
+      "example": "Pull points toward a target area to create dents or bulges.",
+      "menu": {
+        "Magnet": {
+          "Deform Group": "Group of geometry affected by the magnet.",
+          "Magnet Group": "Group defining the magnetic influence region."
+        },
+        "Deform": {
+          "$ref": "Common.Transform"
+        },
+        "Attributes": {
+          "Affect Position": "Applies deformation to point positions.",
+          "Affect Point Color": "Applies effect to point color.",
+          "Affect Point Normal": "Applies effect to point normals.",
+          "Affect Point Velocity": "Applies effect to point velocity."
+        }
+      },
+      "explain_like_im_five": "It pulls parts of a shape like a magnet."
+    },
+    {
+      "operator": "Material (SOP)",
+      "what_it_is": "Assigns or manages material-related attributes on geometry.",
+      "mental_model": "A tag that tells shapes what they’re made of.",
+      "example": "Assign a material attribute before rendering.",
+      "menu": {
+        "Material": {
+          "Material": "Material assignment or reference."
+        }
+      },
+      "explain_like_im_five": "It tells a shape what it should look like."
+    },
+    {
+      "operator": "Merge (SOP)",
+      "what_it_is": "Combines multiple SOP inputs into a single geometry stream.",
+      "mental_model": "A funnel that pours many shapes into one.",
+      "example": "Merge several meshes into a single output.",
+      "menu": {
+        "Merge": {
+          "SOPs": "Input SOPs to merge."
+        }
+      },
+      "explain_like_im_five": "It puts shapes together."
+    },
+    {
+      "operator": "Metaball (SOP)",
+      "what_it_is": "Creates blobby implicit surfaces that merge smoothly based on proximity.",
+      "mental_model": "Blobs of goo that melt together when close.",
+      "example": "Generate organic blobby forms that fuse together.",
+      "menu": {
+        "Metaball": {
+          "Metaball": "Enables metaball generation.",
+          "Modify Bounds": "Adjusts bounds for evaluation.",
+          "Radius": "Influence radius.",
+          "Center Weight": "Weight at the center of the metaball.",
+          "Kernel Function": "Falloff function.",
+          "XY Exponent": "Exponent in XY plane.",
+          "Z Exponent": "Exponent in Z axis.",
+          "Compute Normals": "Computes surface normals."
+        }
+      },
+      "explain_like_im_five": "It makes blobby shapes that melt together."
+    },
+    {
+      "operator": "Model (SOP)",
+      "what_it_is": "Provides a placeholder or reference model geometry.",
+      "mental_model": "A simple stand-in shape.",
+      "example": "Use a default model as a reference in a network.",
+      "menu": {
+        "Model": {
+          "Model": "Model selection or reference."
+        }
+      },
+      "explain_like_im_five": "It gives you a basic shape to work with."
+    },
+    {
+      "operator": "Noise (SOP)",
+      "what_it_is": "Applies procedural noise to geometry attributes for variation and deformation.",
+      "mental_model": "Random bumps and wiggles added to a shape.",
+      "example": "Add organic surface variation using noise.",
+      "menu": {
+        "Noise": {
+          "Noise": "Enables noise application.",
+          "Group": "Group affected by noise.",
+          "Attribute Type": "Attribute the noise is applied to.",
+          "Seed": "Random seed.",
+          "Period": "Noise period.",
+          "Harmonics": "Number of harmonics.",
+          "Spread": "Spatial spread of noise.",
+          "Roughness": "Roughness of noise.",
+          "Exponent": "Exponent shaping the noise curve.",
+          "Number of Integrals": "Integration count for noise.",
+          "Amplitude": "Noise strength.",
+          "Offset": "Noise offset.",
+          "Keep Computed Normals": "Preserves existing normals."
+        },
+        "Transform": {
+          "$ref": "Common.Transform"
+        }
+      },
+      "explain_like_im_five": "It makes shapes bumpy and uneven."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Null (SOP)",
+      "what_it_is": "Passes geometry through unchanged and is used for organization and reference.",
+      "mental_model": "A labeled checkpoint in a geometry network.",
+      "example": "Mark a stable output to reference later in the network.",
+      "menu": {
+        "Null": {
+          "Null": "Pass-through operator."
+        }
+      },
+      "explain_like_im_five": "It does nothing, on purpose."
+    },
+    {
+      "operator": "Object Merge (SOP)",
+      "what_it_is": "Brings geometry from other objects or SOPs into the current SOP network.",
+      "mental_model": "A vacuum hose that pulls shapes in from elsewhere.",
+      "example": "Merge geometry from another Geo COMP while controlling transforms.",
+      "menu": {
+        "Object Merge": {
+          "Object Merge": "Source object path.",
+          "Transform Object Merge": "How incoming geometry is transformed.",
+          "SOP": "Specific SOP path to import."
+        }
+      },
+      "explain_like_im_five": "It grabs shapes from somewhere else."
+    },
+    {
+      "operator": "OpenVR (SOP)",
+      "what_it_is": "Imports geometry and tracking models from OpenVR devices.",
+      "mental_model": "A bridge between VR hardware and geometry.",
+      "example": "Load a VR controller model into the scene.",
+      "menu": {
+        "OpenVR": {
+          "Active": "Enables OpenVR input.",
+          "Model": "VR device model selection."
+        }
+      },
+      "explain_like_im_five": "It brings VR stuff into TouchDesigner."
+    },
+    {
+      "operator": "Out (SOP)",
+      "what_it_is": "Defines the output of a SOP network.",
+      "mental_model": "The exit door for shapes.",
+      "example": "Choose which SOP is the final output of a Geo.",
+      "menu": {
+        "Out": {
+          "Select SOP": "SOP sent to output.",
+          "Label": "Output label.",
+          "Connect Order": "Connection ordering."
+        }
+      },
+      "explain_like_im_five": "It says which shape comes out."
+    },
+    {
+      "operator": "Particle (SOP)",
+      "what_it_is": "Simulates particle motion and lifecycle based on rules and forces.",
+      "mental_model": "A sandbox full of moving dots with physics rules.",
+      "example": "Emit particles from a surface and let them drift and collide.",
+      "menu": {
+        "Particle": {
+          "State": "Simulation state.",
+          "Source Group": "Emission source group.",
+          "Particle Type": "Type of particle primitive.",
+          "Behavior": "Particle behavior mode.",
+          "Point Reuse": "Reuses points for particles.",
+          "Pre-Roll Time": "Warm-up simulation time.",
+          "Time Max Steps": "Maximum simulation steps.",
+          "Jitter Burst": "Random burst jitter.",
+          "Accurate": "Higher-accuracy simulation.",
+          "Moves": "Movement control.",
+          "Remove Unused Points": "Deletes inactive points.",
+          "Attractor Use": "Enables attractors.",
+          "Reset": "Resets the simulation."
+        },
+        "Forces": {
+          "External Force": "External force input.",
+          "Wind": "Wind force.",
+          "Turbulence": "Turbulence force.",
+          "Turb Period": "Turbulence period.",
+          "Seed": "Random seed."
+        },
+        "Particles": {
+          "Add Particle ID": "Adds unique particle IDs.",
+          "Add Mass Attribute": "Adds mass attribute.",
+          "Mass": "Particle mass.",
+          "Add Drag Attribute": "Adds drag attribute.",
+          "Drag": "Drag amount.",
+          "Birth": "Birth control.",
+          "Life Expect": "Expected lifespan.",
+          "Life Variance": "Variance in lifespan.",
+          "Alpha Seed": "Random seed for alpha.",
+          "Surface Attraction": "Attraction to surfaces.",
+          "Birth Count": "Particles born per step."
+        },
+        "Limits": {
+          "Limit Plane Plus": "Positive limit plane.",
+          "Limit Plane Minus": "Negative limit plane.",
+          "Hit Behavior": "Behavior on collision.",
+          "Gain Tangent": "Velocity gain along tangent.",
+          "Gain Normal": "Velocity gain along normal.",
+          "Split": "Enables particle splitting.",
+          "Minimum": "Minimum split threshold.",
+          "Maximum Split": "Maximum number of splits.",
+          "Split Velocity": "Velocity applied on split.",
+          "Velocity Variance": "Variance in split velocity."
+        }
+      },
+      "explain_like_im_five": "It makes lots of tiny dots move around."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Point (SOP)",
+      "what_it_is": "Edits point-level attributes such as position, color, normals, and particle-related data.",
+      "mental_model": "A point editor that decides which data to keep or modify on each dot.",
+      "example": "Move points while preserving their color, normals, and particle velocity.",
+      "menu": {
+        "Point": {
+          "Point Group": "Group of points to operate on.",
+          "Position": "Edits point position.",
+          "Keep Weight": "Preserves point weight.",
+          "Keep Color": "Preserves point color.",
+          "Keep Normal": "Preserves point normal.",
+          "Pre-Multiply RGB by Alpha": "Multiplies color by alpha.",
+          "Keep Texture": "Preserves texture coordinates.",
+          "Keep Width": "Preserves point width.",
+          "Keep Scale": "Preserves point scale."
+        },
+        "Custom": {
+          "Custom Attribute Name": "Name of the custom attribute.",
+          "Type": "Attribute data type.",
+          "Value": "Value assigned to the attribute."
+        },
+        "Particle": {
+          "Keep Mass": "Preserves particle mass.",
+          "Keep Drag": "Preserves particle drag.",
+          "Keep Tension": "Preserves particle tension.",
+          "Keep Spring K": "Preserves spring constant.",
+          "Keep Velocity": "Preserves particle velocity.",
+          "Keep Up Vector": "Preserves particle up vector."
+        },
+        "Force": {
+          "Keep Radius": "Preserves force radius.",
+          "Keep F Scale": "Preserves force scale.",
+          "Keep Radial F": "Preserves radial force.",
+          "Keep Normal F": "Preserves normal force.",
+          "Keep Edge F": "Preserves edge force.",
+          "Keep Dir F": "Preserves directional force."
+        }
+      },
+      "explain_like_im_five": "It changes dots but lets you choose what parts stay the same."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Polyloft (SOP)",
+      "what_it_is": "Creates polygon surfaces by lofting between input curves or profiles.",
+      "mental_model": "Stretching fabric between a stack of wires.",
+      "example": "Loft multiple profile curves into a continuous surface.",
+      "menu": {
+        "Polyloft": {
+          "Polyloft": "Enables polygon lofting.",
+          "Connect": "Connects input profiles.",
+          "Closes Ends": "Closes the start and end of the loft.",
+          "Consolidate Points": "Merges nearby points.",
+          "Distance": "Distance threshold for consolidation.",
+          "Minimize U-Rep": "Reduces repetition in U.",
+          "V-Rep": "Controls repetition in V.",
+          "Create Polygon Group": "Creates a group for generated polygons.",
+          "Name": "Name of the created group.",
+          "Method": "Lofting method.",
+          "Group": "Input group to loft.",
+          "Keep Primitives": "Preserves original primitives."
+        }
+      },
+      "explain_like_im_five": "It stretches a surface between lines."
+    },
+    {
+      "operator": "Point Groups (SOP)",
+      "what_it_is": "Creates or manages point-based groups.",
+      "mental_model": "Putting selected dots into named buckets.",
+      "example": "Group specific points for later deformation.",
+      "menu": {
+        "Point Groups": {
+          "Point": "Point selection source.",
+          "Group": "Group name or target."
+        }
+      },
+      "explain_like_im_five": "It puts dots into named groups."
+    },
+    {
+      "operator": "Polypatch (SOP)",
+      "what_it_is": "Builds polygon patches from curves with continuity and clamping controls.",
+      "mental_model": "Sewing a patch of fabric with controlled edges.",
+      "example": "Create a smooth polygon patch from boundary curves.",
+      "menu": {
+        "Polypatch": {
+          "Polypatch": "Enables patch creation.",
+          "Group Basis Connectivity": "Controls basis connectivity across groups.",
+          "U-Rep": "Repetition in U.",
+          "V-Rep": "Repetition in V.",
+          "U-Clamp First": "Clamps first U edge.",
+          "U-Clamp Last": "Clamps last U edge.",
+          "V-Clamp First": "Clamps first V edge.",
+          "V-Clamp Last": "Clamps last V edge.",
+          "Output Divisions": "Subdivision count for output.",
+          "Output Polygons": "Outputs polygons instead of surfaces."
+        }
+      },
+      "explain_like_im_five": "It makes a flat patch from curved edges."
+    },
+    {
+      "operator": "PolyReduce (SOP)",
+      "what_it_is": "Reduces polygon count while preserving important features.",
+      "mental_model": "Shrinking a mesh without losing its shape.",
+      "example": "Optimize a dense mesh for real-time rendering.",
+      "menu": {
+        "PolyReduce": {
+          "Reduce": "Enables polygon reduction.",
+          "Polygons": "Polygon selection.",
+          "Features": "Feature preservation controls.",
+          "Method": "Reduction method.",
+          "Keep Percentage": "Percentage of polygons to keep.",
+          "Keep Objects": "Preserves object boundaries.",
+          "Dist Threshold": "Distance threshold for collapse.",
+          "Maximum": "Maximum reduction limit."
+        },
+        "Clean": {
+          "Stiffen Borders": "Preserves border edges.",
+          "Stiffen Features": "Preserves sharp features.",
+          "Equalize Edges": "Balances edge lengths.",
+          "Prevent Mesh Emergent": "Prevents topology artifacts.",
+          "Pre-Triangulate": "Triangulates before reduction.",
+          "Prevent Cracking": "Avoids cracks during reduction.",
+          "Use Original Points": "Keeps original point positions."
+        }
+      },
+      "explain_like_im_five": "It makes a shape simpler without ruining it."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "PolySpline (SOP)",
+      "what_it_is": "Converts polygonal geometry into spline-based curves with controllable continuity and division.",
+      "mental_model": "Redrawing a jagged line as a smooth curve using rules.",
+      "example": "Turn polygon outlines into smooth splines for lofting.",
+      "menu": {
+        "PolySpline": {
+          "PolySpline Group": "Group of primitives to convert.",
+          "Spline Type": "Type of spline created.",
+          "Close": "Closes the spline.",
+          "Division Method": "How divisions are calculated.",
+          "Segment Length": "Target length per segment.",
+          "Output Division": "Number of output divisions.",
+          "Sample Division": "Sampling resolution.",
+          "First CV Count": "Control vertices at start.",
+          "Last CV Count": "Control vertices at end.",
+          "CV Tension": "Tension of control vertices."
+        }
+      },
+      "explain_like_im_five": "It turns straight edges into smooth lines."
+    },
+    {
+      "operator": "PolyStitch (SOP)",
+      "what_it_is": "Stitches adjacent polygons together by merging edges and points.",
+      "mental_model": "Sewing fabric pieces together along their edges.",
+      "example": "Stitch separate polygon shells into one continuous surface.",
+      "menu": {
+        "PolyStitch": {
+          "Polygons to Stitch": "Polygons selected for stitching.",
+          "Corner Points": "Corner point handling.",
+          "Max Distribution to Stitch": "Maximum distance allowed for stitching.",
+          "Consolidate Points": "Merges nearby points during stitch.",
+          "Automatically Find Corners": "Detects corners automatically."
+        }
+      },
+      "explain_like_im_five": "It sews shapes together along the edges."
+    },
+    {
+      "operator": "POP2 (SOP)",
+      "what_it_is": "Interfaces SOP geometry with POP-style particle data workflows.",
+      "mental_model": "A bridge between particles and shapes.",
+      "example": "Pull particle data into a SOP-based workflow.",
+      "menu": {
+        "POP2": {
+          "POP2": "Enables POP2 behavior.",
+          "POP Download Type": "Type of particle data downloaded."
+        }
+      },
+      "explain_like_im_five": "It lets particle data become shapes."
+    },
+    {
+      "operator": "Primitive (SOP)",
+      "what_it_is": "Creates or modifies primitives using source and template geometry, with transform and attribute controls.",
+      "mental_model": "Building faces using rules and templates.",
+      "example": "Generate primitives based on a template and apply attributes.",
+      "menu": {
+        "Primitive": {
+          "Primitive": "Enables primitive operation.",
+          "Source Group": "Source geometry group.",
+          "Template Group": "Template geometry group."
+        },
+        "Transform": {
+          "$ref": "Common.Transform"
+        },
+        "Attributes": {
+          "Color": "Sets primitive color.",
+          "Color Alpha": "Sets color alpha.",
+          "Crease": "Sets crease value.",
+          "Custom Attribute Name": "Name of custom attribute.",
+          "Size": "Attribute size or magnitude.",
+          "Value": "Attribute value."
+        }
+      },
+      "explain_like_im_five": "It builds faces and gives them properties."
+    },
+    {
+      "operator": "Face Hull (SOP)",
+      "what_it_is": "Generates hull-like surfaces from faces with U/V preservation and clamping controls.",
+      "mental_model": "Wrapping a tight skin around faces.",
+      "example": "Create a hull surface that respects original face flow.",
+      "menu": {
+        "FaceHull": {
+          "Preserve Shape U": "Preserves shape along U.",
+          "Preserve Shape V": "Preserves shape along V.",
+          "Close U": "Closes surface in U.",
+          "Close V": "Closes surface in V.",
+          "Clamp U": "Clamps U edges.",
+          "Clamp V": "Clamps V edges.",
+          "Vertex": "Vertex handling."
+        }
+      },
+      "explain_like_im_five": "It wraps faces in a smooth shell."
+    },
+    {
+      "operator": "Meta (SOP)",
+      "what_it_is": "Builds implicit meta-surfaces from weighted inputs.",
+      "mental_model": "Invisible blobs that blend together based on weight.",
+      "example": "Generate a meta-surface from multiple weighted sources.",
+      "menu": {
+        "Meta": {
+          "Meta Surface": "Enables meta-surface generation.",
+          "Weights": "Weighting controls.",
+          "Weight": "Individual weight value."
+        }
+      },
+      "explain_like_im_five": "It makes blobby shapes that merge smoothly."
+    },
+    {
+      "operator": "Particles (SOP)",
+      "what_it_is": "Controls how particle geometry is represented and rendered.",
+      "mental_model": "Choosing how dots should look.",
+      "example": "Render particles as sprites or geometry.",
+      "menu": {
+        "Particles": {
+          "Particle Render Type": "Rendering style for particles.",
+          "Particle Type": "Underlying particle primitive type."
+        }
+      },
+      "explain_like_im_five": "It decides how particles are drawn."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Profile (SOP)",
+      "what_it_is": "Extracts or generates profile curves from surfaces with precise parameter mapping.",
+      "mental_model": "Tracing clean guide lines along a surface.",
+      "example": "Pull profile curves off a surface to use for sweeping or lofting.",
+      "menu": {
+        "Profile": {
+          "Group Method": "How profiles are selected.",
+          "Parametrically to X, Y": "Maps parameters to X/Y space.",
+          "Smooth Curve": "Smooths the resulting profile.",
+          "Divisions per Span": "Subdivision density per span.",
+          "Tolerance": "Approximation tolerance.",
+          "Order": "Curve order.",
+          "Preserve Sharp Corners": "Keeps sharp corners intact.",
+          "Keep Surface": "Keeps the source surface.",
+          "Delete Original Profile": "Removes the original profile.",
+          "Mapping Type": "Type of parameter mapping.",
+          "U Range": "U parameter range.",
+          "V Range": "V parameter range."
+        }
+      },
+      "explain_like_im_five": "It pulls neat lines off a surface."
+    },
+    {
+      "operator": "Project (SOP)",
+      "what_it_is": "Projects curves or profiles onto surfaces using ray or vector-based methods.",
+      "mental_model": "Shining a flashlight to cast lines onto a surface.",
+      "example": "Project a circle profile onto a curved surface.",
+      "menu": {
+        "Project": {
+          "Project": "Enables projection.",
+          "Face Group": "Faces to project onto.",
+          "Surface Group": "Target surface group.",
+          "Circle Type": "Type of circle used for projection."
+        },
+        "Method": {
+          "Method Access": "Projection method.",
+          "Vector Side": "Projection vector side.",
+          "Division per Span": "Subdivision density.",
+          "Ray Tolerance": "Tolerance for ray casting.",
+          "Fit Tolerance": "Tolerance for fitting.",
+          "Max UV Gap": "Maximum allowed UV gap.",
+          "Order": "Curve order.",
+          "Preserve Sharp Corners": "Keeps sharp corners.",
+          "Super Accurate Projection": "Uses higher-accuracy projection.",
+          "U from V": "Derives U from V.",
+          "Map Profile to Range": "Maps profile to parameter range.",
+          "U Range": "U parameter range.",
+          "V Range": "V parameter range.",
+          "Mapping Type": "Type of mapping used."
+        }
+      },
+      "explain_like_im_five": "It sticks lines onto a surface."
+    },
+    {
+      "operator": "Rails (SOP)",
+      "what_it_is": "Sweeps cross-sections along one or more rail curves to generate surfaces.",
+      "mental_model": "Sliding a shape along tracks.",
+      "example": "Sweep a profile along paired rails to form a complex surface.",
+      "menu": {
+        "Rails": {
+          "Rails": "Enables rail sweeping.",
+          "X Section Groups": "Cross-section groups.",
+          "Rail Groups": "Rail curve groups.",
+          "Cycle Type": "Cycling behavior.",
+          "Sweep Along Pairs of Rails": "Uses rail pairs.",
+          "Sweep Along First and Last Rails": "Uses outer rails.",
+          "Stretch to Rails": "Stretches geometry to fit rails.",
+          "Use Vertex": "Uses vertex data.",
+          "Connect Vertices": "Connects vertices along sweep.",
+          "Scale": "Scales cross-section.",
+          "Rotate": "Rotates cross-section.",
+          "Fix Flipping": "Prevents orientation flipping.",
+          "Use Direction": "Uses explicit direction.",
+          "Direction Two": "Secondary direction.",
+          "Create Output Groups": "Creates output groups.",
+          "Group Name": "Name for created groups."
+        }
+      },
+      "explain_like_im_five": "It slides a shape along rails to make a surface."
+    },
+    {
+      "operator": "Raster (SOP)",
+      "what_it_is": "Downloads or converts raster-based data into SOP geometry context.",
+      "mental_model": "Turning image-like data into geometry-friendly form.",
+      "example": "Use raster data as a source for geometry operations.",
+      "menu": {
+        "Raster": {
+          "Raster TOP Direction": "Direction of raster sampling.",
+          "Download Type": "Type of raster download."
+        }
+      },
+      "explain_like_im_five": "It brings image-style data into shapes."
+    },
+    {
+      "operator": "Ray (SOP)",
+      "what_it_is": "Casts rays from geometry to intersect other surfaces and generate intersection data.",
+      "mental_model": "Shooting invisible lasers and seeing where they hit.",
+      "example": "Project points onto another mesh and record hit distance.",
+      "menu": {
+        "Ray": {
+          "Ray": "Enables ray casting.",
+          "Group Method": "Selection method for rays.",
+          "Transform Points": "Transforms points before casting.",
+          "Intersect Farthest Surface": "Uses farthest intersection.",
+          "Point Intersection Normal": "Outputs hit normals.",
+          "Bounces": "Number of ray bounces.",
+          "Save Bounce Geometry": "Stores bounce results.",
+          "Point Intersection Distance": "Outputs hit distance.",
+          "Scale": "Scales ray offset.",
+          "Lift": "Lifts ray origin.",
+          "Sample": "Sampling mode.",
+          "Jitter Scale": "Random jitter amount.",
+          "Seed": "Random seed.",
+          "Create Point": "Creates points at hit locations.",
+          "Ray Hit Group": "Creates a group for hit points."
+        }
+      },
+      "explain_like_im_five": "It shoots rays and finds where they hit."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Rectangle (SOP)",
+      "what_it_is": "Creates a rectangular primitive with optional rounding and camera-based sizing.",
+      "mental_model": "A flat card you can size, round, and aim at a camera.",
+      "example": "Create a rounded UI panel aligned to a camera’s aspect.",
+      "menu": {
+        "Rectangle": {
+          "Rectangle Orientation": "Orientation of the rectangle.",
+          "Camera": "Primary camera reference.",
+          "Camera 2": "Secondary camera reference.",
+          "Camera Aspect": "Uses camera aspect ratio.",
+          "Modify Bounds": "Adjusts bounds after creation.",
+          "Size": "Width and height.",
+          "Center": "Center position.",
+          "Reverse Anchors": "Flips anchor directions.",
+          "Anchor U": "U anchor position.",
+          "Anchor V": "V anchor position.",
+          "Rounded Corners": "Enables rounded corners.",
+          "Rounded Radius": "Radius of corner rounding.",
+          "Rounded Edges": "Controls rounded edge behavior.",
+          "Texture Coordinates": "Generates texture coordinates.",
+          "Compute Normals": "Computes normals."
+        }
+      },
+      "explain_like_im_five": "It makes a flat rectangle you can round."
+    },
+    {
+      "operator": "Refine (SOP)",
+      "what_it_is": "Refines curves or surfaces by subdividing specific parameter ranges.",
+      "mental_model": "Adding more detail only where you need it.",
+      "example": "Refine a NURBS surface locally to increase detail.",
+      "menu": {
+        "Refine": {
+          "Refine Group": "Group to refine.",
+          "First U": "Start U parameter.",
+          "Second U": "End U parameter.",
+          "U Division": "Divisions in U.",
+          "First V": "Start V parameter.",
+          "Second V": "End V parameter.",
+          "V Divisions": "Divisions in V.",
+          "Method": "Refinement method.",
+          "NURB Count U": "NURBS count in U.",
+          "NURB Count V": "NURBS count in V.",
+          "Spacing": "Spacing rule for refinement.",
+          "Tolerance": "Refinement tolerance."
+        }
+      },
+      "explain_like_im_five": "It adds more points where things need detail."
+    },
+    {
+      "operator": "Resample (SOP)",
+      "what_it_is": "Resamples curves or edges to control point distribution and segment length.",
+      "mental_model": "Re-spacing beads evenly on a string.",
+      "example": "Evenly space points along a curve for animation.",
+      "menu": {
+        "Resample": {
+          "Resample Group": "Group to resample.",
+          "Level of Detail": "Overall resampling detail.",
+          "Resample by Polygon Edge": "Uses polygon edges for resampling.",
+          "Method": "Resampling method.",
+          "Measure Maximum Segment Length": "Measures longest segment.",
+          "Length": "Target segment length.",
+          "Maximum Segments": "Maximum allowed segments.",
+          "Segment": "Segment mode.",
+          "Maintain Last Vertex": "Preserves last vertex."
+        }
+      },
+      "explain_like_im_five": "It spaces points evenly along a line."
+    },
+    {
+      "operator": "Resolve (SOP)",
+      "what_it_is": "Resolves geometry connectivity and can revolve profiles into surfaces.",
+      "mental_model": "Cleaning up paths and spinning them into shapes.",
+      "example": "Resolve connectivity and revolve a profile into a surface.",
+      "menu": {
+        "Resolve": {
+          "Resolve Group": "Group to resolve.",
+          "Connectivity": "Connectivity handling.",
+          "Origin": "Origin for resolution.",
+          "Direction": "Primary direction.",
+          "Convert Mesh to Polygons": "Converts meshes to polygons.",
+          "Imperfect": "Allows imperfect resolution."
+        },
+        "Detail": {
+          "Revolve Type": "Type of revolve operation.",
+          "Start End Angles": "Angular range for revolve.",
+          "Division Order": "Division/order for revolve.",
+          "End Caps": "Adds end caps."
+        }
+      },
+      "explain_like_im_five": "It fixes paths and can spin them into shapes."
+    },
+    {
+      "operator": "Script (SOP)",
+      "what_it_is": "Generates or modifies geometry using scripting callbacks.",
+      "mental_model": "A programmable pen that draws shapes.",
+      "example": "Procedurally generate geometry using a script.",
+      "menu": {
+        "Script": {
+          "Script": "Script source.",
+          "Custom": "Custom script settings.",
+          "Callback DAT": "DAT used for callbacks.",
+          "Setup Parameters": "Initializes parameters."
+        }
+      },
+      "explain_like_im_five": "It uses code to make shapes."
+    },
+    {
+      "operator": "Select (SOP)",
+      "what_it_is": "Selects specific SOP inputs for downstream use.",
+      "mental_model": "Choosing which wire to listen to.",
+      "example": "Pick one SOP from several inputs.",
+      "menu": {
+        "Select": {
+          "Select SOPs": "SOPs to select."
+        }
+      },
+      "explain_like_im_five": "It picks which shape to use."
+    },
+    {
+      "operator": "Sequence Blend (SOP)",
+      "what_it_is": "Blends a sequence of geometries over time or index.",
+      "mental_model": "A crossfader that steps through shapes.",
+      "example": "Blend between multiple mesh states in order.",
+      "menu": {
+        "Sequence Blend": {
+          "Sequence Blend": "Enables sequence blending.",
+          "Blend Factor": "Overall blend amount.",
+          "Blend Position": "Blends positions.",
+          "Blend Colors": "Blends colors.",
+          "Blend Normals": "Blends normals.",
+          "Blend Texture": "Blends texture coordinates.",
+          "Blend Up": "Blends up vectors."
+        }
+      },
+      "explain_like_im_five": "It fades from one shape to the next."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Skin (SOP)",
+      "what_it_is": "Builds a surface by skinning through cross-sections, with control over wrapping and polygon output.",
+      "mental_model": "Stretching a surface over a stack of ribs.",
+      "example": "Skin multiple profile curves into a continuous surface shell.",
+      "menu": {
+        "Skin": {
+          "U Cross Sections": "Cross-sections in U direction.",
+          "V Cross Sections": "Cross-sections in V direction.",
+          "Connectivity": "How sections are connected.",
+          "Preserve Shape": "Preserves section shape while skinning.",
+          "V Wrap": "Wraps in V direction.",
+          "Use V Order": "Uses explicit V ordering.",
+          "Skin": "Enables skinning.",
+          "Keep Primitives": "Keeps input primitives.",
+          "Output Polygons": "Outputs polygonal result."
+        }
+      },
+      "explain_like_im_five": "It makes a surface by stretching between lines."
+    },
+    {
+      "operator": "Sort (SOP)",
+      "what_it_is": "Reorders points, primitives, or particles using rules like randomization, offsets, and vector directions.",
+      "mental_model": "Rearranging a list of geometry elements into a new order.",
+      "example": "Sort points along a vector direction to prepare for sweeping or instancing.",
+      "menu": {
+        "Sort": {
+          "Sort": "Enables sorting."
+        },
+        "Point": {
+          "Point": "Point sorting mode.",
+          "Point Start": "Starting point index/seed for ordering.",
+          "Seed": "Random seed.",
+          "Offset Point": "Offset applied to point indices.",
+          "Vector Object": "Object used as vector reference.",
+          "Vector": "Vector direction used for sorting."
+        },
+        "Primitive": {
+          "Primitives": "Primitive sorting mode.",
+          "Sort": "Primitive sort behavior.",
+          "Seed": "Random seed.",
+          "Offset Point": "Offset used for sorting.",
+          "Vector Object": "Object used as vector reference.",
+          "Vector": "Vector direction used for sorting."
+        },
+        "Particle": {
+          "Particle Sort": "Particle sorting mode.",
+          "Reverse Results": "Reverses the final order.",
+          "Offset Point": "Offset used for sorting.",
+          "Vector Object": "Object used as vector reference.",
+          "Vector": "Vector direction used for sorting."
+        }
+      },
+      "explain_like_im_five": "It changes the order of dots or faces."
+    },
+    {
+      "operator": "Sphere (SOP)",
+      "what_it_is": "Generates a sphere primitive with configurable topology, orientation, and UVs.",
+      "mental_model": "A parametric ball you can subdivide and aim.",
+      "example": "Create a high-resolution sphere for lighting tests or deformation.",
+      "menu": {
+        "Sphere": {
+          "Sphere": "Enables sphere generation.",
+          "Primitive Type": "Type of sphere primitive created.",
+          "Connectivity": "How primitives connect.",
+          "Orient Bounds": "Orients using bounds.",
+          "Modify Bounds": "Adjusts bounds after creation.",
+          "Rotate Order": "Rotation order.",
+          "Radius": "Sphere radius.",
+          "Center": "Sphere center position.",
+          "Rotate": "Rotation values.",
+          "Reverse Anchors": "Flips anchor directions.",
+          "Revert Anchor U": "Reverts U anchor behavior.",
+          "Anchor V": "V anchor position.",
+          "Anchor W": "W anchor position.",
+          "Orientation": "Overall orientation."
+        },
+        "Detail": {
+          "Frequency": "Frequency/detail control.",
+          "Rows": "Row resolution.",
+          "Columns": "Column resolution.",
+          "U Order": "Order in U direction.",
+          "V Order": "Order in V direction.",
+          "Imperfect": "Allows imperfect approximation.",
+          "Unique Points per Pole": "Splits pole points uniquely.",
+          "Texture Coordinates": "Generates texture coordinates.",
+          "Compute Normals": "Computes normals."
+        }
+      },
+      "explain_like_im_five": "It makes a ball you can add more lines to."
+    },
+    {
+      "operator": "Spring (SOP)",
+      "what_it_is": "Simulates spring dynamics on points with forces, constraints, and physical attributes like mass and drag.",
+      "mental_model": "A net of springs that jiggles and settles.",
+      "example": "Make a chain of points bounce with spring tension and collision limits.",
+      "menu": {
+        "Spring": {
+          "State": "Simulation state.",
+          "Pre-Roll Time": "Warm-up time before output.",
+          "Time Inc": "Time increment per step.",
+          "Accurate Moves": "Higher-accuracy stepping.",
+          "Attractor Use": "Enables attractor influence.",
+          "Reset": "Resets simulation."
+        },
+        "Forces": {
+          "$ref": "Particle.Forces"
+        },
+        "Node": {
+          "Fixed Point Groups": "Groups of fixed points.",
+          "Fixed Points": "Fixed point selection.",
+          "Go to Source Positions": "Resets toward source positions.",
+          "Copy Groups from Source": "Copies groups from the source.",
+          "Add Mass Attribute": "Adds mass attribute.",
+          "Mass": "Mass value.",
+          "Add Drag Attribute": "Adds drag attribute.",
+          "Drag": "Drag value.",
+          "Spring Behavior": "Spring behavior mode.",
+          "Spring Constant": "Stiffness constant.",
+          "Initial Tension": "Initial tension amount."
+        },
+        "Limits": {
+          "Limit Plane X": "Limit plane in X.",
+          "Limit Plane Plus": "Positive limit plane.",
+          "Limit Plane Minus": "Negative limit plane.",
+          "Hit Behavior": "Behavior on collision.",
+          "Gain Tangent": "Velocity gain along tangent.",
+          "Gain Normal": "Velocity gain along normal."
+        }
+      },
+      "explain_like_im_five": "It makes points act like they’re connected by rubber bands."
+    }
+  ]
+}
+,
+          "Subtract Primitive": "Subtracts from primitive att
+{
+  "operators": [
+    {
+      "operator": "Surfsect (SOP)",
+      "what_it_is": "Computes intersection curves between two surface groups and optionally trims results based on inside/outside rules.",
+      "mental_model": "Finding and cutting along where two surfaces cross each other.",
+      "example": "Extract clean intersection curves between two NURBS surfaces.",
+      "menu": {
+        "Surfsect": {
+          "Surfsect": "Enables surface intersection.",
+          "Group A": "First surface group.",
+          "Group B": "Second surface group.",
+          "3D Tolerance": "Tolerance for 3D intersection calculations.",
+          "2D Tolerance": "Tolerance in parameter space.",
+          "Marching Steps": "Steps used during intersection marching."
+        },
+        "Method": {
+          "Method Operation": "Type of intersection/trim operation.",
+          "Keep Inside A": "Keeps regions inside surface A.",
+          "Keep Inside B": "Keeps regions inside surface B.",
+          "Keep Outside A": "Keeps regions outside surface A.",
+          "Keep Outside B": "Keeps regions outside surface B.",
+          "Target": "Target surface for trimming.",
+          "A Profiles Group": "Group for profiles created on A.",
+          "B Profiles Group": "Group for profiles created on B.",
+          "Avoid Already Trimmed Outputs": "Prevents reusing trimmed results.",
+          "Join Profiles Created by Multiple Surfaces": "Merges profiles from multiple intersections."
+        }
+      },
+      "explain_like_im_five": "It finds where two surfaces touch and cuts along that line."
+    },
+    {
+      "operator": "Sweep (SOP)",
+      "what_it_is": "Sweeps cross-section geometry along a path to create surfaces or solids.",
+      "mental_model": "Dragging a shape along a track to leave a surface behind.",
+      "example": "Sweep a circle along a curve to create a tube.",
+      "menu": {
+        "Sweep": {
+          "Sweep": "Enables sweeping.",
+          "X Section Group": "Cross-section geometry group.",
+          "Path Group": "Path curve group.",
+          "Reference Group": "Reference geometry for orientation.",
+          "Cycle Type": "Cycling behavior along the path.",
+          "Angle Fix": "Corrects angle discontinuities.",
+          "Fix Flipping": "Prevents orientation flipping.",
+          "Remove Coincident Points on Path": "Cleans duplicate path points.",
+          "Aim at Reference Points": "Aims cross-section toward references.",
+          "Use Vertex": "Uses vertex data for orientation.",
+          "Connection Vertex": "Vertex used for connections.",
+          "Scale": "Scales the cross-section.",
+          "Twist": "Twist applied along the path.",
+          "Roll": "Roll applied along the path."
+        },
+        "Output": {
+          "Create Groups": "Creates output groups.",
+          "Swap Groups": "Swaps generated groups.",
+          "Skin Output": "Skins the sweep output.",
+          "Fast Sweep": "Uses optimized sweeping."
+        }
+      },
+      "explain_like_im_five": "It slides a shape along a line to make a surface."
+    },
+    {
+      "operator": "Switch (SOP)",
+      "what_it_is": "Selects one of multiple SOP inputs to pass through.",
+      "mental_model": "A railroad switch choosing which track to use.",
+      "example": "Toggle between different geometry versions.",
+      "menu": {
+        "Switch": {
+          "Switch": "Enables switching.",
+          "Select Input": "Index of the input to output.",
+          "Extend": "Behavior when index is out of range."
+        }
+      },
+      "explain_like_im_five": "It chooses which shape gets through."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Text (SOP)",
+      "what_it_is": "Generates vector or polygonal text geometry with typographic layout controls.",
+      "mental_model": "A typesetter that turns words into shapes.",
+      "example": "Create extruded 3D text with proper alignment and wrapping.",
+      "menu": {
+        "Text": {
+          "Font": "Font family selection.",
+          "Font File": "Custom font file path.",
+          "Bold": "Enables bold styling.",
+          "Italic": "Enables italic styling.",
+          "Font Size": "Base font size.",
+          "Keep Font Ratio": "Preserves font aspect ratio.",
+          "Scale Font to BB Box Height": "Scales font to bounding box height.",
+          "Output": "Type of geometry output.",
+          "Level of Detail": "Controls text tessellation detail.",
+          "Extrude": "Enables extrusion.",
+          "Extrude Depth": "Depth of extrusion.",
+          "Break Language": "Language rules for line breaking.",
+          "Reading Direction": "Text reading direction.",
+          "Tracking Line Spacing": "Character and line spacing.",
+          "Horizontal Align": "Horizontal alignment.",
+          "Vertical Align": "Vertical alignment.",
+          "Word Wrap": "Enables word wrapping.",
+          "Word Wrap Size": "Width used for wrapping.",
+          "Smart Punctuation": "Applies smart punctuation.",
+          "Text": "Text content.",
+          "Legacy Parsing": "Uses legacy text parsing."
+        },
+        "Transform": {
+          "$ref": "Common.Transform"
+        }
+      },
+      "explain_like_im_five": "It turns words into shapes you can see and touch."
+    },
+    {
+      "operator": "Texture (SOP)",
+      "what_it_is": "Applies or generates texture coordinates on geometry using various projection methods.",
+      "mental_model": "Wrapping paper around shapes.",
+      "example": "Project camera-based UVs onto a mesh.",
+      "menu": {
+        "Texture": {
+          "Texture": "Enables texture coordinate generation.",
+          "Primitive Group": "Group to apply textures to.",
+          "Texture Layer": "Texture layer index.",
+          "Texture Type": "Type of texture coordinates.",
+          "Projection Axis": "Axis used for projection.",
+          "Camera Name": "Camera used for projection.",
+          "Camera Aspect": "Uses camera aspect ratio.",
+          "Apply To": "Target attribute for application.",
+          "Scale Offset": "Scales and offsets UVs.",
+          "Rotate": "Rotates texture coordinates.",
+          "Fix Face Seams": "Attempts to fix UV seams."
+        },
+        "Transform": {
+          "$ref": "Common.Transform"
+        }
+      },
+      "explain_like_im_five": "It tells shapes how pictures stick to them."
+    },
+    {
+      "operator": "Torus (SOP)",
+      "what_it_is": "Creates a torus (donut-shaped) primitive with detailed topology controls.",
+      "mental_model": "A donut you can slice into neat rows and columns.",
+      "example": "Generate a torus with custom wrapping and end caps.",
+      "menu": {
+        "Torus": {
+          "Torus": "Enables torus generation.",
+          "Primitive Type": "Type of primitive created.",
+          "Connectivity": "How primitives connect.",
+          "Orientation": "Overall orientation.",
+          "Modify Bounds": "Adjusts bounds after creation.",
+          "Radius": "Major/minor radius.",
+          "Center": "Center position.",
+          "Reverse Anchors": "Flips anchor directions.",
+          "Anchor U": "U anchor position.",
+          "Anchor V": "V anchor position.",
+          "Anchor W": "W anchor position.",
+          "Rows": "Row resolution.",
+          "Columns": "Column resolution."
+        },
+        "Detail": {
+          "Angle Offset": "Offsets starting angle.",
+          "Imperfect": "Allows imperfect approximation.",
+          "U Order": "Order in U direction.",
+          "V Order": "Order in V direction.",
+          "U Angle": "Angular span in U.",
+          "V Angle": "Angular span in V.",
+          "U Wrap": "Wraps geometry in U.",
+          "V Wrap": "Wraps geometry in V.",
+          "U Endcaps": "Adds end caps in U.",
+          "V Endcaps": "Adds end caps in V.",
+          "Texture Coordinates": "Generates texture coordinates.",
+          "Compute Normals": "Computes normals."
+        }
+      },
+      "explain_like_im_five": "It makes a donut shape."
+    },
+    {
+      "operator": "Trace (SOP)",
+      "what_it_is": "Converts raster images into vector or polygonal outlines.",
+      "mental_model": "Drawing around the edges of a picture.",
+      "example": "Trace a logo image into clean vector geometry.",
+      "menu": {
+        "Trace": {
+          "Trace TOP Name": "Source TOP to trace.",
+          "Threshold": "Brightness threshold for tracing.",
+          "Add Point Texture": "Adds texture coordinates to points.",
+          "Remove Borders": "Removes image borders.",
+          "Compute Normals": "Computes normals on output."
+        },
+        "Filters": {
+          "Border Width": "Border thickness for filtering.",
+          "Resample Shapes": "Resamples traced shapes.",
+          "Step Size": "Step size for resampling.",
+          "Smooth Shapes": "Smooths traced outlines.",
+          "Corner Delta": "Corner detection sensitivity.",
+          "Fit to Curves": "Fits outlines to curves.",
+          "Fitting Error": "Allowed curve fitting error.",
+          "Convert to Poly": "Converts curves to polygons.",
+          "Level of Detail": "Detail level for tracing.",
+          "Whole Faces": "Outputs whole faces."
+        }
+      },
+      "explain_like_im_five": "It turns pictures into line shapes."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Trail (SOP)",
+      "what_it_is": "Accumulates previous frames of geometry to create motion trails or history-based geometry.",
+      "mental_model": "Leaving footprints behind moving shapes.",
+      "example": "Create streaks behind moving points.",
+      "menu": {
+        "Trail": {
+          "Result Type": "Type of trail output.",
+          "Trail Length": "Number of frames kept.",
+          "Trail Increment": "Frame step between samples.",
+          "Cache Size": "Internal cache length.",
+          "Evaluate Within Frame Range": "Limits evaluation to frame range.",
+          "Connectivity": "How trail segments connect.",
+          "Close Rows": "Closes rows in the trail.",
+          "Velocity Scale": "Scales velocity contribution.",
+          "Reset": "Clears the trail cache."
+        }
+      },
+      "explain_like_im_five": "It shows where things have been."
+    },
+    {
+      "operator": "Transform (SOP)",
+      "what_it_is": "Applies spatial transformations to geometry.",
+      "mental_model": "Grab, move, turn, and resize a shape.",
+      "example": "Rotate and scale a mesh around a pivot.",
+      "menu": {
+        "Transform": {
+          "Transform Group": "Group to transform.",
+          "Transform Order": "Order of transform operations.",
+          "Rotate Order": "Rotation order.",
+          "Translate": "Position offset.",
+          "Rotate": "Rotation values.",
+          "Scale": "Scale values.",
+          "Pivot": "Pivot point.",
+          "Uniform Scale": "Locks scale axes together.",
+          "Normals Maintain Length": "Preserves normal length.",
+          "Look At": "Object to face.",
+          "Up Vector": "Defines up direction.",
+          "Forward Direction": "Defines forward direction."
+        },
+        "Post": {
+          "Post Transform Order": "Order for post-transform.",
+          "Post Translate": "Additional translation.",
+          "From Input to Reference": "Translation mapping mode.",
+          "Post Translate Y": "Y translation with from/to.",
+          "From": "Source reference.",
+          "To": "Target reference.",
+          "Post Translate Z": "Z translation with from/to.",
+          "Post Scale": "Additional scaling.",
+          "Post Scale X": "X scale.",
+          "Post Scale Y": "Y scale.",
+          "Post Scale Z": "Z scale."
+        }
+      },
+      "explain_like_im_five": "It moves and turns shapes."
+    },
+    {
+      "operator": "Trim (SOP)",
+      "what_it_is": "Trims surfaces using profile curves with precise tolerance controls.",
+      "mental_model": "Cutting out parts of a surface with scissors.",
+      "example": "Trim a NURBS surface using projected curves.",
+      "menu": {
+        "Trim": {
+          "Trim Group": "Profiles or surfaces to trim.",
+          "Process Profiles Individually": "Handles each profile separately.",
+          "Build Outer Trim Loop Explicitly": "Forces explicit outer loop.",
+          "Trimming Tolerance": "Tolerance for trimming operations."
+        }
+      },
+      "explain_like_im_five": "It cuts surfaces using lines."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "TriStrip (SOP)",
+      "what_it_is": "Reorders triangles into triangle strips for efficiency.",
+      "mental_model": "Lacing triangles into long zipper-like strips.",
+      "example": "Optimize triangle meshes for faster rendering.",
+      "menu": {
+        "TriStrip": {
+          "TriStrip": "Enables triangle strip generation.",
+          "Source Group": "Triangles to convert.",
+          "Constrain Strip Length": "Limits strip length.",
+          "Maximum Strip Length": "Maximum triangles per strip."
+        }
+      },
+      "explain_like_im_five": "It lines up triangles into long strips."
+    },
+    {
+      "operator": "Tube (SOP)",
+      "what_it_is": "Creates a tubular primitive with detailed topology and caps.",
+      "mental_model": "A pipe you can twist and resize.",
+      "example": "Generate a hollow tube with end caps.",
+      "menu": {
+        "Tube": {
+          "Tube": "Enables tube creation.",
+          "Primitive Type": "Type of tube primitive.",
+          "Connectivity": "Topology connectivity.",
+          "Orientation": "Overall orientation.",
+          "Orient Bounds": "Orient using bounds.",
+          "Modify Bounds": "Adjust bounds after creation.",
+          "Rotate Order": "Rotation order.",
+          "Center": "Tube center.",
+          "Rotate Radius": "Rotates radius orientation.",
+          "Height": "Tube height.",
+          "Reverse Anchors": "Flips anchor directions.",
+          "Anchor U": "U anchor position.",
+          "Anchor V": "V anchor position.",
+          "Anchor W": "W anchor position.",
+          "Imperfect": "Allows imperfect approximation."
+        },
+        "Detail": {
+          "Rows": "Row resolution.",
+          "Columns": "Column resolution.",
+          "U Order": "Order in U.",
+          "V Order": "Order in V.",
+          "End Caps": "Adds end caps.",
+          "Texture Coordinates": "Generates texture coordinates.",
+          "Compute Normals": "Computes normals."
+        }
+      },
+      "explain_like_im_five": "It makes a pipe shape."
+    },
+    {
+      "operator": "Twist (SOP)",
+      "what_it_is": "Applies a twisting deformation around an axis.",
+      "mental_model": "Twisting a towel around its length.",
+      "example": "Add a corkscrew twist to a column.",
+      "menu": {
+        "Twist": {
+          "Twist Group": "Group to twist.",
+          "Operation": "Twist operation mode.",
+          "Primary Axis": "Main twist axis.",
+          "Secondary Axis": "Secondary reference axis.",
+          "Pivot Strength": "Strength around pivot.",
+          "Rolloff": "Falloff of the twist."
+        }
+      },
+      "explain_like_im_five": "It twists shapes like a spiral."
+    },
+    {
+      "operator": "Vertex (SOP)",
+      "what_it_is": "Edits vertex-level attributes independently from points.",
+      "mental_model": "Adjusting the corners of faces instead of dots.",
+      "example": "Modify vertex colors without changing point colors.",
+      "menu": {
+        "Vertex": {
+          "Vertex Group": "Vertices to affect.",
+          "Keep Color": "Preserves vertex color.",
+          "Keep Texture": "Preserves vertex UVs.",
+          "Keep Crease": "Preserves crease values."
+        }
+      },
+      "explain_like_im_five": "It changes corner data on shapes."
+    },
+    {
+      "operator": "Wireframe (SOP)",
+      "what_it_is": "Converts geometry into a wireframe representation.",
+      "mental_model": "Turning faces into metal rods.",
+      "example": "Create a wireframe version of a mesh.",
+      "menu": {
+        "Wireframe": {
+          "Wireframe Group": "Group to wireframe.",
+          "Wire Radius": "Thickness of wires.",
+          "Round Corners": "Rounds wire corners.",
+          "End Caps": "Adds caps to wire ends.",
+          "Remove Polygons": "Removes original faces.",
+          "Fast Wire": "Uses faster wireframe method."
+        }
+      },
+      "explain_like_im_five": "It turns shapes into wires."
+    },
+    {
+      {  "operator": "ZED (SOP)",
+  "what_it_is": "Converts ZED camera depth and image data into geometry inside SOPs.",
+  "mental_model": "Turning a depth camera’s view into actual 3D points and surfaces.",
+  "example": "Generate live point clouds or meshes from a ZED stereo camera feed.",
+  "menu": {
+    "ZED": {
+      "ZED": "Enables ZED SOP processing.",
+      "ZED TOP": "Source ZED TOP providing depth and image data.",
+      "Sample Reset Preview": "Resets the sampling preview state.",
+      "Maximum Memory": "Limits memory usage for geometry generation.",
+      "Resolution": "Resolution of generated geometry.",
+      "Range": "Depth range used for geometry creation.",
+      "Normals": "Computes normals from depth data.",
+      "Texture": "Applies texture coordinates from the camera image.",
+      "Filter": "Filtering method for depth noise.",
+      "Consolidate Points": "Merges nearby points to reduce density."
+    }
+  },
+  "explain_like_im_five": "It turns what the depth camera sees into real 3D shapes."
+}

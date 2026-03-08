@@ -1,0 +1,2005 @@
+{
+  "operators": [
+    {
+      "operator": "Ableton Link (CHOP)",
+      "what_it_is": "Connects TouchDesigner to Ableton Link for shared tempo, beat, and transport synchronization.",
+      "mental_model": "A shared musical clock that multiple apps agree to follow.",
+      "example": "Sync TouchDesigner visuals to the tempo and beat of Ableton Live.",
+      "menu": {
+        "Ableton": "[ABLETON_LINK_MENU]",
+        "Output": "[ABLETON_LINK_OUTPUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "attached": {
+        "operator": "Ableton Link Callbacks (Text DAT)",
+        "menu": {
+          "File": "[TEXT_DAT_FILE_MENU]",
+          "Common": "[TEXT_DAT_COMMON_MENU]"
+        }
+      },
+      "explain_like_im_five": "It makes TouchDesigner follow the same beat as music apps."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Ableton Link (CHOP)",
+      "what_it_is": "Connects TouchDesigner to Ableton Link for shared tempo, beat, and transport synchronization.",
+      "mental_model": "A shared musical clock that multiple apps agree to follow.",
+      "example": "Sync TouchDesigner visuals to the tempo and beat of Ableton Live.",
+      "menu": {
+        "Ableton": "[ABLETON_LINK_MENU]",
+        "Output": "[ABLETON_LINK_OUTPUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "attached": {
+        "operator": "Ableton Link Callbacks (Text DAT)",
+        "menu": {
+          "File": "[TEXT_DAT_FILE_MENU]",
+          "Common": "[TEXT_DAT_COMMON_MENU]"
+        }
+      },
+      "explain_like_im_five": "It makes TouchDesigner follow the same beat as music apps."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Angle (CHOP)",
+      "what_it_is": "Converts and reorders angular data between different angle representations.",
+      "mental_model": "A translator that changes how angles are measured and ordered.",
+      "example": "Convert rotation data from degrees to radians before driving a transform.",
+      "menu": {
+        "Angle": "[ANGLE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It changes how turning numbers are counted and lined up."
+    },
+    {
+      "operator": "Attribute (CHOP)",
+      "what_it_is": "Modifies quaternion attributes and rotation order on channel data.",
+      "mental_model": "A tool that edits how rotation information is stored and applied.",
+      "example": "Replace quaternion rotation data before exporting to another operator.",
+      "menu": {
+        "Attribute": "[ATTRIBUTE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It edits how spinning directions are saved."
+    },
+    {
+      "operator": "Audio Band EQ (CHOP)",
+      "what_it_is": "Applies multi-band equalization to audio signals.",
+      "mental_model": "A sound mixer that turns different pitch ranges up or down.",
+      "example": "Boost low frequencies and reduce harsh highs in a music-driven visual.",
+      "menu": {
+        "Low Bands": "[AUDIO_EQ_LOW_BANDS]",
+        "High Bands": "[AUDIO_EQ_HIGH_BANDS]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It changes how loud different sounds are."
+    },
+    {
+      "operator": "Audio Binaural (CHOP)",
+      "what_it_is": "Processes audio for binaural spatial listening.",
+      "mental_model": "A sound processor that makes audio feel like it’s coming from space around you.",
+      "example": "Create 3D-positioned sound that feels left, right, near, or far.",
+      "menu": {
+        "Audio Binaural": "[AUDIO_BINAURAL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes sound feel like it’s moving around your head."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Audio Device In (CHOP)",
+      "what_it_is": "Captures live audio input from an audio device into TouchDesigner.",
+      "mental_model": "A microphone jack that feeds sound into the system.",
+      "example": "Bring in live microphone or mixer input to drive audio-reactive visuals.",
+      "menu": {
+        "Audio Device In": "[AUDIO_DEVICE_IN_MENU]",
+        "Input": "[AUDIO_CHANNEL_LAYOUT_MENU]",
+        "Input To": "[AUDIO_INPUT_TO_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It lets sound come into TouchDesigner."
+    },
+    {
+      "operator": "Audio Device Out (CHOP)",
+      "what_it_is": "Sends audio from TouchDesigner to an external audio device.",
+      "mental_model": "A speaker jack that sends sound out of the system.",
+      "example": "Play generated or processed audio through speakers or headphones.",
+      "menu": {
+        "Audio Device Out": "[AUDIO_DEVICE_OUT_MENU]",
+        "Output": "[AUDIO_CHANNEL_LAYOUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It sends sound out to speakers."
+    },
+    {
+      "operator": "Audio Dynamics (CHOP)",
+      "what_it_is": "Applies dynamic range processing such as compression and limiting to audio signals.",
+      "mental_model": "An automatic volume controller that keeps sound under control.",
+      "example": "Compress loud peaks so music-driven visuals stay stable.",
+      "menu": {
+        "Pre": "[AUDIO_DYNAMICS_PRE_MENU]",
+        "Compressor": "[AUDIO_DYNAMICS_COMPRESSOR_MENU]",
+        "Limiter": "[AUDIO_DYNAMICS_LIMITER_MENU]",
+        "Post": "[AUDIO_DYNAMICS_POST_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It keeps sounds from getting too loud or too quiet."
+    },
+    {
+      "operator": "Audio File In (CHOP)",
+      "what_it_is": "Loads and plays audio files into TouchDesigner.",
+      "mental_model": "A music player that turns sound files into channels.",
+      "example": "Play a song file and use its waveform to animate visuals.",
+      "menu": {
+        "Audio File In": "[AUDIO_FILE_IN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It plays a sound file inside TouchDesigner."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Audio Filter (CHOP)",
+      "what_it_is": "Applies frequency-based filtering to audio signals.",
+      "mental_model": "A sieve that lets certain sound frequencies through and blocks others.",
+      "example": "Remove low rumble from an audio signal before analysis.",
+      "menu": {
+        "Filter": "[AUDIO_FILTER_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It lets only certain sounds pass through."
+    },
+    {
+      "operator": "Audio Movie (CHOP)",
+      "what_it_is": "Extracts and plays audio from a movie file or Movie TOP.",
+      "mental_model": "Pulling the sound out of a video.",
+      "example": "Use the soundtrack of a movie to drive visuals.",
+      "menu": {
+        "Audio Movie": "[AUDIO_MOVIE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It takes sound out of a video."
+    },
+    {
+      "operator": "Audio NDI (CHOP)",
+      "what_it_is": "Receives audio streams over NDI from the network.",
+      "mental_model": "Listening to sound sent over the network.",
+      "example": "Receive live audio from another computer running TouchDesigner.",
+      "menu": {
+        "Audio NDI": "[AUDIO_NDI_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It hears sound coming from another computer."
+    },
+    {
+      "operator": "Audio Oscillator (CHOP)",
+      "what_it_is": "Generates synthetic audio waveforms.",
+      "mental_model": "A sound generator that makes tones from math.",
+      "example": "Create a sine wave tone to test audio systems.",
+      "menu": {
+        "Waveform": "[AUDIO_OSC_WAVEFORM_MENU]",
+        "Channel": "[AUDIO_OSC_CHANNEL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes sounds by itself."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Audio Power EQ (CHOP)",
+      "what_it_is": "Applies power-based equalization with frequency and bandwidth control.",
+      "mental_model": "A precise sound shaper that boosts or cuts specific frequency ranges.",
+      "example": "Emphasize certain frequency bands to accent visual reactions.",
+      "menu": {
+        "EQ": "[AUDIO_POWER_EQ_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes certain sounds stronger or softer."
+    },
+    {
+      "operator": "Audio Play (CHOP)",
+      "what_it_is": "Plays audio from CHOP channels through an output device.",
+      "mental_model": "A play button for sound already inside TouchDesigner.",
+      "example": "Send processed audio channels to speakers.",
+      "menu": {
+        "Audio Play": "[AUDIO_PLAY_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It plays sounds you already have."
+    },
+    {
+      "operator": "Audio Render (CHOP)",
+      "what_it_is": "Simulates and renders spatial audio using positional and acoustic modeling.",
+      "mental_model": "A virtual room that calculates how sound moves and bounces.",
+      "example": "Render realistic 3D sound that reflects off walls and objects.",
+      "menu": {
+        "Audio Render": "[AUDIO_RENDER_MAIN_MENU]",
+        "Attenuation": "[AUDIO_RENDER_ATTENUATION_MENU]",
+        "Simulation": "[AUDIO_RENDER_SIMULATION_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes sound behave like it’s in a real place."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Audio Spectrum (CHOP)",
+      "what_it_is": "Performs spectral analysis and synthesis on audio signals using FFT.",
+      "mental_model": "A machine that breaks sound into its frequency ingredients and puts it back together.",
+      "example": "Analyze music frequencies to drive bars or waveforms.",
+      "menu": {
+        "Spectrum": "[AUDIO_SPECTRUM_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It shows what sounds are inside the sound."
+    },
+    {
+      "operator": "Audio Stream In (CHOP)",
+      "what_it_is": "Receives streamed audio from network sources.",
+      "mental_model": "Listening to live sound coming from the internet.",
+      "example": "Receive audio from a remote stream or WebRTC source.",
+      "menu": {
+        "Audio Stream In": "[AUDIO_STREAM_IN_MENU]",
+        "WebRTC": "[WEBRTC_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It hears sound coming from online."
+    },
+    {
+      "operator": "Audio Stream Out (CHOP)",
+      "what_it_is": "Streams audio from TouchDesigner to the network.",
+      "mental_model": "Broadcasting sound to other computers.",
+      "example": "Send live-generated audio to a remote client.",
+      "menu": {
+        "Audio Stream Out": "[AUDIO_STREAM_OUT_MENU]",
+        "WebRTC": "[WEBRTC_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It sends sound out over the internet."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Audio BST (CHOP)",
+      "what_it_is": "Hosts and controls audio plugins using the BST plugin system.",
+      "mental_model": "A rack that loads audio plugins and lets them talk to TouchDesigner.",
+      "example": "Load a third-party audio effect plugin and control it with channels.",
+      "menu": {
+        "BST": "[AUDIO_BST_MENU]",
+        "Bus Layout": "[AUDIO_BST_BUS_LAYOUT_MENU]",
+        "Playhead": "[AUDIO_BST_PLAYHEAD_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It lets TouchDesigner use audio plugins."
+    },
+    {
+      "operator": "Audio Web Render (CHOP)",
+      "what_it_is": "Outputs audio generated by a Web Render TOP.",
+      "mental_model": "Taking sound from a web page and turning it into channels.",
+      "example": "Use audio from a web app or online player inside TouchDesigner.",
+      "menu": {
+        "Audio Web Render": "[AUDIO_WEB_RENDER_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It grabs sound from a website."
+    },
+    {
+      "operator": "Beat (CHOP)",
+      "what_it_is": "Generates tempo-based timing signals such as beats, bars, and ramps.",
+      "mental_model": "A musical metronome that outputs timing signals.",
+      "example": "Drive animations based on musical beats and bars.",
+      "menu": {
+        "Beat": "[BEAT_MENU]",
+        "Output": "[BEAT_OUTPUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes rhythm signals you can use."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Bind (CHOP)",
+      "what_it_is": "Binds CHOP channels to parameters or external values with flexible matching rules.",
+      "mental_model": "A cable that automatically connects channels to controls.",
+      "example": "Bind incoming channels to multiple parameters by name.",
+      "menu": {
+        "Bind": "[BIND_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It connects numbers to knobs automatically."
+    },
+    {
+      "operator": "BlackTrax (CHOP)",
+      "what_it_is": "Receives and processes real-time tracking data from the BlackTrax system.",
+      "mental_model": "A motion tracking receiver that knows where things are and how they move.",
+      "example": "Track performers on stage and drive visuals from their movement.",
+      "menu": {
+        "BlackTrax": "[BLACKTRAX_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It listens to a system that tracks moving things."
+    },
+    {
+      "operator": "Blend (CHOP)",
+      "what_it_is": "Combines multiple CHOP inputs using different blending methods.",
+      "mental_model": "A mixer that merges several number streams into one.",
+      "example": "Blend animation channels from different sources.",
+      "menu": {
+        "Blend": "[BLEND_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It mixes numbers together."
+    },
+    {
+      "operator": "Tracker (CHOP)",
+      "what_it_is": "Tracks points or blobs over time and outputs motion data.",
+      "mental_model": "A watcher that follows moving dots and remembers where they go.",
+      "example": "Track blobs from a camera feed to generate motion channels.",
+      "menu": {
+        "Tracker": "[TRACKER_MENU]",
+        "Blob": "[TRACKER_BLOB_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It follows moving spots."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Body Track (CHOP)",
+      "what_it_is": "Outputs human body tracking data including keypoints, rotations, and 3D information.",
+      "mental_model": "A system that understands where people’s bodies are and how they move.",
+      "example": "Drive character animation or visuals from detected human poses.",
+      "menu": {
+        "Body Track": "[BODYTRACK_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It knows where people’s bodies are."
+    },
+    {
+      "operator": "Bullet Solver (CHOP)",
+      "what_it_is": "Extracts physics simulation data from a Bullet Solver or Actor component.",
+      "mental_model": "A reporter that reads motion and collision data from a physics world.",
+      "example": "Use physics-driven movement to control animation parameters.",
+      "menu": {
+        "General": "[BULLET_SOLVER_GENERAL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It reads movement from a physics simulation."
+    },
+    {
+      "operator": "Clip (CHOP)",
+      "what_it_is": "Plays and blends animation clips using rules and timing controls.",
+      "mental_model": "A playlist for motion clips that knows how to transition between them.",
+      "example": "Blend smoothly between walk and run animation clips.",
+      "menu": {
+        "Clip": "[CLIP_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It plays and switches between movement clips."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Clip Blender (CHOP)",
+      "what_it_is": "Blends and transitions between multiple animation clips.",
+      "mental_model": "A DJ crossfader for motion clips.",
+      "example": "Smoothly blend between two motion clips based on timing or triggers.",
+      "menu": {
+        "Clip Blender": "[CLIP_BLENDER_MENU]",
+        "Channel": "[CHOP_CHANNEL_MENU]",
+        "Transform": "[CHOP_TRANSFORM_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It mixes movement clips together."
+    },
+    {
+      "operator": "Clock (CHOP)",
+      "what_it_is": "Outputs time and calendar information as channels.",
+      "mental_model": "A digital clock that turns time into numbers.",
+      "example": "Drive visuals based on the current time or date.",
+      "menu": {
+        "Clock": "[CLOCK_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It tells TouchDesigner what time it is."
+    },
+    {
+      "operator": "Solar (CHOP)",
+      "what_it_is": "Calculates sun and moon position data based on time and location.",
+      "mental_model": "An astronomy calculator for sunlight and moon cycles.",
+      "example": "Change lighting based on real sunrise and sunset times.",
+      "menu": {
+        "Solar": "[SOLAR_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It knows where the sun and moon are."
+    },
+    {
+      "operator": "Composite (CHOP)",
+      "what_it_is": "Combines and blends animation or motion channels with advanced rules.",
+      "mental_model": "A smart mixer that understands motion and timing.",
+      "example": "Blend rotation channels using shortest-path logic.",
+      "menu": {
+        "Composite": "[COMPOSITE_MENU]",
+        "Effect": "[COMPOSITE_EFFECT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It mixes movements in smart ways."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Constant (CHOP)",
+      "what_it_is": "Outputs constant channel values that do not change over time.",
+      "mental_model": "A knob that always stays at the same number.",
+      "example": "Provide a steady value to drive a parameter or blend.",
+      "menu": {
+        "Constant": "[CONSTANT_MENU]",
+        "Snap": "[CONSTANT_SNAP_MENU]",
+        "Channel": "[CONSTANT_CHANNEL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes a number that stays the same."
+    },
+    {
+      "operator": "Copy (CHOP)",
+      "what_it_is": "Duplicates or combines channel data using copy or convolution methods.",
+      "mental_model": "A copier that repeats or stamps channels in different ways.",
+      "example": "Copy animation channels across multiple objects.",
+      "menu": {
+        "Copy": "[COPY_MENU]",
+        "Output": "[COPY_OUTPUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It copies numbers in useful ways."
+    },
+    {
+      "operator": "Count (CHOP)",
+      "what_it_is": "Counts events based on trigger conditions and thresholds.",
+      "mental_model": "A counter that goes up or down when something happens.",
+      "example": "Count how many times a trigger signal fires.",
+      "menu": {
+        "Trigger": "[COUNT_TRIGGER_MENU]",
+        "Count": "[COUNT_COUNT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It counts how many times something happens."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Frost (CHOP)",
+      "what_it_is": "Freezes or dampens channel changes using a simple crossfade control.",
+      "mental_model": "A brake that slows numbers down.",
+      "example": "Smooth sudden jumps in animation channels.",
+      "menu": {
+        "Frost": "[FROST_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It stops numbers from changing too fast."
+    },
+    {
+      "operator": "Cycle (CHOP)",
+      "what_it_is": "Repeats and blends channel sequences over time.",
+      "mental_model": "A looping tape that can blend its ends.",
+      "example": "Loop a motion cycle smoothly.",
+      "menu": {
+        "Cycle": "[CYCLE_MENU]",
+        "Blend": "[CYCLE_BLEND_MENU]",
+        "Shape": "[CYCLE_SHAPE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It repeats movements smoothly."
+    },
+    {
+      "operator": "DAT to CHOP (DAT2CHOP)",
+      "what_it_is": "Converts table data from a DAT into CHOP channels.",
+      "mental_model": "A translator that turns spreadsheet rows into number streams.",
+      "example": "Drive animation channels from a table of values.",
+      "menu": {
+        "DAT": "[DAT2CHOP_DAT_MENU]",
+        "Output": "[DAT2CHOP_OUTPUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It turns table numbers into moving numbers."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Delay (CHOP)",
+      "what_it_is": "Removes or filters channels and samples based on value, range, and comparison rules.",
+      "mental_model": "A sieve that drops channels or samples that don’t meet rules.",
+      "example": "Delete channels whose values stay within a specific range.",
+      "menu": {
+        "Channel": "[DELAY_CHANNEL_MENU]",
+        "Samples": "[DELAY_SAMPLES_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It throws away numbers you don’t want."
+    },
+    {
+      "operator": "DMX In (CHOP)",
+      "what_it_is": "Receives DMX lighting control data from hardware or network protocols.",
+      "mental_model": "An inbox for lighting control signals.",
+      "example": "Bring lighting console data into TouchDesigner.",
+      "menu": {
+        "DMX In": "[DMX_IN_MENU]",
+        "Serial": "[DMX_SERIAL_MENU]",
+        "Network": "[DMX_NETWORK_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It listens to lighting control signals."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "DMX Out (CHOP)",
+      "what_it_is": "Sends DMX lighting control data to hardware or network protocols.",
+      "mental_model": "An outbox that sends lighting commands.",
+      "example": "Control stage lights from TouchDesigner.",
+      "menu": {
+        "DMX Out": "[DMX_OUT_MENU]",
+        "Serial": "[DMX_SERIAL_MENU]",
+        "Network": "[DMX_NETWORK_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It sends commands to lights."
+    },
+    {
+      "operator": "Envelope (CHOP)",
+      "what_it_is": "Extracts amplitude envelopes and signal power characteristics from channels.",
+      "mental_model": "A shape that shows how strong a signal is over time.",
+      "example": "Measure audio loudness to drive visual intensity.",
+      "menu": {
+        "Envelope": "[ENVELOPE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It shows how big a sound or signal is."
+    },
+    {
+      "operator": "Event (CHOP)",
+      "what_it_is": "Generates events with ADSR-style timing and state tracking.",
+      "mental_model": "A trigger system that remembers its life cycle.",
+      "example": "Trigger animations with attack and release behavior.",
+      "menu": {
+        "Channel": "[EVENT_CHANNEL_MENU]",
+        "ADSR": "[EVENT_ADSR_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes events that turn on and off smoothly."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Expression (CHOP)",
+      "what_it_is": "Evaluates expressions to generate or modify channel data.",
+      "mental_model": "A calculator that runs formulas every frame.",
+      "example": "Create procedural motion using math expressions.",
+      "menu": {
+        "Expression": "[EXPRESSION_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It does math to make numbers move."
+    },
+    {
+      "operator": "Extend (CHOP)",
+      "what_it_is": "Defines how channel values behave beyond their defined range.",
+      "mental_model": "Rules for what happens before the start or after the end of data.",
+      "example": "Hold the last value when animation data ends.",
+      "menu": {
+        "Extend": "[EXTEND_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It decides what happens when data runs out."
+    },
+    {
+      "operator": "Face Track (CHOP)",
+      "what_it_is": "Outputs facial tracking data including landmarks, meshes, and rotations.",
+      "mental_model": "A system that understands how a face is shaped and moving.",
+      "example": "Drive facial animation from live camera input.",
+      "menu": {
+        "Face Track": "[FACETRACK_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It tracks how a face moves."
+    },
+    {
+      "operator": "Fan (CHOP)",
+      "what_it_is": "Redistributes channel data by fanning channels in or out.",
+      "mental_model": "A splitter or combiner for channel streams.",
+      "example": "Spread a single channel across many outputs.",
+      "menu": {
+        "Fan": "[FAN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It spreads numbers out or pulls them together."
+    },
+    {
+      "operator": "Feedback (CHOP)",
+      "what_it_is": "Feeds previous channel values back into the current frame.",
+      "mental_model": "A memory loop for numbers.",
+      "example": "Create accumulating or delayed motion effects.",
+      "menu": {
+        "Feedback": "[FEEDBACK_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It remembers what happened before."
+    },
+    {
+      "operator": "File In (CHOP)",
+      "what_it_is": "Loads channel data from external files.",
+      "mental_model": "A file reader for animation data.",
+      "example": "Import motion capture or recorded animation.",
+      "menu": {
+        "File In": "[FILE_IN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It loads numbers from a file."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "File Out (CHOP)",
+      "what_it_is": "Writes channel data to external files at specified intervals.",
+      "mental_model": "A recorder that saves numbers to disk.",
+      "example": "Record animation channels to a file for later playback.",
+      "menu": {
+        "File Out": "[FILE_OUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It saves numbers into a file."
+    },
+    {
+      "operator": "Filter (CHOP)",
+      "what_it_is": "Applies mathematical filtering and smoothing to channel data.",
+      "mental_model": "A noise reducer that smooths or reshapes number changes.",
+      "example": "Smooth jittery motion data.",
+      "menu": {
+        "Filter": "[FILTER_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It smooths numbers."
+    },
+    {
+      "operator": "FreeD In (CHOP)",
+      "what_it_is": "Receives FreeD camera tracking data over the network.",
+      "mental_model": "An inbox for camera position and lens data.",
+      "example": "Drive virtual camera movement from a tracked real camera.",
+      "menu": {
+        "FreeD In": "[FREED_IN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It listens to camera tracking data."
+    },
+    {
+      "operator": "Function (CHOP)",
+      "what_it_is": "Applies mathematical functions to channel values.",
+      "mental_model": "A math machine that transforms numbers.",
+      "example": "Apply exponential or trigonometric math to channels.",
+      "menu": {
+        "Function": "[FUNCTION_MENU]",
+        "Error": "[FUNCTION_ERROR_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It does math tricks on numbers."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Gesture (CHOP)",
+      "what_it_is": "Controls gesture-based playback and blending of motion data.",
+      "mental_model": "A gesture reader that decides how motion should play.",
+      "example": "Trigger and blend motion clips based on detected gestures.",
+      "menu": {
+        "Gesture": "[GESTURE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It plays movements when you make gestures."
+    },
+    {
+      "operator": "Handle (CHOP)",
+      "what_it_is": "Generates handle-based control data for interactive manipulation.",
+      "mental_model": "A virtual handle you can grab and move.",
+      "example": "Rotate or manipulate objects interactively.",
+      "menu": {
+        "Handle": "[HANDLE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It lets you grab and move things."
+    },
+    {
+      "operator": "Hog (CHOP)",
+      "what_it_is": "Controls cooking and timing behavior of CHOP data.",
+      "mental_model": "A throttle that controls when data updates.",
+      "example": "Delay or force updates in a CHOP network.",
+      "menu": {
+        "Hog": "[HOG_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It controls when numbers update."
+    },
+    {
+      "operator": "Hokuyo (CHOP)",
+      "what_it_is": "Receives laser rangefinder data from a Hokuyo sensor.",
+      "mental_model": "A laser scanner that measures distances.",
+      "example": "Use LiDAR-style distance data to drive visuals.",
+      "menu": {
+        "Hokuyo": "[HOKUYO_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It reads distances using a laser."
+    },
+    {
+      "operator": "Hold (CHOP)",
+      "what_it_is": "Holds channel values based on sampling rules.",
+      "mental_model": "A sample-and-hold circuit for numbers.",
+      "example": "Freeze values at specific moments.",
+      "menu": {
+        "Hold": "[HOLD_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It freezes numbers in place."
+    },
+    {
+      "operator": "Import Select (CHOP)",
+      "what_it_is": "Selects and imports animation data from parent components.",
+      "mental_model": "A selector that pulls motion from somewhere else.",
+      "example": "Import animation channels from a parent COMP.",
+      "menu": {
+        "General": "[IMPORT_SELECT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It brings in movement from somewhere else."
+    },
+    {
+      "operator": "Playback (CHOP)",
+      "what_it_is": "Controls playback of animation channels over time.",
+      "mental_model": "A video player for motion data.",
+      "example": "Play, loop, or scrub animation channels.",
+      "menu": {
+        "Playback": "[PLAYBACK_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It plays movement over time."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "In (CHOP)",
+      "what_it_is": "Receives CHOP data from outside the current component.",
+      "mental_model": "An inlet where numbers come into the network.",
+      "example": "Bring CHOP data into a Base COMP from another network.",
+      "menu": {
+        "In": "[IN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It lets numbers come in from somewhere else."
+    },
+    {
+      "operator": "Info (CHOP)",
+      "what_it_is": "Outputs diagnostic and performance information about operators.",
+      "mental_model": "A status panel that reports what’s happening inside operators.",
+      "example": "Monitor cook times and performance of a CHOP network.",
+      "menu": {
+        "Info": "[INFO_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It tells you what the system is doing."
+    },
+    {
+      "operator": "Interpolate (CHOP)",
+      "what_it_is": "Interpolates between channel values using different shapes and priorities.",
+      "mental_model": "A smoother that fills in gaps between values.",
+      "example": "Smooth transitions between animation poses.",
+      "menu": {
+        "Interpolate": "[INTERPOLATE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It fills in the space between numbers."
+    },
+    {
+      "operator": "Immersive Curve (CHOP)",
+      "what_it_is": "Generates curve-based data for immersive or skeletal systems.",
+      "mental_model": "A flexible curve that guides motion or deformation.",
+      "example": "Drive skeletal or path-based animation using curves.",
+      "menu": {
+        "Immersive Curve": "[IMMERSIVE_CURVE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes smooth paths for movement."
+    },
+    {
+      "operator": "Inverse Kinematics (CHOP)",
+      "what_it_is": "Solves inverse kinematics for bone chains.",
+      "mental_model": "A solver that figures out how joints should bend to reach a point.",
+      "example": "Make an arm reach a target automatically.",
+      "menu": {
+        "Inverse Kin": "[INVERSE_KIN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It figures out how joints move to reach something."
+    },
+    {
+      "operator": "Join (CHOP)",
+      "what_it_is": "Joins and blends multiple CHOP inputs using structured blending rules.",
+      "mental_model": "A stitcher that sews motion streams together.",
+      "example": "Blend motion sequences across different inputs.",
+      "menu": {
+        "Join": "[JOIN_MENU]",
+        "Scope": "[JOIN_SCOPE_MENU]",
+        "Rotate": "[JOIN_ROTATE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It joins movements together smoothly."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Joystick (CHOP)",
+      "what_it_is": "Reads input data from a joystick or game controller.",
+      "mental_model": "A controller reader that turns sticks and buttons into numbers.",
+      "example": "Use a gamepad to control camera movement or parameters.",
+      "menu": {
+        "Joystick": "[JOYSTICK_MENU]",
+        "Channel": "[JOYSTICK_CHANNEL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It reads buttons and sticks from a controller."
+    },
+    {
+      "operator": "Keyboard In (CHOP)",
+      "what_it_is": "Outputs keyboard input as channels.",
+      "mental_model": "A keyboard listener that turns key presses into numbers.",
+      "example": "Trigger events or animations with keyboard input.",
+      "menu": {
+        "Keyboard In": "[KEYBOARD_IN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It knows which keys are being pressed."
+    },
+    {
+      "operator": "Keyframe (CHOP)",
+      "what_it_is": "Outputs keyframed animation data.",
+      "mental_model": "A timeline that plays stored animation curves.",
+      "example": "Play back authored animation inside TouchDesigner.",
+      "menu": {
+        "Keyframe": "[KEYFRAME_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It plays drawn animation curves."
+    },
+    {
+      "operator": "Kinect / Connect (CHOP)",
+      "what_it_is": "Receives skeletal and tracking data from a depth camera system.",
+      "mental_model": "A body-tracking reader that knows where people are in space.",
+      "example": "Drive characters or visuals from tracked human movement.",
+      "menu": {
+        "Connect": "[CONNECT_MENU]",
+        "Smoothing": "[CONNECT_SMOOTHING_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It tracks how people move."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Lag (CHOP)",
+      "what_it_is": "Smooths channel changes over time using lag-based methods.",
+      "mental_model": "A shock absorber for numbers.",
+      "example": "Smooth sudden jumps in motion or sensor data.",
+      "menu": {
+        "Lag": "[LAG_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes changes happen more slowly."
+    },
+    {
+      "operator": "Laser (CHOP)",
+      "what_it_is": "Generates and controls laser scanning and color output data.",
+      "mental_model": "A laser plotter that knows where to draw and what color to use.",
+      "example": "Drive a laser projector with shapes and color timing.",
+      "menu": {
+        "Laser": "[LASER_MENU]",
+        "Scanning": "[LASER_SCANNING_MENU]",
+        "Colors": "[LASER_COLORS_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It tells a laser where to draw and what color to be."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Leap Motion (CHOP)",
+      "what_it_is": "Receives hand, finger, and gesture tracking data from a Leap Motion device.",
+      "mental_model": "A hand-tracking reader that understands fingers and gestures in the air.",
+      "example": "Control visuals or parameters using hand movements and gestures.",
+      "menu": {
+        "Leap Motion": "[LEAP_MOTION_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It watches your hands move in the air."
+    },
+    {
+      "operator": "Leuze ROD4 (CHOP)",
+      "what_it_is": "Receives object and blob tracking data from a Leuze ROD4 sensor.",
+      "mental_model": "A sensor reader that tracks moving points and blobs in a defined area.",
+      "example": "Track people or objects crossing a sensor field.",
+      "menu": {
+        "RD04": "[LEUZE_RD04_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It tracks moving points from a special sensor."
+    },
+    {
+      "operator": "LFO (CHOP)",
+      "what_it_is": "Generates low-frequency oscillation signals.",
+      "mental_model": "A slow wave generator for motion and modulation.",
+      "example": "Create looping sine waves to animate parameters.",
+      "menu": {
+        "LFO": "[LFO_MENU]",
+        "Channel": "[CHOP_CHANNEL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes slow repeating waves."
+    },
+    {
+      "operator": "Limit (CHOP)",
+      "what_it_is": "Constrains and quantizes channel values within defined limits.",
+      "mental_model": "A fence that keeps numbers within bounds.",
+      "example": "Clamp animation values to a safe range.",
+      "menu": {
+        "Limit": "[LIMIT_MENU]",
+        "Quantize": "[LIMIT_QUANTIZE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It stops numbers from going too far."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Logic (CHOP)",
+      "what_it_is": "Performs logical operations and comparisons on channel data.",
+      "mental_model": "A decision machine that compares numbers and outputs true or false results.",
+      "example": "Trigger events when values cross thresholds.",
+      "menu": {
+        "Logic": "[LOGIC_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It decides yes or no based on numbers."
+    },
+    {
+      "operator": "Lookup (CHOP)",
+      "what_it_is": "Maps channel values through lookup tables or index ranges.",
+      "mental_model": "A chart that converts one number into another.",
+      "example": "Remap input values to custom curves or ranges.",
+      "menu": {
+        "Lookup": "[LOOKUP_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It changes numbers using a table."
+    },
+    {
+      "operator": "LTC In (CHOP)",
+      "what_it_is": "Receives and decodes Linear Timecode (LTC) signals.",
+      "mental_model": "A clock reader that listens to timecode audio.",
+      "example": "Sync TouchDesigner playback to external timecode.",
+      "menu": {
+        "LTC In": "[LTC_IN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It listens to a time signal."
+    },
+    {
+      "operator": "LTC Out (CHOP)",
+      "what_it_is": "Generates Linear Timecode (LTC) signals.",
+      "mental_model": "A clock that sends timecode out as audio.",
+      "example": "Send timecode to synchronize external systems.",
+      "menu": {
+        "LTC Out": "[LTC_OUT_MENU]",
+        "User": "[LTC_USER_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It sends a time signal out."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Bass (CHOP)",
+      "what_it_is": "Applies bass-style channel processing with pre/post operations and interpolation.",
+      "mental_model": "A low-level channel processor that reshapes numbers before and after combining.",
+      "example": "Prepare channel data before mixing or logic operations.",
+      "menu": {
+        "Bass": "[BASS_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It adjusts numbers before and after mixing them."
+    },
+    {
+      "operator": "Multi Add (CHOP)",
+      "what_it_is": "Adds multiple channel values together with scaling and range control.",
+      "mental_model": "A calculator that adds many numbers with rules.",
+      "example": "Sum several modulation signals into one output.",
+      "menu": {
+        "Multi Add": "[MULTIADD_MENU]",
+        "Range": "[MULTIADD_RANGE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It adds lots of numbers together."
+    },
+    {
+      "operator": "Merge (CHOP)",
+      "what_it_is": "Merges multiple CHOP inputs into a single output.",
+      "mental_model": "A zipper that joins channel lists together.",
+      "example": "Combine channels from different sources.",
+      "menu": {
+        "Merge": "[MERGE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It puts channels together."
+    },
+    {
+      "operator": "MIDI In (CHOP)",
+      "what_it_is": "Receives MIDI input data and converts it to channels.",
+      "mental_model": "A MIDI listener that turns notes and controls into numbers.",
+      "example": "Use a MIDI keyboard to control visuals.",
+      "menu": {
+        "MIDI In": "[MIDI_IN_MENU]",
+        "Note": "[MIDI_NOTE_MENU]",
+        "Control": "[MIDI_CONTROL_MENU]",
+        "Timer": "[MIDI_TIMER_MENU]",
+        "Sys": "[MIDI_SYS_MENU]",
+        "Channel": "[CHOP_CHANNEL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It listens to musical controllers."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "MIDI In Map (CHOP)",
+      "what_it_is": "Maps MIDI input devices to channels using configurable sliders and buttons.",
+      "mental_model": "A MIDI router that turns controls into named channels.",
+      "example": "Map MIDI controller sliders and buttons to animation controls.",
+      "menu": {
+        "MIDI In Map": "[MIDIINMAP_MENU]",
+        "Channel": "[CHOP_CHANNEL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It connects music knobs and buttons to numbers."
+    },
+    {
+      "operator": "MIDI Out (CHOP)",
+      "what_it_is": "Sends channel data out as MIDI messages.",
+      "mental_model": "A MIDI sender that turns numbers into musical commands.",
+      "example": "Control external synths or DAWs from TouchDesigner.",
+      "menu": {
+        "Dest": "[MIDIOUT_DEST_MENU]",
+        "Output": "[MIDIOUT_OUTPUT_MENU]",
+        "Note": "[MIDI_NOTE_MENU]",
+        "Control": "[MIDIOUT_CONTROL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It sends music commands out."
+    },
+    {
+      "operator": "MOSIS (CHOP)",
+      "what_it_is": "Receives tracking data from a MOSIS camera system.",
+      "mental_model": "A camera-tracking receiver for position data.",
+      "example": "Drive visuals using MOSIS camera tracking.",
+      "menu": {
+        "MOSIS": "[MOSIS_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It listens to a tracking camera."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Mouse In (CHOP)",
+      "what_it_is": "Reads mouse position, buttons, and wheel input as channels.",
+      "mental_model": "A mouse listener that turns movement and clicks into numbers.",
+      "example": "Control parameters with mouse movement and clicks.",
+      "menu": {
+        "Control": "[MOUSE_IN_MENU]",
+        "Channel": "[CHOP_CHANNEL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It knows where the mouse is and which buttons are pressed."
+    },
+    {
+      "operator": "Mouse Out (CHOP)",
+      "what_it_is": "Outputs channel data as mouse position and button events.",
+      "mental_model": "A fake mouse that moves and clicks using numbers.",
+      "example": "Drive mouse input programmatically.",
+      "menu": {
+        "Control": "[MOUSE_OUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It moves the mouse using numbers."
+    },
+    {
+      "operator": "NCam (CHOP)",
+      "what_it_is": "Receives camera tracking data over the network from an NCam system.",
+      "mental_model": "A camera-tracking receiver over the network.",
+      "example": "Drive virtual camera motion from NCam tracking.",
+      "menu": {
+        "Network": "[NCAM_MENU]",
+        "Channel": "[CHOP_CHANNEL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It listens to camera tracking data."
+    },
+    {
+      "operator": "Noise (CHOP)",
+      "what_it_is": "Generates procedural noise signals.",
+      "mental_model": "A random wave generator with controls.",
+      "example": "Create organic motion or randomness.",
+      "menu": {
+        "Noise": "[NOISE_MENU]",
+        "Transform": "[NOISE_TRANSFORM_MENU]",
+        "Constraints": "[NOISE_CONSTRAINTS_MENU]",
+        "Channel": "[CHOP_CHANNEL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes wiggly random numbers."
+    },
+    {
+      "operator": "Null (CHOP)",
+      "what_it_is": "Passes channels through unchanged, with optional cooking controls.",
+      "mental_model": "A wire that does nothing but can be switched.",
+      "example": "Use as an endpoint or debugging reference.",
+      "menu": {
+        "Null": "[NULL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It passes numbers through without changing them."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Oak Device (CHOP)",
+      "what_it_is": "Controls and monitors an Oak sensor device and its data streams.",
+      "mental_model": "A controller that starts, runs, and reports the state of a sensor device.",
+      "example": "Initialize an Oak camera and monitor when it is ready or running.",
+      "menu": {
+        "Oak Device": "[OAK_DEVICE_MENU]",
+        "Stream In": "[OAK_STREAM_IN_MENU]",
+        "Outputs": "[OAK_OUTPUTS_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It turns a sensor on and tells you what it’s doing."
+    },
+    {
+      "operator": "Oak Select (CHOP)",
+      "what_it_is": "Selects and buffers streams coming from an Oak Device CHOP.",
+      "mental_model": "A picker that chooses which sensor stream to listen to.",
+      "example": "Select a specific Oak data stream and control its buffering.",
+      "menu": {
+        "Oak Select": "[OAK_SELECT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It chooses which sensor data to use."
+    },
+    {
+      "operator": "Object (CHOP)",
+      "what_it_is": "Computes spatial relationships between objects, such as position, rotation, and distance.",
+      "mental_model": "A ruler and compass for objects in 3D space.",
+      "example": "Measure distance and bearing between two objects.",
+      "menu": {
+        "Object": "[OBJECT_MENU]",
+        "Output": "[OBJECT_OUTPUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It tells you how objects are placed compared to each other."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "OpenVR (CHOP)",
+      "what_it_is": "Receives tracking, controller, and action data from OpenVR-compatible VR systems.",
+      "mental_model": "A VR data reader that knows where headsets, controllers, and trackers are.",
+      "example": "Drive camera or object motion from a VR headset and controllers.",
+      "menu": {
+        "OpenVR": "[OPENVR_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It reads where VR gear is in space."
+    },
+    {
+      "operator": "OptiTrack In (CHOP)",
+      "what_it_is": "Receives motion capture data from an OptiTrack system.",
+      "mental_model": "A motion-capture receiver for tracked bodies and markers.",
+      "example": "Use OptiTrack mocap data to animate characters.",
+      "menu": {
+        "OptiTrack In": "[OPTITRACK_IN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It listens to a motion-capture system."
+    },
+    {
+      "operator": "OCS In (CHOP)",
+      "what_it_is": "Receives Open Control System (OCS) data over the network.",
+      "mental_model": "An inbox for structured control messages.",
+      "example": "Receive structured control data from another system.",
+      "menu": {
+        "OCS In": "[OCS_IN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It receives control messages from the network."
+    },
+    {
+      "operator": "OCS Out (CHOP)",
+      "what_it_is": "Sends Open Control System (OCS) data over the network.",
+      "mental_model": "An outbox for structured control messages.",
+      "example": "Send control data to external systems using OCS.",
+      "menu": {
+        "OCS Out": "[OCS_OUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It sends control messages over the network."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Out (CHOP)",
+      "what_it_is": "Outputs CHOP data from a component to the outside network.",
+      "mental_model": "An outlet where numbers leave the component.",
+      "example": "Expose CHOP channels from inside a Base COMP.",
+      "menu": {
+        "Out": "[OUT_MENU]",
+        "Override": "[OUT_OVERRIDE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It lets numbers go out."
+    },
+    {
+      "operator": "Pan Tilt (CHOP)",
+      "what_it_is": "Controls pan and tilt values with reset and clamping behavior.",
+      "mental_model": "A head that turns left–right and up–down.",
+      "example": "Control camera or light pan/tilt movement.",
+      "menu": {
+        "Pan Tilt": "[PANTILT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It turns things left, right, up, and down."
+    },
+    {
+      "operator": "Panel (CHOP)",
+      "what_it_is": "Outputs interaction and state data from panel components.",
+      "mental_model": "A listener that watches UI panels and events.",
+      "example": "React to button presses or mouse events on panels.",
+      "menu": {
+        "Panel": "[PANEL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It listens to buttons and panels."
+    },
+    {
+      "operator": "Pangolin (CHOP)",
+      "what_it_is": "Generates and sends laser control data to Pangolin laser systems.",
+      "mental_model": "A laser controller that speaks Pangolin’s language.",
+      "example": "Drive Pangolin laser hardware with CHOP data.",
+      "menu": {
+        "Pangolin": "[PANGOLIN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It controls professional laser systems."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Parameter (CHOP)",
+      "what_it_is": "Fetches and outputs parameter values from operators as channels.",
+      "mental_model": "A reader that turns operator settings into numbers.",
+      "example": "Expose transform parameters as channels for further processing.",
+      "menu": {
+        "Parameter": "[PARAMETER_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It turns knobs into numbers."
+    },
+    {
+      "operator": "Pattern (CHOP)",
+      "what_it_is": "Generates repeating numeric patterns and sequences.",
+      "mental_model": "A pattern machine that makes repeating shapes of numbers.",
+      "example": "Create rhythmic step patterns to drive animation.",
+      "menu": {
+        "Pattern": "[PATTERN_MENU]",
+        "Channel": "[CHOP_CHANNEL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes repeating number patterns."
+    },
+    {
+      "operator": "Perform (CHOP)",
+      "what_it_is": "Outputs performance and system statistics as channels.",
+      "mental_model": "A dashboard that reports how hard the system is working.",
+      "example": "Monitor CPU, GPU, and frame timing during playback.",
+      "menu": {
+        "Perform": "[PERFORM_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It shows how fast and hard the computer is running."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Phaser (CHOP)",
+      "what_it_is": "Applies phase-based filtering to channel data.",
+      "mental_model": "A filter that shifts parts of a signal forward or backward in phase.",
+      "example": "Create sweeping phase effects on audio or modulation channels.",
+      "menu": {
+        "Phaser": "[PHASER_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes signals wobble in a wave-like way."
+    },
+    {
+      "operator": "Pipe In (CHOP)",
+      "what_it_is": "Receives channel data from an external pipe connection.",
+      "mental_model": "A tube that brings numbers in from another process.",
+      "example": "Receive real-time data from an external application.",
+      "menu": {
+        "Pipe In": "[PIPEIN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It brings numbers in through a pipe."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Pop (CHOP)",
+      "what_it_is": "Sends CHOP data out through a pipe connection to another process.",
+      "mental_model": "A tube that pushes numbers out to another program.",
+      "example": "Send real-time channel data to an external application.",
+      "menu": {
+        "Pop": "[POP_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It sends numbers out through a pipe."
+    },
+    {
+      "operator": "Pop 2 (CHOP)",
+      "what_it_is": "Downloads and converts data from a POP source into CHOP channels.",
+      "mental_model": "A data extractor that pulls selected pieces from a stream.",
+      "example": "Thin and rename incoming POP data before use.",
+      "menu": {
+        "CHOP2": "[POP2_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It pulls specific numbers out of a stream."
+    },
+    {
+      "operator": "PosiStageNet (CHOP)",
+      "what_it_is": "Receives PosiStageNet tracking data over the network.",
+      "mental_model": "A tracker that listens for position data on the network.",
+      "example": "Track performers or objects using PosiStageNet.",
+      "menu": {
+        "Setup": "[POSISTAGENET_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It listens for position tracking data."
+    },
+    {
+      "operator": "Pulse (CHOP)",
+      "what_it_is": "Generates timed pulse signals with flexible spacing and shaping.",
+      "mental_model": "A pulse generator that fires beats or flashes.",
+      "example": "Trigger events at controlled intervals.",
+      "menu": {
+        "Pulse": "[PULSE_MENU]",
+        "Values": "[PULSE_VALUES_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes repeating blips."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Record (CHOP)",
+      "what_it_is": "Records incoming CHOP channel data over time.",
+      "mental_model": "A tape recorder for numbers.",
+      "example": "Capture motion data to replay or analyze later.",
+      "menu": {
+        "Record": "[RECORD_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It records numbers so you can play them back."
+    },
+    {
+      "operator": "Rename (CHOP)",
+      "what_it_is": "Renames CHOP channels using simple rules.",
+      "mental_model": "A label maker for channels.",
+      "example": "Standardize channel names before merging data.",
+      "menu": {
+        "Rename": "[RENAME_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It changes channel names."
+    },
+    {
+      "operator": "Render Pick (CHOP)",
+      "what_it_is": "Performs object picking from rendered scenes and outputs pick results as channels.",
+      "mental_model": "A selector that figures out what you clicked or pointed at in 3D.",
+      "example": "Detect which object the mouse is hovering over in a rendered scene.",
+      "menu": {
+        "Render Pick": "[RENDER_PICK_MENU]",
+        "Options": "[RENDER_PICK_OPTIONS_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It figures out what you clicked on."
+    },
+    {
+      "operator": "Render Stream In (CHOP)",
+      "what_it_is": "Receives streamed render data from an external rendering source.",
+      "mental_model": "A video-and-data feed coming from another renderer.",
+      "example": "Receive scene depth or ID data from a remote render process.",
+      "menu": {
+        "Render Stream In": "[RENDER_STREAM_IN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It listens to render data coming in."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Reorder (CHOP)",
+      "what_it_is": "Reorders channels using explicit patterns, references, or randomized rules.",
+      "mental_model": "A sorter that rearranges channels into a new order.",
+      "example": "Reorder channels to match a required output layout.",
+      "menu": {
+        "Reorder": "[REORDER_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It changes the order of the channels."
+    },
+    {
+      "operator": "Replace (CHOP)",
+      "what_it_is": "Replaces channel values over a defined length and can notify on changes.",
+      "mental_model": "A swapper that overwrites parts of a signal.",
+      "example": "Temporarily replace live input with fixed values.",
+      "menu": {
+        "Replace": "[REPLACE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It swaps numbers with new ones."
+    },
+    {
+      "operator": "Resample (CHOP)",
+      "what_it_is": "Changes the sampling rate or length of channel data.",
+      "mental_model": "A time stretcher or compressor for numbers.",
+      "example": "Match CHOP data to a different frame rate.",
+      "menu": {
+        "Resample": "[RESAMPLE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It changes how fast numbers are sampled."
+    },
+    {
+      "operator": "S-Curve (CHOP)",
+      "what_it_is": "Applies an S-shaped curve to remap values smoothly.",
+      "mental_model": "A curve that eases values in and out.",
+      "example": "Smooth acceleration and deceleration of motion.",
+      "menu": {
+        "S-Curve": "[SCURVE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes smooth curves instead of sharp changes."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Script (CHOP)",
+      "what_it_is": "Executes custom Python scripts and callbacks tied to CHOP behavior.",
+      "mental_model": "A hook that runs custom code alongside channel processing.",
+      "example": "Modify parameters or external state without relying on Cook.",
+      "menu": {
+        "Script": "[SCRIPT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It runs your own code when things happen."
+    },
+    {
+      "operator": "Select (CHOP)",
+      "what_it_is": "Selects, filters, and renames channels from incoming CHOPs.",
+      "mental_model": "A filter that picks which channels to keep.",
+      "example": "Extract only specific channels by name or pattern.",
+      "menu": {
+        "Select": "[SELECT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It picks the channels you want."
+    },
+    {
+      "operator": "Sequencer (CHOP)",
+      "what_it_is": "Sequences and blends channel data using queued triggers.",
+      "mental_model": "A timeline that plays steps in order.",
+      "example": "Trigger and blend animation steps in sequence.",
+      "menu": {
+        "Sequencer": "[SEQUENCER_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It plays steps one after another."
+    },
+    {
+      "operator": "Serial (CHOP)",
+      "what_it_is": "Communicates with serial devices and outputs received data as channels.",
+      "mental_model": "A cable that talks to hardware over serial.",
+      "example": "Read sensor data from an Arduino.",
+      "menu": {
+        "Serial": "[SERIAL_MENU]",
+        "Scripts": "[SERIAL_SCRIPTS_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It talks to hardware through a cable."
+    },
+    {
+      "operator": "Shared Memory In (CHOP)",
+      "what_it_is": "Reads channel data from shared memory.",
+      "mental_model": "A shared clipboard for numbers between processes.",
+      "example": "Receive data from another application via shared memory.",
+      "menu": {
+        "SharedMem In": "[SHAREDMEMIN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It reads numbers shared by another program."
+    },
+    {
+      "operator": "Shared Memory Out (CHOP)",
+      "what_it_is": "Writes channel data to shared memory.",
+      "mental_model": "A shared clipboard that other programs can read.",
+      "example": "Send real-time data to another application.",
+      "menu": {
+        "SharedMem Out": "[SHAREDMEMOUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It shares numbers with another program."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Shift (CHOP)",
+      "what_it_is": "Offsets channel data in time or value space.",
+      "mental_model": "A slider that moves data forward or backward.",
+      "example": "Delay or advance signals without resampling.",
+      "menu": {
+        "Shift": "[SHIFT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It moves numbers left or right."
+    },
+    {
+      "operator": "Shuffle (CHOP)",
+      "what_it_is": "Reorders samples or channels using shuffle rules.",
+      "mental_model": "A deck shuffler for data.",
+      "example": "Randomize or reorder samples.",
+      "menu": {
+        "Shuffle": "[SHUFFLE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It mixes the order of numbers."
+    },
+    {
+      "operator": "Slope (CHOP)",
+      "what_it_is": "Calculates the rate of change (slope) of channel values.",
+      "mental_model": "A speedometer for numbers.",
+      "example": "Detect acceleration or trends.",
+      "menu": {
+        "Slope": "[SLOPE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It tells how fast numbers are changing."
+    },
+    {
+      "operator": "SOP to CHOP (CHOP)",
+      "what_it_is": "Converts SOP geometry attributes into CHOP channels.",
+      "mental_model": "A translator that turns shapes into numbers.",
+      "example": "Extract positions or colors from geometry.",
+      "menu": {
+        "SOP2": "[SOP2_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It turns shapes into numbers."
+    },
+    {
+      "operator": "Sort (CHOP)",
+      "what_it_is": "Sorts samples or channels based on selected criteria.",
+      "mental_model": "A sorter that lines numbers up.",
+      "example": "Order samples by value or index.",
+      "menu": {
+        "Sort": "[SORT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It puts numbers in order."
+    },
+    {
+      "operator": "Speed (CHOP)",
+      "what_it_is": "Integrates speed and acceleration to produce motion-like behavior.",
+      "mental_model": "A motion engine with limits and resets.",
+      "example": "Simulate velocity-driven movement.",
+      "menu": {
+        "Speed": "[SPEED_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes numbers move like motion."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Splice (CHOP)",
+      "what_it_is": "Cuts, inserts, and blends sections of channel data.",
+      "mental_model": "A video editor for numbers.",
+      "example": "Trim a segment of motion and insert a new interpolated section.",
+      "menu": {
+        "Splice": "[SPLICE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It cuts and pastes parts of the numbers."
+    },
+    {
+      "operator": "Spring (CHOP)",
+      "what_it_is": "Simulates spring–mass dynamics on channel values.",
+      "mental_model": "A bouncy spring that follows input with weight and damping.",
+      "example": "Add natural lag and bounce to animation controls.",
+      "menu": {
+        "Spring": "[SPRING_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes numbers bounce like a spring."
+    },
+    {
+      "operator": "ST 2110 Device (CHOP)",
+      "what_it_is": "Interfaces with SMPTE ST 2110 network media devices.",
+      "mental_model": "A network device controller for professional media streams.",
+      "example": "Configure and monitor an ST 2110 media device.",
+      "menu": {
+        "ST2110 Device": "[ST2110_DEVICE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It talks to a professional media box on the network."
+    },
+    {
+      "operator": "Stretch (CHOP)",
+      "what_it_is": "Stretches or compresses channel data over time.",
+      "mental_model": "A rubber band that makes data longer or shorter.",
+      "example": "Time-stretch motion data to fit a duration.",
+      "menu": {
+        "Stretch": "[STRETCH_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It squishes or stretches numbers in time."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "SType In (CHOP)",
+      "what_it_is": "Receives SType protocol data over the network and outputs it as channels.",
+      "mental_model": "A network listener that understands SType packets.",
+      "example": "Receive structured control or tracking data via SType.",
+      "menu": {
+        "SType In": "[STYPE_IN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It listens for special network messages."
+    },
+    {
+      "operator": "SType Out (CHOP)",
+      "what_it_is": "Sends CHOP data over the network using the SType protocol.",
+      "mental_model": "A network sender that packages numbers into SType packets.",
+      "example": "Transmit control data to another system via SType.",
+      "menu": {
+        "SType Out": "[STYPE_OUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It sends special network messages."
+    },
+    {
+      "operator": "Switch (CHOP)",
+      "what_it_is": "Selects one input CHOP from multiple inputs based on an index.",
+      "mental_model": "A selector switch that chooses one signal at a time.",
+      "example": "Toggle between multiple control sources.",
+      "menu": {
+        "Switch": "[SWITCH_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It picks one input to use."
+    },
+    {
+      "operator": "Sync In (CHOP)",
+      "what_it_is": "Receives synchronization data over the network for timing alignment.",
+      "mental_model": "A clock listener that syncs timing with others.",
+      "example": "Synchronize playback across multiple machines.",
+      "menu": {
+        "Sync In": "[SYNC_IN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It keeps time with other computers."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Sync Out (CHOP)",
+      "what_it_is": "Sends synchronization timing data to other systems over the network.",
+      "mental_model": "A clock broadcaster that keeps others in sync.",
+      "example": "Synchronize timelines across multiple machines.",
+      "menu": {
+        "Sync Out": "[SYNC_OUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It sends time to other computers."
+    },
+    {
+      "operator": "Tablet (CHOP)",
+      "what_it_is": "Reads pen tablet input including position, pressure, tilt, and buttons.",
+      "mental_model": "A tablet listener that turns pen movement into numbers.",
+      "example": "Use a drawing tablet to control parameters or draw gestures.",
+      "menu": {
+        "Tablet": "[TABLET_MENU]",
+        "Channel": "[CHOP_CHANNEL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It reads what a pen is doing on a tablet."
+    },
+    {
+      "operator": "Time Slice (CHOP)",
+      "what_it_is": "Controls how channel data is evaluated per time slice.",
+      "mental_model": "A rulebook for how time chunks are handled.",
+      "example": "Change how CHOPs process data over time slices.",
+      "menu": {
+        "Time Slice": "[TIMESLICE_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It decides how time pieces are used."
+    },
+    {
+      "operator": "Timer (CHOP)",
+      "what_it_is": "Generates complex timing, segment, and cycle-based signals.",
+      "mental_model": "A programmable stopwatch with segments and cycles.",
+      "example": "Drive sequenced events with precise timing.",
+      "menu": {
+        "Timer": "[TIMER_MENU]",
+        "Segments": "[TIMER_SEGMENTS_MENU]",
+        "Subrange": "[TIMER_SUBRANGE_MENU]",
+        "Outputs": "[TIMER_OUTPUTS_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It’s a very smart stopwatch."
+    },
+    {
+      "operator": "External (CHOP)",
+      "what_it_is": "Receives externally driven timing or channel data.",
+      "mental_model": "A bridge that lets outside time control the system.",
+      "example": "Drive timing from an external timecode or controller.",
+      "menu": {
+        "External": "[EXTERNAL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It lets outside time control things."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "TOP to CHOP (CHOP)",
+      "what_it_is": "Converts image data from a TOP into CHOP channels.",
+      "mental_model": "A pixel reader that turns image colors into numbers.",
+      "example": "Extract luminance or color channels from an image.",
+      "menu": {
+        "TOP to CHOP": "[TOP2_MENU]",
+        "Crop": "[TOP2_CROP_MENU]",
+        "Extend": "[TOP2_EXTEND_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It turns pictures into numbers."
+    },
+    {
+      "operator": "Touch In (CHOP)",
+      "what_it_is": "Receives touch interaction data over the network.",
+      "mental_model": "A listener for finger and touch messages.",
+      "example": "Receive multitouch input from another device.",
+      "menu": {
+        "Touch In": "[TOUCH_IN_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It listens for finger touches."
+    },
+    {
+      "operator": "Touch Out (CHOP)",
+      "what_it_is": "Sends touch interaction data over the network.",
+      "mental_model": "A sender that broadcasts touch events.",
+      "example": "Forward touch input to another system.",
+      "menu": {
+        "Touch Out": "[TOUCH_OUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It sends finger touch messages."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Trail (CHOP)",
+      "what_it_is": "Accumulates and outputs historical channel values over time.",
+      "mental_model": "A tail that shows where values have been.",
+      "example": "Visualize motion trails or keep recent history of signals.",
+      "menu": {
+        "Trail": "[TRAIL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It remembers where numbers were before."
+    },
+    {
+      "operator": "Transform (CHOP)",
+      "what_it_is": "Applies weighted and ordered transformations to channel data.",
+      "mental_model": "A mixer that transforms numbers using position, rotation, and scale rules.",
+      "example": "Combine multiple motion inputs into a final transform.",
+      "menu": {
+        "Transform": "[TRANSFORM_CHOP_MENU]",
+        "Transform Submenu": "[TRANSFORM_CHOP_TRANSFORM_MENU]",
+        "Output": "[TRANSFORM_CHOP_OUTPUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It moves and rotates numbers in smart ways."
+    },
+    {
+      "operator": "Transform XYZ (CHOP)",
+      "what_it_is": "Applies XYZ-based transformations to channel data.",
+      "mental_model": "A simpler transformer that works directly in XYZ space.",
+      "example": "Apply position and rotation transforms using XYZ channels.",
+      "menu": {
+        "Transform XYZ": "[TRANSFORM_XYZ_MENU]",
+        "Transform Submenu": "[TRANSFORM_XYZ_TRANSFORM_MENU]",
+        "Output": "[TRANSFORM_XYZ_OUTPUT_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It moves numbers using X, Y, and Z."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Trigger (CHOP)",
+      "what_it_is": "Generates trigger-driven envelopes with attack, sustain, and release phases.",
+      "mental_model": "An envelope generator that reacts when a signal crosses a threshold.",
+      "example": "Create ADSR-style envelopes from incoming trigger signals.",
+      "menu": {
+        "Trigger": "[TRIGGER_MENU]",
+        "Attack": "[TRIGGER_ATTACK_MENU]",
+        "Sustain": "[TRIGGER_SUSTAIN_MENU]",
+        "Channel": "[TRIGGER_CHANNEL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes a shape when something turns on and off."
+    }
+  ]
+}
+{
+  "operators": [
+    {
+      "operator": "Trim (CHOP)",
+      "what_it_is": "Trims or discards sections of channel data based on units and start rules.",
+      "mental_model": "Scissors that cut off parts of the numbers.",
+      "example": "Remove leading or trailing samples from a signal.",
+      "menu": {
+        "Trim": "[TRIM_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It cuts parts off the numbers."
+    },
+    {
+      "operator": "Warp (CHOP)",
+      "what_it_is": "Warps channel indices to remap data length or timing.",
+      "mental_model": "A rubber ruler that bends how indices line up.",
+      "example": "Stretch or compress index mapping without resampling.",
+      "menu": {
+        "Warp": "[WARP_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It bends how numbers line up."
+    },
+    {
+      "operator": "Wave (CHOP)",
+      "what_it_is": "Generates waveform signals with optional decay and ramp shaping.",
+      "mental_model": "A wave machine that makes repeating shapes.",
+      "example": "Create oscillating signals for animation or modulation.",
+      "menu": {
+        "Wave": "[WAVE_MENU]",
+        "Channel": "[CHOP_CHANNEL_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It makes wave-shaped numbers."
+    },
+    {
+      "operator": "ZED (CHOP)",
+      "what_it_is": "Outputs tracking, plane, and body data from a ZED camera system.",
+      "mental_model": "A depth camera reader that understands space, planes, and bodies.",
+      "example": "Use ZED plane detection and body tracking to drive interactions.",
+      "menu": {
+        "ZED": "[ZED_CHOP_MENU]",
+        "Common": "[COMMON_CHOP_COMMON_MENU]"
+      },
+      "explain_like_im_five": "It reads space and people from a depth camera."
+    }
+  ]
+}
