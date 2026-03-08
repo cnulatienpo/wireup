@@ -444,7 +444,7 @@ function buildPrompt(context, question, state, previousState = null, mode = 'qa'
   ].join('\n');
 }
 
-app.post('/rayray', async (req, res) => {
+async function handleRayrayRequest(req, res) {
   try {
     const { question = '', state = {}, mode = 'qa', sessionId: incomingSessionId } = req.body || {};
 
@@ -540,7 +540,11 @@ app.post('/rayray', async (req, res) => {
   } catch (error) {
     return res.status(500).json({ answer: `Ray Ray hit an error: ${error.message}` });
   }
-});
+
+}
+
+app.post('/rayray', handleRayrayRequest);
+app.post('/api/rayray', handleRayrayRequest);
 
 app.listen(PORT, () => {
   console.log('Ray Ray server running at http://localhost:3000');
