@@ -291,10 +291,16 @@ export function renderNarration(state) {
 
   nextButton.textContent = 'Next Level';
 
+  popup.classList.remove('hidden');
   if (state.narration.mode === 'none') {
-    popup.classList.add('hidden');
+    title.textContent = state.levelMeta.title || '—';
+    lineText.style.fontFamily = 'Garamond, serif';
+    lineText.style.fontStyle = 'normal';
+    lineText.style.fontVariant = 'normal';
+    lineText.style.fontWeight = '400';
+    lineText.style.backgroundColor = '';
+    lineText.textContent = state.flags?.lastRayMessage || 'Ready for the next move.';
   } else {
-    popup.classList.remove('hidden');
     title.textContent = state.levelMeta.title || '—';
 
     const visibleLines = state.narration.lines.slice(0, state.dialogueIndex + 1);

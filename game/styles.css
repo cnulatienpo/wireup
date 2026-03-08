@@ -11,12 +11,12 @@
 
 * {
   box-sizing: border-box;
-  font-family: "LaNuTienpo", Garamond, serif;
+  font-family: Garamond, "Times New Roman", serif;
 }
 
 body {
   margin: 0;
-  font-family: "LaNuTienpo", Garamond, serif;
+  font-family: Garamond, "Times New Roman", serif;
   background-image: url("./assets/metal-bg.jpg");
   background-size: cover;
   background-position: center;
@@ -83,16 +83,16 @@ body::before {
   border-radius: 1px 7px 2px 9px;
   transform: rotate(-0.16deg);
   padding: 0.65rem 0.8rem;
-  background: #ffffff;
-  color: #000000;
-  border: 2px solid #000000;
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.75);
 }
 
 .narration-title,
 .narration-line,
 .narration-count {
   margin: 0;
-  color: #000000;
+  color: #ffffff;
 }
 
 .narration-title {
@@ -167,14 +167,14 @@ select:disabled {
 
 .top-bar :is(h1, button),
 .panel :is(h2, h3, h4, p, span, li, button, select, label) {
-  -webkit-text-stroke: 1px #000000;
+  -webkit-text-stroke: 0;
   text-shadow: none;
 }
 
 .narration-strip {
-  background: #ffffff;
-  color: #000000;
-  border: 2px solid #000000;
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.75);
 }
 
 
@@ -414,9 +414,9 @@ select:disabled {
 .rayray-hint,
 .ray-ray-hint {
   margin: 0.7rem 0 0;
-  background: #f2f2f2;
-  color: #000000;
-  border-top: 1px solid #000000;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
   padding: 8px;
   border-radius: 1px 6px 1px 8px;
   clip-path: polygon(1% 3%, 99% 1%, 100% 95%, 95% 100%, 2% 98%, 0 9%);
@@ -526,9 +526,9 @@ select:disabled {
   bottom: 0;
   width: 100%;
   max-width: none;
-  background: #ffffff;
-  color: #000000;
-  border: 4px solid #cc0000;
+  background: rgba(8, 8, 12, 0.95);
+  color: #ffffff;
+  border: 3px solid rgba(255, 255, 255, 0.8);
   box-shadow: none;
   z-index: 2147483647;
   padding: 12px;
@@ -539,12 +539,12 @@ select:disabled {
 }
 
 .narration-title {
-  font-family: "LaNuTienpo", Garamond, "Times New Roman", serif;
+  font-family: Garamond, "Times New Roman", serif;
   font-weight: bold;
   font-size: 1.9rem;
   line-height: 1.2;
   margin-bottom: 6px;
-  color: #000000;
+  color: #ffffff;
 }
 
 .narration-text {
@@ -555,7 +555,7 @@ select:disabled {
   max-height: 132px;
   overflow-y: auto;
   white-space: pre-line;
-  color: #000000;
+  color: #ffffff;
 }
 
 .hidden {
