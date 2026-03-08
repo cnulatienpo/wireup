@@ -1,0 +1,3149 @@
+{
+  "menu": "COMPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Shared Mem In / Out",
+      "reasoning_lenses": ["Data Boundary", "Stateful", "Cook-Sensitive"],
+      "translation": "This lets two programs pass notes through a shared mailbox. If one side writes before the other is ready, the note is missing or old."
+    },
+    {
+      "name": "Ambient Light",
+      "reasoning_lenses": ["GPU Space", "Viewer-Only"],
+      "translation": "This is like turning on a room light that brightens everything evenly, without caring where objects are."
+    },
+    {
+      "name": "Blend",
+      "reasoning_lenses": ["Order-Dependent", "GPU Space"],
+      "translation": "This mixes two pictures together. Which one is on top matters, like stacking papers."
+    },
+    {
+      "name": "Bone",
+      "reasoning_lenses": ["Stateful", "Temporal", "Context-Bound"],
+      "translation": "This is a bendy joint in a puppet. It remembers how it was posed and changes over time."
+    },
+    {
+      "name": "Camera",
+      "reasoning_lenses": ["GPU Space", "Context-Bound"],
+      "translation": "This is the eye that looks at the scene. What you see depends on where the eye is and what it points at."
+    },
+    {
+      "name": "Camera Blend",
+      "reasoning_lenses": ["Temporal", "Order-Dependent"],
+      "translation": "This slowly moves between two eyes, like fading between camera shots."
+    },
+    {
+      "name": "Environment Light",
+      "reasoning_lenses": ["GPU Space", "Resolution-Dependent"],
+      "translation": "This wraps the whole world in light from a big picture, like standing inside a glowing bubble."
+    },
+    {
+      "name": "FBX",
+      "reasoning_lenses": ["Data Boundary", "Initialization-Sensitive"],
+      "translation": "This brings in a boxed-up 3D thing from outside. It has to be unpacked first before it works."
+    },
+    {
+      "name": "Geometry",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This is a container that turns raw shapes into something the renderer can see."
+    },
+    {
+      "name": "Handle",
+      "reasoning_lenses": ["Viewer-Only", "Context-Bound"],
+      "translation": "This is the grabby gizmo you drag in the viewer. It helps you move things but doesn’t change the math by itself."
+    },
+    {
+      "name": "Light",
+      "reasoning_lenses": ["GPU Space", "Context-Bound"],
+      "translation": "This is a flashlight in the scene. Where it is and what it points at changes how things look."
+    },
+    {
+      "name": "Null",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This is a labeled hook in the network. It holds a place so you can connect things neatly."
+    },
+    {
+      "name": "USD",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound", "Initialization-Sensitive"],
+      "translation": "This brings in a big organized world description. It sets rules first, then everything follows them."
+    }
+  ]
+}
+{
+  "menu": "COMPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Shared Mem In / Out",
+      "reasoning_lenses": ["Data Boundary", "Stateful", "Cook-Sensitive"],
+      "translation": "This is a shared mailbox between programs. If one writes too early or too late, the message can be missing or old."
+    },
+    {
+      "name": "Ambient Light",
+      "reasoning_lenses": ["GPU Space", "Viewer-Only"],
+      "translation": "This is like turning on a room light that makes everything brighter the same way."
+    },
+    {
+      "name": "Blend",
+      "reasoning_lenses": ["Order-Dependent", "GPU Space"],
+      "translation": "This mixes two pictures together. Which one goes first changes the result."
+    },
+    {
+      "name": "Bone",
+      "reasoning_lenses": ["Stateful", "Temporal", "Context-Bound"],
+      "translation": "This is a bendy joint for a puppet. It remembers how it moved before and keeps changing over time."
+    },
+    {
+      "name": "Camera",
+      "reasoning_lenses": ["GPU Space", "Context-Bound"],
+      "translation": "This is the eye that looks at the scene. What you see depends on where the eye is."
+    },
+    {
+      "name": "Camera Blend",
+      "reasoning_lenses": ["Temporal", "Order-Dependent"],
+      "translation": "This fades between two eyes, like slowly switching camera shots."
+    },
+    {
+      "name": "Environment Light",
+      "reasoning_lenses": ["GPU Space", "Resolution-Dependent"],
+      "translation": "This lights the whole scene using a big surrounding picture, like standing inside a glowing sky."
+    },
+    {
+      "name": "FBX",
+      "reasoning_lenses": ["Data Boundary", "Initialization-Sensitive"],
+      "translation": "This brings in a packed 3D object from outside that has to be set up before it works."
+    },
+    {
+      "name": "Geometry",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This is a box that holds shapes and makes them ready to be drawn."
+    },
+    {
+      "name": "Handle",
+      "reasoning_lenses": ["Viewer-Only", "Context-Bound"],
+      "translation": "This is the grab tool you drag in the viewer. It helps you move things but doesn’t do math by itself."
+    },
+    {
+      "name": "Light",
+      "reasoning_lenses": ["GPU Space", "Context-Bound"],
+      "translation": "This is a flashlight in the scene. Moving it changes how objects look."
+    },
+    {
+      "name": "Null",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This is a named plug you use to keep networks organized."
+    },
+    {
+      "name": "USD",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound", "Initialization-Sensitive"],
+      "translation": "This loads a big structured world and sets the rules before anything else happens."
+    }
+  ]
+}
+{
+  "menu": "COMPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Actor",
+      "reasoning_lenses": ["Stateful", "Temporal", "Context-Bound"],
+      "translation": "This is a character in a physics world. It remembers where it was last frame and keeps moving based on that."
+    },
+    {
+      "name": "Bullet Solver",
+      "reasoning_lenses": ["Temporal", "Stateful", "Cook-Sensitive"],
+      "translation": "This is the referee that steps time forward for physics. If the timing or order changes, the whole game changes."
+    },
+    {
+      "name": "Constraint",
+      "reasoning_lenses": ["Stateful", "Context-Bound"],
+      "translation": "This is a rule that tells two things how they are allowed to move together, like tying them with a rope."
+    },
+    {
+      "name": "Force",
+      "reasoning_lenses": ["Temporal", "Order-Dependent"],
+      "translation": "This is a push or pull that gets applied every moment. When it happens matters just as much as how strong it is."
+    }
+  ]
+}
+{
+  "menu": "TOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Add",
+      "reasoning_lenses": ["GPU Space", "Order-Dependent"],
+      "translation": "This adds pictures together like stacking light. The order and values change how bright it gets."
+    },
+    {
+      "name": "Analyze",
+      "reasoning_lenses": ["Sampling-Based", "Resolution-Dependent"],
+      "translation": "This looks at a picture and measures things like brightness or color amounts."
+    },
+    {
+      "name": "Anti-Alias",
+      "reasoning_lenses": ["GPU Space", "Resolution-Dependent"],
+      "translation": "This smooths jagged edges by blending nearby pixels together."
+    },
+    {
+      "name": "Cache",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This remembers previous frames so you can look back in time."
+    },
+    {
+      "name": "Cache Select",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This picks a stored frame from memory, like choosing a photo from a stack."
+    },
+    {
+      "name": "Chop to TOP",
+      "reasoning_lenses": ["Data Boundary", "Sampling-Based"],
+      "translation": "This turns numbers over time into an image."
+    },
+    {
+      "name": "Composite",
+      "reasoning_lenses": ["GPU Space", "Order-Dependent"],
+      "translation": "This combines images using rules like over, add, or multiply."
+    },
+    {
+      "name": "Constant",
+      "reasoning_lenses": ["GPU Space"],
+      "translation": "This makes a flat image that never changes unless you change its settings."
+    },
+    {
+      "name": "C++",
+      "reasoning_lenses": ["CPU Space", "Cook-Sensitive"],
+      "translation": "This runs custom code to make images. What it does depends entirely on the code."
+    },
+    {
+      "name": "Direct Display Out",
+      "reasoning_lenses": ["Viewer-Only", "Context-Bound"],
+      "translation": "This sends the picture straight to a display."
+    },
+    {
+      "name": "DirectX 10",
+      "reasoning_lenses": ["GPU Space", "Context-Bound"],
+      "translation": "This uses DirectX to draw images using the graphics card."
+    },
+    {
+      "name": "Import Select",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This reaches into another place and pulls an image out."
+    },
+    {
+      "name": "Movie File In",
+      "reasoning_lenses": ["Temporal", "Initialization-Sensitive"],
+      "translation": "This plays a movie file frame by frame over time."
+    },
+    {
+      "name": "NDI In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives live video over a network."
+    },
+    {
+      "name": "NCam",
+      "reasoning_lenses": ["Temporal", "Context-Bound"],
+      "translation": "This brings in live camera tracking data as images."
+    },
+    {
+      "name": "OCSelect",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This pulls an image out of a component."
+    },
+    {
+      "name": "Orbex Select",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This selects image data coming from Orbex devices."
+    },
+    {
+      "name": "Point File In",
+      "reasoning_lenses": ["Data Boundary", "Initialization-Sensitive"],
+      "translation": "This loads point data from a file and turns it into an image."
+    },
+    {
+      "name": "Render Stream In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives rendered images from another TouchDesigner process."
+    },
+    {
+      "name": "Render Stream Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends rendered images to another TouchDesigner process."
+    },
+    {
+      "name": "Screen Grab",
+      "reasoning_lenses": ["Viewer-Only", "Temporal"],
+      "translation": "This takes a picture of what’s on the screen."
+    },
+    {
+      "name": "Shared Mem In",
+      "reasoning_lenses": ["Data Boundary", "Stateful", "Cook-Sensitive"],
+      "translation": "This reads images from a shared memory mailbox."
+    },
+    {
+      "name": "Shared Mem Out",
+      "reasoning_lenses": ["Data Boundary", "Stateful", "Cook-Sensitive"],
+      "translation": "This writes images into a shared memory mailbox."
+    },
+    {
+      "name": "Syphon / Spout In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives video from another app using Syphon or Spout."
+    },
+    {
+      "name": "Syphon / Spout Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends video to another app using Syphon or Spout."
+    },
+    {
+      "name": "Touch In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives data from another TouchDesigner project."
+    },
+    {
+      "name": "Touch Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends data to another TouchDesigner project."
+    },
+    {
+      "name": "Video Device In",
+      "reasoning_lenses": ["Temporal", "Initialization-Sensitive"],
+      "translation": "This brings live video in from a camera or capture card."
+    },
+    {
+      "name": "Video Device Out",
+      "reasoning_lenses": ["Viewer-Only", "Context-Bound"],
+      "translation": "This sends video out to external hardware."
+    },
+    {
+      "name": "Web Render",
+      "reasoning_lenses": ["Temporal", "Initialization-Sensitive", "GPU Space"],
+      "translation": "This shows a web page as a moving image."
+    }
+  ]
+}
+{
+  "menu": "TOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Add",
+      "reasoning_lenses": ["GPU Space", "Order-Dependent"],
+      "translation": "This adds images together like piling light on top of light. Which image goes first changes the result."
+    },
+    {
+      "name": "Analyze",
+      "reasoning_lenses": ["Sampling-Based", "Resolution-Dependent"],
+      "translation": "This looks at an image and counts or measures what’s inside it."
+    },
+    {
+      "name": "Anti-Alias",
+      "reasoning_lenses": ["GPU Space", "Resolution-Dependent"],
+      "translation": "This softens jagged edges by blending nearby pixels."
+    },
+    {
+      "name": "Cache",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This remembers past frames so you can use them later."
+    },
+    {
+      "name": "Cache Select",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This picks one stored frame from memory."
+    },
+    {
+      "name": "Chop to TOP",
+      "reasoning_lenses": ["Data Boundary", "Sampling-Based"],
+      "translation": "This turns rows of numbers into an image."
+    },
+    {
+      "name": "Composite",
+      "reasoning_lenses": ["GPU Space", "Order-Dependent"],
+      "translation": "This combines images using rules like over, add, or multiply."
+    },
+    {
+      "name": "Constant",
+      "reasoning_lenses": ["GPU Space"],
+      "translation": "This makes a flat image that stays the same until you change it."
+    },
+    {
+      "name": "C++",
+      "reasoning_lenses": ["CPU Space", "Cook-Sensitive"],
+      "translation": "This makes images using custom code, so its behavior depends on the program inside."
+    },
+    {
+      "name": "Direct Display Out",
+      "reasoning_lenses": ["Viewer-Only", "Context-Bound"],
+      "translation": "This sends the image straight to a screen."
+    },
+    {
+      "name": "DirectX 10",
+      "reasoning_lenses": ["GPU Space", "Context-Bound"],
+      "translation": "This draws images using DirectX on the graphics card."
+    },
+    {
+      "name": "Import Select",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This reaches into another place and pulls an image out."
+    },
+    {
+      "name": "Movie File In",
+      "reasoning_lenses": ["Temporal", "Initialization-Sensitive"],
+      "translation": "This plays a movie file one frame at a time."
+    },
+    {
+      "name": "NDI In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives live video over a network."
+    },
+    {
+      "name": "NCam",
+      "reasoning_lenses": ["Temporal", "Context-Bound"],
+      "translation": "This turns live camera tracking into image data."
+    },
+    {
+      "name": "OCSelect",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This pulls an image out of a component."
+    },
+    {
+      "name": "Orbex Select",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This selects image data coming from Orbex systems."
+    },
+    {
+      "name": "Point File In",
+      "reasoning_lenses": ["Data Boundary", "Initialization-Sensitive"],
+      "translation": "This loads point data from a file and turns it into an image."
+    },
+    {
+      "name": "Render Stream In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives rendered images from another TouchDesigner process."
+    },
+    {
+      "name": "Render Stream Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends rendered images to another TouchDesigner process."
+    },
+    {
+      "name": "Screen Grab",
+      "reasoning_lenses": ["Viewer-Only", "Temporal"],
+      "translation": "This takes a snapshot of what’s on the screen."
+    },
+    {
+      "name": "Shared Mem In",
+      "reasoning_lenses": ["Data Boundary", "Stateful", "Cook-Sensitive"],
+      "translation": "This reads images from a shared memory mailbox."
+    },
+    {
+      "name": "Shared Mem Out",
+      "reasoning_lenses": ["Data Boundary", "Stateful", "Cook-Sensitive"],
+      "translation": "This writes images into a shared memory mailbox."
+    },
+    {
+      "name": "Syphon / Spout In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives video from another app using Syphon or Spout."
+    },
+    {
+      "name": "Syphon / Spout Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends video to another app using Syphon or Spout."
+    },
+    {
+      "name": "Touch In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives data from another TouchDesigner project."
+    },
+    {
+      "name": "Touch Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends data to another TouchDesigner project."
+    },
+    {
+      "name": "Video Device In",
+      "reasoning_lenses": ["Temporal", "Initialization-Sensitive"],
+      "translation": "This brings live video in from a camera or capture device."
+    },
+    {
+      "name": "Video Device Out",
+      "reasoning_lenses": ["Viewer-Only", "Context-Bound"],
+      "translation": "This sends video out to external hardware."
+    },
+    {
+      "name": "Web Render",
+      "reasoning_lenses": ["Temporal", "Initialization-Sensitive", "GPU Space"],
+      "translation": "This turns a web page into a moving image."
+    }
+  ]
+}
+{
+  "menu": "TOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Channel Mix",
+      "reasoning_lenses": ["GPU Space", "Order-Dependent"],
+      "translation": "This takes the color parts of an image and mixes them in new ways, like swapping or blending paint colors."
+    },
+    {
+      "name": "Chroma Key",
+      "reasoning_lenses": ["Sampling-Based", "GPU Space"],
+      "translation": "This removes a color, like green, to make parts of the picture disappear."
+    },
+    {
+      "name": "Constant (Color)",
+      "reasoning_lenses": ["GPU Space"],
+      "translation": "This makes a solid block of one color that stays the same."
+    },
+    {
+      "name": "Edge",
+      "reasoning_lenses": ["GPU Space", "Sampling-Based"],
+      "translation": "This finds where colors change suddenly, like outlining shapes with a pencil."
+    },
+    {
+      "name": "Emboss",
+      "reasoning_lenses": ["GPU Space", "Sampling-Based"],
+      "translation": "This makes the image look raised or pressed in, like a stamped coin."
+    },
+    {
+      "name": "HSV Adjust",
+      "reasoning_lenses": ["GPU Space", "Order-Dependent"],
+      "translation": "This changes color, brightness, or strength of colors using color knobs."
+    },
+    {
+      "name": "HSV to RGB",
+      "reasoning_lenses": ["Data Boundary"],
+      "translation": "This changes one way of describing colors into another way."
+    },
+    {
+      "name": "Luma Blur",
+      "reasoning_lenses": ["GPU Space", "Sampling-Based"],
+      "translation": "This blurs only the light and dark parts of an image."
+    },
+    {
+      "name": "Luma Level",
+      "reasoning_lenses": ["GPU Space"],
+      "translation": "This makes the light and dark parts brighter or darker."
+    },
+    {
+      "name": "Math",
+      "reasoning_lenses": ["GPU Space", "Order-Dependent"],
+      "translation": "This uses math rules to change pixel values."
+    },
+    {
+      "name": "Matte",
+      "reasoning_lenses": ["Data Boundary", "Order-Dependent"],
+      "translation": "This uses one image to cut holes or shapes out of another."
+    },
+    {
+      "name": "Monochrome",
+      "reasoning_lenses": ["GPU Space"],
+      "translation": "This turns the picture into one color or shades of gray."
+    },
+    {
+      "name": "RGB Key",
+      "reasoning_lenses": ["Sampling-Based", "GPU Space"],
+      "translation": "This removes pixels based on red, green, and blue values."
+    },
+    {
+      "name": "RGB to HSV",
+      "reasoning_lenses": ["Data Boundary"],
+      "translation": "This changes how colors are described, from red-green-blue to color-wheel values."
+    },
+    {
+      "name": "Reorder",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This rearranges color channels, like swapping left and right socks."
+    },
+    {
+      "name": "Slope",
+      "reasoning_lenses": ["GPU Space"],
+      "translation": "This remaps brightness using a curve, like bending a ruler."
+    },
+    {
+      "name": "Threshold",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This turns pixels fully on or off based on a cutoff point."
+    },
+    {
+      "name": "Tone Map",
+      "reasoning_lenses": ["GPU Space", "Resolution-Dependent"],
+      "translation": "This squeezes very bright and dark values into a range you can see."
+    }
+  ]
+}
+{
+  "menu": "TOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Corner Pin",
+      "reasoning_lenses": ["GPU Space", "Context-Bound"],
+      "translation": "This stretches an image by grabbing its four corners and pinning them somewhere else."
+    },
+    {
+      "name": "Crop",
+      "reasoning_lenses": ["Resolution-Dependent"],
+      "translation": "This cuts out part of an image and throws the rest away."
+    },
+    {
+      "name": "Displace",
+      "reasoning_lenses": ["GPU Space", "Sampling-Based"],
+      "translation": "This pushes pixels around using another image, like using wind to blow fabric."
+    },
+    {
+      "name": "Fit",
+      "reasoning_lenses": ["Resolution-Dependent"],
+      "translation": "This resizes an image so it fits inside another space."
+    },
+    {
+      "name": "Flip",
+      "reasoning_lenses": ["GPU Space"],
+      "translation": "This turns the image over left-right or up-down."
+    },
+    {
+      "name": "Inside",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This shows one image only where another image exists."
+    },
+    {
+      "name": "Lens Distortion",
+      "reasoning_lenses": ["GPU Space", "Sampling-Based"],
+      "translation": "This bends the image like it was seen through a curved camera lens."
+    },
+    {
+      "name": "Lookup",
+      "reasoning_lenses": ["Sampling-Based", "Data Boundary"],
+      "translation": "This uses a table image to decide what color each pixel becomes."
+    },
+    {
+      "name": "Mirror",
+      "reasoning_lenses": ["GPU Space"],
+      "translation": "This reflects the image across a line, like a mirror."
+    },
+    {
+      "name": "Normal Map",
+      "reasoning_lenses": ["Data Boundary", "GPU Space"],
+      "translation": "This turns color information into directions that describe surface bumps."
+    },
+    {
+      "name": "Outside",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This shows one image only where another image does not exist."
+    },
+    {
+      "name": "Over",
+      "reasoning_lenses": ["Order-Dependent", "GPU Space"],
+      "translation": "This places one image on top of another."
+    },
+    {
+      "name": "Projection",
+      "reasoning_lenses": ["GPU Space", "Context-Bound"],
+      "translation": "This throws an image onto a surface as if using a projector."
+    },
+    {
+      "name": "Remap",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This changes values from one range into another range."
+    },
+    {
+      "name": "Resolution",
+      "reasoning_lenses": ["Resolution-Dependent", "Data Boundary"],
+      "translation": "This changes how many pixels an image has."
+    },
+    {
+      "name": "Screen",
+      "reasoning_lenses": ["Order-Dependent", "GPU Space"],
+      "translation": "This blends images together in a way that makes them brighter."
+    },
+    {
+      "name": "Tile",
+      "reasoning_lenses": ["Resolution-Dependent"],
+      "translation": "This repeats an image over and over to fill space."
+    },
+    {
+      "name": "Transform",
+      "reasoning_lenses": ["GPU Space"],
+      "translation": "This moves, rotates, or scales an image."
+    },
+    {
+      "name": "Under",
+      "reasoning_lenses": ["Order-Dependent", "GPU Space"],
+      "translation": "This puts one image underneath another."
+    }
+  ]
+}
+{
+  "menu": "TOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Bloom",
+      "reasoning_lenses": ["GPU Space", "Sampling-Based", "Resolution-Dependent"],
+      "translation": "This makes bright parts of an image glow and spill light into nearby areas."
+    },
+    {
+      "name": "Blur",
+      "reasoning_lenses": ["GPU Space", "Sampling-Based"],
+      "translation": "This softens the image by averaging nearby pixels together."
+    },
+    {
+      "name": "Convolve",
+      "reasoning_lenses": ["Sampling-Based", "GPU Space"],
+      "translation": "This changes the image using a small pattern that slides over every pixel, like rubbing a texture across it."
+    },
+    {
+      "name": "Difference",
+      "reasoning_lenses": ["Order-Dependent", "GPU Space"],
+      "translation": "This compares two images and shows where they are not the same."
+    }
+  ],
+  "notes": {
+    "excluded": [
+      "Edge (already counted)",
+      "Luma Blur (already counted)"
+    ]
+  }
+}
+{
+  "menu": "TOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Circle",
+      "reasoning_lenses": ["GPU Space", "Resolution-Dependent"],
+      "translation": "This draws a round shape into an image, like stamping a circle onto paper."
+    },
+    {
+      "name": "Cross",
+      "reasoning_lenses": ["GPU Space", "Resolution-Dependent"],
+      "translation": "This draws a plus-shaped mark, like two rectangles crossing."
+    },
+    {
+      "name": "Function",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This makes an image by following a math rule, like drawing a picture from a formula."
+    },
+    {
+      "name": "GLSL",
+      "reasoning_lenses": ["GPU Space", "Cook-Sensitive"],
+      "translation": "This makes images using small programs that run on the graphics card."
+    },
+    {
+      "name": "GLSL Multi",
+      "reasoning_lenses": ["GPU Space", "Cook-Sensitive", "Order-Dependent"],
+      "translation": "This runs many small graphics programs together, where the order can change the result."
+    },
+    {
+      "name": "Noise",
+      "reasoning_lenses": ["GPU Space", "Sampling-Based"],
+      "translation": "This fills the image with random-looking patterns, like static or clouds."
+    },
+    {
+      "name": "Ramp",
+      "reasoning_lenses": ["GPU Space", "Resolution-Dependent"],
+      "translation": "This makes a smooth change from one color or value to another."
+    },
+    {
+      "name": "Rectangle",
+      "reasoning_lenses": ["GPU Space", "Resolution-Dependent"],
+      "translation": "This draws a box shape into an image."
+    }
+  ]
+}
+{
+  "menu": "TOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Depth",
+      "reasoning_lenses": ["GPU Space", "Data Boundary", "Context-Bound"],
+      "translation": "This shows how far away things are from the camera, turning distance into an image."
+    },
+    {
+      "name": "Render",
+      "reasoning_lenses": ["GPU Space", "Context-Bound", "Cook-Sensitive"],
+      "translation": "This is the machine that draws the 3D world into a picture based on cameras, lights, and objects."
+    },
+    {
+      "name": "Render Pass",
+      "reasoning_lenses": ["GPU Space", "Context-Bound", "Order-Dependent"],
+      "translation": "This draws the scene in separate layers, like painting the background and shadows in different steps."
+    },
+    {
+      "name": "Render Select",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This picks a specific result out of a render, like choosing only the shadow picture."
+    },
+    {
+      "name": "Render Simple",
+      "reasoning_lenses": ["GPU Space", "Context-Bound"],
+      "translation": "This draws the scene in a basic way with fewer options."
+    },
+    {
+      "name": "SSAO",
+      "reasoning_lenses": ["GPU Space", "Sampling-Based", "Resolution-Dependent"],
+      "translation": "This adds soft shadows where objects are close together, like darkening corners and cracks."
+    }
+  ]
+}
+{
+  "menu": "TOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Blob Track",
+      "reasoning_lenses": ["Sampling-Based", "Temporal", "Stateful"],
+      "translation": "This watches moving shapes in an image and remembers where they were last frame so it can keep following them."
+    },
+    {
+      "name": "Feedback",
+      "reasoning_lenses": ["Temporal", "Stateful", "Cook-Sensitive"],
+      "translation": "This feeds the last frame back into the next one, like pointing a camera at its own screen."
+    },
+    {
+      "name": "Kinect",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This brings in live depth and body data from a Kinect sensor."
+    },
+    {
+      "name": "Leap Motion",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This brings in live hand and finger tracking data."
+    },
+    {
+      "name": "Motion",
+      "reasoning_lenses": ["Sampling-Based", "Temporal"],
+      "translation": "This finds where pixels change over time, like spotting movement between frames."
+    },
+    {
+      "name": "Optical Flow",
+      "reasoning_lenses": ["Sampling-Based", "Temporal", "Resolution-Dependent"],
+      "translation": "This measures how pixels slide across the image from frame to frame, like tracking the direction of moving clouds."
+    },
+    {
+      "name": "RealSense",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This brings in depth and camera data from an Intel RealSense device."
+    },
+    {
+      "name": "ZED",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This brings in stereo camera and depth data from a ZED camera."
+    },
+    {
+      "name": "ZED Select",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This chooses a specific image or data stream coming from a ZED camera."
+    }
+  ]
+}
+{
+  "menu": "TOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "MPCDI",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound", "Initialization-Sensitive"],
+      "translation": "This loads a big projection-mapping setup so images line up correctly on curved or multiple screens."
+    },
+    {
+      "name": "OpenColorIO",
+      "reasoning_lenses": ["Data Boundary", "Order-Dependent"],
+      "translation": "This changes colors using strict rules so they look the same on different screens."
+    },
+    {
+      "name": "OpenVR",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Context-Bound"],
+      "translation": "This connects the image system to a VR headset so the picture moves with your head."
+    },
+    {
+      "name": "Pack",
+      "reasoning_lenses": ["Resolution-Dependent", "Order-Dependent"],
+      "translation": "This squeezes many images into one bigger image, like packing photos into a collage."
+    },
+    {
+      "name": "Prefilter Map",
+      "reasoning_lenses": ["GPU Space", "Sampling-Based"],
+      "translation": "This prepares lighting textures so shiny surfaces know how to reflect light."
+    },
+    {
+      "name": "Scalable Display",
+      "reasoning_lenses": ["Context-Bound", "Initialization-Sensitive"],
+      "translation": "This helps spread one image across many screens so they act like one big display."
+    },
+    {
+      "name": "Substance",
+      "reasoning_lenses": ["Data Boundary", "GPU Space"],
+      "translation": "This turns material recipes into images you can use for textures."
+    },
+    {
+      "name": "ST2110 In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives professional broadcast video over a network."
+    },
+    {
+      "name": "ST2110 Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends professional broadcast video over a network."
+    },
+    {
+      "name": "Switch",
+      "reasoning_lenses": ["Order-Dependent", "Cook-Sensitive"],
+      "translation": "This chooses which image to pass through, like flipping a light switch."
+    },
+    {
+      "name": "Texture 3D",
+      "reasoning_lenses": ["Data Boundary", "GPU Space"],
+      "translation": "This stores images as a 3D block so shaders can look inside them."
+    },
+    {
+      "name": "Time Machine",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This records frames over time so you can jump backward and forward."
+    },
+    {
+      "name": "Vioso",
+      "reasoning_lenses": ["Context-Bound", "Initialization-Sensitive"],
+      "translation": "This aligns images to real-world projection surfaces using calibration data."
+    },
+    {
+      "name": "Window",
+      "reasoning_lenses": ["Viewer-Only", "Context-Bound"],
+      "translation": "This opens a window on the screen to show the image."
+    }
+  ]
+}
+{
+  "menu": "CHOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Ableton Link",
+      "reasoning_lenses": ["Temporal", "Data Boundary", "Stateful"],
+      "translation": "This keeps time in sync with other music apps, like everyone clapping to the same beat."
+    },
+    {
+      "name": "Angle",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This turns movement or direction into angle numbers."
+    },
+    {
+      "name": "Attribute",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This pulls numeric information out of 3D data and turns it into channels."
+    },
+    {
+      "name": "Audio Band EQ",
+      "reasoning_lenses": ["Temporal", "Sampling-Based"],
+      "translation": "This lets you make some sound ranges louder or quieter, like turning knobs for bass and treble."
+    },
+    {
+      "name": "Audio Binaural",
+      "reasoning_lenses": ["Temporal", "Sampling-Based"],
+      "translation": "This makes sound feel like it’s coming from around your head."
+    },
+    {
+      "name": "Audio Device In",
+      "reasoning_lenses": ["Temporal", "Initialization-Sensitive"],
+      "translation": "This brings sound in from a microphone or sound card."
+    },
+    {
+      "name": "Audio Device Out",
+      "reasoning_lenses": ["Temporal", "Context-Bound"],
+      "translation": "This sends sound out to speakers or headphones."
+    },
+    {
+      "name": "Audio Dynamics",
+      "reasoning_lenses": ["Temporal", "Sampling-Based"],
+      "translation": "This controls how loud sounds get over time, like squashing loud parts and lifting quiet ones."
+    },
+    {
+      "name": "Audio File In",
+      "reasoning_lenses": ["Temporal", "Initialization-Sensitive"],
+      "translation": "This plays sound from a file over time."
+    },
+    {
+      "name": "Audio Filter",
+      "reasoning_lenses": ["Temporal", "Sampling-Based"],
+      "translation": "This removes or changes certain sound frequencies."
+    },
+    {
+      "name": "Audio Movie",
+      "reasoning_lenses": ["Temporal", "Initialization-Sensitive"],
+      "translation": "This pulls sound out of a movie file and plays it."
+    },
+    {
+      "name": "Audio NDI",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives live audio over a network."
+    },
+    {
+      "name": "Audio Oscillator",
+      "reasoning_lenses": ["Temporal"],
+      "translation": "This makes a repeating sound wave, like a steady beep."
+    },
+    {
+      "name": "Audio Power EQ",
+      "reasoning_lenses": ["Temporal", "Sampling-Based"],
+      "translation": "This shapes sound by boosting or cutting energy in different frequency bands."
+    },
+    {
+      "name": "Audio Play",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This controls when sound starts, stops, and pauses."
+    },
+    {
+      "name": "Audio Render",
+      "reasoning_lenses": ["Temporal", "Context-Bound"],
+      "translation": "This mixes sound channels together so they can be heard."
+    },
+    {
+      "name": "Audio Spectrum",
+      "reasoning_lenses": ["Sampling-Based", "Temporal"],
+      "translation": "This shows how strong different sound frequencies are over time."
+    },
+    {
+      "name": "Audio Stream In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives live audio from another TouchDesigner process."
+    },
+    {
+      "name": "Audio Stream Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends live audio to another TouchDesigner process."
+    },
+    {
+      "name": "Audio VST",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This runs a plugin that changes or generates sound."
+    }
+  ]
+}
+{
+  "menu": "CHOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Audio Web Render",
+      "reasoning_lenses": ["Temporal", "Data Boundary", "Initialization-Sensitive"],
+      "translation": "This pulls sound from a web page and plays it over time."
+    },
+    {
+      "name": "Bass",
+      "reasoning_lenses": ["Temporal", "Sampling-Based"],
+      "translation": "This focuses on low sounds, like the thump you feel in music."
+    },
+    {
+      "name": "Beat",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This listens for the pulse in music and keeps track of it."
+    },
+    {
+      "name": "Bind",
+      "reasoning_lenses": ["Context-Bound", "Cook-Sensitive"],
+      "translation": "This connects one value to another so they move together."
+    },
+    {
+      "name": "Blacktrax",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This brings in live position data from a BlackTrax tracking system."
+    },
+    {
+      "name": "Blob Track",
+      "reasoning_lenses": ["Sampling-Based", "Temporal", "Stateful"],
+      "translation": "This follows moving shapes over time and remembers where they were."
+    },
+    {
+      "name": "Body Track",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Stateful"],
+      "translation": "This tracks body joints and movement from a sensor."
+    },
+    {
+      "name": "Bullet Solver",
+      "reasoning_lenses": ["Temporal", "Stateful", "Cook-Sensitive"],
+      "translation": "This steps physics forward in time and remembers past motion."
+    },
+    {
+      "name": "Clip",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This limits values so they stay inside a set range."
+    },
+    {
+      "name": "Clip Blender",
+      "reasoning_lenses": ["Temporal", "Order-Dependent"],
+      "translation": "This blends between different clips of motion over time."
+    },
+    {
+      "name": "Clock",
+      "reasoning_lenses": ["Temporal"],
+      "translation": "This generates time signals like seconds, minutes, or beats."
+    },
+    {
+      "name": "Composite",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This combines channels using rules like add or multiply."
+    },
+    {
+      "name": "Constant",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This outputs a steady value that stays the same."
+    },
+    {
+      "name": "Copy",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This duplicates channels and lines them up in new ways."
+    },
+    {
+      "name": "Count",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This counts steps or events as time moves forward."
+    },
+    {
+      "name": "DAT to CHOP",
+      "reasoning_lenses": ["Data Boundary"],
+      "translation": "This turns table data into time-based channels."
+    },
+    {
+      "name": "Delay",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This shifts values back in time so they arrive later."
+    },
+    {
+      "name": "DMX In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives live lighting control values from a DMX system."
+    },
+    {
+      "name": "DMX Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends lighting control values to a DMX system."
+    }
+  ]
+}
+{
+  "menu": "CHOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Envelope",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This shapes how a value changes over time, like how a sound slowly fades in and out."
+    },
+    {
+      "name": "Event",
+      "reasoning_lenses": ["Temporal", "Stateful", "Cook-Sensitive"],
+      "translation": "This watches for something to happen and reacts when it does."
+    },
+    {
+      "name": "Expression",
+      "reasoning_lenses": ["Cook-Sensitive"],
+      "translation": "This calculates values using math formulas whenever it updates."
+    },
+    {
+      "name": "Extend",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This decides what happens to values outside their original time range."
+    },
+    {
+      "name": "Face Track",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Stateful"],
+      "translation": "This tracks facial features over time and remembers their positions."
+    },
+    {
+      "name": "Fan",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This spreads one channel into many, like dealing cards from a deck."
+    },
+    {
+      "name": "Feedback",
+      "reasoning_lenses": ["Temporal", "Stateful", "Cook-Sensitive"],
+      "translation": "This feeds previous values back into the next step, creating history."
+    },
+    {
+      "name": "File In",
+      "reasoning_lenses": ["Initialization-Sensitive"],
+      "translation": "This loads channel data from a file."
+    },
+    {
+      "name": "File Out",
+      "reasoning_lenses": ["Initialization-Sensitive"],
+      "translation": "This saves channel data to a file."
+    },
+    {
+      "name": "Filter",
+      "reasoning_lenses": ["Temporal", "Sampling-Based"],
+      "translation": "This smooths or changes values over time."
+    },
+    {
+      "name": "Function",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This creates channels by following a math rule."
+    },
+    {
+      "name": "Gesture",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This looks for patterns in movement over time."
+    },
+    {
+      "name": "Handle",
+      "reasoning_lenses": ["Viewer-Only", "Context-Bound"],
+      "translation": "This gives you something to grab in the viewer to move or adjust values."
+    }
+  ]
+}
+{
+  "menu": "CHOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Hog",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This brings in live lighting control data from a Hog console."
+    },
+    {
+      "name": "Hokuyo",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This reads distance measurements from a laser scanner as changing numbers."
+    },
+    {
+      "name": "Hold",
+      "reasoning_lenses": ["Stateful"],
+      "translation": "This keeps the last value and holds onto it until something new arrives."
+    },
+    {
+      "name": "Import Select",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This pulls channels from somewhere else in the project."
+    },
+    {
+      "name": "In",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This receives channels coming into a component."
+    },
+    {
+      "name": "Info",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This reports information about another operator as numbers."
+    },
+    {
+      "name": "Interpolate",
+      "reasoning_lenses": ["Temporal", "Sampling-Based"],
+      "translation": "This fills in smooth steps between values over time."
+    },
+    {
+      "name": "Immersive Curve",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This outputs curve data used for immersive display setups."
+    },
+    {
+      "name": "Inverse Kin",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This figures out how joints should bend so an end point reaches a target."
+    },
+    {
+      "name": "Join",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This sticks channels together end-to-end in time."
+    },
+    {
+      "name": "Joystick",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This reads live input from a joystick or game controller."
+    },
+    {
+      "name": "Keyboard In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This turns key presses into changing values."
+    },
+    {
+      "name": "Keyframe",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This lets you draw values over time using key points."
+    },
+    {
+      "name": "Kinect / Connect",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This connects to a Kinect and brings in body or depth data."
+    },
+    {
+      "name": "Lag",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This makes values react slowly instead of changing instantly."
+    },
+    {
+      "name": "Laser",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends control data to a laser output system."
+    },
+    {
+      "name": "Leap Motion",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This brings in live hand and finger movement data."
+    },
+    {
+      "name": "Leuze ROD4",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This reads distance and position data from an industrial sensor."
+    },
+    {
+      "name": "LFO",
+      "reasoning_lenses": ["Temporal"],
+      "translation": "This makes repeating waves, like slow oscillating motion."
+    },
+    {
+      "name": "Limit",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This restricts how fast or how far values are allowed to change."
+    }
+  ]
+}
+{
+  "menu": "CHOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Logic",
+      "reasoning_lenses": ["Sampling-Based", "Order-Dependent"],
+      "translation": "This makes yes-or-no decisions using rules, like checking if a switch is on or off."
+    },
+    {
+      "name": "Lookup",
+      "reasoning_lenses": ["Sampling-Based", "Data Boundary"],
+      "translation": "This uses one set of values to look up results in another set, like using a chart to find answers."
+    },
+    {
+      "name": "LTC In",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Stateful"],
+      "translation": "This reads timecode from an audio signal so everything can stay in sync."
+    },
+    {
+      "name": "LTC Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This turns time information into an audio signal for syncing other devices."
+    },
+    {
+      "name": "MIDI In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives live note and control data from a MIDI device."
+    },
+    {
+      "name": "MIDI In Map",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This connects incoming MIDI controls to specific channels."
+    },
+    {
+      "name": "MIDI Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends MIDI notes or controls to external devices."
+    },
+    {
+      "name": "MOSIS",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This brings in motion data from a MOSIS tracking system."
+    },
+    {
+      "name": "Mouse In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This turns mouse movement and clicks into changing values."
+    },
+    {
+      "name": "Mouse Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends values out as mouse control signals."
+    },
+    {
+      "name": "NCam",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Context-Bound"],
+      "translation": "This brings in live camera tracking data as channels."
+    },
+    {
+      "name": "Noise",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This generates random-looking values over time."
+    },
+    {
+      "name": "Null",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This passes values through unchanged and gives them a clear name."
+    }
+  ]
+}
+{
+  "menu": "CHOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Oak Device",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This connects to an Oak depth camera and brings in live sensor data."
+    },
+    {
+      "name": "Oak Select",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This chooses specific channels coming from an Oak device."
+    },
+    {
+      "name": "Object",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This pulls transform or state values from a 3D object into channels."
+    },
+    {
+      "name": "OpenVR",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Context-Bound"],
+      "translation": "This brings in headset and controller movement from a VR system."
+    },
+    {
+      "name": "OptiTrack In",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This receives live motion-capture data from an OptiTrack system."
+    },
+    {
+      "name": "OCS In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives control data from an OCS network source."
+    },
+    {
+      "name": "OCS Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends control data out to an OCS network destination."
+    },
+    {
+      "name": "Out",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This marks channels as outputs of a component."
+    },
+    {
+      "name": "Pan Tilt",
+      "reasoning_lenses": ["Temporal", "Context-Bound"],
+      "translation": "This converts control values into pan and tilt motion for devices."
+    },
+    {
+      "name": "Panel",
+      "reasoning_lenses": ["Context-Bound", "Temporal"],
+      "translation": "This reads values from interface panels like sliders and buttons."
+    },
+    {
+      "name": "Pangolin",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This sends control data to Pangolin laser systems."
+    },
+    {
+      "name": "Parameter",
+      "reasoning_lenses": ["Context-Bound", "Cook-Sensitive"],
+      "translation": "This turns parameter values into channels that update when the parameter changes."
+    },
+    {
+      "name": "Pattern",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This creates repeating value patterns over time."
+    },
+    {
+      "name": "Perform",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This manages timing and state during live performance playback."
+    },
+    {
+      "name": "Phaser",
+      "reasoning_lenses": ["Temporal", "Sampling-Based"],
+      "translation": "This shifts phases in sound or signals, creating a sweeping effect."
+    },
+    {
+      "name": "Pipe In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives channel data from another process through a system pipe."
+    }
+  ]
+}
+{
+  "menu": "CHOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Pop",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This makes a short spike when a value changes, like a quick tap instead of a long press."
+    },
+    {
+      "name": "Pop 2",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This is another way to make short spikes, with more control over how they fire."
+    },
+    {
+      "name": "PosiStageNet",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This brings in live position data used for stage lighting and tracking."
+    },
+    {
+      "name": "Pulse",
+      "reasoning_lenses": ["Temporal"],
+      "translation": "This creates a momentary on signal, like pressing a button very fast."
+    },
+    {
+      "name": "Record",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This records channel values over time so they can be played back later."
+    },
+    {
+      "name": "Rename",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This changes channel names without changing the data."
+    },
+    {
+      "name": "Render Pick",
+      "reasoning_lenses": ["Context-Bound", "Temporal"],
+      "translation": "This reads which 3D object the mouse is pointing at in a rendered scene."
+    },
+    {
+      "name": "Render Stream In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives channel data streamed from another TouchDesigner process."
+    },
+    {
+      "name": "Reorder",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This rearranges channels into a new order."
+    },
+    {
+      "name": "Replace",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This swaps channel values using another channel as a guide."
+    },
+    {
+      "name": "Resample",
+      "reasoning_lenses": ["Temporal", "Sampling-Based"],
+      "translation": "This changes how often values are sampled over time."
+    },
+    {
+      "name": "S-Curve",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This reshapes values using a smooth S-shaped curve."
+    },
+    {
+      "name": "Script",
+      "reasoning_lenses": ["Cook-Sensitive"],
+      "translation": "This runs code that can change channel data whenever it updates."
+    },
+    {
+      "name": "Select",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This chooses specific channels and ignores the rest."
+    },
+    {
+      "name": "Sequencer",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This plays values in steps over time, like following a timeline."
+    },
+    {
+      "name": "Serial",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This reads data coming in over a serial port from external hardware."
+    },
+    {
+      "name": "Shared Memory In",
+      "reasoning_lenses": ["Data Boundary", "Stateful", "Cook-Sensitive"],
+      "translation": "This reads channel data from a shared memory space."
+    },
+    {
+      "name": "Shared Memory Out",
+      "reasoning_lenses": ["Data Boundary", "Stateful", "Cook-Sensitive"],
+      "translation": "This writes channel data into shared memory for other programs to read."
+    }
+  ]
+}
+{
+  "menu": "CHOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Shift",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This moves channel values forward or backward in time, like sliding them left or right."
+    },
+    {
+      "name": "Shuffle",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This rearranges channels or samples into a new layout."
+    },
+    {
+      "name": "Slope",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This turns changes over time into speed-like values."
+    },
+    {
+      "name": "SOP to CHOP",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This turns 3D shape data into numeric channels."
+    },
+    {
+      "name": "Sort",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This orders channel values from smallest to biggest or the other way around."
+    },
+    {
+      "name": "Speed",
+      "reasoning_lenses": ["Temporal", "Sampling-Based"],
+      "translation": "This measures how fast values are changing."
+    },
+    {
+      "name": "Splice",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This smoothly joins different pieces of channel data together."
+    },
+    {
+      "name": "Spring",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This makes values move like they are attached to a spring, with bounce and drag."
+    },
+    {
+      "name": "ST 2110 Device",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This connects to a professional broadcast video device and reads its timing data."
+    },
+    {
+      "name": "Stretch",
+      "reasoning_lenses": ["Temporal", "Sampling-Based"],
+      "translation": "This squeezes or expands channel data in time."
+    }
+  ]
+}
+{
+  "menu": "CHOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "SType In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives data using the SType protocol from another system."
+    },
+    {
+      "name": "SType Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends data out using the SType protocol."
+    },
+    {
+      "name": "Switch",
+      "reasoning_lenses": ["Order-Dependent", "Cook-Sensitive"],
+      "translation": "This chooses which channels pass through, like flipping between inputs."
+    },
+    {
+      "name": "Sync In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives timing signals so different systems stay in step."
+    },
+    {
+      "name": "Sync Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends timing signals to keep other systems in step."
+    },
+    {
+      "name": "Tablet",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This reads pen and tablet input like position and pressure."
+    },
+    {
+      "name": "Time Slice",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This processes channels in small chunks of time instead of all at once."
+    },
+    {
+      "name": "Timer",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This counts time for things like delays, loops, or countdowns."
+    },
+    {
+      "name": "TOP to CHOP",
+      "reasoning_lenses": ["Data Boundary", "Sampling-Based"],
+      "translation": "This turns image pixels into numeric channels."
+    },
+    {
+      "name": "Touch In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives channel data from another TouchDesigner project."
+    },
+    {
+      "name": "Touch Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends channel data to another TouchDesigner project."
+    },
+    {
+      "name": "Trail",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This keeps past values around to draw or analyze motion paths."
+    },
+    {
+      "name": "Transform",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This changes channel values by scaling, rotating, or offsetting them."
+    },
+    {
+      "name": "Transform XYZ",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This applies position, rotation, and scale changes using X, Y, and Z values."
+    },
+    {
+      "name": "Trigger",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This watches for a signal crossing a line and then fires an action."
+    },
+    {
+      "name": "Trim",
+      "reasoning_lenses": ["Temporal"],
+      "translation": "This cuts channel data so only a chosen time range remains."
+    },
+    {
+      "name": "Warp",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This bends or remaps channel values in time."
+    },
+    {
+      "name": "Wave",
+      "reasoning_lenses": ["Temporal"],
+      "translation": "This makes repeating wave shapes like sine or square patterns."
+    },
+    {
+      "name": "ZED",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This brings in stereo camera and depth data from a ZED device."
+    }
+  ]
+}
+{
+  "menu": "SOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Add",
+      "reasoning_lenses": ["Order-Dependent", "Context-Bound"],
+      "translation": "This connects points together to make lines or shapes, depending on the order you choose."
+    },
+    {
+      "name": "Alembic",
+      "reasoning_lenses": ["Data Boundary", "Initialization-Sensitive", "Temporal"],
+      "translation": "This brings in animated 3D shapes from a file made somewhere else."
+    },
+    {
+      "name": "Align",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This lines shapes up so they match position or direction."
+    },
+    {
+      "name": "Arm",
+      "reasoning_lenses": ["Context-Bound", "Stateful"],
+      "translation": "This builds a chain of joints for moving a character or object."
+    },
+    {
+      "name": "Attribute",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This reads information stored on points or shapes and exposes it."
+    },
+    {
+      "name": "Attribute Create",
+      "reasoning_lenses": ["Data Boundary", "Cook-Sensitive"],
+      "translation": "This adds new information to points or shapes, like labels or extra numbers."
+    },
+    {
+      "name": "Basis",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This changes how curves are calculated, affecting how smooth they are."
+    },
+    {
+      "name": "Blend",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This mixes two shapes together so one slowly turns into the other."
+    },
+    {
+      "name": "Bone Group",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This organizes bones into named groups so they can be controlled together."
+    },
+    {
+      "name": "Boolean",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This cuts or combines shapes using overlap rules, like subtracting one cookie cutter from another."
+    },
+    {
+      "name": "Box",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a simple box shape."
+    },
+    {
+      "name": "Bridge",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This connects edges or shapes together to span a gap."
+    },
+    {
+      "name": "Cache",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This stores geometry from earlier frames so it can be reused."
+    },
+    {
+      "name": "Cap",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This fills holes in shapes so they become closed."
+    },
+    {
+      "name": "Capture",
+      "reasoning_lenses": ["Stateful", "Context-Bound"],
+      "translation": "This binds points to bones so they move together during animation."
+    },
+    {
+      "name": "Capture Region",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This shows or defines which bones affect which parts of a shape."
+    },
+    {
+      "name": "Carve",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This cuts a curve so only part of it remains."
+    },
+    {
+      "name": "CHOP To",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This uses time-based numbers to move or change shapes."
+    },
+    {
+      "name": "Circle",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a round curve or flat circle shape."
+    },
+    {
+      "name": "Clay",
+      "reasoning_lenses": ["Sampling-Based", "Stateful"],
+      "translation": "This smooths and reshapes geometry like pushing real clay around."
+    }
+  ]
+}
+{
+  "menu": "SOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Clip",
+      "reasoning_lenses": ["Context-Bound", "Order-Dependent"],
+      "translation": "This cuts geometry using a plane, like slicing a model with a knife."
+    },
+    {
+      "name": "Convert",
+      "reasoning_lenses": ["Data Boundary"],
+      "translation": "This changes geometry from one type into another, like turning curves into polygons."
+    },
+    {
+      "name": "Copy",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This makes many copies of a shape and places them using rules."
+    },
+    {
+      "name": "Creep",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This slides points along a surface, like ants crawling over an object."
+    },
+    {
+      "name": "Curve Clay",
+      "reasoning_lenses": ["Sampling-Based", "Stateful"],
+      "translation": "This lets you push and smooth curves as if they were soft wire."
+    },
+    {
+      "name": "Curve Set (Check / Intersect Curves)",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This checks where curves cross or touch each other."
+    },
+    {
+      "name": "DAT to SOP",
+      "reasoning_lenses": ["Data Boundary"],
+      "translation": "This turns table data into 3D shapes."
+    },
+    {
+      "name": "Deform",
+      "reasoning_lenses": ["Context-Bound", "Sampling-Based"],
+      "translation": "This bends or reshapes geometry using another object or field."
+    },
+    {
+      "name": "Delete",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This removes parts of geometry based on rules."
+    },
+    {
+      "name": "Divide",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This splits shapes into smaller pieces."
+    },
+    {
+      "name": "Extrude",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This pulls a flat shape outward to give it depth."
+    },
+    {
+      "name": "Face Track",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Stateful"],
+      "translation": "This turns live face tracking data into moving geometry."
+    },
+    {
+      "name": "Facet",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This changes how surfaces are smoothed or split at edges."
+    },
+    {
+      "name": "File In",
+      "reasoning_lenses": ["Data Boundary", "Initialization-Sensitive"],
+      "translation": "This loads geometry from a file."
+    },
+    {
+      "name": "Fillet",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This rounds off sharp edges."
+    },
+    {
+      "name": "Fit",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This rescales geometry so it fits within a space."
+    },
+    {
+      "name": "Force",
+      "reasoning_lenses": ["Temporal", "Context-Bound"],
+      "translation": "This pushes geometry using simulated forces."
+    },
+    {
+      "name": "Fractal",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This adds repeating rough detail to shapes."
+    },
+    {
+      "name": "Grid",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a flat grid of points or polygons."
+    }
+  ]
+}
+{
+  "menu": "SOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Group",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This puts parts of geometry into named groups so you can work on them together."
+    },
+    {
+      "name": "Edit",
+      "reasoning_lenses": ["Stateful", "Context-Bound"],
+      "translation": "This lets you grab and move points or shapes by hand."
+    },
+    {
+      "name": "Hole",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This cuts holes in surfaces using shapes or rules."
+    },
+    {
+      "name": "Import Select",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This pulls geometry from another component or network."
+    },
+    {
+      "name": "In",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This brings geometry into a component from the outside."
+    },
+    {
+      "name": "Inverse Curve",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This reverses or flips how a curve is measured."
+    },
+    {
+      "name": "Isosurface",
+      "reasoning_lenses": ["Sampling-Based", "Data Boundary"],
+      "translation": "This turns a volume or field into a visible surface."
+    },
+    {
+      "name": "Joint",
+      "reasoning_lenses": ["Context-Bound", "Stateful"],
+      "translation": "This creates a joint used for skeletal movement."
+    },
+    {
+      "name": "Kinect / Connect",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This brings live body or depth data from a Kinect into geometry."
+    },
+    {
+      "name": "Lattice",
+      "reasoning_lenses": ["Context-Bound", "Sampling-Based"],
+      "translation": "This bends geometry using a cage, like squeezing something inside a box."
+    },
+    {
+      "name": "Limit",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This restricts how far points are allowed to move."
+    },
+    {
+      "name": "Line",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a straight line shape."
+    },
+    {
+      "name": "Line Thick",
+      "reasoning_lenses": ["Context-Bound", "Sampling-Based"],
+      "translation": "This turns a thin line into a thick ribbon or tube."
+    },
+    {
+      "name": "LOD",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This switches between simpler or more detailed shapes depending on conditions."
+    },
+    {
+      "name": "LS System",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This grows branching structures like plants using rules."
+    },
+    {
+      "name": "Magnet",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This pulls points toward a target like a magnet."
+    },
+    {
+      "name": "Material",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This assigns surface appearance information to geometry."
+    },
+    {
+      "name": "Merge",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This combines multiple pieces of geometry into one."
+    },
+    {
+      "name": "Metaball",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This creates blobby shapes that melt into each other."
+    },
+    {
+      "name": "Model",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This applies transformations like move, rotate, or scale."
+    },
+    {
+      "name": "Noise",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This adds random variation to geometry."
+    }
+  ]
+}
+{
+  "menu": "SOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Null",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This passes geometry through unchanged and gives it a clear name."
+    },
+    {
+      "name": "Object Merge",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This pulls geometry from another object or network into the current one."
+    },
+    {
+      "name": "OpenVR",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Context-Bound"],
+      "translation": "This brings headset or controller position data into geometry space."
+    },
+    {
+      "name": "Out",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This marks geometry as the output of a component."
+    },
+    {
+      "name": "Particle",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This moves points over time like tiny floating objects."
+    },
+    {
+      "name": "Point",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This changes or reads information stored on individual points."
+    },
+    {
+      "name": "PolyLoft",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This stretches surfaces between curves to form a shape."
+    },
+    {
+      "name": "Point Groups",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This organizes points into named sets."
+    },
+    {
+      "name": "PolyPatch",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This fills areas with smooth polygon surfaces."
+    },
+    {
+      "name": "PolyReduce",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This removes extra polygons to make geometry simpler."
+    },
+    {
+      "name": "PolySpline",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This smooths polygon edges into curved lines."
+    },
+    {
+      "name": "PolyStitch",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This sews separate polygon edges together."
+    },
+    {
+      "name": "POP2",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This simulates particles using forces and rules over time."
+    },
+    {
+      "name": "Primitive",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This works on whole faces or shapes instead of individual points."
+    },
+    {
+      "name": "Face Hull",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This wraps geometry in the smallest possible outer surface."
+    },
+    {
+      "name": "Meta",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This combines influence fields to create soft blobby surfaces."
+    },
+    {
+      "name": "Particles",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This generates and updates many moving points over time."
+    },
+    {
+      "name": "Profile",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This defines a cross-section shape used by other tools."
+    },
+    {
+      "name": "Project",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This projects geometry onto another surface."
+    },
+    {
+      "name": "Rails",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This builds surfaces using guide curves like train tracks."
+    },
+    {
+      "name": "Raster",
+      "reasoning_lenses": ["Data Boundary", "Resolution-Dependent"],
+      "translation": "This turns shapes into a grid-based surface."
+    }
+  ]
+}
+{
+  "menu": "SOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Ray",
+      "reasoning_lenses": ["Sampling-Based", "Context-Bound"],
+      "translation": "This shoots invisible lines from points until they hit another surface."
+    },
+    {
+      "name": "Rectangle",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a flat rectangular shape."
+    },
+    {
+      "name": "Refine",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This adds more points to curves or surfaces to make them smoother."
+    },
+    {
+      "name": "Resample",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This redistributes points evenly along curves."
+    },
+    {
+      "name": "Resolve",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This fixes overlapping or conflicting geometry relationships."
+    },
+    {
+      "name": "Script",
+      "reasoning_lenses": ["Cook-Sensitive"],
+      "translation": "This uses code to change geometry when it updates."
+    },
+    {
+      "name": "Select",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This chooses specific parts of geometry and ignores the rest."
+    },
+    {
+      "name": "Sequence Blend",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This blends between multiple shapes in a specific order."
+    },
+    {
+      "name": "Skin",
+      "reasoning_lenses": ["Context-Bound", "Stateful"],
+      "translation": "This stretches a surface over bones so it can move with them."
+    },
+    {
+      "name": "Sort",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This rearranges points or shapes based on rules."
+    },
+    {
+      "name": "Sphere",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a round 3D ball shape."
+    },
+    {
+      "name": "Spring",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This makes points move like they are attached to springs."
+    },
+    {
+      "name": "Sprinkle",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This scatters points across a surface."
+    },
+    {
+      "name": "Sprite",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This turns points into camera-facing images."
+    },
+    {
+      "name": "Stitch",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This sews edges of geometry together."
+    },
+    {
+      "name": "Subdivide",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This splits surfaces into smaller pieces to make them smoother."
+    },
+    {
+      "name": "Superquad / Supersquad",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates flexible shapes that can morph between cubes and spheres."
+    },
+    {
+      "name": "Surfsect",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This finds where surfaces intersect each other."
+    }
+  ]
+}
+{
+  "menu": "SOPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Surfsect",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This finds the lines where two surfaces cut through each other."
+    },
+    {
+      "name": "Sweep",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This pulls a shape along a path to make a surface, like dragging a ribbon through space."
+    },
+    {
+      "name": "Switch",
+      "reasoning_lenses": ["Order-Dependent", "Cook-Sensitive"],
+      "translation": "This chooses which geometry passes through, like selecting one track at a time."
+    },
+    {
+      "name": "Text",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This turns letters into shapes you can use as geometry."
+    },
+    {
+      "name": "Texture",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This assigns image-based information to geometry for later use."
+    },
+    {
+      "name": "Torus",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a donut-shaped 3D object."
+    },
+    {
+      "name": "Trace",
+      "reasoning_lenses": ["Data Boundary", "Sampling-Based"],
+      "translation": "This turns image edges into line geometry."
+    },
+    {
+      "name": "Trail",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This keeps past positions to draw motion paths."
+    },
+    {
+      "name": "Transform",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This moves, rotates, or scales geometry."
+    },
+    {
+      "name": "Trim",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This keeps only part of a curve or surface."
+    },
+    {
+      "name": "TriStrip",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This turns polygons into triangle strips for efficient drawing."
+    },
+    {
+      "name": "Tube",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a hollow cylinder shape."
+    },
+    {
+      "name": "Twist",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This spins geometry around an axis."
+    },
+    {
+      "name": "Vertex",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This works on individual corner points of polygons."
+    },
+    {
+      "name": "Wireframe",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This turns surfaces into line outlines."
+    },
+    {
+      "name": "ZED (SOP)",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This turns live ZED camera depth and tracking data into geometry."
+    }
+  ]
+}
+{
+  "menu": "POPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Accumulate",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This keeps adding changes over time, like counting steps as you walk."
+    },
+    {
+      "name": "Activity Division",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This splits particles into groups based on what they are doing."
+    },
+    {
+      "name": "Alembic In",
+      "reasoning_lenses": ["Data Boundary", "Initialization-Sensitive", "Temporal"],
+      "translation": "This brings animated particle or geometry data in from an Alembic file."
+    },
+    {
+      "name": "Analyze",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This measures things about particles, like speed or distance."
+    },
+    {
+      "name": "Attribute",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This reads information stored on particles, like color or age."
+    },
+    {
+      "name": "Attribute Convert",
+      "reasoning_lenses": ["Data Boundary"],
+      "translation": "This changes particle data from one type into another."
+    },
+    {
+      "name": "Blend",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This mixes particle states together, like fading from one pose to another."
+    },
+    {
+      "name": "Box",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a box-shaped region used by particles."
+    },
+    {
+      "name": "Cache",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This stores particle states from earlier frames."
+    },
+    {
+      "name": "Cache Blend",
+      "reasoning_lenses": ["Temporal", "Stateful", "Order-Dependent"],
+      "translation": "This blends between stored particle states over time."
+    },
+    {
+      "name": "Cache Select",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This chooses a stored particle frame from memory."
+    },
+    {
+      "name": "CHOP to",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This uses time-based channel data to control particles."
+    },
+    {
+      "name": "Circle",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a circular region or shape for particles."
+    },
+    {
+      "name": "Connectivity",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This figures out which particles are connected or near each other."
+    },
+    {
+      "name": "Convert",
+      "reasoning_lenses": ["Data Boundary"],
+      "translation": "This changes particle data into another form or structure."
+    },
+    {
+      "name": "Copy",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This duplicates particles using rules."
+    },
+    {
+      "name": "C++",
+      "reasoning_lenses": ["Cook-Sensitive"],
+      "translation": "This runs custom code to control how particles behave."
+    },
+    {
+      "name": "Curve",
+      "reasoning_lenses": ["Context-Bound", "Sampling-Based"],
+      "translation": "This creates or uses a curve to guide particle motion."
+    },
+    {
+      "name": "DAT to",
+      "reasoning_lenses": ["Data Boundary"],
+      "translation": "This turns table data into particle information."
+    },
+    {
+      "name": "Dimension",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This changes how many dimensions particle data uses."
+    }
+  ]
+}
+{
+  "menu": "POPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "DMX Fixture",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound", "Initialization-Sensitive"],
+      "translation": "This represents a real lighting fixture so particles can control its channels."
+    },
+    {
+      "name": "DMX Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends particle-driven values out to a DMX lighting system."
+    },
+    {
+      "name": "DMX Profile",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This describes how a lighting fixture understands its control values."
+    },
+    {
+      "name": "Extrude",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This pulls particle shapes outward to give them depth."
+    },
+    {
+      "name": "Facet",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This changes how particle surfaces are smoothed or split."
+    },
+    {
+      "name": "Feedback",
+      "reasoning_lenses": ["Temporal", "Stateful", "Cook-Sensitive"],
+      "translation": "This feeds previous particle states back into the next frame."
+    },
+    {
+      "name": "Field",
+      "reasoning_lenses": ["Sampling-Based", "Context-Bound"],
+      "translation": "This creates an invisible influence that pushes particles around."
+    },
+    {
+      "name": "File In",
+      "reasoning_lenses": ["Data Boundary", "Initialization-Sensitive"],
+      "translation": "This loads particle data from a file."
+    },
+    {
+      "name": "File Out",
+      "reasoning_lenses": ["Data Boundary", "Initialization-Sensitive"],
+      "translation": "This saves particle data to a file."
+    },
+    {
+      "name": "Force",
+      "reasoning_lenses": ["Temporal", "Context-Bound"],
+      "translation": "This applies pushes or pulls to particles over time."
+    },
+    {
+      "name": "Global",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This defines global rules that affect all particles."
+    },
+    {
+      "name": "GLSL Advanced",
+      "reasoning_lenses": ["GPU Space", "Cook-Sensitive"],
+      "translation": "This uses custom GPU programs to control particle behavior."
+    },
+    {
+      "name": "GLSL Compute Shader",
+      "reasoning_lenses": ["GPU Space", "Cook-Sensitive"],
+      "translation": "This updates particles using compute programs on the graphics card."
+    },
+    {
+      "name": "GLSL Copy",
+      "reasoning_lenses": ["GPU Space", "Cook-Sensitive"],
+      "translation": "This copies particle data using GPU code."
+    },
+    {
+      "name": "GLSL Select",
+      "reasoning_lenses": ["GPU Space", "Context-Bound"],
+      "translation": "This selects which particle attributes a shader works on."
+    },
+    {
+      "name": "Grid",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a grid used by particles as a space or surface."
+    },
+    {
+      "name": "Group",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This puts particles into named groups."
+    },
+    {
+      "name": "Histogram",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This measures how particle values are distributed."
+    },
+    {
+      "name": "Import Select",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This pulls particle data from another network or component."
+    },
+    {
+      "name": "In",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This receives particles from outside the current component."
+    }
+  ]
+}
+{
+  "menu": "POPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Limit",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This keeps particle values from going past set limits."
+    },
+    {
+      "name": "Line",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a straight line used by particles as a guide or shape."
+    },
+    {
+      "name": "Line Divide",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This splits a line into evenly spaced pieces."
+    },
+    {
+      "name": "Line Resample",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This redistributes points evenly along a line."
+    },
+    {
+      "name": "Line Smooth",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This smooths a line so sharp changes become gentle curves."
+    },
+    {
+      "name": "Lookup Attribute",
+      "reasoning_lenses": ["Sampling-Based", "Data Boundary"],
+      "translation": "This looks up particle values using other particle attributes."
+    },
+    {
+      "name": "Lookup Channel",
+      "reasoning_lenses": ["Sampling-Based", "Data Boundary"],
+      "translation": "This uses channel data to look up particle values."
+    },
+    {
+      "name": "Lookup Texture",
+      "reasoning_lenses": ["Sampling-Based", "Data Boundary"],
+      "translation": "This uses an image to decide particle values."
+    },
+    {
+      "name": "Math",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This applies math rules to particle values."
+    },
+    {
+      "name": "Math Combine",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This combines multiple particle streams using math rules."
+    },
+    {
+      "name": "Merge",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This combines multiple particle systems into one."
+    },
+    {
+      "name": "Metrics",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This measures distances and relationships between particles."
+    },
+    {
+      "name": "Neighbor",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This finds nearby particles and relates them to each other."
+    },
+    {
+      "name": "Noise",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This adds random motion or variation to particles."
+    },
+    {
+      "name": "Normalize",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This rescales particle values so they fit into a standard range."
+    },
+    {
+      "name": "Null",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This passes particles through unchanged and gives them a clear name."
+    },
+    {
+      "name": "OAK Select",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This selects specific data coming from an OAK device."
+    },
+    {
+      "name": "Out",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This marks particles as the output of a component."
+    },
+    {
+      "name": "Particle",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This creates and updates moving particles over time."
+    },
+    {
+      "name": "Pattern",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This generates repeating value patterns for particles."
+    },
+    {
+      "name": "Phaser",
+      "reasoning_lenses": ["Temporal", "Sampling-Based"],
+      "translation": "This shifts phases in particle values, creating sweeping motion."
+    },
+    {
+      "name": "Plane",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a flat plane used as a surface or boundary for particles."
+    },
+    {
+      "name": "Point File In",
+      "reasoning_lenses": ["Data Boundary", "Initialization-Sensitive"],
+      "translation": "This loads point data from a file into particles."
+    },
+    {
+      "name": "Point Generator",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates points that particles can use as positions."
+    },
+    {
+      "name": "Points",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This works directly with particle point data."
+    }
+  ]
+}
+{
+  "menu": "POPs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Polygonize",
+      "reasoning_lenses": ["Sampling-Based", "Data Boundary"],
+      "translation": "This turns soft or point-based data into flat polygon shapes."
+    },
+    {
+      "name": "Primitive",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This works on whole particle shapes instead of individual points."
+    },
+    {
+      "name": "Projection",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This projects particle data onto another surface or space."
+    },
+    {
+      "name": "Proximity",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This checks how close particles are to each other."
+    },
+    {
+      "name": "Quantize",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This snaps values into steps instead of letting them change smoothly."
+    },
+    {
+      "name": "Random",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This creates unpredictable values for particles."
+    },
+    {
+      "name": "Ray",
+      "reasoning_lenses": ["Sampling-Based", "Context-Bound"],
+      "translation": "This shoots rays from particles until they hit something."
+    },
+    {
+      "name": "Rectangle",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a rectangular region used by particles."
+    },
+    {
+      "name": "Rearrange",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This reorganizes particle data into a new layout."
+    },
+    {
+      "name": "Rerange",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This remaps values from one range into another."
+    },
+    {
+      "name": "Select",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This chooses which particle data to keep."
+    },
+    {
+      "name": "Serial",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This receives particle-related data from hardware over a serial connection."
+    },
+    {
+      "name": "Skin",
+      "reasoning_lenses": ["Context-Bound", "Stateful"],
+      "translation": "This stretches surfaces over particles so they move together."
+    },
+    {
+      "name": "Skin Deform",
+      "reasoning_lenses": ["Context-Bound", "Stateful"],
+      "translation": "This deforms shapes based on particle-driven skinning."
+    },
+    {
+      "name": "SOP to",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This uses geometry shapes to control particles."
+    },
+    {
+      "name": "Sort",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This rearranges particles based on rules like distance or age."
+    },
+    {
+      "name": "Sphere",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a spherical region for particles."
+    },
+    {
+      "name": "Sprinkle",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This scatters particles across a surface."
+    },
+    {
+      "name": "Subdivide",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This splits particle geometry into smaller pieces."
+    },
+    {
+      "name": "Switch",
+      "reasoning_lenses": ["Order-Dependent", "Cook-Sensitive"],
+      "translation": "This chooses which particle stream is active."
+    },
+    {
+      "name": "Texture Map",
+      "reasoning_lenses": ["Data Boundary", "Sampling-Based"],
+      "translation": "This uses an image to control particle values."
+    },
+    {
+      "name": "TOP to",
+      "reasoning_lenses": ["Data Boundary", "Sampling-Based"],
+      "translation": "This uses image data to drive particles."
+    },
+    {
+      "name": "Topology",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This describes how particles are connected."
+    },
+    {
+      "name": "Torus",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a donut-shaped region for particles."
+    },
+    {
+      "name": "Trail",
+      "reasoning_lenses": ["Temporal", "Stateful"],
+      "translation": "This keeps a history of particle motion."
+    },
+    {
+      "name": "Transform",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This moves, rotates, or scales particles."
+    },
+    {
+      "name": "Trig",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This uses sine and cosine to shape particle motion."
+    },
+    {
+      "name": "Tube",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This creates a tube-shaped region for particles."
+    },
+    {
+      "name": "Twist",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This spins particle positions around an axis."
+    },
+    {
+      "name": "ZED",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This brings live depth and tracking data from a ZED camera into particles."
+    }
+  ]
+}
+{
+  "menu": "DATs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "Artnet",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends or receives lighting control messages over a network."
+    },
+    {
+      "name": "CHOP Execute",
+      "reasoning_lenses": ["Temporal", "Cook-Sensitive"],
+      "translation": "This runs actions when channel values change."
+    },
+    {
+      "name": "CHOP to",
+      "reasoning_lenses": ["Data Boundary"],
+      "translation": "This turns time-based numbers into rows of text data."
+    },
+    {
+      "name": "CSN",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This communicates with external systems using the CSN protocol."
+    },
+    {
+      "name": "C++",
+      "reasoning_lenses": ["Cook-Sensitive"],
+      "translation": "This runs custom code that can create or change table data."
+    },
+    {
+      "name": "DAT Execute",
+      "reasoning_lenses": ["Cook-Sensitive"],
+      "translation": "This runs actions when table data changes."
+    },
+    {
+      "name": "Error",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This shows error messages as readable text."
+    },
+    {
+      "name": "Etherdream",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends laser control data to Ether Dream hardware."
+    },
+    {
+      "name": "Evaluate",
+      "reasoning_lenses": ["Cook-Sensitive"],
+      "translation": "This calculates expressions and shows the results as text."
+    },
+    {
+      "name": "Examine",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This lets you inspect data in a readable way."
+    },
+    {
+      "name": "FIFO",
+      "reasoning_lenses": ["Stateful", "Temporal"],
+      "translation": "This stores rows of data in a line where the oldest comes out first."
+    },
+    {
+      "name": "File In",
+      "reasoning_lenses": ["Data Boundary", "Initialization-Sensitive"],
+      "translation": "This loads text or table data from a file."
+    },
+    {
+      "name": "File Out",
+      "reasoning_lenses": ["Data Boundary", "Initialization-Sensitive"],
+      "translation": "This saves table data to a file."
+    },
+    {
+      "name": "Folder",
+      "reasoning_lenses": ["Data Boundary"],
+      "translation": "This lists files and folders as table rows."
+    },
+    {
+      "name": "Info",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This reports information about another operator as text."
+    },
+    {
+      "name": "Insert",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This adds new rows or columns into a table."
+    },
+    {
+      "name": "JSON",
+      "reasoning_lenses": ["Data Boundary"],
+      "translation": "This reads or writes data using the JSON format."
+    },
+    {
+      "name": "Keyboard In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This turns key presses into table entries."
+    },
+    {
+      "name": "Lookup",
+      "reasoning_lenses": ["Sampling-Based"],
+      "translation": "This finds table values using other values as keys."
+    },
+    {
+      "name": "Media File In",
+      "reasoning_lenses": ["Data Boundary", "Initialization-Sensitive"],
+      "translation": "This reads metadata or information from media files."
+    },
+    {
+      "name": "Merge",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This combines multiple tables into one."
+    },
+    {
+      "name": "MIDI Event",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This shows MIDI messages as rows of text."
+    },
+    {
+      "name": "MIDI In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives MIDI data and lists it in a table."
+    },
+    {
+      "name": "Monitors",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This lists connected displays and their properties."
+    },
+    {
+      "name": "MPCDI",
+      "reasoning_lenses": ["Data Boundary", "Initialization-Sensitive"],
+      "translation": "This loads projection calibration data into tables."
+    },
+    {
+      "name": "MQTT Client",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends and receives messages using MQTT."
+    },
+    {
+      "name": "Multi-Touch In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This turns touch input into table rows."
+    },
+    {
+      "name": "NDI",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This lists or controls network video sources."
+    },
+    {
+      "name": "Null",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This passes table data through unchanged and gives it a name."
+    },
+    {
+      "name": "OP Execute",
+      "reasoning_lenses": ["Cook-Sensitive"],
+      "translation": "This runs actions when operators change state."
+    }
+  ]
+}
+{
+  "menu": "DATs",
+  "version": "layer5-reasoning-lens-v1",
+  "operators": [
+    {
+      "name": "OP Find",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This searches for operators by name or type and lists the matches."
+    },
+    {
+      "name": "OSC In",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This receives OSC messages over a network and turns them into table rows."
+    },
+    {
+      "name": "Out",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This marks a table as the output of a component."
+    },
+    {
+      "name": "Panel Execute",
+      "reasoning_lenses": ["Temporal", "Cook-Sensitive", "Context-Bound"],
+      "translation": "This runs actions when UI panels change, like button presses or slider moves."
+    },
+    {
+      "name": "Parameter Execute",
+      "reasoning_lenses": ["Cook-Sensitive", "Context-Bound"],
+      "translation": "This runs actions when a parameter changes."
+    },
+    {
+      "name": "Par Group Execute",
+      "reasoning_lenses": ["Cook-Sensitive", "Context-Bound"],
+      "translation": "This runs actions when a group of parameters changes."
+    },
+    {
+      "name": "Perform",
+      "reasoning_lenses": ["Temporal", "Stateful", "Context-Bound"],
+      "translation": "This manages perform mode info and control as table data."
+    },
+    {
+      "name": "POP to",
+      "reasoning_lenses": ["Data Boundary"],
+      "translation": "This turns particle data into table rows."
+    },
+    {
+      "name": "Reorder",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This rearranges rows or columns into a new order."
+    },
+    {
+      "name": "Render Pick",
+      "reasoning_lenses": ["Context-Bound", "Temporal"],
+      "translation": "This reports what object is being pointed at in a rendered view."
+    },
+    {
+      "name": "Script",
+      "reasoning_lenses": ["Cook-Sensitive"],
+      "translation": "This runs code that can create or modify table data."
+    },
+    {
+      "name": "Select",
+      "reasoning_lenses": ["Context-Bound"],
+      "translation": "This chooses specific rows, columns, or cells and ignores the rest."
+    },
+    {
+      "name": "Serial",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This reads messages from hardware over a serial port into table rows."
+    },
+    {
+      "name": "Serial Device",
+      "reasoning_lenses": ["Context-Bound", "Initialization-Sensitive"],
+      "translation": "This lists and helps configure serial ports on the computer."
+    },
+    {
+      "name": "Socket IO",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Stateful"],
+      "translation": "This connects to a Socket.IO server and sends/receives messages as table data."
+    },
+    {
+      "name": "SOP to",
+      "reasoning_lenses": ["Data Boundary", "Context-Bound"],
+      "translation": "This turns 3D geometry data into table rows."
+    },
+    {
+      "name": "Sort",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This orders rows based on values, like sorting a list."
+    },
+    {
+      "name": "Substitute",
+      "reasoning_lenses": ["Cook-Sensitive"],
+      "translation": "This finds text and replaces it with other text."
+    },
+    {
+      "name": "Switch",
+      "reasoning_lenses": ["Order-Dependent", "Cook-Sensitive"],
+      "translation": "This chooses which table to output from multiple inputs."
+    },
+    {
+      "name": "Table",
+      "reasoning_lenses": ["Stateful"],
+      "translation": "This stores a table of cells you can edit and keep."
+    },
+    {
+      "name": "TCP/IP",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Stateful"],
+      "translation": "This sends and receives messages over TCP, like a reliable phone call connection."
+    },
+    {
+      "name": "Text",
+      "reasoning_lenses": ["Stateful"],
+      "translation": "This stores and edits text, like a notepad inside the project."
+    },
+    {
+      "name": "Touch In",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This receives table data from another TouchDesigner project."
+    },
+    {
+      "name": "Touch Out",
+      "reasoning_lenses": ["Data Boundary", "Temporal"],
+      "translation": "This sends table data to another TouchDesigner project."
+    },
+    {
+      "name": "Transpose",
+      "reasoning_lenses": ["Order-Dependent"],
+      "translation": "This swaps rows and columns, like turning a table sideways."
+    },
+    {
+      "name": "TUIO In",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This receives TUIO touch-tracking messages and turns them into table rows."
+    },
+    {
+      "name": "UDP In",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This receives UDP messages and lists them as table data."
+    },
+    {
+      "name": "Video Devices",
+      "reasoning_lenses": ["Context-Bound", "Initialization-Sensitive"],
+      "translation": "This lists available video capture devices and their settings."
+    },
+    {
+      "name": "Web Client",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This fetches web pages or data from the internet into table rows."
+    },
+    {
+      "name": "Web Server",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Stateful", "Initialization-Sensitive"],
+      "translation": "This hosts a web service so other devices can request data from your project."
+    },
+    {
+      "name": "WebRTC",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Initialization-Sensitive"],
+      "translation": "This sends and receives live audio/video/data using WebRTC connections."
+    },
+    {
+      "name": "WebSocket",
+      "reasoning_lenses": ["Data Boundary", "Temporal", "Stateful", "Initialization-Sensitive"],
+      "translation": "This keeps a live two-way web connection open and streams messages."
+    },
+    {
+      "name": "XML",
+      "reasoning_lenses": ["Data Boundary"],
+      "translation": "This reads or writes data in XML format."
+    }
+  ]
+}
