@@ -562,6 +562,22 @@ app.get('/wireup-shack.html', (_req, res) => {
   res.redirect('/outpost');
 });
 
+app.get('/wireup-shack', (_req, res) => {
+  res.redirect('/outpost');
+});
+
+app.get('/wireup-shack/', (_req, res) => {
+  res.redirect('/outpost');
+});
+
+app.get('/shack', (_req, res) => {
+  res.redirect('/outpost');
+});
+
+app.get('/shack/', (_req, res) => {
+  res.redirect('/outpost');
+});
+
 app.get('/wireup-outpost', (_req, res) => {
   res.redirect('/outpost');
 });
