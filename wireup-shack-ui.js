@@ -42,52 +42,65 @@ async function sendQuestion({ input, output }) {
   input.value = '';
 
   try {
-    const response = await fetch('/api/rayray', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        question,
-        context: currentContext,
-      }),
+    const payload = JSON.stringify({
+      question,
+      context: currentContext,
     });
 
-    const data = await response.json();
-    const answer = data.answer || data.responseText || 'No response received.';
-    appendMessage(output, 'Ray Ray', answer);
+    const endpoints = ['/api/rayray', '/rayray'];
+    let lastError = null;
+
+    for (const endpoint of endpoints) {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: payload,
+      });
+
+      const raw = await response.text();
+      const contentType = (response.headers.get('content-type') || '').toLowerCase();
+
+      if (!response.ok) {
+        // If this route is missing, try the next endpoint before reporting.
+        if (response.status === 404) {
+          lastError = `Endpoint ${endpoint} returned 404.`;
+          continue;
+        }
+
+        const bodyPreview = raw ? ` ${raw.slice(0, 180)}` : '';
+        appendMessage(output, 'Ray Ray', `Server error ${response.status}.${bodyPreview}`.trim());
+        return;
+      }
+
+      let data = null;
+      if (raw) {
+        try {
+          data = JSON.parse(raw);
+        } catch (_err) {
+          // Accept plain-text responses to avoid hard failure on bad content-type.
+          data = contentType.includes('application/json') ? null : { answer: raw };
+        }
+      }
+
+      if (!data) {
+        appendMessage(output, 'Ray Ray', 'Server returned an empty or invalid response.');
+        return;
+      }
+
+      const answer = data.answer || data.responseText || 'No response received.';
+      appendMessage(output, 'Ray Ray', answer);
+      return;
+    }
+
+    appendMessage(
+      output,
+      'Ray Ray',
+      `Chat backend not reachable. ${lastError || 'No working endpoint found.'}`,
+    );
   } catch (error) {
     appendMessage(output, 'Ray Ray', `Unable to connect: ${error.message}`);
-  }
-}
-
-function hydrateSidePanels() {
-  const leftPanel = document.getElementById('left-panel');
-  const lowerLeftPanel = document.getElementById('lower-left-panel');
-
-  if (leftPanel) {
-    leftPanel.textContent = [
-      'WIREUP OUTPOST',
-      '',
-      'Ask about a TOP/CHOP/SOP node to load context.',
-      'Try:',
-      '- movie file in',
-      '- level top',
-      '- edge detect',
-      '',
-      'Enter = send',
-      'Shift+Enter = newline',
-    ].join('\n');
-  }
-
-  if (lowerLeftPanel) {
-    lowerLeftPanel.textContent = [
-      'STATUS',
-      '',
-      'Ray Ray connected',
-      'Context panel active',
-      'Outpost layout online',
-    ].join('\n');
   }
 }
 
@@ -122,7 +135,6 @@ async function initWireupOutpost() {
     }
   });
 
-  hydrateSidePanels();
   initRestartButton();
 
   try {
