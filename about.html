@@ -122,5 +122,131 @@
       <a class="nav-button" href="/game/index.html">Go to Game</a>
     </nav>
   </main>
+
+  <div id="system-panel"> 
+    <div id="tox-status"> 
+      <span id="tox-light"></span>
+      <span id="tox-text">Waiting for wireup.tox...</span>
+    </div>
+
+    <button id="restart-btn" type="button">Restart</button>
+  </div>
+
+  <script>
+    (function () {
+      const toxLight = document.getElementById('tox-light');
+      const toxText = document.getElementById('tox-text');
+      const restartBtn = document.getElementById('restart-btn');
+      let toxState = 'waiting';
+      let pollHandle = null;
+      let disconnectedTimer = null;
+
+      const TOX_STATUS = {
+        waiting: { color: '#ffd400', text: 'Waiting for wireup.tox...' },
+        connected: { color: '#35d13a', text: 'wireup.tox active' },
+        disconnected: { color: '#ff3c3c', text: 'wireup.tox not detected' }
+      };
+
+      function setToxState(nextState) {
+        const validState = TOX_STATUS[nextState] ? nextState : 'waiting';
+        const previousState = toxState;
+        toxState = validState;
+
+        toxLight.style.background = TOX_STATUS[validState].color;
+        toxText.textContent = TOX_STATUS[validState].text;
+
+        if (validState === 'connected' && previousState !== 'connected') {
+          toxLight.classList.add('tox-flash');
+          setTimeout(function () {
+            toxLight.classList.remove('tox-flash');
+          }, 450);
+        }
+      }
+
+      function clearRuntimePanels() {
+        const clearTextTargets = ['context-panel', 'chat-panel', 'response-view'];
+        clearTextTargets.forEach(function (id) {
+          const el = document.getElementById(id);
+          if (el) {
+            el.innerHTML = '';
+          }
+        });
+
+        const clearValueTargets = ['question-input'];
+        clearValueTargets.forEach(function (id) {
+          const el = document.getElementById(id);
+          if (el) {
+            el.value = '';
+          }
+        });
+      }
+
+      function resetDisconnectedTimer() {
+        if (disconnectedTimer) {
+          clearTimeout(disconnectedTimer);
+        }
+
+        disconnectedTimer = setTimeout(function () {
+          if (toxState === 'connected') {
+            setToxState('disconnected');
+          }
+        }, 10000);
+      }
+
+      async function fetchToxStatus() {
+        try {
+          const response = await fetch('/api/tox-status', { method: 'GET' });
+          if (!response.ok) {
+            return;
+          }
+
+          const data = await response.json();
+          setToxState(data.state);
+
+          if (data.state === 'connected') {
+            resetDisconnectedTimer();
+          }
+        } catch (error) {
+          // Keep current state if polling fails.
+        }
+      }
+
+      async function restartSystem() {
+        clearRuntimePanels();
+        setToxState('waiting');
+
+        if (disconnectedTimer) {
+          clearTimeout(disconnectedTimer);
+          disconnectedTimer = null;
+        }
+
+        try {
+          await fetch('/api/restart', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+        } catch (error) {
+          // UI has already been reset locally.
+        }
+      }
+
+      restartBtn.addEventListener('click', restartSystem);
+
+      fetchToxStatus();
+      pollHandle = setInterval(fetchToxStatus, 2000);
+
+      window.addEventListener('beforeunload', function () {
+        if (pollHandle) {
+          clearInterval(pollHandle);
+        }
+        if (disconnectedTimer) {
+          clearTimeout(disconnectedTimer);
+        }
+      });
+    })();
+  </script>
+
 </body>
 </html>
