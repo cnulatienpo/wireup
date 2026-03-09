@@ -125,3 +125,61 @@ body {
   margin-left: 1.25rem;
   padding-left: 0.75rem;
 }
+
+#system-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+  z-index: 1000;
+}
+
+#tox-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 6px 8px;
+  border-radius: 999px;
+}
+
+#tox-light {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: red;
+  box-shadow: 0 0 0 rgba(53, 209, 58, 0);
+}
+
+#tox-light.tox-flash {
+  animation: toxFlash 0.45s ease-in-out;
+}
+
+@keyframes toxFlash {
+  0% { box-shadow: 0 0 0 0 rgba(53, 209, 58, 0.9); }
+  100% { box-shadow: 0 0 0 12px rgba(53, 209, 58, 0); }
+}
+
+#restart-btn {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  min-width: 140px;
+  padding: 12px 20px;
+  border: 2px solid #111;
+  border-radius: 10px;
+  background: #ffd400;
+  color: #111;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#restart-btn:hover {
+  filter: brightness(1.06);
+}

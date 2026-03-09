@@ -9,6 +9,7 @@ const {
   getRecentHistory,
   getMostRecentInteraction,
   appendInteraction,
+  clearAllSessions,
 } = require('./sessionMemory');
 const { generateRayRayResponse } = require('./llmAdapter');
 
@@ -22,6 +23,25 @@ const operatorIndex = loadIndex();
 const operatorNames = Object.keys(operatorIndex.operators || {});
 
 const parsedFileCache = new Map();
+
+const TOX_DISCONNECT_TIMEOUT_MS = 10_000;
+
+const toxStatus = {
+  lastStateAt: null,
+  hasConnected: false,
+};
+
+function getToxConnectionState(now = Date.now()) {
+  if (!toxStatus.hasConnected || toxStatus.lastStateAt == null) {
+    return 'waiting';
+  }
+
+  if (now - toxStatus.lastStateAt > TOX_DISCONNECT_TIMEOUT_MS) {
+    return 'disconnected';
+  }
+
+  return 'connected';
+}
 
 function normalizeOperatorName(name = '') {
   return String(name).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
@@ -461,6 +481,11 @@ async function handleRayrayRequest(req, res) {
     const followUp = isFollowUpQuestion(question);
     const mostRecent = getMostRecentInteraction(sessionId);
     const hasIncomingState = hasStateSnapshot(state);
+
+    if (hasIncomingState) {
+      toxStatus.lastStateAt = Date.now();
+      toxStatus.hasConnected = true;
+    }
     const effectiveState = hasIncomingState ? state : (followUp && mostRecent?.state ? mostRecent.state : state);
     const previousState = mostRecent?.state || null;
 
