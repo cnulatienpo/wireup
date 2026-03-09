@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="wireup-shack.css" />
 </head>
 <body>
-  <img id="shack-belt" class="shack-belt" src="/wire_belt.png" alt="Wire belt" />
+  <img id="tox-light" class="shack-belt" src="/wire_belt.png" alt="wireup.tox not connected" />
   <img id="shack-ui" class="shack-ui" src="/wireup.png" alt="Wireup cardboard UI" />
 
   <main class="shack-overlay" aria-label="Wireup Shack controls">
@@ -18,13 +18,45 @@
   <script>
     (function () {
       const img = document.getElementById('shack-ui');
-      const belt = document.getElementById('shack-belt');
+      const toxLight = document.getElementById('tox-light');
       const threshold = 30;
       const alphaThreshold = 20;
       const beltRatio = 1.656;
       const beltWidthFraction = 0.185;
       const beltInsetXFraction = 0.04;
       const beltInsetYFraction = 0.04;
+
+      const DISCONNECT_TIMEOUT_MS = 10000;
+      let disconnectTimerId = null;
+
+      function updateToxConnection(isConnected) {
+        if (!toxLight) {
+          return;
+        }
+
+        const statusText = isConnected ? 'wireup.tox active' : 'wireup.tox not connected';
+        toxLight.classList.toggle('connected', Boolean(isConnected));
+        toxLight.setAttribute('alt', statusText);
+        toxLight.setAttribute('aria-label', statusText);
+        toxLight.setAttribute('title', statusText);
+      }
+
+      function resetDisconnectTimer() {
+        window.clearTimeout(disconnectTimerId);
+        disconnectTimerId = window.setTimeout(function () {
+          updateToxConnection(false);
+        }, DISCONNECT_TIMEOUT_MS);
+      }
+
+      function markToxConnected() {
+        updateToxConnection(true);
+        resetDisconnectTimer();
+      }
+
+      window.updateToxConnection = updateToxConnection;
+      window.addEventListener('wireup-tox-state', markToxConnected);
+      window.addEventListener('touchdesigner-state', markToxConnected);
+      updateToxConnection(false);
 
       function getContentBounds(image) {
         const canvas = document.createElement('canvas');
@@ -106,15 +138,15 @@
         img.style.height = renderHeight + 'px';
         img.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
 
-        if (belt) {
+        if (toxLight) {
           const beltWidth = contentWidth * beltWidthFraction;
           const beltHeight = beltWidth / beltRatio;
           const beltX = contentX + contentWidth - beltWidth - contentWidth * beltInsetXFraction;
           const beltY = contentY + contentHeight - beltHeight - contentHeight * beltInsetYFraction;
 
-          belt.style.width = beltWidth + 'px';
-          belt.style.height = beltHeight + 'px';
-          belt.style.transform = 'translate(' + beltX + 'px, ' + beltY + 'px)';
+          toxLight.style.width = beltWidth + 'px';
+          toxLight.style.height = beltHeight + 'px';
+          toxLight.style.transform = 'translate(' + beltX + 'px, ' + beltY + 'px)';
         }
       }
 

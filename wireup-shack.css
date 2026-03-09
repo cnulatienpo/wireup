@@ -59,3 +59,14 @@ body {
   padding: 0.35rem 0.55rem;
   font-family: Garamond, "Times New Roman", serif;
 }
+
+#tox-light {
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+  background: #ff3b30;
+  box-shadow: none;
+}
+
+#tox-light.connected {
+  background: #4cff6b;
+  box-shadow: 0 0 4px #4cff6b, 0 0 8px #4cff6b;
+}
