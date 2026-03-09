@@ -11,7 +11,8 @@
     "ui:dev": "npm --prefix ui run dev --",
     "ui:build": "npm --prefix ui run build --",
     "ipld:build": "node scripts/build-ipld.js",
-    "ipld:td-export": "node scripts/build-touchdesigner-ipld.mjs"
+    "ipld:td-export": "node scripts/build-touchdesigner-ipld.mjs",
+    "ipld:publish": "node scripts/build-machine-publish.mjs"
   },
   "dependencies": {
     "@ipld/dag-json": "^10.2.5",

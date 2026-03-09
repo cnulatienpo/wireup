@@ -93,66 +93,11 @@ function hydrateSidePanels() {
 
 function initRestartButton() {
   const restartButton = document.getElementById('restart-button');
-  const rootContainer = document.getElementById('outpost-root');
-  if (!restartButton || !rootContainer) {
+  if (!restartButton) {
     return;
   }
 
-  const dragState = {
-    dragging: false,
-    moved: false,
-    startX: 0,
-    startY: 0,
-    startLeft: 3.5,
-    startBottom: 13,
-  };
-
-  function clamp(value, min, max) {
-    return Math.min(max, Math.max(min, value));
-  }
-
-  function setPosition(left, bottom) {
-    restartButton.style.left = `${left}%`;
-    restartButton.style.bottom = `${bottom}%`;
-  }
-
-  setPosition(dragState.startLeft, dragState.startBottom);
-
-  restartButton.addEventListener('pointerdown', (event) => {
-    dragState.dragging = true;
-    dragState.moved = false;
-    dragState.startX = event.clientX;
-    dragState.startY = event.clientY;
-    dragState.startLeft = parseFloat(restartButton.style.left) || 3.5;
-    dragState.startBottom = parseFloat(restartButton.style.bottom) || 13;
-    restartButton.setPointerCapture(event.pointerId);
-  });
-
-  restartButton.addEventListener('pointermove', (event) => {
-    if (!dragState.dragging) {
-      return;
-    }
-
-    const rect = rootContainer.getBoundingClientRect();
-    const dx = ((event.clientX - dragState.startX) / rect.width) * 100;
-    const dy = ((event.clientY - dragState.startY) / rect.height) * 100;
-    const nextLeft = clamp(dragState.startLeft + dx, 0.5, 90);
-    const nextBottom = clamp(dragState.startBottom - dy, 0.5, 90);
-
-    dragState.moved = true;
-    setPosition(nextLeft, nextBottom);
-  });
-
-  restartButton.addEventListener('pointerup', () => {
-    dragState.dragging = false;
-  });
-
-  restartButton.addEventListener('click', (event) => {
-    if (dragState.moved) {
-      event.preventDefault();
-      return;
-    }
-
+  restartButton.addEventListener('click', () => {
     sessionStorage.clear();
     localStorage.clear();
     window.location.reload();

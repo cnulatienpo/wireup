@@ -26,7 +26,7 @@
     <div class="rayray-input-wrap">
       <textarea
         id="rayray-input"
-        class="rayray-input rayray-textarea"
+        class="rayray-input rayray-textarea cardboard-scroll"
         placeholder="Ask Ray Ray..."
         aria-label="Ask Ray Ray"
       ></textarea>
@@ -56,6 +56,7 @@
       const lowerLeftPanel = document.getElementById('lower-left-panel');
       const inputWrap = document.querySelector('.rayray-input-wrap');
       const contextPanel = document.getElementById('context-panel');
+      const restartButton = document.getElementById('restart-button');
       const threshold = 30;
       const alphaThreshold = 20;
       const beltRatio = 1.656;
@@ -155,38 +156,50 @@
         }
 
         if (leftPanel) {
-          leftPanel.style.left = contentX + contentWidth * 0.035 + 'px';
+          leftPanel.style.left = contentX + contentWidth * 0.042 + 'px';
           leftPanel.style.top = contentY + contentHeight * 0.16 + 'px';
-          leftPanel.style.width = contentWidth * 0.12 + 'px';
+          leftPanel.style.width = contentWidth * 0.112 + 'px';
           leftPanel.style.height = contentHeight * 0.70 + 'px';
         }
 
         if (lowerLeftPanel) {
-          lowerLeftPanel.style.left = contentX + contentWidth * 0.035 + 'px';
+          lowerLeftPanel.style.left = contentX + contentWidth * 0.042 + 'px';
           lowerLeftPanel.style.top = contentY + contentHeight * 0.73 + 'px';
-          lowerLeftPanel.style.width = contentWidth * 0.12 + 'px';
+          lowerLeftPanel.style.width = contentWidth * 0.112 + 'px';
           lowerLeftPanel.style.height = contentHeight * 0.13 + 'px';
         }
 
         if (output) {
-          output.style.left = contentX + contentWidth * 0.22 + 'px';
+          output.style.left = contentX + contentWidth * 0.236 + 'px';
           output.style.top = contentY + contentHeight * 0.17 + 'px';
-          output.style.width = contentWidth * 0.47 + 'px';
+          output.style.width = contentWidth * 0.452 + 'px';
           output.style.height = contentHeight * 0.56 + 'px';
         }
 
         if (contextPanel) {
-          contextPanel.style.left = contentX + contentWidth * 0.73 + 'px';
+          contextPanel.style.left = contentX + contentWidth * 0.738 + 'px';
           contextPanel.style.top = contentY + contentHeight * 0.17 + 'px';
-          contextPanel.style.width = contentWidth * 0.2 + 'px';
+          contextPanel.style.width = contentWidth * 0.192 + 'px';
           contextPanel.style.height = contentHeight * 0.56 + 'px';
         }
 
         if (inputWrap) {
-          inputWrap.style.left = contentX + contentWidth * 0.22 + 'px';
+          inputWrap.style.left = contentX + contentWidth * 0.236 + 'px';
           inputWrap.style.top = contentY + contentHeight * 0.73 + 'px';
-          inputWrap.style.width = contentWidth * 0.47 + 'px';
+          inputWrap.style.width = contentWidth * 0.452 + 'px';
           inputWrap.style.height = contentHeight * 0.13 + 'px';
+        }
+
+        // Place restart exactly where the Loveable overlay sat: left 3.5%, bottom 13%, size 9% of UI bounds.
+        if (restartButton) {
+          const restartSize = contentWidth * 0.09;
+          const restartX = contentX + contentWidth * 0.035;
+          const restartY = contentY + contentHeight - (contentHeight * 0.13) - restartSize;
+
+          restartButton.style.left = restartX + 'px';
+          restartButton.style.top = restartY + 'px';
+          restartButton.style.width = restartSize + 'px';
+          restartButton.style.height = restartSize + 'px';
         }
       }
 

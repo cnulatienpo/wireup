@@ -13,7 +13,7 @@ const {
 const { generateRayRayResponse } = require('./llmAdapter');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -546,6 +546,10 @@ async function handleRayrayRequest(req, res) {
 app.post('/rayray', handleRayrayRequest);
 app.post('/api/rayray', handleRayrayRequest);
 
+app.get('/healthz', (_req, res) => {
+  res.status(200).json({ ok: true });
+});
+
 app.get('/outpost', (_req, res) => {
   res.sendFile(path.join(__dirname, 'wireup-outpost.html'));
 });
@@ -561,6 +565,20 @@ app.get('/wireup-shack.html', (_req, res) => {
 app.get('/wireup-outpost', (_req, res) => {
   res.redirect('/outpost');
 });
+
+app.get('/machines', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'machines.html'));
+});
+
+app.get('/machines/', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'machines.html'));
+});
+
+app.get('/machines/index.json', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'ipld', 'published', 'index.json'));
+});
+
+app.use('/machines/files', express.static(path.join(__dirname, 'ipld', 'published')));
 
 app.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));

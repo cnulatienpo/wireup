@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: wireup
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm run shack
+    autoDeploy: true
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: DEEPSEEK_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false

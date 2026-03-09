@@ -71,7 +71,8 @@ body {
 .lower-left-panel {
   position: fixed;
   z-index: 4;
-  overflow-y: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
   color: #2a1f14;
   font-family: "Courier New", monospace;
   white-space: pre-wrap;
@@ -92,11 +93,22 @@ body {
 
 .rayray-output,
 .context-panel {
-  overflow-y: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
   padding: 0.5rem;
+  color: #000000;
+}
+
+.rayray-output {
+  font-family: Garamond, "Times New Roman", serif;
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  line-height: 1.35;
+}
+
+.context-panel {
   font-family: Arial, sans-serif;
-  font-size: clamp(0.7rem, 1.2vw, 0.95rem);
-  color: #0b0b0b;
+  font-size: clamp(0.9rem, 1.45vw, 1.15rem);
+  line-height: 1.35;
 }
 
 .rayray-line {
@@ -136,19 +148,22 @@ body {
   border: none;
   outline: none;
   background: transparent;
-  color: #f1f1f1;
+  color: #ffffff;
   font-family: Arial, sans-serif;
-  font-size: clamp(0.8rem, 1.4vw, 1rem);
+  font-size: clamp(1.2rem, 2vw, 1.65rem);
+  line-height: 1.35;
 }
 
 .rayray-input.rayray-textarea {
   resize: none;
   min-height: 100%;
   padding-top: 0.35rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .rayray-input::placeholder {
-  color: rgba(241, 241, 241, 0.8);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .rayray-send {
@@ -167,23 +182,21 @@ body {
 
 .restart-button {
   position: fixed;
-  z-index: 5;
-  width: clamp(2.7rem, 9vw, 5.2rem);
-  aspect-ratio: 1;
-  border-radius: 999px;
-  border: 2px dashed rgba(248, 113, 113, 0.95);
-  background: rgba(190, 24, 24, 0.32);
-  color: #ffffff;
-  font-family: "Courier New", monospace;
-  font-size: clamp(0.44rem, 1.05vw, 0.84rem);
+  z-index: 6;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #1d1300;
+  font-family: Garamond, "Times New Roman", serif;
+  font-size: clamp(0.72rem, 1.05vw, 1rem);
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
-  cursor: grab;
-}
-
-.restart-button:active {
-  cursor: grabbing;
+  text-shadow: 0 1px 0 rgba(255, 244, 204, 0.65);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cardboard-scroll::-webkit-scrollbar {

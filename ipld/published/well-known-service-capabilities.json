@@ -1,0 +1,22 @@
+{
+  "service": "wireup-outpost",
+  "service_type": "node_graph_diagnostic_assistant",
+  "runtime_environment": "touchdesigner",
+  "supported_graph_model": "directed_signal_processing_network",
+  "operations": [
+    "graph_state_read",
+    "signal_flow_trace",
+    "operator_state_description",
+    "parameter_mode_interpretation",
+    "failure_mode_identification"
+  ],
+  "analysis_scope": [
+    "TOP_texture_streams",
+    "CHOP_time_channels",
+    "SOP_geometry_streams",
+    "DAT_structured_data",
+    "MAT_render_materials",
+    "POP_particle_systems"
+  ],
+  "execution_mode": "interactive_runtime_assistance"
+}
