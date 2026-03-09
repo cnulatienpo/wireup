@@ -4,6 +4,7 @@ import { mapContextForPanel } from './contextMapper.js';
 import { renderContextPanel } from './contextRenderer.js';
 
 const CONTEXT_KEYS = ['tops', 'chops', 'sops'];
+let backendHealthy = null;
 
 function appendMessage(panel, speaker, text) {
   const line = document.createElement('div');
@@ -85,7 +86,11 @@ async function sendQuestion({ input, output }) {
       }
 
       if (!data) {
-        appendMessage(output, 'Ray Ray', 'Server returned an empty or invalid response.');
+        appendMessage(
+          output,
+          'Ray Ray',
+          'Server returned an empty response. This usually means the site is running as static hosting instead of the Node API service.',
+        );
         return;
       }
 
@@ -101,6 +106,28 @@ async function sendQuestion({ input, output }) {
     );
   } catch (error) {
     appendMessage(output, 'Ray Ray', `Unable to connect: ${error.message}`);
+  }
+}
+
+async function checkBackendHealth(output) {
+  try {
+    const res = await fetch('/healthz', { method: 'GET' });
+    backendHealthy = res.ok;
+
+    if (!backendHealthy) {
+      appendMessage(
+        output,
+        'Ray Ray',
+        'Backend API is offline on this deploy (/healthz failed). Chat needs Render Web Service mode with start command: npm run shack.',
+      );
+    }
+  } catch (_error) {
+    backendHealthy = false;
+    appendMessage(
+      output,
+      'Ray Ray',
+      'Backend API is unreachable on this deploy. Chat needs Render Web Service mode with start command: npm run shack.',
+    );
   }
 }
 
@@ -144,6 +171,8 @@ async function initWireupOutpost() {
   } catch (error) {
     appendMessage(output, 'Ray Ray', `Context load failed, but chat is still available: ${error.message}`);
   }
+
+  await checkBackendHealth(output);
 }
 
 initWireupOutpost();
