@@ -546,6 +546,28 @@ async function handleRayrayRequest(req, res) {
 app.post('/rayray', handleRayrayRequest);
 app.post('/api/rayray', handleRayrayRequest);
 
+app.get('/outpost', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'wireup-outpost.html'));
+});
+
+app.get('/outpost/', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'wireup-outpost.html'));
+});
+
+app.get('/wireup-shack.html', (_req, res) => {
+  res.redirect('/outpost');
+});
+
+app.get('/wireup-outpost', (_req, res) => {
+  res.redirect('/outpost');
+});
+
+app.get('/', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.use(express.static(__dirname));
+
 app.listen(PORT, () => {
   console.log('Ray Ray server running at http://localhost:3000');
 });

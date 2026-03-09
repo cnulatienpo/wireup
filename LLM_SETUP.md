@@ -2,9 +2,25 @@
 
 Ray Ray supports both DeepSeek and OpenAI through a shared adapter configured by `llmConfig.json`.
 
+## 0) Create a local `.env` file (recommended)
+
+Copy the template and fill in your key:
+
+```bash
+cp .env.example .env
+```
+
+`llmAdapter.js` now auto-loads `.env` using `dotenv`, so keys persist across terminal sessions.
+
 ## 1) Add a DeepSeek API key
 
-Set your DeepSeek API key in your shell environment before starting the server:
+You can set it in `.env`:
+
+```env
+DEEPSEEK_API_KEY="your-deepseek-api-key"
+```
+
+Or set it in your shell before starting the server:
 
 ```bash
 export DEEPSEEK_API_KEY="your-deepseek-api-key"
@@ -40,11 +56,25 @@ Use `llmConfig.json` in the repository root to choose the provider and model.
 
 If `provider` is `openai`, set:
 
+In `.env`:
+
+```env
+OPENAI_API_KEY="your-openai-api-key"
+```
+
+Or in shell:
+
 ```bash
 export OPENAI_API_KEY="your-openai-api-key"
 ```
 
-## 3) Run Ray Ray without an LLM
+## 3) Start the server
+
+```bash
+npm run shack
+```
+
+## 4) Run Ray Ray without an LLM
 
 If the selected provider API key is missing, Ray Ray does not crash. It returns:
 

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config();
 
 const CONFIG_PATH = path.join(__dirname, 'llmConfig.json');
 const DEFAULT_CONFIG = {
