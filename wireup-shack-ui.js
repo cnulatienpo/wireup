@@ -113,11 +113,6 @@ async function initWireupOutpost() {
     return;
   }
 
-  await loadAllJSON();
-  renderContextPanel(mapContextForPanel());
-  hydrateSidePanels();
-  initRestartButton();
-
   sendButton.addEventListener('click', () => sendQuestion({ input, output }));
 
   input.addEventListener('keydown', (event) => {
@@ -126,6 +121,17 @@ async function initWireupOutpost() {
       sendQuestion({ input, output });
     }
   });
+
+  hydrateSidePanels();
+  initRestartButton();
+
+  try {
+    await loadAllJSON();
+    renderContextPanel(mapContextForPanel());
+    appendMessage(output, 'Ray Ray', 'Ready. Ask a TouchDesigner question.');
+  } catch (error) {
+    appendMessage(output, 'Ray Ray', `Context load failed, but chat is still available: ${error.message}`);
+  }
 }
 
 initWireupOutpost();
