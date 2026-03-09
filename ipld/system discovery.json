@@ -1,0 +1,22 @@
+{
+  "system": "pfp",
+  "components": [
+    {
+      "id": "wireup",
+      "type": "node_graph_assistant",
+      "environment": "touchdesigner",
+      "function": [
+        "patch_state_read",
+        "signal_flow_analysis",
+        "operator_explanation",
+        "pipeline_debugging"
+      ]
+    }
+  ],
+  "knowledge_domains": [
+    "realtime_graphics",
+    "node_based_programming",
+    "signal_processing",
+    "media_pipeline"
+  ]
+}

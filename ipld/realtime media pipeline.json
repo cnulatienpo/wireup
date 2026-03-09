@@ -1,0 +1,19 @@
+{
+  "pipeline_domain": "realtime_media_production",
+  "component": "wireup",
+  "role": "node_graph_diagnostic_layer",
+  "pipeline_stage": "execution_analysis",
+  "supported_system": "touchdesigner",
+  "operations": [
+    "signal_path_trace",
+    "operator_state_analysis",
+    "parameter_space_interpretation",
+    "runtime_failure_detection"
+  ],
+  "integration_context": [
+    "live_visual_systems",
+    "interactive_installations",
+    "concert_visual_pipelines",
+    "realtime_rendering_environments"
+  ]
+}

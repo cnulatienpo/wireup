@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wireup Outpost</title>
+  <link rel="stylesheet" href="wireup-shack.css" />
+</head>
+<body>
+  <div id="outpost-root">
+    <img id="shack-belt" class="shack-belt" src="/ui/src/assets/WIRE_BELT.svg" alt="Wire belt" />
+    <img id="shack-ui" class="shack-ui" src="/wireup.png" alt="Wireup cardboard UI" />
+
+    <main class="shack-overlay" aria-label="Wireup Outpost controls">
+      <h1 class="shack-title">Wireup Outpost</h1>
+      <a class="shack-link" href="index.html">Back Home</a>
+    </main>
+
+    <aside id="left-panel" class="left-panel cardboard-scroll" aria-label="Left panel"></aside>
+    <aside id="lower-left-panel" class="lower-left-panel cardboard-scroll" aria-label="Bottom left panel"></aside>
+
+    <section id="rayray-output" class="rayray-output cardboard-scroll" aria-live="polite"></section>
+
+    <aside id="context-panel" class="context-panel cardboard-scroll" aria-label="Context panel"></aside>
+
+    <div class="rayray-input-wrap">
+      <textarea
+        id="rayray-input"
+        class="rayray-input rayray-textarea cardboard-scroll"
+        placeholder="Ask Ray Ray..."
+        aria-label="Ask Ray Ray"
+      ></textarea>
+      <button id="rayray-send" class="rayray-send" type="button" aria-label="Send">
+        <svg class="send-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M6 22 C10 21, 20 20, 28 20 C26 16, 24 13, 22 10 M28 20 C26 24, 24 27, 22 30 M7 21 C12 22, 18 21, 28 20"
+            stroke="hsl(30, 30%, 60%)"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            fill="none"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <button id="restart-button" class="restart-button" type="button" aria-label="Restart">Restart</button>
+  </div>
+
+  <script>
+    (function () {
+      const img = document.getElementById('shack-ui');
+      const belt = document.getElementById('shack-belt');
+      const output = document.getElementById('rayray-output');
+      const leftPanel = document.getElementById('left-panel');
+      const lowerLeftPanel = document.getElementById('lower-left-panel');
+      const inputWrap = document.querySelector('.rayray-input-wrap');
+      const contextPanel = document.getElementById('context-panel');
+      const restartButton = document.getElementById('restart-button');
+      const threshold = 30;
+      const alphaThreshold = 20;
+      const beltRatio = 1.656;
+      const beltWidthFraction = 0.2;
+      const beltInsetXFraction = 0.086;
+      const beltInsetYFraction = 0.064;
+
+      function getContentBounds(image) {
+        const canvas = document.createElement('canvas');
+        canvas.width = image.naturalWidth;
+        canvas.height = image.naturalHeight;
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        if (!ctx) {
+          return null;
+        }
+
+        ctx.drawImage(image, 0, 0);
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+        let minX = canvas.width;
+        let minY = canvas.height;
+        let maxX = -1;
+        let maxY = -1;
+
+        for (let y = 0; y < canvas.height; y += 1) {
+          for (let x = 0; x < canvas.width; x += 1) {
+            const i = (y * canvas.width + x) * 4;
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+            const a = data[i + 3];
+            const isVisible = a > alphaThreshold;
+            const isNotNearBlack = (r + g + b) > threshold;
+
+            if (isVisible && isNotNearBlack) {
+              if (x < minX) minX = x;
+              if (y < minY) minY = y;
+              if (x > maxX) maxX = x;
+              if (y > maxY) maxY = y;
+            }
+          }
+        }
+
+        if (maxX < minX || maxY < minY) {
+          return null;
+        }
+
+        return {
+          x: minX,
+          y: minY,
+          width: Math.max(1, maxX - minX + 1),
+          height: Math.max(1, maxY - minY + 1)
+        };
+      }
+
+      function applyAutoFit() {
+        if (!img.naturalWidth || !img.naturalHeight) {
+          return;
+        }
+
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const bounds = getContentBounds(img) || {
+          x: 0,
+          y: 0,
+          width: img.naturalWidth,
+          height: img.naturalHeight
+        };
+
+        const scale = Math.max(
+          viewportWidth / bounds.width,
+          viewportHeight / bounds.height
+        );
+
+        const renderWidth = img.naturalWidth * scale;
+        const renderHeight = img.naturalHeight * scale;
+        const offsetX = viewportWidth / 2 - (bounds.x + bounds.width / 2) * scale;
+        const offsetY = viewportHeight / 2 - (bounds.y + bounds.height / 2) * scale;
+        const contentX = offsetX + bounds.x * scale;
+        const contentY = offsetY + bounds.y * scale;
+        const contentWidth = bounds.width * scale;
+        const contentHeight = bounds.height * scale;
+
+        img.style.width = renderWidth + 'px';
+        img.style.height = renderHeight + 'px';
+        img.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
+
+        if (belt) {
+          const beltWidth = contentWidth * beltWidthFraction;
+          const beltHeight = beltWidth / beltRatio;
+          const beltX = contentX + contentWidth - beltWidth - contentWidth * beltInsetXFraction;
+          const beltY = contentY + contentHeight - beltHeight - contentHeight * beltInsetYFraction;
+
+          belt.style.width = beltWidth + 'px';
+          belt.style.height = beltHeight + 'px';
+          belt.style.transform = 'translate(' + beltX + 'px, ' + beltY + 'px)';
+        }
+
+        if (leftPanel) {
+          leftPanel.style.left = contentX + contentWidth * 0.042 + 'px';
+          leftPanel.style.top = contentY + contentHeight * 0.16 + 'px';
+          leftPanel.style.width = contentWidth * 0.112 + 'px';
+          leftPanel.style.height = contentHeight * 0.70 + 'px';
+        }
+
+        if (lowerLeftPanel) {
+          lowerLeftPanel.style.left = contentX + contentWidth * 0.042 + 'px';
+          lowerLeftPanel.style.top = contentY + contentHeight * 0.73 + 'px';
+          lowerLeftPanel.style.width = contentWidth * 0.112 + 'px';
+          lowerLeftPanel.style.height = contentHeight * 0.13 + 'px';
+        }
+
+        if (output) {
+          output.style.left = contentX + contentWidth * 0.236 + 'px';
+          output.style.top = contentY + contentHeight * 0.17 + 'px';
+          output.style.width = contentWidth * 0.452 + 'px';
+          output.style.height = contentHeight * 0.56 + 'px';
+        }
+
+        if (contextPanel) {
+          contextPanel.style.left = contentX + contentWidth * 0.738 + 'px';
+          contextPanel.style.top = contentY + contentHeight * 0.17 + 'px';
+          contextPanel.style.width = contentWidth * 0.192 + 'px';
+          contextPanel.style.height = contentHeight * 0.56 + 'px';
+        }
+
+        if (inputWrap) {
+          inputWrap.style.left = contentX + contentWidth * 0.236 + 'px';
+          inputWrap.style.top = contentY + contentHeight * 0.73 + 'px';
+          inputWrap.style.width = contentWidth * 0.452 + 'px';
+          inputWrap.style.height = contentHeight * 0.13 + 'px';
+        }
+
+        // Place restart exactly where the Loveable overlay sat: left 3.5%, bottom 13%, size 9% of UI bounds.
+        if (restartButton) {
+          const restartSize = contentWidth * 0.09;
+          const restartX = contentX + contentWidth * 0.035;
+          const restartY = contentY + contentHeight - (contentHeight * 0.13) - restartSize;
+
+          restartButton.style.left = restartX + 'px';
+          restartButton.style.top = restartY + 'px';
+          restartButton.style.width = restartSize + 'px';
+          restartButton.style.height = restartSize + 'px';
+        }
+      }
+
+      if (img.complete) {
+        applyAutoFit();
+      } else {
+        img.addEventListener('load', applyAutoFit, { once: true });
+      }
+
+      window.addEventListener('resize', applyAutoFit);
+    })();
+  </script>
+  <script type="module" src="./wireup-shack-ui.js"></script>
+</body>
+</html>

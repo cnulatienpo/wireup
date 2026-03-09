@@ -61,6 +61,12 @@ function getMemorySnapshot() {
   return sessions;
 }
 
+function clearAllSessions() {
+  Object.keys(sessions).forEach((sessionId) => {
+    delete sessions[sessionId];
+  });
+}
+
 module.exports = {
   MAX_HISTORY,
   ensureSession,
@@ -69,4 +75,5 @@ module.exports = {
   getMostRecentInteraction,
   appendInteraction,
   getMemorySnapshot,
+  clearAllSessions,
 };

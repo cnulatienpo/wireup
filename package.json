@@ -1,0 +1,24 @@
+{
+  "name": "wireup-outpost",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix ui run dev --",
+    "shack": "node rayrayServer.js",
+    "build": "npm --prefix ui run build --",
+    "preview": "npm --prefix ui run preview --",
+    "ui:install": "npm --prefix ui install",
+    "ui:dev": "npm --prefix ui run dev --",
+    "ui:build": "npm --prefix ui run build --",
+    "ipld:build": "node scripts/build-ipld.js",
+    "ipld:td-export": "node scripts/build-touchdesigner-ipld.mjs",
+    "ipld:publish": "node scripts/build-machine-publish.mjs"
+  },
+  "dependencies": {
+    "@ipld/dag-json": "^10.2.5",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "ipfs-only-hash": "^4.0.0",
+    "multiformats": "^13.3.1"
+  }
+}

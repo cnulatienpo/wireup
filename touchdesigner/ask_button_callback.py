@@ -4,6 +4,15 @@ Wires UI + state_collector + request_sender Web Client DAT.
 """
 
 import json
+import os
+import random
+
+WAIT_PLACEHOLDER_ID = 'rayray-waiting'
+TYPING_INTERVAL_MS = 400
+LONG_WAIT_MS = 60_000
+SAFETY_WAIT_MS = 120_000
+
+_WAIT_PHRASES_CACHE = None
 
 
 def _get_panel_text(comp_name):
@@ -48,6 +57,179 @@ def _set_response_view(text):
         view.text = text
     except Exception:
         pass
+
+
+def _wait_phrases_path():
+    try:
+        base = project.folder
+    except Exception:
+        base = os.getcwd()
+
+    return os.path.join(base, 'wait phrases.json')
+
+
+def _load_wait_phrases():
+    global _WAIT_PHRASES_CACHE
+
+    if _WAIT_PHRASES_CACHE is not None:
+        return _WAIT_PHRASES_CACHE
+
+    try:
+        with open(_wait_phrases_path(), 'r', encoding='utf-8') as handle:
+            payload = json.load(handle)
+    except Exception:
+        _WAIT_PHRASES_CACHE = []
+        return _WAIT_PHRASES_CACHE
+
+    phrases = []
+
+    if isinstance(payload, dict):
+        direct_phrases = payload.get('phrases')
+        if isinstance(direct_phrases, list):
+            phrases.extend([str(item).strip() for item in direct_phrases if str(item).strip()])
+
+        languages = payload.get('languages')
+        if isinstance(languages, dict):
+            for value in languages.values():
+                if isinstance(value, list):
+                    phrases.extend([str(item).strip() for item in value if str(item).strip()])
+
+    _WAIT_PHRASES_CACHE = phrases
+    return _WAIT_PHRASES_CACHE
+
+
+def getRandomWaitPhrase():
+    phrases = _load_wait_phrases()
+    if not phrases:
+        return 'just a moment...'
+
+    return random.choice(phrases)
+
+
+def _set_store(key, value):
+    try:
+        parent().store(key, value)
+    except Exception:
+        pass
+
+
+def _get_store(key, default=None):
+    try:
+        return parent().fetch(key, default)
+    except Exception:
+        return default
+
+
+def _cancel_run(key):
+    run_obj = _get_store(key)
+    if run_obj is None:
+        return
+
+    try:
+        run_obj.kill()
+    except Exception:
+        pass
+
+    _set_store(key, None)
+
+
+def clear_waiting_timers():
+    _cancel_run('rayray_typing_run')
+    _cancel_run('rayray_long_wait_run')
+    _cancel_run('rayray_safety_wait_run')
+
+
+def _schedule(expr, delay_ms, key):
+    clear_key_only = _get_store(key)
+    if clear_key_only is not None:
+        _cancel_run(key)
+
+    try:
+        run_obj = run(expr, delayMilliSeconds=delay_ms)
+    except Exception:
+        run_obj = None
+
+    _set_store(key, run_obj)
+
+
+def _render_waiting_state(question, state, message):
+    lines = [
+        f"Selected Node: {state.get('selectedNode')}",
+        f"Operator Type: {state.get('nodeType')}",
+        f"Question Input: {question}",
+        f'Ray Ray Response [{WAIT_PLACEHOLDER_ID}]: {message}',
+    ]
+    _set_response_view('\n'.join(lines))
+
+
+def _update_waiting_message(message):
+    context = _get_store('rayray_wait_context') or {}
+    question = context.get('question', '')
+    state = context.get('state', {})
+
+    if context.get('request_status') != 'pending':
+        return
+
+    context['message'] = message
+    _set_store('rayray_wait_context', context)
+    _render_waiting_state(question, state, message)
+
+
+def _start_waiting(question, state):
+    clear_waiting_timers()
+
+    context = {
+        'request_status': 'pending',
+        'question': question,
+        'state': state,
+        'typing_index': 0,
+        'message': '...',
+    }
+    _set_store('rayray_wait_context', context)
+    _render_waiting_state(question, state, context['message'])
+
+    _schedule("parent().op('ask_button_callback').module._on_typing_tick()", TYPING_INTERVAL_MS, 'rayray_typing_run')
+    _schedule("parent().op('ask_button_callback').module._on_long_wait_timeout()", LONG_WAIT_MS, 'rayray_long_wait_run')
+    _schedule("parent().op('ask_button_callback').module._on_safety_timeout()", SAFETY_WAIT_MS, 'rayray_safety_wait_run')
+
+
+def _on_typing_tick():
+    context = _get_store('rayray_wait_context') or {}
+    if context.get('request_status') != 'pending':
+        clear_waiting_timers()
+        return
+
+    dots = (context.get('typing_index', 0) % 3) + 1
+    context['typing_index'] = dots
+    context['message'] = '.' * dots
+    _set_store('rayray_wait_context', context)
+
+    _render_waiting_state(context.get('question', ''), context.get('state', {}), context['message'])
+    _schedule("parent().op('ask_button_callback').module._on_typing_tick()", TYPING_INTERVAL_MS, 'rayray_typing_run')
+
+
+def _on_long_wait_timeout():
+    context = _get_store('rayray_wait_context') or {}
+    if context.get('request_status') != 'pending':
+        return
+
+    _cancel_run('rayray_typing_run')
+    _update_waiting_message(getRandomWaitPhrase())
+
+
+def _on_safety_timeout():
+    context = _get_store('rayray_wait_context') or {}
+    if context.get('request_status') != 'pending':
+        return
+
+    _update_waiting_message('Ray Ray is still working on this...')
+
+
+def mark_response_received():
+    context = _get_store('rayray_wait_context') or {}
+    context['request_status'] = 'completed'
+    _set_store('rayray_wait_context', context)
+    clear_waiting_timers()
 
 
 def _send_web_request(payload):
@@ -145,16 +327,6 @@ def _collect_state():
     }
 
 
-def _render_waiting_state(question, state):
-    lines = [
-        f"Selected Node: {state.get('selectedNode')}",
-        f"Operator Type: {state.get('nodeType')}",
-        f"Question Input: {question}",
-        'Ray Ray Response: (waiting for response...)',
-    ]
-    _set_response_view('\n'.join(lines))
-
-
 def onOffToOn(panelValue):
     """Button callback: fires when ask_button transitions from off->on."""
     question = _get_panel_text('question_field').strip()
@@ -166,6 +338,6 @@ def onOffToOn(panelValue):
         'state': state,
     }
 
-    _render_waiting_state(question, state)
+    _start_waiting(question, state)
     _send_web_request(payload)
     return

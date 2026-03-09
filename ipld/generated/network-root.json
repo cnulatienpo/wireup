@@ -1,0 +1,40 @@
+{
+  "connections": [
+    {
+      "cid": {
+        "/": "baguqeeraovidenttjklv4ardkihdx4phluc3lg5fquyuuatb6d6ldj5cnfsq"
+      },
+      "from": "/project1/moviefilein1",
+      "to": "/project1/level1"
+    },
+    {
+      "cid": {
+        "/": "baguqeerahbgwejh6uewnvqrctz3zgmp5o7xhgldocizo3f6fgfqqfji2uq5q"
+      },
+      "from": "/project1/level1",
+      "to": "/project1/null1"
+    }
+  ],
+  "network_path": "/project1",
+  "node_type": "touchdesigner.network_root",
+  "operators": [
+    {
+      "cid": {
+        "/": "baguqeerazkkife254rgdf6ulg4gce7c3mex6chzo2wyyom2bn4htnrgmxtjq"
+      },
+      "path": "/project1/moviefilein1"
+    },
+    {
+      "cid": {
+        "/": "baguqeeraekqknr4ckuha7rhwdcachenctnaxvkuptat74o4tq3bkzjyiuz3q"
+      },
+      "path": "/project1/level1"
+    },
+    {
+      "cid": {
+        "/": "baguqeeraoz4h6kqdznois5fdtrwv6rbn2dg6cglyivfrbvph55ehh4yty56q"
+      },
+      "path": "/project1/null1"
+    }
+  ]
+}

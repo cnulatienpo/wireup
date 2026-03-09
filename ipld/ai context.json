@@ -1,0 +1,18 @@
+{
+  "system": "wireup-outpost",
+  "context_domain": "touchdesigner_patch_analysis",
+  "core_concepts": [
+    "operator",
+    "node",
+    "signal",
+    "connection",
+    "pipeline"
+  ],
+  "analysis_focus": [
+    "signal_flow",
+    "operator_semantics",
+    "parameter_interpretation",
+    "runtime_graph_state"
+  ],
+  "knowledge_scope": "realtime_visual_programming"
+}

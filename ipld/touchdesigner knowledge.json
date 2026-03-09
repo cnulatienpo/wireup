@@ -1,0 +1,18 @@
+{
+  "dataset_name": "touchdesigner_signal_flow_knowledge",
+  "publisher": "Projects From The Projects",
+  "domain": "node_based_visual_programming",
+  "concepts": [
+    "operator_semantics",
+    "signal_flow_topology",
+    "patch_state_analysis",
+    "node_relationships"
+  ],
+  "format": "json_graph",
+  "update_frequency": "irregular",
+  "intended_consumers": [
+    "knowledge_graph_indexers",
+    "technical_search_engines",
+    "automation_agents"
+  ]
+}

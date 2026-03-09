@@ -1,0 +1,34 @@
+{
+  "operator_families": [
+    {
+      "family": "TOP",
+      "data_type": "texture_stream",
+      "processing_domain": "gpu_image_processing"
+    },
+    {
+      "family": "CHOP",
+      "data_type": "time_channel",
+      "processing_domain": "signal_waveforms"
+    },
+    {
+      "family": "SOP",
+      "data_type": "geometry_stream",
+      "processing_domain": "mesh_and_point_structures"
+    },
+    {
+      "family": "DAT",
+      "data_type": "structured_data",
+      "processing_domain": "tables_text_scripts"
+    },
+    {
+      "family": "MAT",
+      "data_type": "material_state",
+      "processing_domain": "render_surface_definition"
+    },
+    {
+      "family": "POP",
+      "data_type": "particle_stream",
+      "processing_domain": "particle_simulation"
+    }
+  ]
+}

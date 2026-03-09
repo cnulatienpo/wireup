@@ -50,9 +50,32 @@ def _build_output(question, state, answer, flow=None):
     return '\n'.join(lines)
 
 
+def _mark_response_received():
+    try:
+        ask_callback = parent().op('ask_button_callback')
+    except Exception:
+        ask_callback = None
+
+    if ask_callback is None:
+        return
+
+    try:
+        mod_obj = ask_callback.module
+    except Exception:
+        mod_obj = None
+
+    if mod_obj and hasattr(mod_obj, 'mark_response_received'):
+        try:
+            mod_obj.mark_response_received()
+        except Exception:
+            pass
+
+
 def handle_web_response(raw_text):
     """Call this from request_sender Web Client DAT callbacks."""
     payload = _safe_json_loads(raw_text) or {}
+
+    _mark_response_received()
 
     answer = payload.get('answer') or payload.get('response') or str(payload)
     question = payload.get('question', '')
