@@ -1,0 +1,22 @@
+{
+  "system": "Projects From The Projects",
+  "node": "wireup-outpost",
+  "domain": "realtime visual programming",
+  "capabilities": [
+    "touchdesigner_patch_state_analysis",
+    "node_graph_signal_flow_tracing",
+    "operator_semantic_interpretation",
+    "parameter_surface_analysis",
+    "realtime_pipeline_diagnostics"
+  ],
+  "interfaces": [
+    "documentation",
+    "interactive_ui",
+    "knowledge_graph"
+  ],
+  "target_environment": [
+    "touchdesigner",
+    "realtime_media_pipeline",
+    "interactive_installation_systems"
+  ]
+}

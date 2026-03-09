@@ -1,0 +1,68 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://pfp.example/#wireup",
+      "name": "Wireup Outpost",
+      "applicationCategory": "DeveloperTool",
+      "applicationSubCategory": "Realtime Media Pipeline Diagnostic System",
+      "description": "Graph-aware diagnostic and explanation layer for TouchDesigner node networks used in realtime media production pipelines.",
+      "operatingSystem": "TouchDesigner / Web Interface",
+      "audience": {
+        "@type": "Audience",
+        "audienceType": [
+          "Visual Effects Studio",
+          "Realtime Media Studio",
+          "Concert Visual Production",
+          "Interactive Installation Studio"
+        ]
+      },
+      "featureList": [
+        "Live node graph inspection",
+        "Signal flow tracing across operator chains",
+        "Operator diagnostics and semantic explanation",
+        "Parameter and mode interpretation",
+        "Failure-mode detection in realtime pipelines",
+        "Layered reasoning for debugging complex node graphs"
+      ]
+    },
+
+    {
+      "@type": "CreativeWork",
+      "@id": "https://pfp.example/#realtimePipeline",
+      "name": "Realtime Visual Processing Pipeline",
+      "description": "A directed graph of processing stages transforming media signals into realtime rendered output.",
+      "about": [
+        {"@id": "https://pfp.example/#signalGraph"},
+        {"@id": "https://pfp.example/#renderStage"},
+        {"@id": "https://pfp.example/#mediaAsset"}
+      ]
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "@id": "https://pfp.example/#signalGraph",
+      "name": "Signal Graph",
+      "description": "A directed processing network in which nodes receive signals, transform them, and emit new signals to downstream nodes."
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "@id": "https://pfp.example/#renderStage",
+      "name": "Render Stage",
+      "description": "A processing stage within a realtime pipeline responsible for transforming intermediate data into rendered frames or visual output."
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "@id": "https://pfp.example/#mediaAsset",
+      "name": "Media Asset",
+      "description": "Input resources used within realtime pipelines such as video textures, geometry streams, audio signals, or control data."
+    }
+
+  ]
+}
+</script>

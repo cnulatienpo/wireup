@@ -16,10 +16,32 @@ body {
   min-height: 100vh;
   background: #000;
   color: #fff;
+  display: flex;
+}
+
+#tox-panel {
+  width: 240px;
+  min-height: 100vh;
+  padding: 15px;
+  border-right: 1px solid #333;
+}
+
+.download-btn {
+  display: inline-block;
+  padding: 8px 12px;
+  background: #222;
+  color: white;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+.download-btn:hover {
+  background: #444;
 }
 
 .title-card {
   min-height: 100vh;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;

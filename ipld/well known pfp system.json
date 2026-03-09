@@ -1,0 +1,30 @@
+{
+  "system_id": "pfp",
+  "system_name": "Projects From The Projects",
+  "primary_component": "wireup-outpost",
+  "domain": [
+    "realtime_visual_programming",
+    "node_graph_systems",
+    "signal_flow_networks",
+    "touchdesigner_pipeline_tools"
+  ],
+  "capabilities": [
+    "patch_state_introspection",
+    "node_graph_signal_trace",
+    "operator_semantic_analysis",
+    "parameter_surface_interpretation",
+    "pipeline_diagnostic_support"
+  ],
+  "interfaces": [
+    "web_ui",
+    "knowledge_graph",
+    "documentation_layer"
+  ],
+  "target_environments": [
+    "touchdesigner",
+    "realtime_media_pipeline",
+    "interactive_installation_systems",
+    "live_visual_performance_systems"
+  ],
+  "last_updated": "2026-03-08T20:00:00Z"
+}

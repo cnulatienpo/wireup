@@ -1,0 +1,11 @@
+{
+  "nodes": [
+    "operator",
+    "signal",
+    "connection"
+  ],
+  "relationships": {
+    "operator": "transforms_signal",
+    "connection": "transmits_signal"
+  }
+}

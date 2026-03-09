@@ -1,0 +1,46 @@
+{
+  "patch_name": "example_patch",
+  "root_network": "/project1",
+  "operators": [
+    {
+      "name": "moviefilein1",
+      "path": "/project1/moviefilein1",
+      "op_type": "moviefileinTOP",
+      "family": "TOP",
+      "kind": "generator",
+      "parameters": {
+        "file": "clips/hallway.mp4",
+        "play": 1
+      }
+    },
+    {
+      "name": "level1",
+      "path": "/project1/level1",
+      "op_type": "levelTOP",
+      "family": "TOP",
+      "kind": "transform",
+      "parameters": {
+        "brightness": 1,
+        "opacity": 1
+      }
+    },
+    {
+      "name": "null1",
+      "path": "/project1/null1",
+      "op_type": "nullTOP",
+      "family": "TOP",
+      "kind": "output",
+      "parameters": {}
+    }
+  ],
+  "connections": [
+    {
+      "from": "/project1/moviefilein1",
+      "to": "/project1/level1"
+    },
+    {
+      "from": "/project1/level1",
+      "to": "/project1/null1"
+    }
+  ]
+}

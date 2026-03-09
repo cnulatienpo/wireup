@@ -14,9 +14,10 @@ const {
 const { generateRayRayResponse } = require('./llmAdapter');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(express.static(__dirname));
 
 const operatorIndex = loadIndex();
 const operatorNames = Object.keys(operatorIndex.operators || {});
@@ -464,25 +465,7 @@ function buildPrompt(context, question, state, previousState = null, mode = 'qa'
   ].join('\n');
 }
 
-
-app.get('/api/tox-status', (req, res) => {
-  const now = Date.now();
-  return res.json({
-    state: getToxConnectionState(now),
-    lastStateAt: toxStatus.lastStateAt,
-    serverTime: now,
-  });
-});
-
-app.post('/api/restart', (req, res) => {
-  clearAllSessions();
-  toxStatus.lastStateAt = null;
-  toxStatus.hasConnected = false;
-
-  return res.json({ ok: true, state: getToxConnectionState() });
-});
-
-app.post('/rayray', async (req, res) => {
+async function handleRayrayRequest(req, res) {
   try {
     const { question = '', state = {}, mode = 'qa', sessionId: incomingSessionId } = req.body || {};
 
@@ -583,7 +566,67 @@ app.post('/rayray', async (req, res) => {
   } catch (error) {
     return res.status(500).json({ answer: `Ray Ray hit an error: ${error.message}` });
   }
+
+}
+
+app.post('/rayray', handleRayrayRequest);
+app.post('/api/rayray', handleRayrayRequest);
+
+app.get('/healthz', (_req, res) => {
+  res.status(200).json({ ok: true });
 });
+
+app.get('/outpost', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'wireup-outpost.html'));
+});
+
+app.get('/outpost/', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'wireup-outpost.html'));
+});
+
+app.get('/wireup-shack.html', (_req, res) => {
+  res.redirect('/outpost');
+});
+
+app.get('/wireup-shack', (_req, res) => {
+  res.redirect('/outpost');
+});
+
+app.get('/wireup-shack/', (_req, res) => {
+  res.redirect('/outpost');
+});
+
+app.get('/shack', (_req, res) => {
+  res.redirect('/outpost');
+});
+
+app.get('/shack/', (_req, res) => {
+  res.redirect('/outpost');
+});
+
+app.get('/wireup-outpost', (_req, res) => {
+  res.redirect('/outpost');
+});
+
+app.get('/machines', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'machines.html'));
+});
+
+app.get('/machines/', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'machines.html'));
+});
+
+app.get('/machines/index.json', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'ipld', 'published', 'index.json'));
+});
+
+app.use('/machines/files', express.static(path.join(__dirname, 'ipld', 'published')));
+
+app.get('/', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.use(express.static(__dirname));
 
 app.listen(PORT, () => {
   console.log('Ray Ray server running at http://localhost:3000');

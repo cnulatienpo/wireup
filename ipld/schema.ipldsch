@@ -1,0 +1,22 @@
+type System struct {
+  name String
+  component String
+  domains [String]
+  operators &OperatorFamily
+  signal_graph &SignalGraph
+  pipeline &PipelineStage
+}
+
+type OperatorFamily struct {
+  families [String]
+}
+
+type SignalGraph struct {
+  nodes [String]
+  relationships {String:String}
+}
+
+type PipelineStage struct {
+  stage String
+  operations [String]
+}

@@ -1,0 +1,44 @@
+{
+  "resources": [
+    {
+      "source": "wireupdiscovery.json",
+      "target": "wireup-discovery.json",
+      "purpose": "Primary machine discovery document for Wireup."
+    },
+    {
+      "source": "well known service capabilities.json",
+      "target": "well-known-service-capabilities.json",
+      "purpose": "Service capability advertisement for machine clients."
+    },
+    {
+      "source": "well known pfp system.json",
+      "target": "well-known-pfp-system.json",
+      "purpose": "System profile and machine-readable identity metadata."
+    },
+    {
+      "source": "system discovery.json",
+      "target": "system-discovery.json",
+      "purpose": "System-level discovery metadata."
+    },
+    {
+      "source": "codemeta.json",
+      "target": "codemeta.json",
+      "purpose": "Project metadata for indexing and tooling."
+    },
+    {
+      "source": "generated/manifest.json",
+      "target": "touchdesigner-manifest.json",
+      "purpose": "Generated CID manifest for TouchDesigner export."
+    },
+    {
+      "source": "generated/network-root.json",
+      "target": "touchdesigner-network-root.json",
+      "purpose": "Generated network root IPLD node."
+    },
+    {
+      "source": "generated/patch-root.json",
+      "target": "touchdesigner-patch-root.json",
+      "purpose": "Generated patch root IPLD node."
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "graph_type": "directed_processing_network",
+  "entities": [
+    {
+      "type": "node",
+      "name": "operator",
+      "description": "Processing unit transforming input signals into output signals"
+    },
+    {
+      "type": "signal",
+      "name": "data_stream",
+      "description": "Data propagated between operators within the network"
+    },
+    {
+      "type": "connection",
+      "name": "wire",
+      "description": "Directed link carrying signals between operators"
+    }
+  ],
+  "relationships": [
+    {
+      "source": "operator",
+      "relation": "receives",
+      "target": "signal"
+    },
+    {
+      "source": "operator",
+      "relation": "emits",
+      "target": "signal"
+    },
+    {
+      "source": "connection",
+      "relation": "transmits",
+      "target": "signal"
+    }
+  ]
+}

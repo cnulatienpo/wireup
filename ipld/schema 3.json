@@ -1,0 +1,67 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://pfp.example/#wireup",
+      "name": "Wireup Outpost",
+      "applicationCategory": "DeveloperTool",
+      "description": "Patch-aware analysis and explanation system for TouchDesigner node graphs used in real-time media production pipelines.",
+      "operatingSystem": "TouchDesigner / Web Interface",
+      "applicationSubCategory": "Realtime Media Pipeline Tool",
+      "audience": {
+        "@type": "Audience",
+        "audienceType": [
+          "Visual Effects Studio",
+          "Realtime Media Studio",
+          "Music Performance Technology",
+          "Interactive Installation Studio"
+        ]
+      },
+      "featureList": [
+        "Live node graph inspection",
+        "Signal flow analysis",
+        "Operator diagnostics",
+        "Parameter interpretation",
+        "Pipeline debugging"
+      ]
+    },
+
+    {
+      "@type": "CreativeWork",
+      "@id": "https://pfp.example/#realtimePipeline",
+      "name": "Realtime Visual Pipeline",
+      "description": "A node-based processing chain transforming data streams into realtime visual output.",
+      "about": [
+        {"@id": "https://pfp.example/#node"},
+        {"@id": "https://pfp.example/#signal"},
+        {"@id": "https://pfp.example/#operator"}
+      ]
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "@id": "https://pfp.example/#renderStage",
+      "name": "Render Stage",
+      "description": "A processing step within a realtime visual pipeline where signals are transformed into rendered frames or media output."
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "@id": "https://pfp.example/#mediaAsset",
+      "name": "Media Asset",
+      "description": "Input resources used in realtime pipelines such as video streams, textures, geometry, audio signals, and control data."
+    },
+
+    {
+      "@type": "DefinedTerm",
+      "@id": "https://pfp.example/#signalGraph",
+      "name": "Signal Graph",
+      "description": "A directed network of processing nodes where media signals propagate through transformation stages."
+    }
+
+  ]
+}
+</script>

@@ -1827,7 +1827,7 @@
   "assumed_common_menus": [
     "Common (TOP)"
   ]
-}{{
+}{
   "operator": "Luma Level (TOP)",
   "what_it_is": "Adjusts brightness using only luminance (how light or dark something is), not color.",
   "mental_model": "Editing a black-and-white version of the image, then applying it back.",

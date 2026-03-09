@@ -1,0 +1,55 @@
+{
+  "node_type": "wireup.machine_publish_index",
+  "generated_at": "2026-03-09T00:52:11.260Z",
+  "count": 8,
+  "resources": [
+    {
+      "file": "wireup-discovery.json",
+      "source": "wireupdiscovery.json",
+      "purpose": "Primary machine discovery document for Wireup.",
+      "url": "/machines/files/wireup-discovery.json"
+    },
+    {
+      "file": "well-known-service-capabilities.json",
+      "source": "well known service capabilities.json",
+      "purpose": "Service capability advertisement for machine clients.",
+      "url": "/machines/files/well-known-service-capabilities.json"
+    },
+    {
+      "file": "well-known-pfp-system.json",
+      "source": "well known pfp system.json",
+      "purpose": "System profile and machine-readable identity metadata.",
+      "url": "/machines/files/well-known-pfp-system.json"
+    },
+    {
+      "file": "system-discovery.json",
+      "source": "system discovery.json",
+      "purpose": "System-level discovery metadata.",
+      "url": "/machines/files/system-discovery.json"
+    },
+    {
+      "file": "codemeta.json",
+      "source": "codemeta.json",
+      "purpose": "Project metadata for indexing and tooling.",
+      "url": "/machines/files/codemeta.json"
+    },
+    {
+      "file": "touchdesigner-manifest.json",
+      "source": "generated/manifest.json",
+      "purpose": "Generated CID manifest for TouchDesigner export.",
+      "url": "/machines/files/touchdesigner-manifest.json"
+    },
+    {
+      "file": "touchdesigner-network-root.json",
+      "source": "generated/network-root.json",
+      "purpose": "Generated network root IPLD node.",
+      "url": "/machines/files/touchdesigner-network-root.json"
+    },
+    {
+      "file": "touchdesigner-patch-root.json",
+      "source": "generated/patch-root.json",
+      "purpose": "Generated patch root IPLD node.",
+      "url": "/machines/files/touchdesigner-patch-root.json"
+    }
+  ]
+}
