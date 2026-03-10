@@ -44,14 +44,18 @@ body {
 .shack-overlay {
   position: fixed;
   top: 1rem;
-  left: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: 0.75rem;
   z-index: 30;
   background: rgba(0, 0, 0, 0.52);
   border: 1px solid rgba(255, 255, 255, 0.8);
   padding: 0.55rem 0.75rem;
+  max-width: calc(100vw - 2rem);
 }
 
 .shack-title {
