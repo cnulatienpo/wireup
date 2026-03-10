@@ -58,6 +58,11 @@ body {
   max-width: calc(100vw - 2rem);
 }
 
+body.layout-edit-mode .shack-overlay {
+  top: auto;
+  bottom: 1rem;
+}
+
 .shack-title {
   margin: 0;
   color: #ffffff;
