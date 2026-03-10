@@ -5,6 +5,7 @@ import { renderContextPanel } from './contextRenderer.js';
 
 const CONTEXT_KEYS = ['tops', 'chops', 'sops'];
 let backendHealthy = null;
+const LLM_FALLBACK_MARKER = 'LLM not configured. Ray Ray running in rule-only mode.';
 
 function appendMessage(panel, speaker, text) {
   const line = document.createElement('div');
@@ -28,6 +29,54 @@ function detectOperatorFromQuestion(question) {
   return null;
 }
 
+function toBulletList(text, maxItems = 2) {
+  if (!text || typeof text !== 'string') {
+    return [];
+  }
+
+  return text
+    .split('.')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(0, maxItems);
+}
+
+function localRuleAnswer(question, operatorName = null) {
+  const fromQuestion = operatorName || detectOperatorFromQuestion(question);
+  const fallbackHint = 'I can answer directly from local JSON if you include an operator name (example: Blur TOP, Null CHOP, Sphere SOP).';
+
+  if (!fromQuestion) {
+    return fallbackHint;
+  }
+
+  const context = updateContextFromOperator(fromQuestion);
+  if (!context) {
+    return `${fallbackHint} I could not find ${fromQuestion} in the loaded local operator files.`;
+  }
+
+  renderContextPanel(mapContextForPanel());
+
+  const identity = context.identity || `${context.operator} is in the ${context.family?.toUpperCase() || 'operator'} family.`;
+  const signalBullets = toBulletList(context.signalStory, 2);
+  const warnings = Array.isArray(context.failureModes) ? context.failureModes.slice(0, 2) : [];
+
+  const lines = [
+    `Local mode: ${context.operator} (${context.family?.toUpperCase() || 'operator'}).`,
+    identity,
+  ];
+
+  if (signalBullets.length) {
+    lines.push(`Signal flow: ${signalBullets.join(' ')}`);
+  }
+
+  if (warnings.length) {
+    lines.push(`Watch out: ${warnings.join(' | ')}`);
+  }
+
+  lines.push('Cloud tutor is optional for this answer. I am using repository JSON knowledge.');
+  return lines.join(' ');
+}
+
 async function sendQuestion({ input, output }) {
   const question = input.value.trim();
   if (!question) return;
@@ -42,16 +91,16 @@ async function sendQuestion({ input, output }) {
 
   input.value = '';
 
-  try {
-    const payload = JSON.stringify({
-      question,
-      context: currentContext,
-    });
+  const payload = JSON.stringify({
+    question,
+    context: currentContext,
+  });
 
-    const endpoints = ['/api/rayray', '/rayray'];
-    let lastError = null;
+  const endpoints = ['/api/rayray', '/rayray'];
+  let lastError = null;
 
-    for (const endpoint of endpoints) {
+  for (const endpoint of endpoints) {
+    try {
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -64,15 +113,14 @@ async function sendQuestion({ input, output }) {
       const contentType = (response.headers.get('content-type') || '').toLowerCase();
 
       if (!response.ok) {
-        // If this route is missing, try the next endpoint before reporting.
         if (response.status === 404) {
           lastError = `Endpoint ${endpoint} returned 404.`;
           continue;
         }
 
         const bodyPreview = raw ? ` ${raw.slice(0, 180)}` : '';
-        appendMessage(output, 'Ray Ray', `Server error ${response.status}.${bodyPreview}`.trim());
-        return;
+        lastError = `Server error ${response.status}.${bodyPreview}`.trim();
+        continue;
       }
 
       let data = null;
@@ -80,32 +128,30 @@ async function sendQuestion({ input, output }) {
         try {
           data = JSON.parse(raw);
         } catch (_err) {
-          // Accept plain-text responses to avoid hard failure on bad content-type.
           data = contentType.includes('application/json') ? null : { answer: raw };
         }
       }
 
       if (!data) {
-        appendMessage(
-          output,
-          'Ray Ray',
-          'Server returned an empty response. This usually means the site is running as static hosting instead of the Node API service.',
-        );
-        return;
+        lastError = 'Server returned an empty response.';
+        continue;
       }
 
       const answer = data.answer || data.responseText || 'No response received.';
-      appendMessage(output, 'Ray Ray', answer);
+      if (answer.includes(LLM_FALLBACK_MARKER)) {
+        appendMessage(output, 'Ray Ray', localRuleAnswer(question, maybeOperator));
+      } else {
+        appendMessage(output, 'Ray Ray', answer);
+      }
       return;
+    } catch (error) {
+      lastError = error?.message || String(error);
     }
+  }
 
-    appendMessage(
-      output,
-      'Ray Ray',
-      `Chat backend not reachable. ${lastError || 'No working endpoint found.'}`,
-    );
-  } catch (error) {
-    appendMessage(output, 'Ray Ray', `Unable to connect: ${error.message}`);
+  appendMessage(output, 'Ray Ray', localRuleAnswer(question, maybeOperator));
+  if (lastError) {
+    appendMessage(output, 'Ray Ray', `Cloud/API unreachable (${lastError}). Stayed in local JSON mode.`);
   }
 }
 
@@ -118,7 +164,7 @@ async function checkBackendHealth(output) {
       appendMessage(
         output,
         'Ray Ray',
-        'Backend API is offline on this deploy (/healthz failed). Chat needs Render Web Service mode with start command: npm run shack.',
+        'Cloud/API backend is offline on this deploy (/healthz failed). Local JSON tutor mode is still available.',
       );
     }
   } catch (_error) {
@@ -126,7 +172,7 @@ async function checkBackendHealth(output) {
     appendMessage(
       output,
       'Ray Ray',
-      'Backend API is unreachable on this deploy. Chat needs Render Web Service mode with start command: npm run shack.',
+      'Cloud/API backend is unreachable on this deploy. Local JSON tutor mode is still available.',
     );
   }
 }

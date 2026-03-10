@@ -254,17 +254,17 @@ button.shack-link {
 
 .layout-resize-handle {
   position: absolute;
-  width: 18px;
-  height: 18px;
-  right: -9px;
-  bottom: -9px;
+  width: 28px;
+  height: 28px;
+  right: -14px;
+  bottom: -14px;
   border: 1px solid rgba(255, 255, 255, 0.8);
   background: rgba(0, 0, 0, 0.5);
   color: transparent;
   padding: 0;
   display: none;
   cursor: nwse-resize;
-  z-index: 12;
+  z-index: 14;
 }
 
 body.layout-edit-mode .layout-target {
