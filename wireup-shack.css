@@ -120,6 +120,8 @@ button.shack-link {
   font-family: Garamond, "Times New Roman", serif;
   font-size: clamp(1.4rem, 2.4vw, 1.9rem);
   line-height: 1.35;
+  color: #fff5db;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.75);
 }
 
 .context-panel {

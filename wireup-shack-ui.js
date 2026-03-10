@@ -167,88 +167,92 @@ function shouldEscalateToCloud(localResult) {
 }
 
 async function sendQuestion({ input, output }) {
-  const question = input.value.trim();
-  if (!question) return;
+  try {
+    const question = input.value.trim();
+    if (!question) return;
 
-  appendMessage(output, 'You', question);
+    appendMessage(output, 'You', question);
+    input.value = '';
 
-  const maybeOperator = detectOperatorFromQuestion(question);
-  const localResult = localRuleAnswer(question, maybeOperator);
+    const maybeOperator = detectOperatorFromQuestion(question);
+    const localResult = localRuleAnswer(question, maybeOperator);
 
-  if (localResult.matchedOperator) {
-    updateContextFromOperator(localResult.matchedOperator);
-    renderContextPanel(mapContextForPanel());
-  }
+    if (localResult.matchedOperator) {
+      updateContextFromOperator(localResult.matchedOperator);
+      renderContextPanel(mapContextForPanel());
+    }
 
-  // Local JSON knowledge is the default path. Only use cloud/API when needed.
-  if (!shouldEscalateToCloud(localResult)) {
-    appendMessage(output, 'Ray Ray', localResult.text);
-    return;
-  }
+    // Local JSON knowledge is the default path. Only use cloud/API when needed.
+    if (!shouldEscalateToCloud(localResult)) {
+      appendMessage(output, 'Ray Ray', localResult.text);
+      return;
+    }
 
-  input.value = '';
+    const payload = JSON.stringify({
+      question,
+      context: currentContext,
+    });
 
-  const payload = JSON.stringify({
-    question,
-    context: currentContext,
-  });
+    const endpoints = ['/api/rayray', '/rayray'];
+    let lastError = null;
 
-  const endpoints = ['/api/rayray', '/rayray'];
-  let lastError = null;
+    for (const endpoint of endpoints) {
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: payload,
+        });
 
-  for (const endpoint of endpoints) {
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: payload,
-      });
+        const raw = await response.text();
+        const contentType = (response.headers.get('content-type') || '').toLowerCase();
 
-      const raw = await response.text();
-      const contentType = (response.headers.get('content-type') || '').toLowerCase();
+        if (!response.ok) {
+          if (response.status === 404) {
+            lastError = `Endpoint ${endpoint} returned 404.`;
+            continue;
+          }
 
-      if (!response.ok) {
-        if (response.status === 404) {
-          lastError = `Endpoint ${endpoint} returned 404.`;
+          const bodyPreview = raw ? ` ${raw.slice(0, 180)}` : '';
+          lastError = `Server error ${response.status}.${bodyPreview}`.trim();
           continue;
         }
 
-        const bodyPreview = raw ? ` ${raw.slice(0, 180)}` : '';
-        lastError = `Server error ${response.status}.${bodyPreview}`.trim();
-        continue;
-      }
-
-      let data = null;
-      if (raw) {
-        try {
-          data = JSON.parse(raw);
-        } catch (_err) {
-          data = contentType.includes('application/json') ? null : { answer: raw };
+        let data = null;
+        if (raw) {
+          try {
+            data = JSON.parse(raw);
+          } catch (_err) {
+            data = contentType.includes('application/json') ? null : { answer: raw };
+          }
         }
-      }
 
-      if (!data) {
-        lastError = 'Server returned an empty response.';
-        continue;
-      }
+        if (!data) {
+          lastError = 'Server returned an empty response.';
+          continue;
+        }
 
-      const answer = data.answer || data.responseText || 'No response received.';
-      if (answer.includes(LLM_FALLBACK_MARKER)) {
-        appendMessage(output, 'Ray Ray', localResult.text);
-      } else {
-        appendMessage(output, 'Ray Ray', answer);
+        const answer = data.answer || data.responseText || 'No response received.';
+        if (answer.includes(LLM_FALLBACK_MARKER)) {
+          appendMessage(output, 'Ray Ray', localResult.text);
+        } else {
+          appendMessage(output, 'Ray Ray', answer);
+        }
+        return;
+      } catch (error) {
+        lastError = error?.message || String(error);
       }
-      return;
-    } catch (error) {
-      lastError = error?.message || String(error);
     }
-  }
 
-  appendMessage(output, 'Ray Ray', localResult.text);
-  if (lastError) {
-    appendMessage(output, 'Ray Ray', `Cloud/API unreachable (${lastError}). Stayed in local JSON mode.`);
+    appendMessage(output, 'Ray Ray', localResult.text);
+    if (lastError) {
+      appendMessage(output, 'Ray Ray', `Cloud/API unreachable (${lastError}). Stayed in local JSON mode.`);
+    }
+  } catch (error) {
+    console.error('Ray Ray sendQuestion failed:', error);
+    appendMessage(output, 'Ray Ray', `Local processing error: ${error?.message || String(error)}`);
   }
 }
 
