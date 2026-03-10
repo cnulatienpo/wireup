@@ -515,6 +515,18 @@
         let dragState = null;
         const resizeEdgeThreshold = 24;
 
+        function updateCursor(clientX, clientY) {
+          if (!isLayoutEditMode) {
+            target.style.cursor = '';
+            return;
+          }
+
+          const rect = target.getBoundingClientRect();
+          const nearRight = rect.right - clientX <= resizeEdgeThreshold;
+          const nearBottom = rect.bottom - clientY <= resizeEdgeThreshold;
+          target.style.cursor = nearRight && nearBottom ? 'nwse-resize' : 'move';
+        }
+
         target.addEventListener('pointerdown', (event) => {
           if (!isLayoutEditMode) {
             return;
@@ -555,7 +567,17 @@
             target.style.height = pxSize(Math.max(50, dragState.startHeight + dy), 50);
           }
 
+          updateCursor(event.clientX, event.clientY);
+
           event.preventDefault();
+        });
+
+        target.addEventListener('pointermove', (event) => {
+          if (dragState) {
+            return;
+          }
+
+          updateCursor(event.clientX, event.clientY);
         });
 
         target.addEventListener('pointerup', (event) => {
@@ -565,10 +587,20 @@
 
           target.releasePointerCapture(event.pointerId);
           dragState = null;
+          updateCursor(event.clientX, event.clientY);
         });
 
         target.addEventListener('pointercancel', () => {
           dragState = null;
+          if (isLayoutEditMode) {
+            target.style.cursor = 'move';
+          }
+        });
+
+        target.addEventListener('pointerleave', () => {
+          if (!dragState) {
+            target.style.cursor = isLayoutEditMode ? 'move' : '';
+          }
         });
       }
 
