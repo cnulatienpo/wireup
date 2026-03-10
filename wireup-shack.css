@@ -38,7 +38,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  z-index: 3;
+  z-index: 30;
   background: rgba(0, 0, 0, 0.52);
   border: 1px solid rgba(255, 255, 255, 0.8);
   padding: 0.55rem 0.75rem;
