@@ -147,9 +147,31 @@ function localRuleAnswer(question, operatorName = null) {
   }
 
   if (!lines.length) {
+    const allOperators = CONTEXT_KEYS.flatMap((family) => Object.keys(store[family] || {}));
+    const tokens = questionTokens(question);
+    const suggested = allOperators
+      .map((name) => {
+        const lower = name.toLowerCase();
+        let score = 0;
+        for (const token of tokens) {
+          if (lower.includes(token)) {
+            score += 1;
+          }
+        }
+        return { name, score };
+      })
+      .filter((entry) => entry.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3)
+      .map((entry) => entry.name);
+
+    const suggestionText = suggested.length
+      ? `Closest local matches: ${suggested.join(' | ')}.`
+      : 'Try naming an operator directly, like Blur TOP, Math CHOP, or Null SOP.';
+
     return {
-      hasAnswer: false,
-      text: 'I could not find a confident local JSON match for that question.',
+      hasAnswer: true,
+      text: `I did not find a strong exact local JSON match for that question. ${suggestionText} Using local repository JSON first.`,
       matchedOperator: null,
     };
   }
@@ -163,7 +185,12 @@ function localRuleAnswer(question, operatorName = null) {
 }
 
 function shouldEscalateToCloud(localResult) {
-  return !localResult?.hasAnswer;
+  if (!localResult?.hasAnswer) {
+    return true;
+  }
+
+  // Keep local JSON as the default mode unless explicitly forced.
+  return Boolean(window?.RAYRAY_FORCE_CLOUD);
 }
 
 async function sendQuestion({ input, output }) {
