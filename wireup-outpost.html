@@ -8,8 +8,13 @@
 </head>
 <body>
   <div id="outpost-root">
+    <img id="shack-ui" class="shack-ui" src="/ui/ui%20base.png" alt="Wireup UI base" />
+    <img id="ui-left-panel" class="shack-component" src="/ui/ui%20left%20panel.png" alt="Left panel art" />
+    <img id="ui-white-box" class="shack-component" src="/ui/ui%20white%20box.png" alt="Center panel art" />
+    <img id="ui-right-panel" class="shack-component" src="/ui/ui%20right%20panel.png" alt="Right panel art" />
+    <img id="ui-black-box" class="shack-component" src="/ui/ui%20black%20box.png" alt="Bottom input panel art" />
+    <img id="ui-yellow-button" class="shack-component" src="/ui/ui%20yellow%20button.png" alt="Yellow button art" />
     <img id="shack-belt" class="shack-belt" src="/ui/src/assets/WIRE_BELT.svg" alt="Wire belt" />
-    <img id="shack-ui" class="shack-ui" src="/wireup.png" alt="Wireup cardboard UI" />
 
     <main class="shack-overlay" aria-label="Wireup Outpost controls">
       <h1 class="shack-title">Wireup Outpost</h1>
@@ -57,6 +62,11 @@
   <script>
     (function () {
       const img = document.getElementById('shack-ui');
+      const leftPanelFrame = document.getElementById('ui-left-panel');
+      const whiteBoxFrame = document.getElementById('ui-white-box');
+      const rightPanelFrame = document.getElementById('ui-right-panel');
+      const blackBoxFrame = document.getElementById('ui-black-box');
+      const yellowButtonFrame = document.getElementById('ui-yellow-button');
       const belt = document.getElementById('shack-belt');
       const output = document.getElementById('rayray-output');
       const leftPanel = document.getElementById('left-panel');
@@ -77,6 +87,13 @@
       const beltWidthFraction = 0.2;
       const beltInsetXFraction = 0.086;
       const beltInsetYFraction = 0.064;
+      const uiLayerLayout = {
+        leftPanel: { x: 0.03, y: 0.14, width: 0.186, height: 0.484 },
+        whiteBox: { x: 0.236, y: 0.17, width: 0.443, height: 0.56 },
+        rightPanel: { x: 0.705, y: 0.17, width: 0.232, height: 0.535 },
+        blackBox: { x: 0.225, y: 0.725, width: 0.478, height: 0.154 },
+        yellowButton: { x: 0.034, y: 0.705, width: 0.176, height: 0.195 },
+      };
       const uiScaleStorageKey = 'wireup.outpost.uiScale.v1';
       const layoutStorageKey = 'wireup.outpost.layout.v1';
       const minUiScale = 0.35;
@@ -189,6 +206,27 @@
         img.style.width = renderWidth + 'px';
         img.style.height = renderHeight + 'px';
         img.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
+
+        function placeLayer(layerImg, rect) {
+          if (!layerImg || !rect) {
+            return;
+          }
+
+          const x = offsetX + renderWidth * rect.x;
+          const y = offsetY + renderHeight * rect.y;
+          const width = renderWidth * rect.width;
+          const height = renderHeight * rect.height;
+
+          layerImg.style.width = width + 'px';
+          layerImg.style.height = height + 'px';
+          layerImg.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+        }
+
+        placeLayer(leftPanelFrame, uiLayerLayout.leftPanel);
+        placeLayer(whiteBoxFrame, uiLayerLayout.whiteBox);
+        placeLayer(rightPanelFrame, uiLayerLayout.rightPanel);
+        placeLayer(blackBoxFrame, uiLayerLayout.blackBox);
+        placeLayer(yellowButtonFrame, uiLayerLayout.yellowButton);
 
         if (belt) {
           const beltWidth = contentWidth * beltWidthFraction;
