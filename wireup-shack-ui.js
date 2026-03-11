@@ -2,6 +2,8 @@ import { loadAllJSON, store } from './jsonStore.js';
 import { updateContextFromOperator, currentContext } from './contextEngine.js';
 import { mapContextForPanel } from './contextMapper.js';
 import { renderContextPanel } from './contextRenderer.js';
+import { retrieveContext } from './runtime/retrieval/index.js';
+import { detectPatterns, explainContext } from './runtime/reasoning/index.js';
 
 const CONTEXT_KEYS = ['tops', 'chops', 'sops'];
 const LLM_FALLBACK_MARKER = 'LLM not configured. Ray Ray running in rule-only mode.';
@@ -107,7 +109,12 @@ function buildOperatorCandidates(tokens, question) {
   return candidates.sort((a, b) => b.score - a.score).slice(0, 3);
 }
 
-function localRuleAnswer(question, operatorName = null) {
+function getExplainMode() {
+  const modeInput = document.getElementById('explain-mode');
+  return modeInput?.value || 'td';
+}
+
+async function localRuleAnswer(question, operatorName = null) {
   const tokens = questionTokens(question);
   const fromQuestion = operatorName || detectOperatorFromQuestion(question);
   const candidates = fromQuestion
@@ -119,9 +126,9 @@ function localRuleAnswer(question, operatorName = null) {
   const lines = [];
 
   if (top?.name) {
-    const context = updateContextFromOperator(top.name);
+    const context = await updateContextFromOperator(top.name);
     if (context) {
-      renderContextPanel(mapContextForPanel());
+      renderContextPanel(await mapContextForPanel());
       const identity = context.identity || `${context.operator} is in the ${context.family?.toUpperCase() || 'operator'} family.`;
       const signalBullets = toBulletList(context.signalStory, 2);
       const warnings = Array.isArray(context.failureModes) ? context.failureModes.slice(0, 2) : [];
@@ -169,14 +176,21 @@ function localRuleAnswer(question, operatorName = null) {
       ? `Closest local matches: ${suggested.join(' | ')}.`
       : 'Try naming an operator directly, like Blur TOP, Math CHOP, or Null SOP.';
 
+    const runtimeContext = await retrieveContext(question);
+    const mode = getExplainMode();
     return {
       hasAnswer: true,
-      text: `I did not find a strong exact local JSON match for that question. ${suggestionText} Using local repository JSON first.`,
+      text: `${explainContext(runtimeContext, mode)} ${suggestionText} Using runtime JSON first.`,
       matchedOperator: null,
     };
   }
 
-  lines.push('Using local repository JSON first.');
+  const runtimeContext = await retrieveContext(question);
+  const patterns = detectPatterns(runtimeContext);
+  if (patterns.length) {
+    lines.push(`Detected patterns: ${patterns.map((item) => item.id).join(' | ')}`);
+  }
+  lines.push(`Using runtime JSON first. (${getExplainMode()} mode)`);
   return {
     hasAnswer: true,
     text: lines.join(' '),
@@ -202,11 +216,11 @@ async function sendQuestion({ input, output }) {
     input.value = '';
 
     const maybeOperator = detectOperatorFromQuestion(question);
-    const localResult = localRuleAnswer(question, maybeOperator);
+    const localResult = await localRuleAnswer(question, maybeOperator);
 
     if (localResult.matchedOperator) {
-      updateContextFromOperator(localResult.matchedOperator);
-      renderContextPanel(mapContextForPanel());
+      await updateContextFromOperator(localResult.matchedOperator);
+      renderContextPanel(await mapContextForPanel());
     }
 
     // Local JSON knowledge is the default path. Only use cloud/API when needed.
@@ -218,6 +232,7 @@ async function sendQuestion({ input, output }) {
     const payload = JSON.stringify({
       question,
       context: currentContext,
+      explainMode: getExplainMode(),
     });
 
     const endpoints = ['/api/rayray', '/rayray'];

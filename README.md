@@ -62,3 +62,35 @@ Other commands:
 npm run build
 npm run preview
 ```
+
+## Runtime Knowledge Architecture
+
+Canonical runtime knowledge now lives in `data/wireup_runtime/`:
+
+- `master_index.json`
+- `operator_lookup.json`
+- `concept_index.json`
+- `concept_graph.json`
+- `runtime_rules.json`
+
+Runtime modules:
+
+- `runtime/loader/index.js` (browser loader)
+- `runtime/retrieval/index.js` (operator/context retrieval)
+- `runtime/reasoning/index.js` (pattern detection + explanation modes)
+- `runtime/index.cjs` (server runtime API)
+
+Explanation modes supported end-to-end:
+
+- `td`
+- `eli5`
+- `dual`
+
+## Deprecated Legacy Knowledge Sources
+
+The following files are deprecated and no longer used by the runtime path:
+
+- `rayray_index.json`
+- `touch designer tops.json`
+- `td simple glossery.json`
+- `touch designer glossery part 3.json`
