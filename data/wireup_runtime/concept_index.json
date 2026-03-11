@@ -1,0 +1,966 @@
+{
+  "touchdesigner": {
+    "term": "TouchDesigner",
+    "definition": "TouchDesigner is software for moving information around so it turns into images, sound, or interaction while it is happening."
+  },
+  "signal flow": {
+    "term": "Signal Flow",
+    "definition": "Signal flow means information moves in a direction, step by step, from one place to the next."
+  },
+  "operator": {
+    "term": "Operator",
+    "definition": "An operator is one small part of the system that does one job and then passes the result along."
+  },
+  "op taxonomy": {
+    "term": "OP Taxonomy",
+    "definition": "OP taxonomy is how TouchDesigner groups operators by what kind of job they do."
+  },
+  "real time": {
+    "term": "Real Time",
+    "definition": "Real time means things update immediately while they are happening."
+  },
+  "network": {
+    "term": "Network",
+    "definition": "A network is a group of connected parts that pass information to each other."
+  },
+  "top": {
+    "term": "TOP",
+    "definition": "TOPs work with images."
+  },
+  "chop": {
+    "term": "CHOP",
+    "definition": "CHOPs work with changing numbers."
+  },
+  "sop": {
+    "term": "SOP",
+    "definition": "SOPs work with shapes in space."
+  },
+  "dat": {
+    "term": "DAT",
+    "definition": "DATs work with text and lists."
+  },
+  "mat": {
+    "term": "MAT",
+    "definition": "MATs control how surfaces look."
+  },
+  "input": {
+    "term": "Input",
+    "definition": "An input is where information enters something."
+  },
+  "output": {
+    "term": "Output",
+    "definition": "An output is where information leaves something."
+  },
+  "viewer": {
+    "term": "Viewer",
+    "definition": "A viewer is a place where you can see what is happening."
+  },
+  "parameter": {
+    "term": "Parameter",
+    "definition": "A parameter is a setting that changes how something behaves."
+  },
+  "cook": {
+    "term": "Cook",
+    "definition": "Cook means the system is doing its work right now."
+  },
+  "time": {
+    "term": "Time",
+    "definition": "Time is what keeps everything moving forward."
+  },
+  "data vs view": {
+    "term": "Data vs View",
+    "definition": "Data is the information itself. View is how you look at that information."
+  },
+  "state": {
+    "term": "State",
+    "definition": "State means something remembers what happened before."
+  },
+  "frame": {
+    "term": "Frame",
+    "definition": "A frame is one update of the system."
+  },
+  "rate": {
+    "term": "Rate",
+    "definition": "Rate is how many frames happen over time."
+  },
+  "context": {
+    "term": "Context",
+    "definition": "Context means where something exists and what it belongs to."
+  },
+  "inside vs outside": {
+    "term": "Inside vs Outside",
+    "definition": "Inside means you are looking at something from within it. Outside means you are looking at it from the outside."
+  },
+  "live vs stored": {
+    "term": "Live vs Stored",
+    "definition": "Live means something keeps changing. Stored means something stays the same."
+  },
+  "trigger / event": {
+    "term": "Trigger / Event",
+    "definition": "A trigger or event is something that happens once when a condition is met."
+  },
+  "channel": {
+    "term": "Channel",
+    "definition": "Channel tells which MIDI channel the message is on."
+  },
+  "units": {
+    "term": "Units",
+    "definition": "Units tell you what a number means."
+  },
+  "palette": {
+    "term": "Palette",
+    "definition": "The palette is a place where ready-made parts are listed so you can bring them into your work."
+  },
+  "derivative": {
+    "term": "Derivative",
+    "definition": "Derivative is the main group of built-in parts made by the creators of the software."
+  },
+  "generators": {
+    "term": "Generators",
+    "definition": "Generators are parts that create something from nothing."
+  },
+  "image filters": {
+    "term": "Image Filters",
+    "definition": "Image filters change the look of images."
+  },
+  "mapping": {
+    "term": "Mapping",
+    "definition": "Mapping is about fitting images onto shapes or spaces."
+  },
+  "meta quest": {
+    "term": "Meta Quest",
+    "definition": "Meta Quest groups parts made to work with VR headsets."
+  },
+  "pops": {
+    "term": "POPs",
+    "definition": "POPs are parts that work with many small moving points."
+  },
+  "td ableton": {
+    "term": "TD Ableton",
+    "definition": "TD Ableton groups parts that connect TouchDesigner to Ableton."
+  },
+  "td bitwing": {
+    "term": "TD Bitwing",
+    "definition": "TD Bitwing groups parts that connect TouchDesigner to Bitwing."
+  },
+  "td synchro": {
+    "term": "TD Synchro",
+    "definition": "TD Synchro groups parts used to keep things in time together."
+  },
+  "tdvr": {
+    "term": "TDVR",
+    "definition": "TDVR groups parts made for virtual reality setups."
+  },
+  "tdvs": {
+    "term": "TDVS",
+    "definition": "TDVS groups parts made for video server workflows."
+  },
+  "techniques": {
+    "term": "Techniques",
+    "definition": "Techniques groups parts that help manage how the system runs."
+  },
+  "thread manager": {
+    "term": "Thread Manager",
+    "definition": "Thread Manager helps control how work is split up inside the system."
+  },
+  "tools": {
+    "term": "Tools",
+    "definition": "Tools group parts that help build, manage, or inspect things."
+  },
+  "ui": {
+    "term": "UI",
+    "definition": "UI groups parts used to build interfaces people interact with."
+  },
+  "vive": {
+    "term": "Vive",
+    "definition": "Vive groups parts made to work with Vive hardware."
+  },
+  "web rtc": {
+    "term": "Web RTC",
+    "definition": "Web RTC groups parts for sending data over the internet in real time."
+  },
+  "my components": {
+    "term": "My Components",
+    "definition": "My Components is your personal collection of saved parts."
+  },
+  "icon / info / suggestions": {
+    "term": "Icon / Info / Suggestions",
+    "definition": "This area shows details and hints about what is selected."
+  },
+  "live 11": {
+    "term": "Live 11",
+    "definition": "Live 11 holds parts made to work with Ableton Live version 11."
+  },
+  "live 9+10": {
+    "term": "Live 9+10",
+    "definition": "Live 9+10 holds parts made to work with older versions of Ableton Live."
+  },
+  "extras": {
+    "term": "Extras",
+    "definition": "Extras holds additional parts that are not required but can be useful."
+  },
+  "system components": {
+    "term": "System Components",
+    "definition": "System Components are parts that help the overall system work together."
+  },
+  "utilities": {
+    "term": "Utilities",
+    "definition": "Utilities are small helper parts that do simple support jobs."
+  },
+  "world objects": {
+    "term": "World Objects",
+    "definition": "World Objects are parts that exist inside a 3D space."
+  },
+  "sick": {
+    "term": "Sick",
+    "definition": "Sick holds example interface designs made to look polished."
+  },
+  "basic widgets": {
+    "term": "Basic Widgets",
+    "definition": "Basic Widgets are simple interface parts like buttons and sliders."
+  },
+  "core": {
+    "term": "Core",
+    "definition": "Core holds the most basic and necessary parts."
+  },
+  "gadgets": {
+    "term": "Gadgets",
+    "definition": "Gadgets are small ready-made parts that do one clear thing."
+  },
+  "package": {
+    "term": "Package",
+    "definition": "Package groups parts that are meant to be used together."
+  },
+  "scripting": {
+    "term": "Scripting",
+    "definition": "Scripting groups parts that use written instructions to control behavior."
+  },
+  "window placement": {
+    "term": "Window Placement",
+    "definition": "Window Placement controls how the main window behaves and where it appears."
+  },
+  "designer mode": {
+    "term": "Designer Mode",
+    "definition": "Designer Mode is for building and adjusting things."
+  },
+  "performer mode": {
+    "term": "Performer Mode",
+    "definition": "Performer Mode is for showing the result without editing."
+  },
+  "par": {
+    "term": "Par",
+    "definition": "Par means the window follows settings from a parameter."
+  },
+  "net": {
+    "term": "Net",
+    "definition": "Net means the window placement is linked to the network."
+  },
+  "open / close": {
+    "term": "Open / Close",
+    "definition": "Open and Close control whether the window is visible or hidden."
+  },
+  "path": {
+    "term": "Path",
+    "definition": "Path defines which part of the system the window is connected to."
+  },
+  "custom position": {
+    "term": "Custom Position",
+    "definition": "Custom Position lets you place the window exactly where you want."
+  },
+  "midi mapper": {
+    "term": "MIDI Mapper",
+    "definition": "MIDI Mapper is where you connect MIDI controls to things in TouchDesigner."
+  },
+  "device mappings": {
+    "term": "Device Mappings",
+    "definition": "Device Mappings is the list of all MIDI connections you have set up."
+  },
+  "in device": {
+    "term": "In Device",
+    "definition": "In Device is the MIDI device that sends messages into TouchDesigner."
+  },
+  "out device": {
+    "term": "Out Device",
+    "definition": "Out Device is the MIDI device that TouchDesigner sends messages to."
+  },
+  "midi map": {
+    "term": "MIDI Map",
+    "definition": "MIDI Map is the set of rules that say which MIDI message controls which thing."
+  },
+  "ch": {
+    "term": "Ch",
+    "definition": "Ch means which MIDI channel a message uses."
+  },
+  "create new mapping": {
+    "term": "Create New Mapping",
+    "definition": "Create New Mapping makes a new connection between a MIDI control and something in TouchDesigner."
+  },
+  "check midi devices": {
+    "term": "Check MIDI Devices",
+    "definition": "Check MIDI Devices looks for MIDI devices that are connected and available."
+  },
+  "midi console": {
+    "term": "MIDI Console",
+    "definition": "MIDI Console shows the MIDI messages that are coming in or going out."
+  },
+  "id": {
+    "term": "ID",
+    "definition": "ID is the label that helps tell one message apart from another."
+  },
+  "type": {
+    "term": "Type",
+    "definition": "Type tells what kind of MIDI message it is."
+  },
+  "index": {
+    "term": "Index",
+    "definition": "Index is the number that points to which control or part the message refers to."
+  },
+  "value": {
+    "term": "Value",
+    "definition": "Value is the number carried by the message."
+  },
+  "message": {
+    "term": "Message",
+    "definition": "Message is the full MIDI information being shown in the console."
+  },
+  "console settings": {
+    "term": "Console Settings",
+    "definition": "Console Settings control what the MIDI console shows."
+  },
+  "enable logging": {
+    "term": "Enable Logging",
+    "definition": "Enable Logging turns message recording on or off."
+  },
+  "in messages": {
+    "term": "In Messages",
+    "definition": "In Messages shows MIDI messages coming into TouchDesigner."
+  },
+  "out messages": {
+    "term": "Out Messages",
+    "definition": "Out Messages shows MIDI messages being sent out from TouchDesigner."
+  },
+  "clock / timing messages": {
+    "term": "Clock / Timing Messages",
+    "definition": "Clock and Timing Messages show signals related to timing and sync."
+  },
+  "sensing messages": {
+    "term": "Sensing Messages",
+    "definition": "Sensing Messages show signals used to check if devices are still connected."
+  },
+  "beat panel": {
+    "term": "Beat Panel",
+    "definition": "Beat Panel is where timing based on rhythm is handled."
+  },
+  "time panel": {
+    "term": "Time Panel",
+    "definition": "Time Panel shows timing information related to beats."
+  },
+  "beat input": {
+    "term": "Beat Input",
+    "definition": "Beat Input is where beat information comes from."
+  },
+  "listen / tap": {
+    "term": "Listen / Tap",
+    "definition": "Listen and Tap are ways to set a beat by listening or tapping."
+  },
+  "tempo": {
+    "term": "Tempo",
+    "definition": "Tempo is how fast the beat is."
+  },
+  "variables / macros / t-script": {
+    "term": "Variables / Macros / T-Script",
+    "definition": "This area is about names that stand in for values or text so they can be reused."
+  },
+  "environment variables": {
+    "term": "Environment Variables",
+    "definition": "Environment variables are values set outside the project that the project can read."
+  },
+  "built-in variables": {
+    "term": "Built-in Variables",
+    "definition": "Built-in variables are values TouchDesigner already knows and provides automatically."
+  },
+  "macros": {
+    "term": "Macros",
+    "definition": "Macros are shortcuts that expand into longer text or values."
+  },
+  "console": {
+    "term": "Console",
+    "definition": "The console is a place where messages from the system are shown."
+  },
+  "textport": {
+    "term": "Textport",
+    "definition": "Textport is a place where you type text commands and see text responses."
+  },
+  "signal flow taxonomy": {
+    "term": "Signal Flow Taxonomy",
+    "definition": "Signal flow taxonomy is the system TouchDesigner uses to describe how information moves and connects."
+  },
+  "one-to-one": {
+    "term": "One-to-One",
+    "definition": "One-to-one means one thing feeds into one other thing."
+  },
+  "one-to-many": {
+    "term": "One-to-Many",
+    "definition": "One-to-many means one thing feeds into multiple things."
+  },
+  "many-to-one": {
+    "term": "Many-to-One",
+    "definition": "Many-to-one means multiple things feed into one thing."
+  },
+  "chain": {
+    "term": "Chain",
+    "definition": "A chain is a straight line of things connected one after another."
+  },
+  "branch": {
+    "term": "Branch",
+    "definition": "A branch is where one output feeds into multiple paths."
+  },
+  "merge": {
+    "term": "Merge",
+    "definition": "A merge is where multiple inputs come together into one."
+  },
+  "pass-through": {
+    "term": "Pass-Through",
+    "definition": "Pass-through means information goes through unchanged."
+  },
+  "process": {
+    "term": "Process",
+    "definition": "Process means information is changed as it moves through."
+  },
+  "cook dependency": {
+    "term": "Cook Dependency",
+    "definition": "Cook dependency means one thing updates because something before it changed."
+  },
+  "upstream": {
+    "term": "Upstream",
+    "definition": "Upstream means earlier in the flow."
+  },
+  "downstream": {
+    "term": "Downstream",
+    "definition": "Downstream means later in the flow."
+  },
+  "family-specific flow rules": {
+    "term": "Family-Specific Flow Rules",
+    "definition": "Family-specific flow rules describe which kinds of data are allowed to connect to each other."
+  },
+  "image data": {
+    "term": "Image Data",
+    "definition": "Image data is information that represents pictures."
+  },
+  "value data": {
+    "term": "Value Data",
+    "definition": "Value data is information made of changing numbers."
+  },
+  "shape data": {
+    "term": "Shape Data",
+    "definition": "Shape data describes form and structure in space."
+  },
+  "text data": {
+    "term": "Text Data",
+    "definition": "Text data is information written as words, lists, or tables."
+  },
+  "surface data": {
+    "term": "Surface Data",
+    "definition": "Surface data describes how something looks on the outside."
+  },
+  "compatible": {
+    "term": "Compatible",
+    "definition": "Compatible means two things can connect directly."
+  },
+  "incompatible": {
+    "term": "Incompatible",
+    "definition": "Incompatible means two things cannot connect directly."
+  },
+  "connection words": {
+    "term": "Connection Words",
+    "definition": "Connection words are the terms TouchDesigner uses to describe how data is shared."
+  },
+  "connect": {
+    "term": "Connect",
+    "definition": "Connect means linking an output to an input."
+  },
+  "reference": {
+    "term": "Reference",
+    "definition": "Reference means pointing to something without copying it."
+  },
+  "export": {
+    "term": "Export",
+    "definition": "Export means sending information out to be used elsewhere."
+  },
+  "link": {
+    "term": "Link",
+    "definition": "Link means keeping two things connected so they stay in sync."
+  },
+  "bind": {
+    "term": "Bind",
+    "definition": "Bind means locking one thing to follow another."
+  },
+  "fetch": {
+    "term": "Fetch",
+    "definition": "Fetch means pulling information from somewhere else."
+  },
+  "pull vs push": {
+    "term": "Pull vs Push",
+    "definition": "Pull means something updates because it is asked for. Push means something updates because it decides to send data out."
+  },
+  "demand": {
+    "term": "Demand",
+    "definition": "Demand means something only updates when something else needs it."
+  },
+  "active vs inactive": {
+    "term": "Active vs Inactive",
+    "definition": "Active means something is currently being used. Inactive means it is not being used."
+  },
+  "order of evaluation": {
+    "term": "Order of Evaluation",
+    "definition": "Order of evaluation is the order in which things are checked and updated."
+  },
+  "side effects": {
+    "term": "Side Effects",
+    "definition": "Side effects are changes that happen beyond the main result."
+  },
+  "ownership": {
+    "term": "Ownership",
+    "definition": "Ownership means which part is responsible for the data."
+  },
+  "scope": {
+    "term": "Scope",
+    "definition": "Scope means how far something can be seen or used."
+  },
+  "operator families": {
+    "term": "Operator Families",
+    "definition": "Operator families are groups that tell you what kind of data an operator works with."
+  },
+  "top family": {
+    "term": "TOP Family",
+    "definition": "The TOP family works with images."
+  },
+  "chop family": {
+    "term": "CHOP Family",
+    "definition": "The CHOP family works with changing numbers over time."
+  },
+  "sop family": {
+    "term": "SOP Family",
+    "definition": "The SOP family works with shapes and structure in space."
+  },
+  "dat family": {
+    "term": "DAT Family",
+    "definition": "The DAT family works with text, tables, and lists."
+  },
+  "mat family": {
+    "term": "MAT Family",
+    "definition": "The MAT family works with how surfaces look."
+  },
+  "family compatibility": {
+    "term": "Family Compatibility",
+    "definition": "Family compatibility means some families can connect directly and others cannot."
+  },
+  "family boundaries": {
+    "term": "Family Boundaries",
+    "definition": "Family boundaries explain where data must change form to keep moving."
+  },
+  "shared mem in": {
+    "term": "Shared Mem In",
+    "definition": "Shared Mem In receives data from another program using shared memory."
+  },
+  "setup": {
+    "term": "Setup",
+    "definition": "Setup contains the settings needed to send data to shared memory."
+  },
+  "shared mem name": {
+    "term": "Shared Mem Name",
+    "definition": "Shared Mem Name is the name used so other programs know where to find the shared data."
+  },
+  "objsharedmem": {
+    "term": "objsharedmem",
+    "definition": "objsharedmem is the default shared memory name used by TouchDesigner."
+  },
+  "shared mem type": {
+    "term": "Shared Mem Type",
+    "definition": "Shared Mem Type describes what kind of data is being sent."
+  },
+  "extensions": {
+    "term": "Extensions",
+    "definition": "Extensions add extra behavior logic."
+  },
+  "promote extension": {
+    "term": "Promote Extension",
+    "definition": "Promote Extension makes extension features visible at a higher level."
+  },
+  "re-init extension": {
+    "term": "Re-Init Extension",
+    "definition": "Re-Init Extension restarts the extension logic."
+  },
+  "common": {
+    "term": "Common",
+    "definition": "Common contains shared component settings."
+  },
+  "viewer active": {
+    "term": "Viewer Active",
+    "definition": "Viewer Active controls whether the viewer is updating."
+  },
+  "cook type": {
+    "term": "Cook Type",
+    "definition": "Cook Type controls when the component updates."
+  },
+  "node view": {
+    "term": "Node View",
+    "definition": "Node View controls how the component looks in the network."
+  },
+  "clone": {
+    "term": "Clone",
+    "definition": "Clone allows the component to follow another one."
+  },
+  "shared mem out": {
+    "term": "Shared Mem Out",
+    "definition": "Shared Mem Out sends data from TouchDesigner to another program using shared memory."
+  },
+  "active": {
+    "term": "Active",
+    "definition": "Active controls whether data is being sent out or not."
+  },
+  "ambient light": {
+    "term": "Ambient Light",
+    "definition": "Ambient Light adds overall light that affects everything evenly."
+  },
+  "light": {
+    "term": "Light",
+    "definition": "Light contains settings that control the basic color and strength of the light."
+  },
+  "light color": {
+    "term": "Light Color",
+    "definition": "Light Color sets the color of the ambient light."
+  },
+  "dimmer": {
+    "term": "Dimmer",
+    "definition": "Dimmer controls how strong the ambient light is."
+  },
+  "render": {
+    "term": "Render",
+    "definition": "Render controls how things are drawn."
+  },
+  "material render": {
+    "term": "Material Render",
+    "definition": "Material Render controls whether materials are used when drawing."
+  },
+  "draw priority": {
+    "term": "Draw Priority",
+    "definition": "Draw Priority controls which things are drawn first or last."
+  },
+  "pick priority": {
+    "term": "Pick Priority",
+    "definition": "Pick Priority controls which object is chosen when things overlap."
+  },
+  "wireframe color": {
+    "term": "Wireframe Color",
+    "definition": "Wireframe Color sets the color used for wireframe display."
+  },
+  "extension": {
+    "term": "Extension",
+    "definition": "Extension refers to added logic attached to the component."
+  },
+  "object": {
+    "term": "Object",
+    "definition": "Object refers to the component itself as a controllable item."
+  },
+  "re-init extensions": {
+    "term": "Re-Init Extensions",
+    "definition": "Re-Init Extensions resets the extension logic."
+  },
+  "init extensions on start": {
+    "term": "Init Extensions on Start",
+    "definition": "Init Extensions on Start controls whether extensions start automatically."
+  },
+  "parent shortcut": {
+    "term": "Parent Shortcut",
+    "definition": "Parent Shortcut is a quick way to refer to the parent component."
+  },
+  "global op shortcut": {
+    "term": "Global OP Shortcut",
+    "definition": "Global OP Shortcut is a name used to access this component globally."
+  },
+  "internal op shortcut": {
+    "term": "Internal OP Shortcut",
+    "definition": "Internal OP Shortcut is a name used inside the component."
+  },
+  "enable cloning": {
+    "term": "Enable Cloning",
+    "definition": "Enable Cloning allows the component to follow another one."
+  },
+  "clone master": {
+    "term": "Clone Master",
+    "definition": "Clone Master is the component being followed."
+  },
+  "load on demand": {
+    "term": "Load on Demand",
+    "definition": "Load on Demand means parts load only when needed."
+  },
+  "enable external tox": {
+    "term": "Enable External TOX",
+    "definition": "Enable External TOX allows the component to load from a file."
+  },
+  "external tox path": {
+    "term": "External TOX Path",
+    "definition": "External TOX Path is where the external file is located."
+  },
+  "reload custom parameters": {
+    "term": "Reload Custom Parameters",
+    "definition": "Reload Custom Parameters refreshes custom settings."
+  },
+  "reload built-in parameters": {
+    "term": "Reload Built-In Parameters",
+    "definition": "Reload Built-In Parameters refreshes default settings."
+  },
+  "sub-component to load": {
+    "term": "Sub-Component to Load",
+    "definition": "Sub-Component to Load selects which part to load from a file."
+  },
+  "relative file path behavior": {
+    "term": "Relative File Path Behavior",
+    "definition": "Relative File Path Behavior controls how file paths are handled."
+  },
+  "blend": {
+    "term": "Blend",
+    "definition": "Blend combines multiple things into one result."
+  },
+  "blend type": {
+    "term": "Blend Type",
+    "definition": "Blend Type decides how things are combined."
+  },
+  "sequence": {
+    "term": "Sequence",
+    "definition": "Sequence controls the order things are combined."
+  },
+  "reset frame": {
+    "term": "Reset Frame",
+    "definition": "Reset Frame resets timing used by the blend."
+  },
+  "weight": {
+    "term": "Weight",
+    "definition": "Weight controls how much influence something has."
+  },
+  "mask": {
+    "term": "Mask",
+    "definition": "Mask limits where blending happens."
+  },
+  "normal offset": {
+    "term": "Normal Offset",
+    "definition": "Normal Offset shifts blending along a surface direction."
+  },
+  "orient": {
+    "term": "Orient",
+    "definition": "Orient controls how direction is aligned."
+  },
+  "axes": {
+    "term": "Axes",
+    "definition": "Axes define directions used for orientation."
+  },
+  "short rotation": {
+    "term": "Short Rotation",
+    "definition": "Short Rotation chooses the shortest turn direction."
+  },
+  "xform": {
+    "term": "Xform",
+    "definition": "Xform controls where the camera is, how it is turned, and its size scale."
+  },
+  "transform order": {
+    "term": "Transform Order",
+    "definition": "Transform Order sets the order that movement steps happen."
+  },
+  "rotate order": {
+    "term": "Rotate Order",
+    "definition": "Rotate Order sets the order rotations are applied."
+  },
+  "translate": {
+    "term": "Translate",
+    "definition": "Translate moves the camera."
+  },
+  "rotate": {
+    "term": "Rotate",
+    "definition": "Rotate turns the camera."
+  },
+  "scale": {
+    "term": "Scale",
+    "definition": "Scale changes the camera\u2019s scale space."
+  },
+  "pivot": {
+    "term": "Pivot",
+    "definition": "Pivot sets the point rotations happen around."
+  },
+  "uniform scale": {
+    "term": "Uniform Scale",
+    "definition": "Uniform Scale keeps scale equal in all directions."
+  },
+  "parent transform source": {
+    "term": "Parent Transform Source",
+    "definition": "Parent Transform Source makes the camera follow another object."
+  },
+  "look at": {
+    "term": "Look At",
+    "definition": "Look At makes the camera face a target."
+  },
+  "path op": {
+    "term": "Path OP",
+    "definition": "Path OP defines a path the camera can follow."
+  },
+  "orient along path": {
+    "term": "Orient Along Path",
+    "definition": "Orient Along Path makes direction follow the path."
+  },
+  "pre-xform": {
+    "term": "Pre-Xform",
+    "definition": "Pre-Xform applies movement before the main transform."
+  },
+  "apply pre-transform": {
+    "term": "Apply Pre-Transform",
+    "definition": "Apply Pre-Transform turns the pre-transform on or off."
+  },
+  "reset transform": {
+    "term": "Reset Transform",
+    "definition": "Reset Transform clears transform values."
+  },
+  "commit to main transform": {
+    "term": "Commit to Main Transform",
+    "definition": "Commit to Main Transform makes the pre-transform permanent."
+  },
+  "material": {
+    "term": "Material",
+    "definition": "Material defines surface appearance."
+  },
+  "light mask": {
+    "term": "Light Mask",
+    "definition": "Light Mask controls which lights affect this object."
+  },
+  "bone": {
+    "term": "Bone",
+    "definition": "A Bone controls movement and bending for connected parts, usually in a chain."
+  },
+  "forward direction": {
+    "term": "Forward Direction",
+    "definition": "Forward Direction defines what direction counts as forward."
+  },
+  "up vector": {
+    "term": "Up Vector",
+    "definition": "Up Vector defines which direction is considered up."
+  },
+  "roll position": {
+    "term": "Roll Position",
+    "definition": "Roll Position controls rotation along the path."
+  },
+  "orient up vector": {
+    "term": "Orient Up Vector",
+    "definition": "Orient Up Vector keeps orientation aligned upright."
+  },
+  "auto bank factor": {
+    "term": "Auto Bank Factor",
+    "definition": "Auto Bank Factor controls how much automatic tilt happens on turns."
+  },
+  "bone settings": {
+    "term": "Bone Settings",
+    "definition": "Bone settings control bending and limits."
+  },
+  "display link": {
+    "term": "Display Link",
+    "definition": "Display Link shows the bone connection."
+  },
+  "rest angles": {
+    "term": "Rest Angles",
+    "definition": "Rest Angles define the default angle."
+  },
+  "bone length": {
+    "term": "Bone Length",
+    "definition": "Bone Length controls how long the bone is."
+  },
+  "dampening": {
+    "term": "Dampening",
+    "definition": "Dampening softens movement."
+  },
+  "capture": {
+    "term": "Capture",
+    "definition": "Capture controls how geometry is influenced by bones."
+  },
+  "display capture geometry": {
+    "term": "Display Capture Geometry",
+    "definition": "Display Capture Geometry shows the affected area."
+  },
+  "camera": {
+    "term": "Camera",
+    "definition": "Camera defines how the scene is viewed."
+  },
+  "look at up vector": {
+    "term": "Look At Up Vector",
+    "definition": "Look At Up Vector defines what direction is considered up while looking."
+  },
+  "view": {
+    "term": "View",
+    "definition": "View controls how the camera sees the world."
+  },
+  "projection": {
+    "term": "Projection",
+    "definition": "Projection controls how 3D space is flattened into an image."
+  },
+  "viewing angle method": {
+    "term": "Viewing Angle Method",
+    "definition": "Viewing Angle Method chooses how viewing angles are calculated."
+  },
+  "fov angle": {
+    "term": "FOV Angle",
+    "definition": "FOV Angle controls how wide the camera sees."
+  },
+  "near": {
+    "term": "Near",
+    "definition": "Near sets how close objects can be before disappearing."
+  },
+  "far": {
+    "term": "Far",
+    "definition": "Far sets how distant objects can be before disappearing."
+  },
+  "window roll": {
+    "term": "Window Roll",
+    "definition": "Window Roll rotates the camera view."
+  },
+  "ipd shift": {
+    "term": "IPD Shift",
+    "definition": "IPD Shift adjusts eye separation for stereo viewing."
+  },
+  "settings": {
+    "term": "Settings",
+    "definition": "Settings control background and rendering behavior."
+  },
+  "background color": {
+    "term": "Background Color",
+    "definition": "Background Color sets the color behind everything."
+  },
+  "fog": {
+    "term": "Fog",
+    "definition": "Fog fades distant objects."
+  },
+  "camera light mask": {
+    "term": "Camera Light Mask",
+    "definition": "Camera Light Mask controls which lights affect the camera view."
+  },
+  "annotate": {
+    "term": "Annotate",
+    "definition": "A UI component used to label, comment on, or visually explain parts of a network."
+  },
+  "window": {
+    "term": "Window",
+    "definition": "Controls an application window on your screen."
+  },
+  "constraint": {
+    "term": "Constraint",
+    "definition": "An operator that limits or connects how things can move."
+  },
+  "actor": {
+    "term": "Actor",
+    "definition": "An operator that turns geometry into a physical object that can move, collide, and be affected by forces."
+  },
+  "bullet solver": {
+    "term": "Bullet Solver",
+    "definition": "The system that runs physics for actors."
+  },
+  "force": {
+    "term": "Force",
+    "definition": "An operator that pushes, pulls, or spins physical objects."
+  }
+}

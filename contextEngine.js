@@ -1,32 +1,24 @@
-// contextEngine.js
-import { buildContextBundle, lookupGlossaryTerms } from "./lookup.js";
+import { buildContextBundle, lookupGlossaryTerms } from './lookup.js';
 
 export let currentContext = null;
 
-export function updateContextFromOperator(opName) {
-  currentContext = buildContextBundle(opName);
+export async function updateContextFromOperator(opName) {
+  currentContext = await buildContextBundle(opName);
   return currentContext;
 }
 
-export function deriveContextPanelData() {
+export async function deriveContextPanelData() {
   if (!currentContext) return null;
 
-  const textBlob = [
-    currentContext.identity,
-    currentContext.signalStory
-  ].join(" ");
-
-  const words = textBlob
-    .toLowerCase()
-    .split(/\W+/);
-
-  const glossaryTerms = lookupGlossaryTerms(words);
+  const textBlob = [currentContext.identity, currentContext.signalStory].join(' ');
+  const words = textBlob.toLowerCase().split(/\W+/);
+  const glossaryTerms = await lookupGlossaryTerms(words);
 
   return {
     operator: currentContext.operator,
     family: currentContext.family,
     lenses: currentContext.lenses,
     failureModes: currentContext.failureModes,
-    glossaryTerms
+    glossaryTerms,
   };
 }

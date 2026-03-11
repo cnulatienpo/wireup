@@ -1,7 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { loadIndex, getOperatorSources } = require('./rayrayIndex');
+const runtime = require('./runtime/index.cjs');
 const { buildSignalFlowDescription } = require('./signalFlowInterpreter');
 const { interpretParameters } = require('./parameterInterpreter');
 const {
@@ -19,10 +19,8 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(__dirname));
 
-const operatorIndex = loadIndex();
-const operatorNames = Object.keys(operatorIndex.operators || {});
-
-const parsedFileCache = new Map();
+const runtimeData = runtime.loadRuntime();
+const operatorNames = Object.keys(runtimeData.master_index?.operators || {});
 
 const TOX_DISCONNECT_TIMEOUT_MS = 10_000;
 
@@ -120,147 +118,16 @@ function detectOperator(question = '', state = {}) {
   return matches[0] || null;
 }
 
-function parseConcatenatedJson(content) {
-  const docs = [];
-  let start = -1;
-  let depth = 0;
-  let inString = false;
-  let escaped = false;
-
-  for (let i = 0; i < content.length; i += 1) {
-    const char = content[i];
-
-    if (inString) {
-      if (escaped) {
-        escaped = false;
-      } else if (char === '\\') {
-        escaped = true;
-      } else if (char === '"') {
-        inString = false;
-      }
-      continue;
-    }
-
-    if (char === '"') {
-      inString = true;
-      continue;
-    }
-
-    if (char === '{') {
-      if (depth === 0) start = i;
-      depth += 1;
-    } else if (char === '}') {
-      depth -= 1;
-      if (depth === 0 && start !== -1) {
-        const jsonText = content.slice(start, i + 1);
-        docs.push(JSON.parse(jsonText));
-        start = -1;
-      }
-    }
-  }
-
-  return docs;
-}
-
-function getParsedFileDocs(fileName) {
-  if (parsedFileCache.has(fileName)) {
-    return parsedFileCache.get(fileName);
-  }
-
-  const filePath = path.join(__dirname, fileName);
-  const raw = fs.readFileSync(filePath, 'utf8');
-  const docs = parseConcatenatedJson(raw);
-
-  parsedFileCache.set(fileName, docs);
-  return docs;
-}
-
-function resolvePathWithParent(root, jsonPath) {
-  const cleanPath = jsonPath.replace(/^\$/, '');
-  const tokens = cleanPath.match(/[^.\[\]]+|\[(\d+)\]/g) || [];
-
-  let current = root;
-  let parent = null;
-
-  for (const token of tokens) {
-    parent = current;
-    if (token.startsWith('[') && token.endsWith(']')) {
-      current = current?.[Number(token.slice(1, -1))];
-    } else {
-      current = current?.[token];
-    }
-  }
-
-  return { value: current, parent };
-}
-
-function extractSourceEntry(source) {
-  const docs = getParsedFileDocs(source.file);
-  const docMatch = source.path.match(/^\$(\d+)/);
-  if (!docMatch) return null;
-
-  const docIndex = Number(docMatch[1]);
-  const doc = docs[docIndex];
-  if (!doc) return null;
-
-  const relativePath = source.path.replace(/^\$\d+\.?/, '');
-  if (!relativePath) return doc;
-
-  const resolved = resolvePathWithParent(doc, relativePath);
-  if (resolved.value && typeof resolved.value === 'object') return resolved.value;
-  if (resolved.parent && typeof resolved.parent === 'object') return resolved.parent;
-
-  return resolved.value;
-}
-
-function buildKnowledgeContext(operatorName) {
-  const sources = getOperatorSources(operatorName);
-  if (!sources.length) {
-    return `Operator: ${operatorName}\n\nNo indexed knowledge fragments were found.`;
-  }
-
-  const fragments = sources
-    .map((source) => ({ source, data: extractSourceEntry(source) }))
-    .filter((entry) => entry.data != null)
-    .map((entry, index) => {
-      const body =
-        typeof entry.data === 'string'
-          ? entry.data
-          : JSON.stringify(entry.data, null, 2);
-
-      return `Fragment ${index + 1} (${entry.source.file} | ${entry.source.path})\n${body}`;
-    });
-
-  return [`Operator: ${operatorName}`, '', ...fragments].join('\n\n');
+function buildKnowledgeContext(operatorName, explainMode = 'td') {
+  const context = runtime.retrieveContext(operatorName);
+  return runtime.explainContext(context, explainMode);
 }
 
 const COMPARISON_SECTIONS = ['Identity', 'Signal Story', 'Failure Modes', 'Recipes', 'Reasoning Lens'];
 
-function findSectionValue(entry, sectionName) {
-  if (!entry || typeof entry !== 'object') {
-    return null;
-  }
-
-  const normalizedSection = normalizeOperatorName(sectionName);
-  for (const [key, value] of Object.entries(entry)) {
-    if (normalizeOperatorName(key) === normalizedSection) {
-      return value;
-    }
-  }
-
-  for (const value of Object.values(entry)) {
-    if (value && typeof value === 'object') {
-      const nested = findSectionValue(value, sectionName);
-      if (nested != null) return nested;
-    }
-  }
-
-  return null;
-}
-
 function formatSectionValue(value) {
   if (value == null) {
-    return 'Not explicitly documented in indexed fragments.';
+    return 'Not explicitly documented in runtime index.';
   }
 
   if (typeof value === 'string') {
@@ -271,58 +138,27 @@ function formatSectionValue(value) {
 }
 
 function buildOperatorComparisonContext(operatorName) {
-  const sources = getOperatorSources(operatorName);
-  const entries = sources
-    .map((source) => extractSourceEntry(source))
-    .filter((data) => data != null);
-
-  const sectionBlocks = COMPARISON_SECTIONS.map((sectionName) => {
-    const sectionValue = entries
-      .map((entry) => findSectionValue(entry, sectionName))
-      .find((value) => value != null);
-
-    return `${sectionName}:\n${formatSectionValue(sectionValue)}`;
-  });
-
-  if (!entries.length) {
-    sectionBlocks.push('Knowledge Fragments:\nNo indexed knowledge fragments were found.');
+  const entry = runtime.getOperator(operatorName);
+  if (!entry) {
+    return 'No runtime entry found.';
   }
 
-  return sectionBlocks.join('\n\n');
+  const sectionMap = {
+    Identity: entry.identity,
+    'Signal Story': entry.signal_story,
+    'Failure Modes': entry.failure_modes,
+    Recipes: entry.recipes,
+    'Reasoning Lens': entry.lenses,
+  };
+
+  return COMPARISON_SECTIONS.map((name) => `${name}:\n${formatSectionValue(sectionMap[name])}`).join('\n\n');
 }
 
-function buildComparisonPrompt(operatorA, operatorB, question, recentHistory = [], followUp = false) {
-  const contextA = buildOperatorComparisonContext(operatorA);
-  const contextB = buildOperatorComparisonContext(operatorB);
-  const recentConversation = buildRecentConversationContext(recentHistory);
-  const followUpInstruction = followUp
-    ? 'This appears to be a follow-up question, so keep continuity with prior context when useful.'
-    : 'Treat this as a standalone comparison unless recent conversation clearly helps.';
-
-  return [
-    'You are Ray Ray, a TouchDesigner tutor.',
-    '',
-    'Explain the practical difference between these operators.',
-    'Keep the answer short and beginner friendly.',
-    'Cover: (1) what each operator does, (2) how they differ, (3) when to use one vs the other.',
-    '',
-    `Operator A: ${operatorA}`,
-    contextA,
-    '',
-    `Operator B: ${operatorB}`,
-    contextB,
-    '',
-    recentConversation,
-    followUpInstruction,
-    '',
-    'User question:',
-    question,
-  ].join('\n');
-}
-
-async function compareOperators(operatorA, operatorB, question, recentHistory = [], followUp = false) {
+async function compareOperators(operatorA, operatorB, question, recentHistory = [], followUp = false, explainMode = 'td') {
   const prompt = buildComparisonPrompt(operatorA, operatorB, question, recentHistory, followUp);
-  return generateRayRayResponse([{ role: 'user', content: prompt }]);
+  const context = runtime.retrieveContext(`${operatorA} ${operatorB}`);
+  const explanation = runtime.explainContext(context, explainMode);
+  return generateRayRayResponse([{ role: 'user', content: `${prompt}\n\nRuntime explanation mode (${explainMode}):\n${explanation}` }]);
 }
 
 function summarizeNeighborhood(nodes = []) {
@@ -467,7 +303,7 @@ function buildPrompt(context, question, state, previousState = null, mode = 'qa'
 
 async function handleRayrayRequest(req, res) {
   try {
-    const { question = '', state = {}, mode = 'qa', sessionId: incomingSessionId } = req.body || {};
+    const { question = '', state = {}, mode = 'qa', explainMode = 'td', sessionId: incomingSessionId } = req.body || {};
 
     const sessionId = ensureSession(incomingSessionId);
 
@@ -518,7 +354,7 @@ async function handleRayrayRequest(req, res) {
 
     if (comparisonOperators.length === 2) {
       const [operatorA, operatorB] = comparisonOperators;
-      const answer = await compareOperators(operatorA, operatorB, question, recentHistory, followUp);
+      const answer = await compareOperators(operatorA, operatorB, question, recentHistory, followUp, explainMode);
 
       appendInteraction(sessionId, {
         question,
@@ -551,8 +387,10 @@ async function handleRayrayRequest(req, res) {
       return res.json({ sessionId, answer });
     }
 
-    const context = buildKnowledgeContext(operator);
-    const prompt = buildPrompt(context, question, effectiveState, previousState, mode, recentHistory, followUp);
+    const context = buildKnowledgeContext(operator, explainMode);
+    const runtimeContext = runtime.retrieveContext(question);
+    const runtimePatterns = runtime.detectPatterns(effectiveState);
+    const prompt = buildPrompt(`${context}\n\nRuntime concepts: ${JSON.stringify(runtimeContext.concepts || [])}\nRuntime patterns: ${JSON.stringify(runtimePatterns)}`, question, effectiveState, previousState, mode, recentHistory, followUp);
     const answer = await generateRayRayResponse([{ role: 'user', content: prompt }]);
 
     appendInteraction(sessionId, {

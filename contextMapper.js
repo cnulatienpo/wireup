@@ -1,43 +1,21 @@
-// contextMapper.js
-import { currentContext } from "./contextEngine.js";
-import { lookupGlossaryTerms } from "./lookup.js";
+import { currentContext } from './contextEngine.js';
+import { lookupGlossaryTerms } from './lookup.js';
 
-export function mapContextForPanel() {
+export async function mapContextForPanel() {
   if (!currentContext) return null;
 
-  const {
-    operator,
-    family,
-    identity,
-    signalStory,
-    failureModes,
-    lenses
-  } = currentContext;
+  const { operator, family, identity, signalStory, failureModes, lenses } = currentContext;
 
   const signalBullets = Array.isArray(signalStory)
     ? signalStory
-    : signalStory
-        ?.split(".")
-        .map(s => s.trim())
-        .filter(Boolean);
+    : signalStory?.split('.').map((s) => s.trim()).filter(Boolean);
 
-  const textBlob = [
-    identity,
-    ...(signalBullets || []),
-    ...(failureModes || [])
-  ].join(" ");
-
-  const words = textBlob
-    .toLowerCase()
-    .split(/\W+/);
-
-  const glossary = lookupGlossaryTerms(words);
+  const textBlob = [identity, ...(signalBullets || []), ...(failureModes || [])].join(' ');
+  const words = textBlob.toLowerCase().split(/\W+/);
+  const glossary = await lookupGlossaryTerms(words);
 
   return {
-    focus: {
-      operator,
-      family
-    },
+    focus: { operator, family },
     identity,
     signalStory: signalBullets || [],
     warnings: failureModes || [],
@@ -45,12 +23,7 @@ export function mapContextForPanel() {
     glossary,
     officialDocs: {
       label: operator,
-      url: buildOfficialDocURL(operator)
-    }
+      url: `https://docs.derivative.ca/${operator.replace(/\s+/g, '_')}`,
+    },
   };
-}
-
-function buildOfficialDocURL(opName) {
-  const safeName = opName.replace(/\s+/g, "_");
-  return `https://docs.derivative.ca/${safeName}`;
 }
