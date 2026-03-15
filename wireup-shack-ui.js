@@ -110,8 +110,8 @@ function buildOperatorCandidates(tokens, question) {
 }
 
 function getExplainMode() {
-  const modeInput = document.getElementById('explain-mode');
-  return modeInput?.value || 'td';
+  const eli5Toggle = document.getElementById('explain-eli5-toggle');
+  return eli5Toggle?.checked ? 'dual' : 'td';
 }
 
 async function localRuleAnswer(question, operatorName = null) {
@@ -133,7 +133,7 @@ async function localRuleAnswer(question, operatorName = null) {
       const signalBullets = toBulletList(context.signalStory, 2);
       const warnings = Array.isArray(context.failureModes) ? context.failureModes.slice(0, 2) : [];
 
-      lines.push(`Local mode: ${context.operator} (${context.family?.toUpperCase() || 'operator'}).`);
+      lines.push(`${context.operator} (${context.family?.toUpperCase() || 'operator'}).`);
       lines.push(identity);
 
       if (signalBullets.length) {
@@ -180,7 +180,7 @@ async function localRuleAnswer(question, operatorName = null) {
     const mode = getExplainMode();
     return {
       hasAnswer: true,
-      text: `${explainContext(runtimeContext, mode)} ${suggestionText} Using runtime JSON first.`,
+      text: `${explainContext(runtimeContext, mode)} ${suggestionText}`,
       matchedOperator: null,
     };
   }
@@ -190,7 +190,9 @@ async function localRuleAnswer(question, operatorName = null) {
   if (patterns.length) {
     lines.push(`Detected patterns: ${patterns.map((item) => item.id).join(' | ')}`);
   }
-  lines.push(`Using runtime JSON first. (${getExplainMode()} mode)`);
+  if (getExplainMode() === 'dual') {
+    lines.push(`ELI5: ${explainContext(runtimeContext, 'eli5')}`);
+  }
   return {
     hasAnswer: true,
     text: lines.join(' '),
@@ -212,7 +214,6 @@ async function sendQuestion({ input, output }) {
     const question = input.value.trim();
     if (!question) return;
 
-    appendMessage(output, 'You', question);
     input.value = '';
 
     const maybeOperator = detectOperatorFromQuestion(question);
@@ -289,9 +290,6 @@ async function sendQuestion({ input, output }) {
     }
 
     appendMessage(output, 'Ray Ray', localResult.text);
-    if (lastError) {
-      appendMessage(output, 'Ray Ray', `Cloud/API unreachable (${lastError}). Stayed in local JSON mode.`);
-    }
   } catch (error) {
     console.error('Ray Ray sendQuestion failed:', error);
     appendMessage(output, 'Ray Ray', `Local processing error: ${error?.message || String(error)}`);
@@ -333,8 +331,7 @@ async function initWireupOutpost() {
 
   try {
     await loadAllJSON();
-    renderContextPanel(mapContextForPanel());
-    appendMessage(output, 'Ray Ray', 'Ready. Ask a TouchDesigner question.');
+    renderContextPanel(await mapContextForPanel());
   } catch (error) {
     appendMessage(output, 'Ray Ray', `Context load failed, but chat is still available: ${error.message}`);
   }

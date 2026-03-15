@@ -76,7 +76,8 @@ function section(title, children) {
   h.textContent = title;
   el.appendChild(h);
 
-  children.forEach(c => el.appendChild(c));
+  const childNodes = Array.isArray(children) ? children : [children];
+  childNodes.filter(Boolean).forEach(c => el.appendChild(c));
   return el;
 }
 

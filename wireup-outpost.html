@@ -27,13 +27,12 @@
       <button id="layout-edit-toggle" class="shack-link" type="button" aria-pressed="false">Edit Layout</button>
       <button id="layout-save" class="shack-link" type="button">Save</button>
       <button id="layout-reset" class="shack-link" type="button">Reset</button>
-      <label class="shack-link" for="explain-mode">Explain</label>
-      <select id="explain-mode" class="shack-link" aria-label="Explanation mode">
-        <option value="td" selected>TD</option>
-        <option value="eli5">ELI5</option>
-        <option value="dual">Dual</option>
-      </select>
     </main>
+
+    <label id="eli5-toggle-control" class="shack-link eli5-toggle-control" for="explain-eli5-toggle">
+      <input id="explain-eli5-toggle" type="checkbox" />
+      eli5
+    </label>
 
     <aside id="left-panel" class="left-panel cardboard-scroll" aria-label="Left panel"></aside>
     <aside id="lower-left-panel" class="lower-left-panel cardboard-scroll" aria-label="Bottom left panel"></aside>
@@ -89,6 +88,7 @@
       const layoutEditToggle = document.getElementById('layout-edit-toggle');
       const layoutSave = document.getElementById('layout-save');
       const layoutReset = document.getElementById('layout-reset');
+      const eli5ToggleControl = document.getElementById('eli5-toggle-control');
       const threshold = 30;
       const alphaThreshold = 20;
       const beltRatio = 1.656;
@@ -306,6 +306,12 @@
             width: contentWidth * 0.452,
             height: contentHeight * 0.13,
           },
+          eli5ToggleControl: {
+            left: contentX + contentWidth * 0.34,
+            top: contentY + contentHeight * 0.08,
+            width: contentWidth * 0.1,
+            height: contentHeight * 0.055,
+          },
         };
 
         if (!hasSavedLayout()) {
@@ -442,6 +448,13 @@
           inputWrap.style.width = pxSize(layout.inputWrap.width, 120);
           inputWrap.style.height = pxSize(layout.inputWrap.height, 50);
         }
+
+        if (eli5ToggleControl && layout.eli5ToggleControl) {
+          eli5ToggleControl.style.left = px(layout.eli5ToggleControl.left);
+          eli5ToggleControl.style.top = px(layout.eli5ToggleControl.top);
+          eli5ToggleControl.style.width = pxSize(layout.eli5ToggleControl.width, 70);
+          eli5ToggleControl.style.height = pxSize(layout.eli5ToggleControl.height, 32);
+        }
       }
 
       function readElementRect(el) {
@@ -472,6 +485,7 @@
           output: readElementRect(output),
           contextPanel: readElementRect(contextPanel),
           inputWrap: readElementRect(inputWrap),
+          eli5ToggleControl: readElementRect(eli5ToggleControl),
         };
       }
 
@@ -623,6 +637,7 @@
       makeEditable(garbageWireFrame, 'Garbage Wire');
       makeEditable(belt, 'Wire Belt');
       makeEditable(restartButton, 'Restart Button');
+      makeEditable(eli5ToggleControl, 'ELI5 Toggle');
 
       if (layoutEditToggle) {
         layoutEditToggle.addEventListener('click', () => {

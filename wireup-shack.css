@@ -85,6 +85,20 @@ button.shack-link {
   font-size: 0.95rem;
 }
 
+.eli5-toggle-control {
+  position: fixed;
+  z-index: 31;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  user-select: none;
+}
+
+.eli5-toggle-control input {
+  width: 1rem;
+  height: 1rem;
+}
+
 .shack-scale-readout {
   color: #fff8e8;
   border: 1px solid rgba(255, 255, 255, 0.65);
@@ -137,10 +151,10 @@ button.shack-link {
 
 .rayray-output {
   font-family: Garamond, "Times New Roman", serif;
-  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  font-size: clamp(0.95rem, 1.5vw, 1.25rem);
   line-height: 1.35;
-  color: #fff5db;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.75);
+  color: #111111;
+  text-shadow: none;
 }
 
 .context-panel {
@@ -186,9 +200,9 @@ button.shack-link {
   border: none;
   outline: none;
   background: transparent;
-  color: #ffffff;
+  color: #111111;
   font-family: Arial, sans-serif;
-  font-size: clamp(1.2rem, 2vw, 1.65rem);
+  font-size: clamp(0.9rem, 1.3vw, 1.1rem);
   line-height: 1.35;
 }
 
@@ -201,7 +215,7 @@ button.shack-link {
 }
 
 .rayray-input::placeholder {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(17, 17, 17, 0.55);
 }
 
 .rayray-send {
