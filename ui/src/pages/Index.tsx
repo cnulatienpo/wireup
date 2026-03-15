@@ -1,16 +1,10 @@
-import { useRef, useCallback, useState } from "react";
+import { useState } from "react";
 import cardboardUI from "@/assets/FINISHED_UI.png";
 import wireBelt from "@/assets/WIRE_BELT.svg";
 import LeftPanel from "@/components/LeftPanel";
 import BottomLeftPanel from "@/components/BottomLeftPanel";
 
 const Index = () => {
-  const RESTART_DISABLED = true;
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState({ bottom: 13, left: 3.5 });
-  const dragging = useRef(false);
-  const dragStart = useRef({ x: 0, y: 0, bottom: 0, left: 0 });
-  const hasDragged = useRef(false);
 
   const [userInput, setUserInput] = useState("");
   const [response, setResponse] = useState("");
@@ -32,29 +26,6 @@ const Index = () => {
     }, 600);
   };
 
-  const onPointerDown = useCallback((e: React.PointerEvent) => {
-    dragging.current = true;
-    hasDragged.current = false;
-    dragStart.current = { x: e.clientX, y: e.clientY, bottom: pos.bottom, left: pos.left };
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
-  }, [pos]);
-
-  const onPointerMove = useCallback((e: React.PointerEvent) => {
-    if (!dragging.current || !containerRef.current) return;
-    hasDragged.current = true;
-    const rect = containerRef.current.getBoundingClientRect();
-    const dx = ((e.clientX - dragStart.current.x) / rect.width) * 100;
-    const dy = ((e.clientY - dragStart.current.y) / rect.height) * 100;
-    setPos({
-      left: dragStart.current.left + dx,
-      bottom: dragStart.current.bottom - dy,
-    });
-  }, []);
-
-  const onPointerUp = useCallback(() => {
-    dragging.current = false;
-  }, []);
-
   const panelText: React.CSSProperties = {
     fontSize: "clamp(8px, 1.4vw, 15px)",
     lineHeight: 1.5,
@@ -66,16 +37,11 @@ const Index = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-black">
-      <div ref={containerRef} className="relative w-full max-w-[900px]">
-        <img
-          src={cardboardUI}
-          alt="Cardboard UI"
-          className="w-full h-auto block"
-        />
+      <div className="relative isolate w-full max-w-[900px]">
         <img
           src={wireBelt}
           alt="Wire Belt"
-          className="absolute"
+          className="absolute z-0 pointer-events-none"
           style={{
             bottom: "6.4%",
             right: "8.6%",
@@ -83,9 +49,14 @@ const Index = () => {
             height: "auto",
           }}
         />
+        <img
+          src={cardboardUI}
+          alt="Cardboard UI"
+          className="relative z-10 w-full h-auto block"
+        />
         {/* Left panel */}
         <div
-          className="absolute overflow-y-auto cardboard-scroll"
+          className="absolute z-20 overflow-y-auto cardboard-scroll"
           style={{
             top: "16%",
             left: "3.5%",
@@ -97,7 +68,7 @@ const Index = () => {
         </div>
         {/* Bottom-left black rectangle panel */}
         <div
-          className="absolute overflow-y-auto cardboard-scroll"
+          className="absolute z-20 overflow-y-auto cardboard-scroll"
           style={{
             top: "73%",
             left: "3.5%",
@@ -109,7 +80,7 @@ const Index = () => {
         </div>
         {/* White panel - LLM response */}
         <div
-          className="absolute overflow-y-auto cardboard-scroll"
+          className="absolute z-20 overflow-y-auto cardboard-scroll"
           style={{
             top: "16%",
             left: "17%",
@@ -123,7 +94,7 @@ const Index = () => {
         </div>
         {/* Black panel - user input */}
         <div
-          className="absolute overflow-y-auto cardboard-scroll flex"
+          className="absolute z-20 overflow-y-auto cardboard-scroll flex"
           style={{
             top: "73%",
             left: "17%",
@@ -175,7 +146,7 @@ const Index = () => {
         </div>
         {/* Yellow panel - context window */}
         <div
-          className="absolute overflow-y-auto cardboard-scroll"
+          className="absolute z-20 overflow-y-auto cardboard-scroll"
           style={{
             top: "16%",
             right: "6%",
@@ -189,23 +160,13 @@ const Index = () => {
             {context}
           </div>
         </div>
-        {/* Draggable Restart button overlay */}
+        {/* Restart button overlay (position locked) */}
         <button
-          disabled={RESTART_DISABLED}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-          onClick={(e) => {
-            if (RESTART_DISABLED) { e.preventDefault(); return; }
-            if (hasDragged.current) { e.preventDefault(); return; }
-            sessionStorage.clear();
-            localStorage.clear();
-            window.location.reload();
-          }}
-          className="absolute rounded-full cursor-grab active:cursor-grabbing bg-red-500/30 border-2 border-dashed border-red-400 flex items-center justify-center select-none touch-none disabled:opacity-40 disabled:cursor-not-allowed"
+          disabled
+          className="absolute z-20 rounded-full bg-red-500/20 border-2 border-dashed border-red-400 flex items-center justify-center select-none touch-none opacity-35 cursor-not-allowed pointer-events-none"
           style={{
-            bottom: `${pos.bottom}%`,
-            left: `${pos.left}%`,
+            bottom: "13%",
+            left: "calc(3.5% + 48px)",
             width: "9%",
             aspectRatio: "1",
             fontSize: "clamp(7px, 1.3vw, 16px)",
@@ -215,7 +176,7 @@ const Index = () => {
             letterSpacing: "0.05em",
           }}
           aria-label="Restart"
-          title={RESTART_DISABLED ? "Restart temporarily disabled" : "Drag to position, click to restart"}
+          title="Restart temporarily disabled"
         >
           Restart
         </button>
