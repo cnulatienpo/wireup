@@ -5,6 +5,7 @@ import LeftPanel from "@/components/LeftPanel";
 import BottomLeftPanel from "@/components/BottomLeftPanel";
 
 const Index = () => {
+  const RESTART_DISABLED = true;
   const containerRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ bottom: 13, left: 3.5 });
   const dragging = useRef(false);
@@ -190,16 +191,18 @@ const Index = () => {
         </div>
         {/* Draggable Restart button overlay */}
         <button
+          disabled={RESTART_DISABLED}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onClick={(e) => {
+            if (RESTART_DISABLED) { e.preventDefault(); return; }
             if (hasDragged.current) { e.preventDefault(); return; }
             sessionStorage.clear();
             localStorage.clear();
             window.location.reload();
           }}
-          className="absolute rounded-full cursor-grab active:cursor-grabbing bg-red-500/30 border-2 border-dashed border-red-400 flex items-center justify-center select-none touch-none"
+          className="absolute rounded-full cursor-grab active:cursor-grabbing bg-red-500/30 border-2 border-dashed border-red-400 flex items-center justify-center select-none touch-none disabled:opacity-40 disabled:cursor-not-allowed"
           style={{
             bottom: `${pos.bottom}%`,
             left: `${pos.left}%`,
@@ -212,7 +215,7 @@ const Index = () => {
             letterSpacing: "0.05em",
           }}
           aria-label="Restart"
-          title="Drag to position, click to restart"
+          title={RESTART_DISABLED ? "Restart temporarily disabled" : "Drag to position, click to restart"}
         >
           Restart
         </button>
