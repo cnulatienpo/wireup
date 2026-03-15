@@ -19,10 +19,12 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Tuple
 from urllib import request
+from uuid import uuid4
 
 from sentence_transformers import SentenceTransformer
 
 ROOT = Path(__file__).resolve().parent
+GENERATED_RECIPES_PATH = ROOT / "data" / "wireup_runtime" / "generated_recipes.json"
 
 
 def load_env_file(env_path: Path) -> None:
@@ -212,7 +214,147 @@ def load_chunks() -> List[Chunk]:
                         )
                     )
 
+    for recipe in load_generated_recipes():
+        text = str(recipe.get("text", "")).strip()
+        operator_name = " -> ".join(recipe.get("operators", [])) or "Generated Recipe"
+        document_id = str(recipe.get("document_id", "")).strip()
+        if text and document_id:
+            chunks.append(
+                Chunk(
+                    document_id=document_id,
+                    document_type="recipe",
+                    operator_name=operator_name,
+                    text=text,
+                )
+            )
+
     return chunks
+
+
+def load_generated_recipes() -> List[Dict[str, Any]]:
+    if not GENERATED_RECIPES_PATH.exists():
+        return []
+
+    try:
+        payload = json.loads(GENERATED_RECIPES_PATH.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return []
+
+    if not isinstance(payload, list):
+        return []
+
+    return [entry for entry in payload if isinstance(entry, dict)]
+
+
+def _slugify(value: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "_", value.lower()).strip("_")
+    return slug[:80] if slug else f"workflow_{uuid4().hex[:8]}"
+
+
+def _sentence_steps(response_text: str) -> List[str]:
+    steps: List[str] = []
+    parts = re.split(r"(?<=[.!?])\s+", response_text.strip())
+    for sentence in parts:
+        cleaned = sentence.strip().strip("-•")
+        if not cleaned:
+            continue
+        lowered = cleaned.lower()
+        if any(word in lowered for word in ["connect", "then", "next", "load", "add", "use", "route", "switch"]):
+            steps.append(cleaned)
+    return steps
+
+
+def _extract_ordered_steps(response_text: str) -> List[str]:
+    explicit_steps: List[str] = []
+    for line in response_text.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if re.match(r"^(\d+[\).:-]|[-*•])\s+", stripped):
+            explicit_steps.append(re.sub(r"^(\d+[\).:-]|[-*•])\s+", "", stripped).strip())
+
+    if explicit_steps:
+        return explicit_steps
+    return _sentence_steps(response_text)
+
+
+def _extract_operator_names(response_text: str, known_operator_names: List[str]) -> List[str]:
+    found: List[str] = []
+    lowered = response_text.lower()
+
+    for name in known_operator_names:
+        if name.lower() in lowered:
+            found.append(name)
+
+    suffix_pattern = re.compile(r"\b([A-Z][A-Za-z0-9]*(?:\s+[A-Z][A-Za-z0-9]*)*\s+(?:TOP|CHOP|SOP|DAT|COMP|MAT))\b")
+    for match in suffix_pattern.findall(response_text):
+        cleaned = " ".join(match.split())
+        if cleaned not in found:
+            found.append(cleaned)
+
+    return found
+
+
+def _operator_chain_from_steps(operators: List[str], ordered_steps: List[str]) -> str:
+    if operators:
+        return " -> ".join(operators)
+    if ordered_steps:
+        return " -> ".join(ordered_steps[:3])
+    return ""
+
+
+def recipe_extractor(
+    *,
+    query_type_guess: str,
+    user_query: str,
+    response_text: str,
+    known_operator_names: List[str],
+) -> Dict[str, Any] | None:
+    if query_type_guess != "workflow_recipe":
+        return None
+
+    operators = _extract_operator_names(response_text, known_operator_names)
+    ordered_steps = _extract_ordered_steps(response_text)
+    operator_chain = _operator_chain_from_steps(operators, ordered_steps)
+
+    has_clear_pattern = len(operators) >= 2 or len(ordered_steps) >= 2
+    if not has_clear_pattern:
+        return None
+
+    text = " ".join(ordered_steps[:4]).strip() if ordered_steps else response_text.strip()
+    text = text[:500]
+
+    slug_seed = f"{user_query} {' '.join(operators[:3])}".strip()
+    document_id = f"recipe_auto_{_slugify(slug_seed)}"
+
+    existing = load_generated_recipes()
+    chain_signature = "|".join(op.lower() for op in operators)
+    for entry in existing:
+        existing_ops = entry.get("operators", [])
+        existing_signature = "|".join(str(op).lower() for op in existing_ops)
+        if existing_signature and existing_signature == chain_signature:
+            return None
+        if str(entry.get("document_id", "")).strip() == document_id:
+            return None
+
+    recipe_doc = {
+        "document_id": document_id,
+        "document_type": "recipe",
+        "title": "workflow generated from user question",
+        "operators": operators[:6],
+        "operator_chain": operator_chain,
+        "text": text,
+        "source": "generated",
+        "created_from_query": user_query,
+        "created_at": _now_iso(),
+    }
+
+    updated = [*existing, recipe_doc]
+    GENERATED_RECIPES_PATH.parent.mkdir(parents=True, exist_ok=True)
+    GENERATED_RECIPES_PATH.write_text(json.dumps(updated, indent=2), encoding="utf-8")
+    get_embedded_corpus.cache_clear()
+
+    return recipe_doc
 
 
 @lru_cache(maxsize=1)
@@ -575,6 +717,13 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
     response_text, model_used = _post_chat_completion([
         {"role": "user", "content": full_prompt}
     ])
+    known_operator_names = [chunk.operator_name for chunk in corpus if chunk.operator_name]
+    generated_recipe = recipe_extractor(
+        query_type_guess=query_type,
+        user_query=user_query,
+        response_text=response_text,
+        known_operator_names=known_operator_names,
+    )
     response_ms = (time.perf_counter() - response_start) * 1000
     response_trace = {
         "model_used": model_used,
@@ -596,6 +745,10 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
             "routing_stage": "pre_generation",
         },
         "response_trace": response_trace,
+        "recipe_extractor_trace": {
+            "attempted": query_type == "workflow_recipe",
+            "generated_recipe_document_id": generated_recipe.get("document_id") if generated_recipe else None,
+        },
     }
 
     effective_log_dir = Path(log_dir) if log_dir else DEFAULT_LOG_DIR
