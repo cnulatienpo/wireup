@@ -406,16 +406,72 @@ WORKFLOW_PROMPT = (
 def build_prompt(user_query: str, query_type_guess: str, selected: List[Dict[str, Any]]) -> Dict[str, str]:
     system_prompt = WORKFLOW_PROMPT if query_type_guess == "workflow_recipe" else STRICT_PROMPT
 
-    context_lines = []
+    layer_mappings = {
+        "identity": {"glossary", "operator_definition"},
+        "signal_story": {"signal_flow", "operator_behavior"},
+        "failure_modes": {"error", "troubleshooting"},
+        "minimal_recipes": {"recipe", "workflow_recipe"},
+        "reasoning_lens": {"eli5", "metaphor", "mental_model"},
+    }
+    section_titles = {
+        "identity": "IDENTITY_LAYER",
+        "signal_story": "SIGNAL_STORY_LAYER",
+        "failure_modes": "FAILURE_MODES_LAYER",
+        "minimal_recipes": "MINIMAL_RECIPES_LAYER",
+        "reasoning_lens": "REASONING_LENS_LAYER",
+    }
+
+    sections: Dict[str, List[Dict[str, Any]]] = {
+        "identity": [],
+        "signal_story": [],
+        "failure_modes": [],
+        "minimal_recipes": [],
+        "reasoning_lens": [],
+    }
+
     for item in selected:
-        context_lines.append(
-            f"- {item['document_id']} ({item['document_type']}, operator={item['operator_name']}, score={item['similarity_score']}): "
-            f"{item['chunk_text']}"
-        )
-    retrieved_context = "\n".join(context_lines)
+        doc_type = str(item.get("document_type", "")).strip().lower()
+        doc_id = str(item.get("document_id", "")).strip().lower()
+        assigned_layer = None
+
+        for layer, mapped_types in layer_mappings.items():
+            if doc_type in mapped_types:
+                assigned_layer = layer
+                break
+
+        if not assigned_layer:
+            if "glossary" in doc_id or "definition" in doc_id:
+                assigned_layer = "identity"
+            elif "signal" in doc_id or "behavior" in doc_id:
+                assigned_layer = "signal_story"
+            elif "error" in doc_id or "troubleshoot" in doc_id or "failure" in doc_id:
+                assigned_layer = "failure_modes"
+            elif "recipe" in doc_id or "workflow" in doc_id or "chain" in doc_id:
+                assigned_layer = "minimal_recipes"
+            elif "eli5" in doc_id or "metaphor" in doc_id or "mental_model" in doc_id:
+                assigned_layer = "reasoning_lens"
+
+        if assigned_layer:
+            sections[assigned_layer].append(item)
+
+    section_blocks: List[str] = []
+    for layer_name in ["identity", "signal_story", "failure_modes", "minimal_recipes", "reasoning_lens"]:
+        docs = sections[layer_name]
+        if not docs:
+            continue
+
+        lines = []
+        for item in docs:
+            lines.append(
+                f"- {item['document_id']} ({item['document_type']}, operator={item['operator_name']}, score={item['similarity_score']}): "
+                f"{item['chunk_text']}"
+            )
+        section_blocks.append(f"{section_titles[layer_name]}:\n" + "\n".join(lines))
+
+    retrieved_context = "\n\n".join(section_blocks)
     full_prompt = (
         f"SYSTEM_PROMPT:\n{system_prompt}\n\n"
-        f"RETRIEVED_CONTEXT:\n{retrieved_context}\n\n"
+        f"{retrieved_context}\n\n"
         f"USER_QUERY:\n{user_query}\n"
     )
     return {
