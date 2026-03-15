@@ -64,13 +64,19 @@ DEBUG_RAG = os.getenv("DEBUG_RAG", "false").lower() == "true"
 @dataclass
 class Chunk:
     document_id: str
-    document_type: str  # glossary | recipe | error
+    document_type: str  # operator | recipe | use_case | question | failure_mode
     operator_name: str
     text: str
+    source_file: str
+    metadata: Dict[str, Any]
     embedding: List[float] | None = None
 
 
 EMBEDDING_MODEL_NAME = os.getenv("RAG_EMBEDDING_MODEL", "all-MiniLM-L6-v2")
+GENERATED_KNOWLEDGE_DIR = ROOT / "knowledge" / "generated"
+RECIPES_GENERATED_PATH = GENERATED_KNOWLEDGE_DIR / "recipes_generated.json"
+USE_CASES_GENERATED_PATH = GENERATED_KNOWLEDGE_DIR / "use_cases_generated.json"
+QUESTIONS_GENERATED_PATH = GENERATED_KNOWLEDGE_DIR / "questions_generated.json"
 
 
 def _now_iso() -> str:
@@ -153,66 +159,214 @@ def _iter_json_stream(raw: str) -> Iterable[Dict[str, Any]]:
         idx = next_idx
 
 
-def load_chunks() -> List[Chunk]:
+def load_glossary() -> List[Chunk]:
     chunks: List[Chunk] = []
-
     glossary_path = ROOT / "td simple glossery.json"
-    if glossary_path.exists():
-        raw = glossary_path.read_text(encoding="utf-8")
-        for block_idx, obj in enumerate(_iter_json_stream(raw), start=1):
-            for entry in obj.get("glossary", []):
-                term = str(entry.get("term", "unknown")).strip() or "unknown"
-                text = " ".join(
-                    [
-                        str(entry.get("plain_meaning", "")),
-                        str(entry.get("what_it_is_not", "")),
-                        str(entry.get("mental_model", "")),
-                        str(entry.get("example", "")),
-                    ]
-                ).strip()
-                chunks.append(
+    if not glossary_path.exists():
+        return chunks
+
+    raw = glossary_path.read_text(encoding="utf-8")
+    for block_idx, obj in enumerate(_iter_json_stream(raw), start=1):
+        for entry in obj.get("glossary", []):
+            term = str(entry.get("term", "unknown")).strip() or "unknown"
+            text = " ".join(
+                [
+                    str(entry.get("plain_meaning", "")),
+                    str(entry.get("what_it_is_not", "")),
+                    str(entry.get("mental_model", "")),
+                    str(entry.get("example", "")),
+                ]
+            ).strip()
+            chunks.append(
+                Chunk(
+                    document_id=f"glossary_{block_idx}_{re.sub(r'[^a-z0-9]+', '_', term.lower()).strip('_')}",
+                    document_type="operator",
+                    operator_name=term,
+                    text=text,
+                    source_file=str(glossary_path.relative_to(ROOT)),
+                    metadata={
+                        "document_type": "operator",
+                        "term": term,
+                    },
+                )
+            )
+
+    return chunks
+
+
+def load_operator_recipes_and_failures() -> Tuple[List[Chunk], List[Chunk]]:
+    recipe_chunks: List[Chunk] = []
+    failure_chunks: List[Chunk] = []
+
+    master_index_path = ROOT / "data" / "wireup_runtime" / "master_index.json"
+    if not master_index_path.exists():
+        return recipe_chunks, failure_chunks
+
+    master = json.loads(master_index_path.read_text(encoding="utf-8"))
+    for operator_key, operator in master.get("operators", {}).items():
+        name = str(operator.get("name", operator_key))
+        for idx, recipe in enumerate(operator.get("recipes", []) or [], start=1):
+            if isinstance(recipe, dict):
+                text = " ".join(str(v) for v in recipe.values())
+            else:
+                text = str(recipe)
+            if text.strip():
+                recipe_chunks.append(
                     Chunk(
-                        document_id=f"glossary_{block_idx}_{re.sub(r'[^a-z0-9]+', '_', term.lower()).strip('_')}",
-                        document_type="glossary",
-                        operator_name=term,
+                        document_id=f"recipe_{operator_key}_{idx}",
+                        document_type="recipe",
+                        operator_name=name,
                         text=text,
+                        source_file=str(master_index_path.relative_to(ROOT)),
+                        metadata={
+                            "document_type": "recipe",
+                            "operator": name,
+                        },
                     )
                 )
 
-    master_index_path = ROOT / "data" / "wireup_runtime" / "master_index.json"
-    if master_index_path.exists():
-        master = json.loads(master_index_path.read_text(encoding="utf-8"))
-        for operator_key, operator in master.get("operators", {}).items():
-            name = str(operator.get("name", operator_key))
-            for idx, recipe in enumerate(operator.get("recipes", []) or [], start=1):
-                if isinstance(recipe, dict):
-                    text = " ".join(str(v) for v in recipe.values())
-                else:
-                    text = str(recipe)
-                if text.strip():
-                    chunks.append(
-                        Chunk(
-                            document_id=f"recipe_{operator_key}_{idx}",
-                            document_type="recipe",
-                            operator_name=name,
-                            text=text,
-                        )
+        for idx, issue in enumerate(operator.get("failure_modes", []) or [], start=1):
+            if isinstance(issue, dict):
+                text = " ".join(str(v) for v in issue.values())
+            else:
+                text = str(issue)
+            if text.strip():
+                failure_chunks.append(
+                    Chunk(
+                        document_id=f"failure_mode_{operator_key}_{idx}",
+                        document_type="failure_mode",
+                        operator_name=name,
+                        text=text,
+                        source_file=str(master_index_path.relative_to(ROOT)),
+                        metadata={
+                            "document_type": "failure_mode",
+                            "operator": name,
+                        },
                     )
+                )
 
-            for idx, issue in enumerate(operator.get("failure_modes", []) or [], start=1):
-                if isinstance(issue, dict):
-                    text = " ".join(str(v) for v in issue.values())
-                else:
-                    text = str(issue)
-                if text.strip():
-                    chunks.append(
-                        Chunk(
-                            document_id=f"error_{operator_key}_{idx}",
-                            document_type="error",
-                            operator_name=name,
-                            text=text,
-                        )
-                    )
+    return recipe_chunks, failure_chunks
+
+
+def load_recipes() -> List[Chunk]:
+    chunks: List[Chunk] = []
+    if not RECIPES_GENERATED_PATH.exists():
+        return chunks
+
+    payload = json.loads(RECIPES_GENERATED_PATH.read_text(encoding="utf-8"))
+    if not isinstance(payload, list):
+        return chunks
+
+    for entry in payload:
+        if not isinstance(entry, dict):
+            continue
+        recipe_id = str(entry.get("recipe_id", "")).strip()
+        goal = str(entry.get("goal", "")).strip()
+        operators = [str(op).strip() for op in entry.get("operators", []) if str(op).strip()]
+        workflow_steps = [str(step).strip() for step in entry.get("workflow_steps", []) if str(step).strip()]
+        text = f"Goal: {goal}. Operators: {', '.join(operators)}. Steps: {'; '.join(workflow_steps)}.".strip()
+        if recipe_id and text:
+            chunks.append(
+                Chunk(
+                    document_id=recipe_id,
+                    document_type="recipe",
+                    operator_name=" -> ".join(operators) or "Generated Recipe",
+                    text=text,
+                    source_file=str(RECIPES_GENERATED_PATH.relative_to(ROOT)),
+                    metadata={
+                        "document_type": "recipe",
+                        "recipe_id": recipe_id,
+                        "operators": operators,
+                    },
+                )
+            )
+
+    return chunks
+
+
+def load_use_cases() -> List[Chunk]:
+    chunks: List[Chunk] = []
+    if not USE_CASES_GENERATED_PATH.exists():
+        return chunks
+
+    payload = json.loads(USE_CASES_GENERATED_PATH.read_text(encoding="utf-8"))
+    if not isinstance(payload, list):
+        return chunks
+
+    for entry in payload:
+        if not isinstance(entry, dict):
+            continue
+        use_case_id = str(entry.get("use_case_id", "")).strip()
+        goal = str(entry.get("goal", "")).strip()
+        operators = [str(op).strip() for op in entry.get("operators", []) if str(op).strip()]
+        related_recipe = str(entry.get("related_recipe", "")).strip()
+        text = f"Use case: {goal}. Operators: {', '.join(operators)}. Related recipe: {related_recipe}.".strip()
+        if use_case_id and text:
+            chunks.append(
+                Chunk(
+                    document_id=use_case_id,
+                    document_type="use_case",
+                    operator_name=" -> ".join(operators) or "Use Case",
+                    text=text,
+                    source_file=str(USE_CASES_GENERATED_PATH.relative_to(ROOT)),
+                    metadata={
+                        "document_type": "use_case",
+                        "goal": goal,
+                        "related_recipe": related_recipe,
+                    },
+                )
+            )
+
+    return chunks
+
+
+def load_questions() -> List[Chunk]:
+    chunks: List[Chunk] = []
+    if not QUESTIONS_GENERATED_PATH.exists():
+        return chunks
+
+    payload = json.loads(QUESTIONS_GENERATED_PATH.read_text(encoding="utf-8"))
+    if not isinstance(payload, list):
+        return chunks
+
+    for idx, entry in enumerate(payload, start=1):
+        if not isinstance(entry, dict):
+            continue
+        question = str(entry.get("question", "")).strip()
+        use_case = str(entry.get("use_case", "")).strip()
+        if question:
+            chunks.append(
+                Chunk(
+                    document_id=f"question_{idx}_{_slugify(question)}",
+                    document_type="question",
+                    operator_name="Question Variant",
+                    text=question,
+                    source_file=str(QUESTIONS_GENERATED_PATH.relative_to(ROOT)),
+                    metadata={
+                        "document_type": "question",
+                        "use_case": use_case,
+                    },
+                )
+            )
+
+    return chunks
+
+
+def load_chunks() -> List[Chunk]:
+    chunks: List[Chunk] = []
+
+    glossary_chunks = load_glossary()
+    operator_recipe_chunks, failure_mode_chunks = load_operator_recipes_and_failures()
+    generated_recipe_chunks = load_recipes()
+    use_case_chunks = load_use_cases()
+    question_chunks = load_questions()
+
+    chunks += glossary_chunks
+    chunks += operator_recipe_chunks
+    chunks += generated_recipe_chunks
+    chunks += use_case_chunks
+    chunks += question_chunks
+    chunks += failure_mode_chunks
 
     for recipe in load_generated_recipes():
         text = str(recipe.get("text", "")).strip()
@@ -225,8 +379,21 @@ def load_chunks() -> List[Chunk]:
                     document_type="recipe",
                     operator_name=operator_name,
                     text=text,
+                    source_file=str(GENERATED_RECIPES_PATH.relative_to(ROOT)),
+                    metadata={
+                        "document_type": "recipe",
+                        "document_id": document_id,
+                        "operators": recipe.get("operators", []),
+                    },
                 )
             )
+
+    print("Loaded:")
+    print(f"{len(glossary_chunks)} operator docs")
+    print(f"{len(operator_recipe_chunks) + len(generated_recipe_chunks)} recipe docs")
+    print(f"{len(use_case_chunks)} use cases")
+    print(f"{len(question_chunks)} questions")
+    print(f"{len(failure_mode_chunks)} failure mode docs")
 
     return chunks
 
@@ -416,6 +583,7 @@ def retrieve_top_chunks(query: str, corpus: List[Chunk], k: int = 10) -> Tuple[L
             {
                 "document_id": chunk.document_id,
                 "document_type": chunk.document_type,
+                "source_file": chunk.source_file,
                 "operator_name": chunk.operator_name,
                 "similarity_score": round(float(score), 6),
                 "text_preview_first_120_chars": chunk.text[:120],
@@ -432,11 +600,10 @@ def retrieve_top_chunks(query: str, corpus: List[Chunk], k: int = 10) -> Tuple[L
 
 
 def select_context(query_type: str, retrieval_results: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
-    preferred = {
-        "workflow_recipe": "recipe",
-        "operator_definition": "glossary",
-        "troubleshooting": "error",
-        "unknown": None,
+    preferred_order = {
+        "workflow_recipe": ["question", "use_case", "recipe", "operator"],
+        "operator_definition": ["operator", "failure_mode"],
+        "troubleshooting": ["failure_mode", "operator"],
     }.get(query_type)
 
     selected: List[Dict[str, Any]] = []
@@ -445,7 +612,8 @@ def select_context(query_type: str, retrieval_results: List[Dict[str, Any]]) -> 
     for item in retrieval_results:
         doc_type = item["document_type"]
         score = item["similarity_score"]
-        if preferred and doc_type == preferred and score >= 0.01 and len(selected) < 4:
+        if preferred_order and doc_type in preferred_order and score >= 0.01:
+            priority = preferred_order.index(doc_type)
             decision_reason = f"matches query_type={query_type} and similarity={score}"
             selected.append(
                 {
@@ -454,9 +622,10 @@ def select_context(query_type: str, retrieval_results: List[Dict[str, Any]]) -> 
                     "doc_type": doc_type,
                     "decision_reason": decision_reason,
                     "reason_selected": decision_reason,
+                    "priority_rank": priority,
                 }
             )
-        elif not preferred and score >= 0.05 and len(selected) < 4:
+        elif not preferred_order and score >= 0.05 and len(selected) < 4:
             decision_reason = f"high score fallback similarity={score}"
             selected.append(
                 {
@@ -474,6 +643,27 @@ def select_context(query_type: str, retrieval_results: List[Dict[str, Any]]) -> 
                     **item,
                     "doc_id": item["document_id"],
                     "doc_type": doc_type,
+                    "decision_reason": decision_reason,
+                    "reason_dropped": decision_reason,
+                }
+            )
+
+    if preferred_order and selected:
+        selected = sorted(
+            selected,
+            key=lambda item: (item.get("priority_rank", 999), -item["similarity_score"]),
+        )[:4]
+        selected_ids = {item["document_id"] for item in selected}
+        dropped_ids = {item["document_id"] for item in dropped}
+        for item in retrieval_results:
+            if item["document_id"] in selected_ids or item["document_id"] in dropped_ids:
+                continue
+            decision_reason = f"not in top prioritized set for query_type={query_type}"
+            dropped.append(
+                {
+                    **item,
+                    "doc_id": item["document_id"],
+                    "doc_type": item["document_type"],
                     "decision_reason": decision_reason,
                     "reason_dropped": decision_reason,
                 }
@@ -517,9 +707,9 @@ def route_mode(user_query: str, query_type: str, selected_context: List[Dict[str
         selected_types = [item["doc_type"] for item in selected_context]
         if selected_types.count("recipe") >= 2:
             return "recipe_responder"
-        if selected_types.count("error") >= 1 and query_type == "troubleshooting":
+        if selected_types.count("failure_mode") >= 1 and query_type == "troubleshooting":
             return "error_responder"
-        if selected_types.count("glossary") >= 2 and query_type == "operator_definition":
+        if selected_types.count("operator") >= 2 and query_type == "operator_definition":
             return "glossary_responder"
 
     return {
@@ -583,10 +773,10 @@ def build_prompt(user_query: str, query_type_guess: str, selected: List[Dict[str
     system_prompt = WORKFLOW_PROMPT if query_type_guess == "workflow_recipe" else STRICT_PROMPT
 
     layer_mappings = {
-        "identity": {"glossary", "operator_definition"},
+        "identity": {"operator", "operator_definition"},
         "signal_story": {"signal_flow", "operator_behavior"},
-        "failure_modes": {"error", "troubleshooting"},
-        "minimal_recipes": {"recipe", "workflow_recipe"},
+        "failure_modes": {"failure_mode", "troubleshooting"},
+        "minimal_recipes": {"recipe", "workflow_recipe", "use_case", "question"},
         "reasoning_lens": {"eli5", "metaphor", "mental_model"},
     }
     section_titles = {
