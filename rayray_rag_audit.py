@@ -77,6 +77,7 @@ GENERATED_KNOWLEDGE_DIR = ROOT / "knowledge" / "generated"
 RECIPES_GENERATED_PATH = GENERATED_KNOWLEDGE_DIR / "recipes_generated.json"
 USE_CASES_GENERATED_PATH = GENERATED_KNOWLEDGE_DIR / "use_cases_generated.json"
 QUESTIONS_GENERATED_PATH = GENERATED_KNOWLEDGE_DIR / "questions_generated.json"
+GOAL_INFERENCE_MIN_CONFIDENCE = float(os.getenv("GOAL_INFERENCE_MIN_CONFIDENCE", "0.2"))
 
 
 def _now_iso() -> str:
@@ -313,6 +314,7 @@ def load_use_cases() -> List[Chunk]:
                         "document_type": "use_case",
                         "goal": goal,
                         "related_recipe": related_recipe,
+                        "operators": operators,
                     },
                 )
             )
@@ -564,28 +566,118 @@ def cosine(a: List[float], b: List[float]) -> float:
     return sum(x * y for x, y in zip(a, b))
 
 
-def retrieve_top_chunks(query: str, corpus: List[Chunk], k: int = 10) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
-    emb_start = time.perf_counter()
+def _normalize_token(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", value.lower()).strip("_")
+
+
+def infer_goal(query: str, corpus: List[Chunk]) -> Dict[str, Any] | None:
+    question_chunks = [chunk for chunk in corpus if chunk.document_type == "question"]
+    if not question_chunks:
+        return None
+
     query_vec = embedding_fn(query)
+    top_question: Chunk | None = None
+    top_similarity = -1.0
+
+    for chunk in question_chunks:
+        if chunk.embedding is None:
+            raise ValueError(f"Chunk {chunk.document_id} is missing a precomputed embedding")
+        similarity = cosine(query_vec, chunk.embedding)
+        if similarity > top_similarity:
+            top_similarity = similarity
+            top_question = chunk
+
+    if top_question is None or top_similarity < GOAL_INFERENCE_MIN_CONFIDENCE:
+        return None
+
+    use_case_id = str(top_question.metadata.get("use_case", "")).strip()
+    if not use_case_id:
+        return None
+
+    use_case_chunk = next(
+        (
+            chunk
+            for chunk in corpus
+            if chunk.document_type == "use_case" and chunk.document_id == use_case_id
+        ),
+        None,
+    )
+    if use_case_chunk is None:
+        return None
+
+    return {
+        "use_case_id": use_case_chunk.document_id,
+        "goal": str(use_case_chunk.metadata.get("goal", "")).strip(),
+        "related_recipe": str(use_case_chunk.metadata.get("related_recipe", "")).strip(),
+        "operators": [
+            str(op).strip() for op in use_case_chunk.metadata.get("operators", []) if str(op).strip()
+        ],
+        "confidence": round(float(top_similarity), 6),
+        "matched_question": top_question.text,
+    }
+
+
+def retrieve_top_chunks(
+    query: str,
+    corpus: List[Chunk],
+    k: int = 10,
+    inferred_goal: Dict[str, Any] | None = None,
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    emb_start = time.perf_counter()
+    retrieval_query = query
+    if inferred_goal:
+        operators_str = ", ".join(inferred_goal.get("operators", []))
+        retrieval_query = (
+            f"{query}\n"
+            f"Inferred goal: {inferred_goal.get('goal', '')}\n"
+            f"Preferred operators: {operators_str}\n"
+            f"Related recipe: {inferred_goal.get('related_recipe', '')}"
+        )
+
+    query_vec = embedding_fn(retrieval_query)
     emb_ms = (time.perf_counter() - emb_start) * 1000
 
     scored = []
+    inferred_operators = {
+        _normalize_token(str(op)) for op in (inferred_goal or {}).get("operators", []) if str(op).strip()
+    }
+    related_recipe = str((inferred_goal or {}).get("related_recipe", "")).strip()
+
     for chunk in corpus:
         if chunk.embedding is None:
             raise ValueError(f"Chunk {chunk.document_id} is missing a precomputed embedding")
         score = cosine(query_vec, chunk.embedding)
-        scored.append((score, chunk))
+        boost = 0.0
+
+        if inferred_goal and related_recipe and chunk.document_id == related_recipe:
+            boost += 0.2
+
+        if inferred_goal and inferred_operators:
+            chunk_operators = {
+                _normalize_token(str(op))
+                for op in (chunk.metadata.get("operators", []) if isinstance(chunk.metadata, dict) else [])
+                if str(op).strip()
+            }
+            if chunk.operator_name:
+                chunk_operators.add(_normalize_token(chunk.operator_name))
+
+            if inferred_operators.intersection(chunk_operators):
+                boost += 0.08
+
+        scored.append((score + boost, score, boost, chunk))
     scored.sort(key=lambda x: x[0], reverse=True)
 
     retrieval_results: List[Dict[str, Any]] = []
-    for score, chunk in scored[:k]:
+    for final_score, base_score, boost, chunk in scored[:k]:
         retrieval_results.append(
             {
                 "document_id": chunk.document_id,
                 "document_type": chunk.document_type,
                 "source_file": chunk.source_file,
                 "operator_name": chunk.operator_name,
-                "similarity_score": round(float(score), 6),
+                "similarity_score": round(float(final_score), 6),
+                "base_similarity_score": round(float(base_score), 6),
+                "similarity_boost": round(float(boost), 6),
                 "text_preview_first_120_chars": chunk.text[:120],
                 "chunk_text": chunk.text,
             }
@@ -595,6 +687,7 @@ def retrieve_top_chunks(query: str, corpus: List[Chunk], k: int = 10) -> Tuple[L
         "embedding_model_used": EMBEDDING_MODEL_NAME,
         "embedding_vector_length": len(query_vec),
         "embedding_generation_time_ms": round(emb_ms, 3),
+        "retrieval_query": retrieval_query,
     }
     return retrieval_results, embedding_trace
 
@@ -891,7 +984,13 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
     }
 
     corpus = list(get_embedded_corpus())
-    retrieval_results, embedding_trace = retrieve_top_chunks(user_query, corpus, k=10)
+    inferred_goal = infer_goal(user_query, corpus)
+    retrieval_results, embedding_trace = retrieve_top_chunks(
+        user_query,
+        corpus,
+        k=10,
+        inferred_goal=inferred_goal,
+    )
     selected, dropped = select_context(query_type, retrieval_results)
 
     responder = route_mode(user_query, query_type, selected)
@@ -924,6 +1023,17 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
     report = {
         "query_log": query_log,
         "embedding_trace": embedding_trace,
+        "inferred_goal": (
+            {
+                "use_case_id": inferred_goal.get("use_case_id"),
+                "goal": inferred_goal.get("goal"),
+                "related_recipe": inferred_goal.get("related_recipe"),
+                "operators": inferred_goal.get("operators", []),
+                "confidence": inferred_goal.get("confidence"),
+            }
+            if inferred_goal
+            else None
+        ),
         "retrieval_results": retrieval_results,
         "chunk_filtering_trace": {
             "selected_context": selected,
@@ -952,6 +1062,14 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
                 {
                     "query": user_query,
                     "query_type_guess": query_type,
+                    "inferred_goal": (
+                        {
+                            "use_case_id": inferred_goal.get("use_case_id"),
+                            "confidence": inferred_goal.get("confidence"),
+                        }
+                        if inferred_goal
+                        else None
+                    ),
                     "retrieved_docs": retrieval_results,
                     "selected_docs": selected,
                     "dropped_docs": dropped,
