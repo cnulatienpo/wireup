@@ -387,11 +387,24 @@ def route_mode(user_query: str, query_type: str, selected_context: List[Dict[str
     }.get(query_type, "fallback_responder")
 
 
-def build_prompt(user_query: str, selected: List[Dict[str, Any]]) -> Dict[str, str]:
-    system_prompt = (
-        "You are Ray Ray, a TouchDesigner tutor. Use only retrieved context when possible, "
-        "state uncertainty, and avoid hallucinating operator details."
-    )
+STRICT_PROMPT = (
+    "You are Ray Ray, a TouchDesigner tutor.\n"
+    "Answer using the retrieved context as the primary source.\n"
+    "Do not invent operator parameters or behavior that is not present in the context.\n"
+    "If context is missing, say you are uncertain."
+)
+
+WORKFLOW_PROMPT = (
+    "You are Ray Ray, a TouchDesigner tutor.\n\n"
+    "Use your knowledge of TouchDesigner to answer the user's workflow question.\n"
+    "Retrieved context provides definitions, metaphors, and operator explanations that should support your answer.\n\n"
+    "You may explain workflows using known TouchDesigner patterns.\n"
+    "When relevant, reference the retrieved context to reinforce explanations."
+)
+
+
+def build_prompt(user_query: str, query_type_guess: str, selected: List[Dict[str, Any]]) -> Dict[str, str]:
+    system_prompt = WORKFLOW_PROMPT if query_type_guess == "workflow_recipe" else STRICT_PROMPT
 
     context_lines = []
     for item in selected:
@@ -460,7 +473,7 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
     selected, dropped = select_context(query_type, retrieval_results)
 
     responder = route_mode(user_query, query_type, selected)
-    prompt_parts = build_prompt(user_query, selected)
+    prompt_parts = build_prompt(user_query, query_type, selected)
     full_prompt = prompt_parts["full_prompt"]
     prompt_assembly_trace = {
         "system_prompt": prompt_parts["system_prompt"],
