@@ -290,20 +290,6 @@ button.shack-link {
   position: fixed;
 }
 
-.layout-resize-handle {
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  right: -14px;
-  bottom: -14px;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  background: rgba(0, 0, 0, 0.5);
-  color: transparent;
-  padding: 0;
-  display: none;
-  cursor: nwse-resize;
-  z-index: 14;
-}
 
 body.layout-edit-mode .layout-target {
   outline: 1px dashed rgba(255, 220, 150, 0.9);
@@ -340,18 +326,4 @@ body.layout-edit-mode .layout-target::before {
   pointer-events: none;
 }
 
-body.layout-edit-mode .layout-target::after {
-  content: '';
-  position: absolute;
-  right: 2px;
-  bottom: 2px;
-  width: 14px;
-  height: 14px;
-  border-right: 2px solid rgba(255, 220, 150, 0.95);
-  border-bottom: 2px solid rgba(255, 220, 150, 0.95);
-  pointer-events: none;
-}
 
-body.layout-edit-mode .layout-resize-handle {
-  display: block;
-}

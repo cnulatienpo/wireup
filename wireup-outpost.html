@@ -320,13 +320,6 @@
           element.dataset.layoutKey = target.key;
           element.dataset.layoutLabel = target.label;
 
-          if (!element.querySelector('.layout-resize-handle')) {
-            const handle = document.createElement('button');
-            handle.type = 'button';
-            handle.className = 'layout-resize-handle';
-            handle.setAttribute('aria-label', `Resize ${target.label}`);
-            element.appendChild(handle);
-          }
         }
       }
 
@@ -364,16 +357,12 @@
           return;
         }
 
-        const isResize = event.target instanceof Element && event.target.classList.contains('layout-resize-handle');
         activePointerState = {
           pointerId: event.pointerId,
           element: pointerTarget,
-          mode: isResize ? 'resize' : 'move',
           startX: event.clientX,
           startY: event.clientY,
           startRect,
-          minWidth: target.minWidth,
-          minHeight: target.minHeight,
         };
 
         pointerTarget.setPointerCapture(event.pointerId);
@@ -389,13 +378,8 @@
         const deltaY = event.clientY - activePointerState.startY;
         const element = activePointerState.element;
 
-        if (activePointerState.mode === 'resize') {
-          element.style.width = pxSize(activePointerState.startRect.width + deltaX, activePointerState.minWidth);
-          element.style.height = pxSize(activePointerState.startRect.height + deltaY, activePointerState.minHeight);
-        } else {
-          element.style.left = px(activePointerState.startRect.left + deltaX);
-          element.style.top = px(activePointerState.startRect.top + deltaY);
-        }
+        element.style.left = px(activePointerState.startRect.left + deltaX);
+        element.style.top = px(activePointerState.startRect.top + deltaY);
       }
 
       function clearActivePointerState(event) {
