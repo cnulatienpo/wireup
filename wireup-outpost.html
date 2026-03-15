@@ -8,13 +8,28 @@
 </head>
 <body>
   <div id="outpost-root">
+    <img id="shack-ui" class="shack-ui" src="/ui/ui%20base.png" alt="Wireup UI base" />
+    <img id="ui-left-panel" class="shack-component" src="/ui/ui%20left%20panel.png" alt="Left panel art" />
+    <img id="ui-white-box" class="shack-component" src="/ui/ui%20white%20box.png" alt="Center panel art" />
+    <img id="ui-right-panel" class="shack-component" src="/ui/ui%20right%20panel.png" alt="Right panel art" />
+    <img id="ui-black-box" class="shack-component" src="/ui/ui%20black%20box.png" alt="Bottom input panel art" />
+    <img id="ui-yellow-button" class="shack-component" src="/ui/ui%20yellow%20button.png" alt="Yellow button art" />
+    <img id="ui-garbage-wire" class="shack-component" src="/ui/GARBAGE%20WITH%20EMPTY%20WIRE%20without%20black.png" alt="Garbage bag with empty wire" />
     <img id="shack-belt" class="shack-belt" src="/ui/src/assets/WIRE_BELT.svg" alt="Wire belt" />
-    <img id="shack-ui" class="shack-ui" src="/wireup.png" alt="Wireup cardboard UI" />
 
     <main class="shack-overlay" aria-label="Wireup Outpost controls">
       <h1 class="shack-title">Wireup Outpost</h1>
       <a class="shack-link" href="index.html">Back Home</a>
+      <button id="ui-scale-down" class="shack-link" type="button" aria-label="Scale down">UI -</button>
+      <button id="ui-scale-up" class="shack-link" type="button" aria-label="Scale up">UI +</button>
+      <button id="ui-scale-reset" class="shack-link" type="button" aria-label="Reset UI scale">Fit UI</button>
+      <span id="ui-scale-readout" class="shack-scale-readout">100%</span>
     </main>
+
+    <label id="eli5-toggle-control" class="shack-link eli5-toggle-control" for="explain-eli5-toggle">
+      <input id="explain-eli5-toggle" type="checkbox" />
+      eli5
+    </label>
 
     <aside id="left-panel" class="left-panel cardboard-scroll" aria-label="Left panel"></aside>
     <aside id="lower-left-panel" class="lower-left-panel cardboard-scroll" aria-label="Bottom left panel"></aside>
@@ -44,12 +59,18 @@
       </button>
     </div>
 
-    <button id="restart-button" class="restart-button" type="button" aria-label="Restart">Restart</button>
+    <button id="restart-button" class="restart-button" type="button" aria-label="Restart" title="Restart temporarily disabled" disabled>Restart</button>
   </div>
 
   <script>
     (function () {
       const img = document.getElementById('shack-ui');
+      const leftPanelFrame = document.getElementById('ui-left-panel');
+      const whiteBoxFrame = document.getElementById('ui-white-box');
+      const rightPanelFrame = document.getElementById('ui-right-panel');
+      const blackBoxFrame = document.getElementById('ui-black-box');
+      const yellowButtonFrame = document.getElementById('ui-yellow-button');
+      const garbageWireFrame = document.getElementById('ui-garbage-wire');
       const belt = document.getElementById('shack-belt');
       const output = document.getElementById('rayray-output');
       const leftPanel = document.getElementById('left-panel');
@@ -57,12 +78,54 @@
       const inputWrap = document.querySelector('.rayray-input-wrap');
       const contextPanel = document.getElementById('context-panel');
       const restartButton = document.getElementById('restart-button');
+      const uiScaleDown = document.getElementById('ui-scale-down');
+      const uiScaleUp = document.getElementById('ui-scale-up');
+      const uiScaleReset = document.getElementById('ui-scale-reset');
+      const uiScaleReadout = document.getElementById('ui-scale-readout');
+      const eli5ToggleControl = document.getElementById('eli5-toggle-control');
       const threshold = 30;
       const alphaThreshold = 20;
       const beltRatio = 1.656;
       const beltWidthFraction = 0.2;
       const beltInsetXFraction = 0.086;
       const beltInsetYFraction = 0.064;
+      const uiLayerLayout = {
+        leftPanel: { x: 0.03, y: 0.14, width: 0.186, height: 0.484 },
+        whiteBox: { x: 0.236, y: 0.17, width: 0.443, height: 0.56 },
+        rightPanel: { x: 0.705, y: 0.17, width: 0.232, height: 0.535 },
+        blackBox: { x: 0.225, y: 0.725, width: 0.478, height: 0.154 },
+        yellowButton: { x: 0.034, y: 0.705, width: 0.176, height: 0.195 },
+        garbageWire: { x: 0.78, y: 0.74, width: 0.16, height: 0.21 },
+      };
+      const uiScaleStorageKey = 'wireup.outpost.uiScale.v1';
+      const minUiScale = 0.35;
+      const maxUiScale = 2.4;
+      const uiScaleStep = 0.05;
+      let currentAutoLayout = null;
+      let uiScale = Number(localStorage.getItem(uiScaleStorageKey)) || 1;
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function updateUiScaleReadout() {
+        if (!uiScaleReadout) {
+          return;
+        }
+
+        uiScaleReadout.textContent = `${Math.round(uiScale * 100)}%`;
+      }
+
+      function persistUiScale() {
+        localStorage.setItem(uiScaleStorageKey, String(uiScale));
+        updateUiScaleReadout();
+      }
+
+      function setUiScale(nextScale) {
+        uiScale = clamp(nextScale, minUiScale, maxUiScale);
+        persistUiScale();
+        applyAutoFit();
+      }
 
       function getContentBounds(image) {
         const canvas = document.createElement('canvas');
@@ -126,10 +189,11 @@
           height: img.naturalHeight
         };
 
-        const scale = Math.max(
+        const baseScale = Math.max(
           viewportWidth / bounds.width,
           viewportHeight / bounds.height
         );
+        const scale = baseScale * uiScale;
 
         const renderWidth = img.naturalWidth * scale;
         const renderHeight = img.naturalHeight * scale;
@@ -144,6 +208,28 @@
         img.style.height = renderHeight + 'px';
         img.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
 
+        function placeLayer(layerImg, rect) {
+          if (!layerImg || !rect) {
+            return;
+          }
+
+          const x = offsetX + renderWidth * rect.x;
+          const y = offsetY + renderHeight * rect.y;
+          const width = renderWidth * rect.width;
+          const height = renderHeight * rect.height;
+
+          layerImg.style.width = width + 'px';
+          layerImg.style.height = height + 'px';
+          layerImg.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+        }
+
+        placeLayer(leftPanelFrame, uiLayerLayout.leftPanel);
+        placeLayer(whiteBoxFrame, uiLayerLayout.whiteBox);
+        placeLayer(rightPanelFrame, uiLayerLayout.rightPanel);
+        placeLayer(blackBoxFrame, uiLayerLayout.blackBox);
+        placeLayer(yellowButtonFrame, uiLayerLayout.yellowButton);
+        placeLayer(garbageWireFrame, uiLayerLayout.garbageWire);
+
         if (belt) {
           const beltWidth = contentWidth * beltWidthFraction;
           const beltHeight = beltWidth / beltRatio;
@@ -155,53 +241,226 @@
           belt.style.transform = 'translate(' + beltX + 'px, ' + beltY + 'px)';
         }
 
-        if (leftPanel) {
-          leftPanel.style.left = contentX + contentWidth * 0.042 + 'px';
-          leftPanel.style.top = contentY + contentHeight * 0.16 + 'px';
-          leftPanel.style.width = contentWidth * 0.112 + 'px';
-          leftPanel.style.height = contentHeight * 0.70 + 'px';
+        const restartSize = contentWidth * 0.09;
+        const restartX = contentX + contentWidth * 0.035 + 48;
+        const restartY = contentY + contentHeight - (contentHeight * 0.13) - restartSize;
+        const beltWidth = contentWidth * beltWidthFraction;
+        const beltHeight = beltWidth / beltRatio;
+        const beltX = contentX + contentWidth - beltWidth - contentWidth * beltInsetXFraction;
+        const beltY = contentY + contentHeight - beltHeight - contentHeight * beltInsetYFraction;
+
+        currentAutoLayout = {
+          leftPanelFrame: layerRectToPixels({ left: contentX, top: contentY, width: contentWidth, height: contentHeight }, uiLayerLayout.leftPanel),
+          whiteBoxFrame: layerRectToPixels({ left: contentX, top: contentY, width: contentWidth, height: contentHeight }, uiLayerLayout.whiteBox),
+          rightPanelFrame: layerRectToPixels({ left: contentX, top: contentY, width: contentWidth, height: contentHeight }, uiLayerLayout.rightPanel),
+          blackBoxFrame: layerRectToPixels({ left: contentX, top: contentY, width: contentWidth, height: contentHeight }, uiLayerLayout.blackBox),
+          yellowButtonFrame: layerRectToPixels({ left: contentX, top: contentY, width: contentWidth, height: contentHeight }, uiLayerLayout.yellowButton),
+          garbageWireFrame: layerRectToPixels({ left: contentX, top: contentY, width: contentWidth, height: contentHeight }, uiLayerLayout.garbageWire),
+          beltFrame: {
+            left: beltX,
+            top: beltY,
+            width: beltWidth,
+            height: beltHeight,
+          },
+          restartButton: {
+            left: restartX,
+            top: restartY,
+            width: restartSize,
+            height: restartSize,
+          },
+          leftPanel: {
+            left: contentX + contentWidth * 0.042,
+            top: contentY + contentHeight * 0.16,
+            width: contentWidth * 0.112,
+            height: contentHeight * 0.70,
+          },
+          lowerLeftPanel: {
+            left: contentX + contentWidth * 0.042,
+            top: contentY + contentHeight * 0.73,
+            width: contentWidth * 0.112,
+            height: contentHeight * 0.13,
+          },
+          output: {
+            left: contentX + contentWidth * 0.236,
+            top: contentY + contentHeight * 0.17,
+            width: contentWidth * 0.452,
+            height: contentHeight * 0.56,
+          },
+          contextPanel: {
+            left: contentX + contentWidth * 0.738,
+            top: contentY + contentHeight * 0.17,
+            width: contentWidth * 0.192,
+            height: contentHeight * 0.56,
+          },
+          inputWrap: {
+            left: contentX + contentWidth * 0.236,
+            top: contentY + contentHeight * 0.73,
+            width: contentWidth * 0.452,
+            height: contentHeight * 0.13,
+          },
+          eli5ToggleControl: {
+            left: contentX + contentWidth * 0.34,
+            top: contentY + contentHeight * 0.08,
+            width: contentWidth * 0.1,
+            height: contentHeight * 0.055,
+          },
+        };
+
+        applyLayoutPreset(currentAutoLayout);
+      }
+
+      function px(value) {
+        return `${Math.round(value)}px`;
+      }
+
+      function pxSize(value, minSize = 1) {
+        return `${Math.max(minSize, Math.round(value))}px`;
+      }
+
+      function layerRectToPixels(content, layerRect) {
+        if (!content || !layerRect) {
+          return null;
         }
 
-        if (lowerLeftPanel) {
-          lowerLeftPanel.style.left = contentX + contentWidth * 0.042 + 'px';
-          lowerLeftPanel.style.top = contentY + contentHeight * 0.73 + 'px';
-          lowerLeftPanel.style.width = contentWidth * 0.112 + 'px';
-          lowerLeftPanel.style.height = contentHeight * 0.13 + 'px';
+        return {
+          left: content.left + content.width * layerRect.x,
+          top: content.top + content.height * layerRect.y,
+          width: content.width * layerRect.width,
+          height: content.height * layerRect.height,
+        };
+      }
+
+      function applyLayoutPreset(layout) {
+        if (!layout) {
+          return;
         }
 
-        if (output) {
-          output.style.left = contentX + contentWidth * 0.236 + 'px';
-          output.style.top = contentY + contentHeight * 0.17 + 'px';
-          output.style.width = contentWidth * 0.452 + 'px';
-          output.style.height = contentHeight * 0.56 + 'px';
+        if (leftPanelFrame && layout.leftPanelFrame) {
+          leftPanelFrame.style.left = px(layout.leftPanelFrame.left);
+          leftPanelFrame.style.top = px(layout.leftPanelFrame.top);
+          leftPanelFrame.style.width = pxSize(layout.leftPanelFrame.width, 32);
+          leftPanelFrame.style.height = pxSize(layout.leftPanelFrame.height, 32);
+          leftPanelFrame.style.transform = 'none';
         }
 
-        if (contextPanel) {
-          contextPanel.style.left = contentX + contentWidth * 0.738 + 'px';
-          contextPanel.style.top = contentY + contentHeight * 0.17 + 'px';
-          contextPanel.style.width = contentWidth * 0.192 + 'px';
-          contextPanel.style.height = contentHeight * 0.56 + 'px';
+        if (whiteBoxFrame && layout.whiteBoxFrame) {
+          whiteBoxFrame.style.left = px(layout.whiteBoxFrame.left);
+          whiteBoxFrame.style.top = px(layout.whiteBoxFrame.top);
+          whiteBoxFrame.style.width = pxSize(layout.whiteBoxFrame.width, 32);
+          whiteBoxFrame.style.height = pxSize(layout.whiteBoxFrame.height, 32);
+          whiteBoxFrame.style.transform = 'none';
         }
 
-        if (inputWrap) {
-          inputWrap.style.left = contentX + contentWidth * 0.236 + 'px';
-          inputWrap.style.top = contentY + contentHeight * 0.73 + 'px';
-          inputWrap.style.width = contentWidth * 0.452 + 'px';
-          inputWrap.style.height = contentHeight * 0.13 + 'px';
+        if (rightPanelFrame && layout.rightPanelFrame) {
+          rightPanelFrame.style.left = px(layout.rightPanelFrame.left);
+          rightPanelFrame.style.top = px(layout.rightPanelFrame.top);
+          rightPanelFrame.style.width = pxSize(layout.rightPanelFrame.width, 32);
+          rightPanelFrame.style.height = pxSize(layout.rightPanelFrame.height, 32);
+          rightPanelFrame.style.transform = 'none';
         }
 
-        // Place restart exactly where the Loveable overlay sat: left 3.5%, bottom 13%, size 9% of UI bounds.
-        if (restartButton) {
-          const restartSize = contentWidth * 0.09;
-          const restartX = contentX + contentWidth * 0.035;
-          const restartY = contentY + contentHeight - (contentHeight * 0.13) - restartSize;
+        if (blackBoxFrame && layout.blackBoxFrame) {
+          blackBoxFrame.style.left = px(layout.blackBoxFrame.left);
+          blackBoxFrame.style.top = px(layout.blackBoxFrame.top);
+          blackBoxFrame.style.width = pxSize(layout.blackBoxFrame.width, 32);
+          blackBoxFrame.style.height = pxSize(layout.blackBoxFrame.height, 32);
+          blackBoxFrame.style.transform = 'none';
+        }
 
-          restartButton.style.left = restartX + 'px';
-          restartButton.style.top = restartY + 'px';
-          restartButton.style.width = restartSize + 'px';
-          restartButton.style.height = restartSize + 'px';
+        if (yellowButtonFrame && layout.yellowButtonFrame) {
+          yellowButtonFrame.style.left = px(layout.yellowButtonFrame.left);
+          yellowButtonFrame.style.top = px(layout.yellowButtonFrame.top);
+          yellowButtonFrame.style.width = pxSize(layout.yellowButtonFrame.width, 32);
+          yellowButtonFrame.style.height = pxSize(layout.yellowButtonFrame.height, 32);
+          yellowButtonFrame.style.transform = 'none';
+        }
+
+        if (garbageWireFrame && layout.garbageWireFrame) {
+          garbageWireFrame.style.left = px(layout.garbageWireFrame.left);
+          garbageWireFrame.style.top = px(layout.garbageWireFrame.top);
+          garbageWireFrame.style.width = pxSize(layout.garbageWireFrame.width, 32);
+          garbageWireFrame.style.height = pxSize(layout.garbageWireFrame.height, 32);
+          garbageWireFrame.style.transform = 'none';
+        }
+
+        if (belt && layout.beltFrame) {
+          belt.style.left = px(layout.beltFrame.left);
+          belt.style.top = px(layout.beltFrame.top);
+          belt.style.width = pxSize(layout.beltFrame.width, 32);
+          belt.style.height = pxSize(layout.beltFrame.height, 20);
+          belt.style.transform = 'none';
+        }
+
+        if (restartButton && layout.restartButton) {
+          restartButton.style.left = px(layout.restartButton.left);
+          restartButton.style.top = px(layout.restartButton.top);
+          restartButton.style.width = pxSize(layout.restartButton.width, 28);
+          restartButton.style.height = pxSize(layout.restartButton.height, 28);
+        }
+
+        if (leftPanel && layout.leftPanel) {
+          leftPanel.style.left = px(layout.leftPanel.left);
+          leftPanel.style.top = px(layout.leftPanel.top);
+          leftPanel.style.width = pxSize(layout.leftPanel.width, 80);
+          leftPanel.style.height = pxSize(layout.leftPanel.height, 50);
+        }
+
+        if (lowerLeftPanel && layout.lowerLeftPanel) {
+          lowerLeftPanel.style.left = px(layout.lowerLeftPanel.left);
+          lowerLeftPanel.style.top = px(layout.lowerLeftPanel.top);
+          lowerLeftPanel.style.width = pxSize(layout.lowerLeftPanel.width, 80);
+          lowerLeftPanel.style.height = pxSize(layout.lowerLeftPanel.height, 50);
+        }
+
+        if (output && layout.output) {
+          output.style.left = px(layout.output.left);
+          output.style.top = px(layout.output.top);
+          output.style.width = pxSize(layout.output.width, 80);
+          output.style.height = pxSize(layout.output.height, 50);
+        }
+
+        if (contextPanel && layout.contextPanel) {
+          contextPanel.style.left = px(layout.contextPanel.left);
+          contextPanel.style.top = px(layout.contextPanel.top);
+          contextPanel.style.width = pxSize(layout.contextPanel.width, 80);
+          contextPanel.style.height = pxSize(layout.contextPanel.height, 50);
+        }
+
+        if (inputWrap && layout.inputWrap) {
+          inputWrap.style.left = px(layout.inputWrap.left);
+          inputWrap.style.top = px(layout.inputWrap.top);
+          inputWrap.style.width = pxSize(layout.inputWrap.width, 120);
+          inputWrap.style.height = pxSize(layout.inputWrap.height, 50);
+        }
+
+        if (eli5ToggleControl && layout.eli5ToggleControl) {
+          eli5ToggleControl.style.left = px(layout.eli5ToggleControl.left);
+          eli5ToggleControl.style.top = px(layout.eli5ToggleControl.top);
+          eli5ToggleControl.style.width = pxSize(layout.eli5ToggleControl.width, 70);
+          eli5ToggleControl.style.height = pxSize(layout.eli5ToggleControl.height, 32);
         }
       }
+
+      if (uiScaleDown) {
+        uiScaleDown.addEventListener('click', () => {
+          setUiScale(uiScale - uiScaleStep);
+        });
+      }
+
+      if (uiScaleUp) {
+        uiScaleUp.addEventListener('click', () => {
+          setUiScale(uiScale + uiScaleStep);
+        });
+      }
+
+      if (uiScaleReset) {
+        uiScaleReset.addEventListener('click', () => {
+          setUiScale(1);
+        });
+      }
+
+      uiScale = clamp(uiScale, minUiScale, maxUiScale);
+      updateUiScaleReadout();
 
       if (img.complete) {
         applyAutoFit();

@@ -2,8 +2,12 @@ import { loadAllJSON, store } from './jsonStore.js';
 import { updateContextFromOperator, currentContext } from './contextEngine.js';
 import { mapContextForPanel } from './contextMapper.js';
 import { renderContextPanel } from './contextRenderer.js';
+import { retrieveContext } from './runtime/retrieval/index.js';
+import { detectPatterns, explainContext } from './runtime/reasoning/index.js';
 
 const CONTEXT_KEYS = ['tops', 'chops', 'sops'];
+const LLM_FALLBACK_MARKER = 'LLM not configured. Ray Ray running in rule-only mode.';
+const TOKEN_BLACKLIST = new Set(['the', 'a', 'an', 'and', 'or', 'to', 'for', 'of', 'in', 'on', 'is', 'are', 'what', 'how', 'why']);
 
 function appendMessage(panel, speaker, text) {
   const line = document.createElement('div');
@@ -27,80 +31,268 @@ function detectOperatorFromQuestion(question) {
   return null;
 }
 
-async function sendQuestion({ input, output }) {
-  const question = input.value.trim();
-  if (!question) return;
+function questionTokens(question) {
+  return String(question)
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .map((token) => token.trim())
+    .filter((token) => token.length >= 3 && !TOKEN_BLACKLIST.has(token));
+}
 
-  appendMessage(output, 'You', question);
-
-  const maybeOperator = detectOperatorFromQuestion(question);
-  if (maybeOperator) {
-    updateContextFromOperator(maybeOperator);
-    renderContextPanel(mapContextForPanel());
+function toBulletList(text, maxItems = 2) {
+  if (!text || typeof text !== 'string') {
+    return [];
   }
 
-  input.value = '';
+  return text
+    .split('.')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(0, maxItems);
+}
 
+function buildGlossaryMatches(tokens, question) {
+  const glossary = store.glossary || {};
+  const q = question.toLowerCase();
+  const matched = [];
+
+  for (const [term, definition] of Object.entries(glossary)) {
+    if (!definition || typeof definition !== 'string') {
+      continue;
+    }
+
+    const termHit = q.includes(term.toLowerCase()) || tokens.some((token) => term.toLowerCase().includes(token));
+    if (!termHit) {
+      continue;
+    }
+
+    matched.push({ term, definition });
+    if (matched.length >= 4) {
+      break;
+    }
+  }
+
+  return matched;
+}
+
+function buildOperatorCandidates(tokens, question) {
+  const q = question.toLowerCase();
+  const candidates = [];
+
+  for (const family of CONTEXT_KEYS) {
+    for (const [name, data] of Object.entries(store[family] || {})) {
+      const haystack = [
+        name,
+        data.layer_1_identity,
+        data.layer_2_signal_story,
+        ...(Array.isArray(data.layer_3_failure_modes) ? data.layer_3_failure_modes : []),
+        ...(Array.isArray(data.layer_4_minimal_recipes) ? data.layer_4_minimal_recipes : []),
+        ...(Array.isArray(data.layer_5_reasoning_lens) ? data.layer_5_reasoning_lens : []),
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+      let score = q.includes(name.toLowerCase()) ? 6 : 0;
+      for (const token of tokens) {
+        if (haystack.includes(token)) {
+          score += 1;
+        }
+      }
+
+      if (score > 0) {
+        candidates.push({ family, name, score });
+      }
+    }
+  }
+
+  return candidates.sort((a, b) => b.score - a.score).slice(0, 3);
+}
+
+function getExplainMode() {
+  const eli5Toggle = document.getElementById('explain-eli5-toggle');
+  return eli5Toggle?.checked ? 'dual' : 'td';
+}
+
+async function localRuleAnswer(question, operatorName = null) {
+  const tokens = questionTokens(question);
+  const fromQuestion = operatorName || detectOperatorFromQuestion(question);
+  const candidates = fromQuestion
+    ? [{ name: fromQuestion, score: 99 }]
+    : buildOperatorCandidates(tokens, question);
+  const top = candidates[0] || null;
+
+  const glossaryMatches = buildGlossaryMatches(tokens, question);
+  const lines = [];
+
+  if (top?.name) {
+    const context = await updateContextFromOperator(top.name);
+    if (context) {
+      renderContextPanel(await mapContextForPanel());
+      const identity = context.identity || `${context.operator} is in the ${context.family?.toUpperCase() || 'operator'} family.`;
+      const signalBullets = toBulletList(context.signalStory, 2);
+      const warnings = Array.isArray(context.failureModes) ? context.failureModes.slice(0, 2) : [];
+
+      lines.push(`${context.operator} (${context.family?.toUpperCase() || 'operator'}).`);
+      lines.push(identity);
+
+      if (signalBullets.length) {
+        lines.push(`Signal flow: ${signalBullets.join(' ')}`);
+      }
+
+      if (warnings.length) {
+        lines.push(`Watch out: ${warnings.join(' | ')}`);
+      }
+    }
+  }
+
+  if (glossaryMatches.length) {
+    const glossaryLine = glossaryMatches
+      .map((entry) => `${entry.term}: ${entry.definition}`)
+      .join(' | ');
+    lines.push(`Glossary context: ${glossaryLine}`);
+  }
+
+  if (!lines.length) {
+    const allOperators = CONTEXT_KEYS.flatMap((family) => Object.keys(store[family] || {}));
+    const tokens = questionTokens(question);
+    const suggested = allOperators
+      .map((name) => {
+        const lower = name.toLowerCase();
+        let score = 0;
+        for (const token of tokens) {
+          if (lower.includes(token)) {
+            score += 1;
+          }
+        }
+        return { name, score };
+      })
+      .filter((entry) => entry.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3)
+      .map((entry) => entry.name);
+
+    const suggestionText = suggested.length
+      ? `Closest local matches: ${suggested.join(' | ')}.`
+      : 'Try naming an operator directly, like Blur TOP, Math CHOP, or Null SOP.';
+
+    const runtimeContext = await retrieveContext(question);
+    const mode = getExplainMode();
+    return {
+      hasAnswer: true,
+      text: `${explainContext(runtimeContext, mode)} ${suggestionText}`,
+      matchedOperator: null,
+    };
+  }
+
+  const runtimeContext = await retrieveContext(question);
+  const patterns = detectPatterns(runtimeContext);
+  if (patterns.length) {
+    lines.push(`Detected patterns: ${patterns.map((item) => item.id).join(' | ')}`);
+  }
+  if (getExplainMode() === 'dual') {
+    lines.push(`ELI5: ${explainContext(runtimeContext, 'eli5')}`);
+  }
+  return {
+    hasAnswer: true,
+    text: lines.join(' '),
+    matchedOperator: top?.name || null,
+  };
+}
+
+function shouldEscalateToCloud(localResult) {
+  if (!localResult?.hasAnswer) {
+    return true;
+  }
+
+  // Keep local JSON as the default mode unless explicitly forced.
+  return Boolean(window?.RAYRAY_FORCE_CLOUD);
+}
+
+async function sendQuestion({ input, output }) {
   try {
+    const question = input.value.trim();
+    if (!question) return;
+
+    input.value = '';
+
+    const maybeOperator = detectOperatorFromQuestion(question);
+    const localResult = await localRuleAnswer(question, maybeOperator);
+
+    if (localResult.matchedOperator) {
+      await updateContextFromOperator(localResult.matchedOperator);
+      renderContextPanel(await mapContextForPanel());
+    }
+
+    // Local JSON knowledge is the default path. Only use cloud/API when needed.
+    if (!shouldEscalateToCloud(localResult)) {
+      appendMessage(output, 'Ray Ray', localResult.text);
+      return;
+    }
+
     const payload = JSON.stringify({
       question,
       context: currentContext,
+      explainMode: getExplainMode(),
     });
 
     const endpoints = ['/api/rayray', '/rayray'];
     let lastError = null;
 
     for (const endpoint of endpoints) {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: payload,
-      });
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: payload,
+        });
 
-      const raw = await response.text();
-      const contentType = (response.headers.get('content-type') || '').toLowerCase();
+        const raw = await response.text();
+        const contentType = (response.headers.get('content-type') || '').toLowerCase();
 
-      if (!response.ok) {
-        // If this route is missing, try the next endpoint before reporting.
-        if (response.status === 404) {
-          lastError = `Endpoint ${endpoint} returned 404.`;
+        if (!response.ok) {
+          if (response.status === 404) {
+            lastError = `Endpoint ${endpoint} returned 404.`;
+            continue;
+          }
+
+          const bodyPreview = raw ? ` ${raw.slice(0, 180)}` : '';
+          lastError = `Server error ${response.status}.${bodyPreview}`.trim();
           continue;
         }
 
-        const bodyPreview = raw ? ` ${raw.slice(0, 180)}` : '';
-        appendMessage(output, 'Ray Ray', `Server error ${response.status}.${bodyPreview}`.trim());
-        return;
-      }
-
-      let data = null;
-      if (raw) {
-        try {
-          data = JSON.parse(raw);
-        } catch (_err) {
-          // Accept plain-text responses to avoid hard failure on bad content-type.
-          data = contentType.includes('application/json') ? null : { answer: raw };
+        let data = null;
+        if (raw) {
+          try {
+            data = JSON.parse(raw);
+          } catch (_err) {
+            data = contentType.includes('application/json') ? null : { answer: raw };
+          }
         }
-      }
 
-      if (!data) {
-        appendMessage(output, 'Ray Ray', 'Server returned an empty or invalid response.');
+        if (!data) {
+          lastError = 'Server returned an empty response.';
+          continue;
+        }
+
+        const answer = data.answer || data.responseText || 'No response received.';
+        if (answer.includes(LLM_FALLBACK_MARKER)) {
+          appendMessage(output, 'Ray Ray', localResult.text);
+        } else {
+          appendMessage(output, 'Ray Ray', answer);
+        }
         return;
+      } catch (error) {
+        lastError = error?.message || String(error);
       }
-
-      const answer = data.answer || data.responseText || 'No response received.';
-      appendMessage(output, 'Ray Ray', answer);
-      return;
     }
 
-    appendMessage(
-      output,
-      'Ray Ray',
-      `Chat backend not reachable. ${lastError || 'No working endpoint found.'}`,
-    );
+    appendMessage(output, 'Ray Ray', localResult.text);
   } catch (error) {
-    appendMessage(output, 'Ray Ray', `Unable to connect: ${error.message}`);
+    console.error('Ray Ray sendQuestion failed:', error);
+    appendMessage(output, 'Ray Ray', `Local processing error: ${error?.message || String(error)}`);
   }
 }
 
@@ -110,11 +302,8 @@ function initRestartButton() {
     return;
   }
 
-  restartButton.addEventListener('click', () => {
-    sessionStorage.clear();
-    localStorage.clear();
-    window.location.reload();
-  });
+  restartButton.disabled = true;
+  restartButton.title = 'Restart temporarily disabled';
 }
 
 async function initWireupOutpost() {
@@ -139,8 +328,7 @@ async function initWireupOutpost() {
 
   try {
     await loadAllJSON();
-    renderContextPanel(mapContextForPanel());
-    appendMessage(output, 'Ray Ray', 'Ready. Ask a TouchDesigner question.');
+    renderContextPanel(await mapContextForPanel());
   } catch (error) {
     appendMessage(output, 'Ray Ray', `Context load failed, but chat is still available: ${error.message}`);
   }

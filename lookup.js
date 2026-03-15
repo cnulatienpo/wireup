@@ -1,45 +1,38 @@
-// lookup.js
-import { store } from "./jsonStore.js";
+import { getOperator, retrieveContext } from './runtime/retrieval/index.js';
 
-const FAMILIES = ["tops", "chops", "sops"];
+const FAMILIES = ['tops', 'chops', 'sops'];
 
-export function findOperator(opName) {
-  for (const family of FAMILIES) {
-    const ops = store[family];
-    if (ops && ops[opName]) {
-      return {
-        name: opName,
-        family,
-        data: ops[opName]
-      };
-    }
-  }
-  return null;
-}
-
-export function buildContextBundle(opName) {
-  const found = findOperator(opName);
-  if (!found) return null;
-
-  const { family, data } = found;
+export async function findOperator(opName) {
+  const data = await getOperator(opName);
+  if (!data) return null;
 
   return {
-    operator: found.name,
-    family,
-    identity: data.layer_1_identity,
-    signalStory: data.layer_2_signal_story,
-    failureModes: data.layer_3_failure_modes || [],
-    recipes: data.layer_4_minimal_recipes || [],
-    lenses: data.layer_5_reasoning_lens || []
+    name: data.name,
+    family: FAMILIES.includes(data.family) ? data.family : 'unknown',
+    data,
   };
 }
 
-export function lookupGlossaryTerms(words = []) {
-  const glossary = store.glossary || {};
-  return words
-    .filter(w => glossary[w])
-    .map(w => ({
-      term: w,
-      definition: glossary[w]
-    }));
+export async function buildContextBundle(opName) {
+  const found = await findOperator(opName);
+  if (!found) return null;
+
+  const { family, data } = found;
+  return {
+    operator: found.name,
+    family,
+    identity: data.identity,
+    signalStory: data.signal_story,
+    failureModes: data.failure_modes || [],
+    recipes: data.recipes || [],
+    lenses: data.lenses || [],
+  };
+}
+
+export async function lookupGlossaryTerms(words = []) {
+  const context = await retrieveContext(words.join(' '));
+  const set = new Set(words.map((w) => String(w).toLowerCase()));
+  return (context.concepts || [])
+    .filter((entry) => set.has(entry.term.toLowerCase()))
+    .map((entry) => ({ term: entry.term, definition: entry.definition }));
 }
