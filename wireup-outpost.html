@@ -23,6 +23,9 @@
       <button id="ui-scale-down" class="shack-link" type="button" aria-label="Scale down">UI -</button>
       <button id="ui-scale-up" class="shack-link" type="button" aria-label="Scale up">UI +</button>
       <button id="ui-scale-reset" class="shack-link" type="button" aria-label="Reset UI scale">Fit UI</button>
+      <button id="layout-edit-toggle" class="shack-link" type="button" aria-label="Toggle layout edit mode">Edit Layout</button>
+      <button id="layout-save" class="shack-link" type="button" aria-label="Save layout" disabled>Save Layout</button>
+      <button id="layout-reset" class="shack-link" type="button" aria-label="Reset saved layout">Reset Layout</button>
       <span id="ui-scale-readout" class="shack-scale-readout">100%</span>
     </main>
 
@@ -82,6 +85,9 @@
       const uiScaleUp = document.getElementById('ui-scale-up');
       const uiScaleReset = document.getElementById('ui-scale-reset');
       const uiScaleReadout = document.getElementById('ui-scale-readout');
+      const layoutEditToggle = document.getElementById('layout-edit-toggle');
+      const layoutSave = document.getElementById('layout-save');
+      const layoutReset = document.getElementById('layout-reset');
       const eli5ToggleControl = document.getElementById('eli5-toggle-control');
       const threshold = 30;
       const alphaThreshold = 20;
@@ -89,6 +95,7 @@
       const beltWidthFraction = 0.2;
       const beltInsetXFraction = 0.086;
       const beltInsetYFraction = 0.064;
+      const layoutStorageKey = 'wireup.outpost.layout.v2';
       const uiLayerLayout = {
         leftPanel: { x: 0.03, y: 0.14, width: 0.186, height: 0.484 },
         whiteBox: { x: 0.236, y: 0.17, width: 0.443, height: 0.56 },
@@ -101,8 +108,29 @@
       const minUiScale = 0.35;
       const maxUiScale = 2.4;
       const uiScaleStep = 0.05;
+      const targetByKey = new Map();
       let currentAutoLayout = null;
       let uiScale = Number(localStorage.getItem(uiScaleStorageKey)) || 1;
+      let customLayoutNormalized = null;
+      let isLayoutEditMode = false;
+      let activePointerState = null;
+
+      const editableTargets = [
+        { key: 'leftPanelFrame', element: leftPanelFrame, label: 'left-panel-frame', minWidth: 32, minHeight: 32 },
+        { key: 'whiteBoxFrame', element: whiteBoxFrame, label: 'white-box-frame', minWidth: 32, minHeight: 32 },
+        { key: 'rightPanelFrame', element: rightPanelFrame, label: 'right-panel-frame', minWidth: 32, minHeight: 32 },
+        { key: 'blackBoxFrame', element: blackBoxFrame, label: 'black-box-frame', minWidth: 32, minHeight: 32 },
+        { key: 'yellowButtonFrame', element: yellowButtonFrame, label: 'yellow-button-frame', minWidth: 32, minHeight: 32 },
+        { key: 'garbageWireFrame', element: garbageWireFrame, label: 'garbage-wire-frame', minWidth: 32, minHeight: 32 },
+        { key: 'beltFrame', element: belt, label: 'belt', minWidth: 32, minHeight: 20 },
+        { key: 'restartButton', element: restartButton, label: 'restart-button', minWidth: 28, minHeight: 28 },
+        { key: 'leftPanel', element: leftPanel, label: 'left-panel', minWidth: 80, minHeight: 50 },
+        { key: 'lowerLeftPanel', element: lowerLeftPanel, label: 'lower-left-panel', minWidth: 80, minHeight: 50 },
+        { key: 'output', element: output, label: 'chat-output', minWidth: 80, minHeight: 50 },
+        { key: 'contextPanel', element: contextPanel, label: 'context-panel', minWidth: 80, minHeight: 50 },
+        { key: 'inputWrap', element: inputWrap, label: 'input-wrap', minWidth: 120, minHeight: 50 },
+        { key: 'eli5ToggleControl', element: eli5ToggleControl, label: 'eli5-toggle', minWidth: 70, minHeight: 32 },
+      ];
 
       function clamp(value, min, max) {
         return Math.min(max, Math.max(min, value));
@@ -114,6 +142,251 @@
         }
 
         uiScaleReadout.textContent = `${Math.round(uiScale * 100)}%`;
+      }
+
+      function readNumber(value, fallback = 0) {
+        const parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : fallback;
+      }
+
+      function getElementRect(element, target) {
+        if (!element || !target) {
+          return null;
+        }
+
+        return {
+          left: readNumber(element.style.left, 0),
+          top: readNumber(element.style.top, 0),
+          width: Math.max(target.minWidth, readNumber(element.style.width, target.minWidth)),
+          height: Math.max(target.minHeight, readNumber(element.style.height, target.minHeight)),
+        };
+      }
+
+      function captureCurrentLayout() {
+        const layout = {};
+
+        for (const target of editableTargets) {
+          if (!target.element) {
+            continue;
+          }
+          const rect = getElementRect(target.element, target);
+          if (rect) {
+            layout[target.key] = rect;
+          }
+        }
+
+        return layout;
+      }
+
+      function serializeLayout(layout) {
+        const viewportWidth = Math.max(window.innerWidth, 1);
+        const viewportHeight = Math.max(window.innerHeight, 1);
+        const serialized = {};
+
+        for (const target of editableTargets) {
+          const rect = layout?.[target.key];
+          if (!rect) {
+            continue;
+          }
+
+          serialized[target.key] = {
+            left: rect.left / viewportWidth,
+            top: rect.top / viewportHeight,
+            width: rect.width / viewportWidth,
+            height: rect.height / viewportHeight,
+          };
+        }
+
+        return serialized;
+      }
+
+      function deserializeLayout(rawLayout) {
+        if (!rawLayout || typeof rawLayout !== 'object') {
+          return null;
+        }
+
+        const viewportWidth = Math.max(window.innerWidth, 1);
+        const viewportHeight = Math.max(window.innerHeight, 1);
+        const deserialized = {};
+
+        for (const target of editableTargets) {
+          const normalized = rawLayout[target.key];
+          if (!normalized || typeof normalized !== 'object') {
+            continue;
+          }
+
+          const left = readNumber(normalized.left, 0) * viewportWidth;
+          const top = readNumber(normalized.top, 0) * viewportHeight;
+          const width = Math.max(target.minWidth, readNumber(normalized.width, target.minWidth / viewportWidth) * viewportWidth);
+          const height = Math.max(target.minHeight, readNumber(normalized.height, target.minHeight / viewportHeight) * viewportHeight);
+
+          deserialized[target.key] = { left, top, width, height };
+        }
+
+        return Object.keys(deserialized).length ? deserialized : null;
+      }
+
+      function loadCustomLayout() {
+        try {
+          const raw = localStorage.getItem(layoutStorageKey);
+          if (!raw) {
+            return null;
+          }
+
+          const parsed = JSON.parse(raw);
+          return parsed && typeof parsed === 'object' ? parsed : null;
+        } catch (_error) {
+          return null;
+        }
+      }
+
+      function saveCustomLayout(normalizedLayout) {
+        try {
+          localStorage.setItem(layoutStorageKey, JSON.stringify(normalizedLayout));
+        } catch (_error) {
+          // Ignore storage failures and keep in-memory layout.
+        }
+      }
+
+      function clearCustomLayout() {
+        try {
+          localStorage.removeItem(layoutStorageKey);
+        } catch (_error) {
+          // Ignore storage failures.
+        }
+      }
+
+      function updateLayoutToolbar() {
+        if (layoutEditToggle) {
+          layoutEditToggle.textContent = isLayoutEditMode ? 'Done Editing' : 'Edit Layout';
+          layoutEditToggle.setAttribute('aria-pressed', isLayoutEditMode ? 'true' : 'false');
+        }
+
+        if (layoutSave) {
+          layoutSave.disabled = !isLayoutEditMode;
+        }
+      }
+
+      function setLayoutEditMode(enabled) {
+        isLayoutEditMode = Boolean(enabled);
+        document.body.classList.toggle('layout-edit-mode', isLayoutEditMode);
+        updateLayoutToolbar();
+      }
+
+      function applySavedOrAutoLayout() {
+        if (customLayoutNormalized) {
+          const customLayout = deserializeLayout(customLayoutNormalized);
+          if (customLayout) {
+            applyLayoutPreset(customLayout);
+            return;
+          }
+        }
+
+        applyLayoutPreset(currentAutoLayout);
+      }
+
+      function installLayoutTargets() {
+        for (const target of editableTargets) {
+          const element = target.element;
+          if (!element) {
+            continue;
+          }
+
+          targetByKey.set(target.key, target);
+          element.classList.add('layout-target');
+          element.dataset.layoutKey = target.key;
+          element.dataset.layoutLabel = target.label;
+
+          if (!element.querySelector('.layout-resize-handle')) {
+            const handle = document.createElement('button');
+            handle.type = 'button';
+            handle.className = 'layout-resize-handle';
+            handle.setAttribute('aria-label', `Resize ${target.label}`);
+            element.appendChild(handle);
+          }
+        }
+      }
+
+      function findLayoutTargetElement(startElement) {
+        if (!startElement || !(startElement instanceof Element)) {
+          return null;
+        }
+
+        return startElement.closest('.layout-target');
+      }
+
+      function handleLayoutPointerDown(event) {
+        if (!isLayoutEditMode || event.button !== 0) {
+          return;
+        }
+
+        const targetElement = findLayoutTargetElement(event.target);
+        if (!targetElement) {
+          return;
+        }
+
+        const targetKey = targetElement.dataset.layoutKey;
+        const target = targetByKey.get(targetKey);
+        if (!target) {
+          return;
+        }
+
+        const pointerTarget = target.element;
+        if (!pointerTarget) {
+          return;
+        }
+
+        const startRect = getElementRect(pointerTarget, target);
+        if (!startRect) {
+          return;
+        }
+
+        const isResize = event.target instanceof Element && event.target.classList.contains('layout-resize-handle');
+        activePointerState = {
+          pointerId: event.pointerId,
+          element: pointerTarget,
+          mode: isResize ? 'resize' : 'move',
+          startX: event.clientX,
+          startY: event.clientY,
+          startRect,
+          minWidth: target.minWidth,
+          minHeight: target.minHeight,
+        };
+
+        pointerTarget.setPointerCapture(event.pointerId);
+        event.preventDefault();
+      }
+
+      function handleLayoutPointerMove(event) {
+        if (!activePointerState || event.pointerId !== activePointerState.pointerId) {
+          return;
+        }
+
+        const deltaX = event.clientX - activePointerState.startX;
+        const deltaY = event.clientY - activePointerState.startY;
+        const element = activePointerState.element;
+
+        if (activePointerState.mode === 'resize') {
+          element.style.width = pxSize(activePointerState.startRect.width + deltaX, activePointerState.minWidth);
+          element.style.height = pxSize(activePointerState.startRect.height + deltaY, activePointerState.minHeight);
+        } else {
+          element.style.left = px(activePointerState.startRect.left + deltaX);
+          element.style.top = px(activePointerState.startRect.top + deltaY);
+        }
+      }
+
+      function clearActivePointerState(event) {
+        if (!activePointerState || event.pointerId !== activePointerState.pointerId) {
+          return;
+        }
+
+        try {
+          activePointerState.element.releasePointerCapture(event.pointerId);
+        } catch (_error) {
+          // Ignore if pointer capture was already released.
+        }
+
+        activePointerState = null;
       }
 
       function persistUiScale() {
@@ -306,7 +579,7 @@
           },
         };
 
-        applyLayoutPreset(currentAutoLayout);
+        applySavedOrAutoLayout();
       }
 
       function px(value) {
@@ -458,6 +731,39 @@
           setUiScale(1);
         });
       }
+
+      if (layoutEditToggle) {
+        layoutEditToggle.addEventListener('click', () => {
+          setLayoutEditMode(!isLayoutEditMode);
+        });
+      }
+
+      if (layoutSave) {
+        layoutSave.addEventListener('click', () => {
+          const snapshot = captureCurrentLayout();
+          customLayoutNormalized = serializeLayout(snapshot);
+          saveCustomLayout(customLayoutNormalized);
+          setLayoutEditMode(false);
+        });
+      }
+
+      if (layoutReset) {
+        layoutReset.addEventListener('click', () => {
+          clearCustomLayout();
+          customLayoutNormalized = null;
+          setLayoutEditMode(false);
+          applySavedOrAutoLayout();
+        });
+      }
+
+      document.addEventListener('pointerdown', handleLayoutPointerDown);
+      document.addEventListener('pointermove', handleLayoutPointerMove);
+      document.addEventListener('pointerup', clearActivePointerState);
+      document.addEventListener('pointercancel', clearActivePointerState);
+
+      installLayoutTargets();
+      customLayoutNormalized = loadCustomLayout();
+      setLayoutEditMode(false);
 
       uiScale = clamp(uiScale, minUiScale, maxUiScale);
       updateUiScaleReadout();
