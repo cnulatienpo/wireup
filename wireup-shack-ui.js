@@ -2,8 +2,7 @@ import { loadAllJSON, store } from './jsonStore.js';
 import { updateContextFromOperator, currentContext } from './contextEngine.js';
 import { mapContextForPanel } from './contextMapper.js';
 import { renderContextPanel } from './contextRenderer.js';
-import { retrieveContext } from './runtime/retrieval/index.js';
-import { detectPatterns, explainContext } from './runtime/reasoning/index.js';
+
 
 const CONTEXT_KEYS = ['tops', 'chops', 'sops'];
 const LLM_FALLBACK_MARKER = 'LLM not configured. Ray Ray running in rule-only mode.';
@@ -37,42 +36,6 @@ function questionTokens(question) {
     .split(/[^a-z0-9]+/)
     .map((token) => token.trim())
     .filter((token) => token.length >= 3 && !TOKEN_BLACKLIST.has(token));
-}
-
-function toBulletList(text, maxItems = 2) {
-  if (!text || typeof text !== 'string') {
-    return [];
-  }
-
-  return text
-    .split('.')
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .slice(0, maxItems);
-}
-
-function buildGlossaryMatches(tokens, question) {
-  const glossary = store.glossary || {};
-  const q = question.toLowerCase();
-  const matched = [];
-
-  for (const [term, definition] of Object.entries(glossary)) {
-    if (!definition || typeof definition !== 'string') {
-      continue;
-    }
-
-    const termHit = q.includes(term.toLowerCase()) || tokens.some((token) => term.toLowerCase().includes(token));
-    if (!termHit) {
-      continue;
-    }
-
-    matched.push({ term, definition });
-    if (matched.length >= 4) {
-      break;
-    }
-  }
-
-  return matched;
 }
 
 function buildOperatorCandidates(tokens, question) {
@@ -122,81 +85,74 @@ async function localRuleAnswer(question, operatorName = null) {
     : buildOperatorCandidates(tokens, question);
   const top = candidates[0] || null;
 
-  const glossaryMatches = buildGlossaryMatches(tokens, question);
-  const lines = [];
-
   if (top?.name) {
     const context = await updateContextFromOperator(top.name);
     if (context) {
       renderContextPanel(await mapContextForPanel());
-      const identity = context.identity || `${context.operator} is in the ${context.family?.toUpperCase() || 'operator'} family.`;
-      const signalBullets = toBulletList(context.signalStory, 2);
-      const warnings = Array.isArray(context.failureModes) ? context.failureModes.slice(0, 2) : [];
 
-      lines.push(`${context.operator} (${context.family?.toUpperCase() || 'operator'}).`);
-      lines.push(identity);
+      const name = context.operator;
+      const family = context.family ? context.family.toUpperCase() : null;
+      const identity = context.identity ? context.identity.replace(/\.$/, '') : '';
+      const signalStory = context.signalStory ? context.signalStory.split('.')[0].trim() : '';
 
-      if (signalBullets.length) {
-        lines.push(`Signal flow: ${signalBullets.join(' ')}`);
+      let text = family ? `The ${name} (${family})` : `The ${name}`;
+      if (identity) {
+        text += ` ${identity.charAt(0).toLowerCase() + identity.slice(1)}`;
+      }
+      if (signalStory) {
+        text += ` — like ${signalStory.charAt(0).toLowerCase() + signalStory.slice(1)}.`;
+      } else {
+        text += '.';
       }
 
-      if (warnings.length) {
-        lines.push(`Watch out: ${warnings.join(' | ')}`);
+      if (getExplainMode() === 'dual') {
+        let eli5 = `Think of the ${name} as`;
+        if (signalStory) {
+          eli5 += ` ${signalStory.charAt(0).toLowerCase() + signalStory.slice(1)}.`;
+        } else if (identity) {
+          eli5 += ` a tool that ${identity.charAt(0).toLowerCase() + identity.slice(1)}.`;
+        } else {
+          eli5 += ` a useful operator in TouchDesigner.`;
+        }
+        text += ` ${eli5}`;
       }
+
+      return {
+        hasAnswer: true,
+        text,
+        matchedOperator: top.name,
+      };
     }
   }
 
-  if (glossaryMatches.length) {
-    const glossaryLine = glossaryMatches
-      .map((entry) => `${entry.term}: ${entry.definition}`)
-      .join(' | ');
-    lines.push(`Glossary context: ${glossaryLine}`);
-  }
+  // No operator match — suggest closest names
+  const allOperators = CONTEXT_KEYS.flatMap((family) => Object.keys(store[family] || {}));
+  const suggested = allOperators
+    .map((name) => {
+      const lower = name.toLowerCase();
+      let score = 0;
+      for (const token of tokens) {
+        if (lower.includes(token)) score += 1;
+      }
+      return { name, score };
+    })
+    .filter((entry) => entry.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map((entry) => entry.name);
 
-  if (!lines.length) {
-    const allOperators = CONTEXT_KEYS.flatMap((family) => Object.keys(store[family] || {}));
-    const tokens = questionTokens(question);
-    const suggested = allOperators
-      .map((name) => {
-        const lower = name.toLowerCase();
-        let score = 0;
-        for (const token of tokens) {
-          if (lower.includes(token)) {
-            score += 1;
-          }
-        }
-        return { name, score };
-      })
-      .filter((entry) => entry.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 3)
-      .map((entry) => entry.name);
-
-    const suggestionText = suggested.length
-      ? `Closest local matches: ${suggested.join(' | ')}.`
-      : 'Try naming an operator directly, like Blur TOP, Math CHOP, or Null SOP.';
-
-    const runtimeContext = await retrieveContext(question);
-    const mode = getExplainMode();
+  if (suggested.length) {
     return {
       hasAnswer: true,
-      text: `${explainContext(runtimeContext, mode)} ${suggestionText}`,
+      text: `Not sure which operator you mean — closest matches are ${suggested.join(', ')}. Try asking about one of those.`,
       matchedOperator: null,
     };
   }
 
-  const runtimeContext = await retrieveContext(question);
-  const patterns = detectPatterns(runtimeContext);
-  if (patterns.length) {
-    lines.push(`Detected patterns: ${patterns.map((item) => item.id).join(' | ')}`);
-  }
-  if (getExplainMode() === 'dual') {
-    lines.push(`ELI5: ${explainContext(runtimeContext, 'eli5')}`);
-  }
   return {
     hasAnswer: true,
-    text: lines.join(' '),
-    matchedOperator: top?.name || null,
+    text: `Not sure what you're looking for. Try naming an operator directly, like Blur TOP, Math CHOP, or Null SOP.`,
+    matchedOperator: null,
   };
 }
 

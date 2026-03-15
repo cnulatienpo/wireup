@@ -5,25 +5,28 @@ export function detectPatterns(patch = {}, rules = { patterns: [] }) {
 
 function tdExplain(context = {}) {
   if (!context.operator) {
-    return 'No direct operator match found in runtime index.';
+    return 'Try naming an operator directly, like Blur TOP, Math CHOP, or Null SOP.';
   }
 
   const op = context.operator;
-  return [
-    `${op.name} [${op.family.toUpperCase()}]`,
-    op.identity,
-    op.signal_story ? `Signal story: ${op.signal_story}` : null,
-    Array.isArray(op.failure_modes) && op.failure_modes.length ? `Failure modes: ${op.failure_modes.join(' | ')}` : null,
-  ].filter(Boolean).join('\n');
+  const family = op.family ? ` (${op.family.toUpperCase()})` : '';
+  const identity = op.identity ? op.identity.replace(/\.$/, '') : '';
+  const story = op.signal_story ? op.signal_story.split('.')[0].trim() : '';
+  let text = `The ${op.name}${family}`;
+  if (identity) text += ` ${identity.charAt(0).toLowerCase() + identity.slice(1)}`;
+  if (story) text += ` — like ${story.charAt(0).toLowerCase() + story.slice(1)}.`;
+  else text += '.';
+  return text;
 }
 
 function eli5Explain(context = {}) {
   if (!context.operator) {
-    return "I couldn't find that exact operator, but we can still explore the idea with glossary concepts.";
+    return 'Try naming an operator directly, like Blur TOP, Math CHOP, or Null SOP.';
   }
 
   const op = context.operator;
-  return `${op.name} is like a tool that ${op.identity || 'changes your signal in a useful way'}. ${op.signal_story || ''}`.trim();
+  const story = op.signal_story ? ` — like ${op.signal_story.charAt(0).toLowerCase() + op.signal_story.slice(1)}.` : '.';
+  return `The ${op.name} ${op.identity || 'changes your signal in a useful way'}${story}`.trim();
 }
 
 export function explainContext(context, mode = 'td') {
