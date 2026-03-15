@@ -15,11 +15,46 @@ import sys
 import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Tuple
 from urllib import request
 
+from sentence_transformers import SentenceTransformer
+
 ROOT = Path(__file__).resolve().parent
+
+
+def load_env_file(env_path: Path) -> None:
+    if not env_path.exists():
+        return
+
+    for raw_line in env_path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+
+        if line.startswith("export "):
+            line = line[len("export "):].strip()
+
+        if "=" not in line:
+            continue
+
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip()
+
+        if not key or key in os.environ:
+            continue
+
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+            value = value[1:-1]
+
+        os.environ[key] = value
+
+
+load_env_file(ROOT / ".env")
+
 DEFAULT_LOG_DIR = ROOT / "logs"
 DEBUG_RAG = os.getenv("DEBUG_RAG", "false").lower() == "true"
 
@@ -30,6 +65,10 @@ class Chunk:
     document_type: str  # glossary | recipe | error
     operator_name: str
     text: str
+    embedding: List[float] | None = None
+
+
+EMBEDDING_MODEL_NAME = os.getenv("RAG_EMBEDDING_MODEL", "all-MiniLM-L6-v2")
 
 
 def _now_iso() -> str:
@@ -176,15 +215,40 @@ def load_chunks() -> List[Chunk]:
     return chunks
 
 
-def embed_text(text: str, dim: int = 256) -> List[float]:
-    vec = [0.0] * dim
-    for token in re.findall(r"[a-z0-9]+", text.lower()):
-        slot = hash(token) % dim
-        vec[slot] += 1.0
-    norm = math.sqrt(sum(v * v for v in vec))
-    if norm:
-        vec = [v / norm for v in vec]
-    return vec
+@lru_cache(maxsize=1)
+def get_embedding_model() -> SentenceTransformer:
+    return SentenceTransformer(EMBEDDING_MODEL_NAME)
+
+
+def embedding_fn(text: str) -> List[float]:
+    vector = get_embedding_model().encode(
+        text,
+        normalize_embeddings=True,
+        show_progress_bar=False,
+    )
+    return vector.tolist()
+
+
+def embed_chunks(chunks: List[Chunk]) -> List[Chunk]:
+    if not chunks:
+        return chunks
+
+    model = get_embedding_model()
+    vectors = model.encode(
+        [chunk.text for chunk in chunks],
+        normalize_embeddings=True,
+        show_progress_bar=False,
+    )
+
+    for chunk, vector in zip(chunks, vectors):
+        chunk.embedding = vector.tolist()
+
+    return chunks
+
+
+@lru_cache(maxsize=1)
+def get_embedded_corpus() -> Tuple[Chunk, ...]:
+    return tuple(embed_chunks(load_chunks()))
 
 
 def cosine(a: List[float], b: List[float]) -> float:
@@ -193,12 +257,14 @@ def cosine(a: List[float], b: List[float]) -> float:
 
 def retrieve_top_chunks(query: str, corpus: List[Chunk], k: int = 10) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     emb_start = time.perf_counter()
-    query_vec = embed_text(query)
+    query_vec = embedding_fn(query)
     emb_ms = (time.perf_counter() - emb_start) * 1000
 
     scored = []
     for chunk in corpus:
-        score = cosine(query_vec, embed_text(chunk.text))
+        if chunk.embedding is None:
+            raise ValueError(f"Chunk {chunk.document_id} is missing a precomputed embedding")
+        score = cosine(query_vec, chunk.embedding)
         scored.append((score, chunk))
     scored.sort(key=lambda x: x[0], reverse=True)
 
@@ -216,7 +282,7 @@ def retrieve_top_chunks(query: str, corpus: List[Chunk], k: int = 10) -> Tuple[L
         )
 
     embedding_trace = {
-        "embedding_model_used": "token-hash-embedding-v1",
+        "embedding_model_used": EMBEDDING_MODEL_NAME,
         "embedding_vector_length": len(query_vec),
         "embedding_generation_time_ms": round(emb_ms, 3),
     }
@@ -270,6 +336,32 @@ def select_context(query_type: str, retrieval_results: List[Dict[str, Any]]) -> 
                     "reason_dropped": decision_reason,
                 }
             )
+
+    if not selected:
+        fallback_selected: List[Dict[str, Any]] = []
+        fallback_dropped: List[Dict[str, Any]] = []
+        for index, item in enumerate(retrieval_results):
+            if index < 4 and item["similarity_score"] > 0:
+                decision_reason = (
+                    f"fallback top semantic match for query_type={query_type} "
+                    f"similarity={item['similarity_score']}"
+                )
+                fallback_selected.append(
+                    {
+                        **item,
+                        "doc_id": item["document_id"],
+                        "doc_type": item["document_type"],
+                        "decision_reason": decision_reason,
+                        "reason_selected": decision_reason,
+                    }
+                )
+            else:
+                fallback_dropped.append(item)
+
+        if fallback_selected:
+            fallback_selected_ids = {item["document_id"] for item in fallback_selected}
+            selected = fallback_selected
+            dropped = [item for item in dropped if item["document_id"] not in fallback_selected_ids]
 
     return selected, dropped
 
@@ -363,7 +455,7 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
         "query_type_guess": query_type,
     }
 
-    corpus = load_chunks()
+    corpus = list(get_embedded_corpus())
     retrieval_results, embedding_trace = retrieve_top_chunks(user_query, corpus, k=10)
     selected, dropped = select_context(query_type, retrieval_results)
 

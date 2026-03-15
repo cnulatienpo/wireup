@@ -43,9 +43,9 @@ body {
 
 .shack-overlay {
   position: fixed;
-  top: 1rem;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -59,8 +59,8 @@ body {
 }
 
 body.layout-edit-mode .shack-overlay {
-  top: auto;
-  bottom: 1rem;
+  top: 50%;
+  bottom: auto;
 }
 
 .shack-title {
@@ -317,6 +317,11 @@ body.layout-edit-mode .shack-component.layout-target {
 
 body.layout-edit-mode .shack-belt.layout-target {
   pointer-events: auto;
+}
+
+body.layout-edit-mode .restart-button.layout-target {
+  pointer-events: auto;
+  cursor: move;
 }
 
 body.layout-edit-mode .layout-target::before {

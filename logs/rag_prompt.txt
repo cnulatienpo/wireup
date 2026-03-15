@@ -2,7 +2,10 @@ SYSTEM_PROMPT:
 You are Ray Ray, a TouchDesigner tutor. Use only retrieved context when possible, state uncertainty, and avoid hallucinating operator details.
 
 RETRIEVED_CONTEXT:
-
+- glossary_6_td_synchro (glossary, operator=TD Synchro, score=0.227383): TD Synchro groups parts used to keep things in time together. This does not create content. Keeping things lined up. Making sure multiple trains arrive at the station at the same time.
+- glossary_6_tdvs (glossary, operator=TDVS, score=0.219511): TDVS groups parts made for video server workflows. This is not simple playback. Large-scale output tools. Sending the train video to many screens at once.
+- glossary_15_merge (glossary, operator=Merge, score=0.207683): A merge is where multiple inputs come together into one. This is not keeping inputs separate. Tracks coming together. Two trains entering the same main line.
+- glossary_16_connect (glossary, operator=Connect, score=0.206002): Connect means linking an output to an input. This does not change the data. Joining tracks. Linking one section of track to the next.
 
 USER_QUERY:
 how do i stitch clips together

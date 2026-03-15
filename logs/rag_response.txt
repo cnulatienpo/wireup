@@ -1,1 +1,5 @@
-[audit fallback] DEEPSEEK_API_KEY missing. Skipping live generation and returning fallback response.
+Based on the context provided, the specific term "stitch clips together" isn't directly defined. However, the concept of combining multiple inputs into one is covered.
+
+The glossary entry for **Merge** describes it as "where multiple inputs come together into one," using the analogy of "two trains entering the same main line." This sounds like the process of combining or stitching separate clips into a single stream.
+
+For a precise workflow on stitching video clips, I would need more specific context about the operators or processes designed for that task. The provided context covers grouping for timing (TD Synchro), video server output (TDVS), combining inputs (Merge), and making connections (Connect), but not the exact method for clip stitching.

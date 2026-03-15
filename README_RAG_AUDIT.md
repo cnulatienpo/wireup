@@ -10,6 +10,8 @@ DEBUG_RAG=true python rayray_rag_audit.py "how do i stitch clips together"
 
 - `DEBUG_RAG=true` enables file logging.
 - Without `DEBUG_RAG=true`, the script still prints a terminal report but does not write debug files.
+- The audit runner now uses `sentence-transformers` with `all-MiniLM-L6-v2` for semantic embeddings.
+- First run may take longer because the embedding model is downloaded and the corpus is embedded once at startup.
 
 ## What gets traced
 
@@ -24,6 +26,7 @@ The audit runner logs these pipeline stages:
    - `embedding_model_used`
    - `embedding_vector_length`
    - `embedding_generation_time_ms`
+   - document chunks are embedded once at startup and reused for each query in-process
 
 3. **Retrieval trace**
    - Top 10 retrieved chunks with:
@@ -85,7 +88,7 @@ When `DEBUG_RAG=true`, the script writes:
 
 2. **Irrelevant top retrieval chunks**
    - Signature: top scores include unrelated operators (for example `multiply_top` for stitching workflow queries).
-   - Fix direction: adjust embeddings and/or retrieval chunking strategy.
+   - Fix direction: adjust embedding model choice and/or retrieval chunking strategy.
 
 3. **No selected context**
    - Signature: retrieval has results but `selected_context` is empty.

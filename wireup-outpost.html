@@ -24,7 +24,7 @@
       <button id="ui-scale-up" class="shack-link" type="button" aria-label="Scale up">UI +</button>
       <button id="ui-scale-reset" class="shack-link" type="button" aria-label="Reset UI scale">Fit UI</button>
       <button id="layout-edit-toggle" class="shack-link" type="button" aria-label="Toggle layout edit mode">Edit Layout</button>
-      <button id="layout-save" class="shack-link" type="button" aria-label="Save layout" disabled>Save Layout</button>
+      <button id="layout-save" class="shack-link" type="button" aria-label="Save layout">Save Layout</button>
       <button id="layout-reset" class="shack-link" type="button" aria-label="Reset saved layout">Reset Layout</button>
       <span id="ui-scale-readout" class="shack-scale-readout">100%</span>
     </main>
@@ -114,6 +114,7 @@
       let customLayoutNormalized = null;
       let isLayoutEditMode = false;
       let activePointerState = null;
+      let saveStatusTimeout = null;
 
       const editableTargets = [
         { key: 'leftPanelFrame', element: leftPanelFrame, label: 'left-panel-frame', minWidth: 32, minHeight: 32 },
@@ -263,8 +264,30 @@
         }
 
         if (layoutSave) {
-          layoutSave.disabled = !isLayoutEditMode;
+          layoutSave.disabled = false;
         }
+      }
+
+      function showLayoutSavedState() {
+        if (!layoutSave) {
+          return;
+        }
+
+        layoutSave.textContent = 'Saved';
+        layoutSave.setAttribute('aria-label', 'Layout saved');
+
+        if (saveStatusTimeout) {
+          clearTimeout(saveStatusTimeout);
+        }
+
+        saveStatusTimeout = setTimeout(() => {
+          if (!layoutSave) {
+            return;
+          }
+          layoutSave.textContent = 'Save Layout';
+          layoutSave.setAttribute('aria-label', 'Save layout');
+          saveStatusTimeout = null;
+        }, 1200);
       }
 
       function setLayoutEditMode(enabled) {
@@ -741,8 +764,12 @@
       if (layoutSave) {
         layoutSave.addEventListener('click', () => {
           const snapshot = captureCurrentLayout();
+          if (!snapshot || !Object.keys(snapshot).length) {
+            return;
+          }
           customLayoutNormalized = serializeLayout(snapshot);
           saveCustomLayout(customLayoutNormalized);
+          showLayoutSavedState();
           setLayoutEditMode(false);
         });
       }
