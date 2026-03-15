@@ -24,9 +24,6 @@
       <button id="ui-scale-up" class="shack-link" type="button" aria-label="Scale up">UI +</button>
       <button id="ui-scale-reset" class="shack-link" type="button" aria-label="Reset UI scale">Fit UI</button>
       <span id="ui-scale-readout" class="shack-scale-readout">100%</span>
-      <button id="layout-edit-toggle" class="shack-link" type="button" aria-pressed="false">Edit Layout</button>
-      <button id="layout-save" class="shack-link" type="button">Save</button>
-      <button id="layout-reset" class="shack-link" type="button">Reset</button>
     </main>
 
     <label id="eli5-toggle-control" class="shack-link eli5-toggle-control" for="explain-eli5-toggle">
@@ -62,7 +59,7 @@
       </button>
     </div>
 
-    <button id="restart-button" class="restart-button" type="button" aria-label="Restart">Restart</button>
+    <button id="restart-button" class="restart-button" type="button" aria-label="Restart" title="Restart temporarily disabled" disabled>Restart</button>
   </div>
 
   <script>
@@ -85,9 +82,6 @@
       const uiScaleUp = document.getElementById('ui-scale-up');
       const uiScaleReset = document.getElementById('ui-scale-reset');
       const uiScaleReadout = document.getElementById('ui-scale-readout');
-      const layoutEditToggle = document.getElementById('layout-edit-toggle');
-      const layoutSave = document.getElementById('layout-save');
-      const layoutReset = document.getElementById('layout-reset');
       const eli5ToggleControl = document.getElementById('eli5-toggle-control');
       const threshold = 30;
       const alphaThreshold = 20;
@@ -104,11 +98,9 @@
         garbageWire: { x: 0.78, y: 0.74, width: 0.16, height: 0.21 },
       };
       const uiScaleStorageKey = 'wireup.outpost.uiScale.v1';
-      const layoutStorageKey = 'wireup.outpost.layout.v1';
       const minUiScale = 0.35;
       const maxUiScale = 2.4;
       const uiScaleStep = 0.05;
-      let isLayoutEditMode = false;
       let currentAutoLayout = null;
       let uiScale = Number(localStorage.getItem(uiScaleStorageKey)) || 1;
 
@@ -250,7 +242,7 @@
         }
 
         const restartSize = contentWidth * 0.09;
-        const restartX = contentX + contentWidth * 0.035;
+        const restartX = contentX + contentWidth * 0.035 + 48;
         const restartY = contentY + contentHeight - (contentHeight * 0.13) - restartSize;
         const beltWidth = contentWidth * beltWidthFraction;
         const beltHeight = beltWidth / beltRatio;
@@ -314,15 +306,7 @@
           },
         };
 
-        if (!hasSavedLayout()) {
-          applyLayoutPreset(currentAutoLayout);
-        } else {
-          applySavedLayout();
-        }
-      }
-
-      function hasSavedLayout() {
-        return Boolean(localStorage.getItem(layoutStorageKey));
+        applyLayoutPreset(currentAutoLayout);
       }
 
       function px(value) {
@@ -455,206 +439,6 @@
           eli5ToggleControl.style.width = pxSize(layout.eli5ToggleControl.width, 70);
           eli5ToggleControl.style.height = pxSize(layout.eli5ToggleControl.height, 32);
         }
-      }
-
-      function readElementRect(el) {
-        if (!el) {
-          return null;
-        }
-
-        return {
-          left: parseFloat(el.style.left) || 0,
-          top: parseFloat(el.style.top) || 0,
-          width: parseFloat(el.style.width) || el.offsetWidth,
-          height: parseFloat(el.style.height) || el.offsetHeight,
-        };
-      }
-
-      function collectCurrentLayout() {
-        return {
-          leftPanelFrame: readElementRect(leftPanelFrame),
-          whiteBoxFrame: readElementRect(whiteBoxFrame),
-          rightPanelFrame: readElementRect(rightPanelFrame),
-          blackBoxFrame: readElementRect(blackBoxFrame),
-          yellowButtonFrame: readElementRect(yellowButtonFrame),
-          garbageWireFrame: readElementRect(garbageWireFrame),
-          beltFrame: readElementRect(belt),
-          restartButton: readElementRect(restartButton),
-          leftPanel: readElementRect(leftPanel),
-          lowerLeftPanel: readElementRect(lowerLeftPanel),
-          output: readElementRect(output),
-          contextPanel: readElementRect(contextPanel),
-          inputWrap: readElementRect(inputWrap),
-          eli5ToggleControl: readElementRect(eli5ToggleControl),
-        };
-      }
-
-      function saveLayout() {
-        localStorage.setItem(layoutStorageKey, JSON.stringify(collectCurrentLayout()));
-      }
-
-      function applySavedLayout() {
-        const raw = localStorage.getItem(layoutStorageKey);
-        if (!raw) {
-          return;
-        }
-
-        try {
-          const parsed = JSON.parse(raw);
-          applyLayoutPreset(parsed);
-        } catch (_error) {
-          localStorage.removeItem(layoutStorageKey);
-        }
-      }
-
-      function resetLayout() {
-        localStorage.removeItem(layoutStorageKey);
-        if (currentAutoLayout) {
-          applyLayoutPreset(currentAutoLayout);
-        }
-      }
-
-      function setLayoutEditMode(enabled) {
-        isLayoutEditMode = enabled;
-        document.body.classList.toggle('layout-edit-mode', enabled);
-        if (layoutEditToggle) {
-          layoutEditToggle.setAttribute('aria-pressed', String(enabled));
-          layoutEditToggle.textContent = enabled ? 'Editing Layout' : 'Edit Layout';
-        }
-      }
-
-      function makeEditable(target, label) {
-        if (!target) {
-          return;
-        }
-
-        target.classList.add('layout-target');
-        target.setAttribute('data-layout-label', label);
-        target.style.touchAction = 'none';
-
-        let dragState = null;
-        const resizeEdgeThreshold = 24;
-
-        function updateCursor(clientX, clientY) {
-          if (!isLayoutEditMode) {
-            target.style.cursor = '';
-            return;
-          }
-
-          const rect = target.getBoundingClientRect();
-          const nearRight = rect.right - clientX <= resizeEdgeThreshold;
-          const nearBottom = rect.bottom - clientY <= resizeEdgeThreshold;
-          target.style.cursor = nearRight && nearBottom ? 'nwse-resize' : 'move';
-        }
-
-        target.addEventListener('pointerdown', (event) => {
-          if (!isLayoutEditMode) {
-            return;
-          }
-
-          const rect = target.getBoundingClientRect();
-          const nearRight = rect.right - event.clientX <= resizeEdgeThreshold;
-          const nearBottom = rect.bottom - event.clientY <= resizeEdgeThreshold;
-          dragState = {
-            mode: nearRight && nearBottom ? 'resize' : 'move',
-            pointerId: event.pointerId,
-            startX: event.clientX,
-            startY: event.clientY,
-            startLeft: parseFloat(target.style.left) || rect.left,
-            startTop: parseFloat(target.style.top) || rect.top,
-            startWidth: parseFloat(target.style.width) || rect.width,
-            startHeight: parseFloat(target.style.height) || rect.height,
-          };
-
-          target.setPointerCapture(event.pointerId);
-          event.preventDefault();
-          event.stopPropagation();
-        });
-
-        target.addEventListener('pointermove', (event) => {
-          if (!dragState || dragState.pointerId !== event.pointerId) {
-            return;
-          }
-
-          const dx = event.clientX - dragState.startX;
-          const dy = event.clientY - dragState.startY;
-
-          if (dragState.mode === 'move') {
-            target.style.left = px(dragState.startLeft + dx);
-            target.style.top = px(dragState.startTop + dy);
-          } else {
-            target.style.width = pxSize(Math.max(80, dragState.startWidth + dx), 80);
-            target.style.height = pxSize(Math.max(50, dragState.startHeight + dy), 50);
-          }
-
-          updateCursor(event.clientX, event.clientY);
-
-          event.preventDefault();
-        });
-
-        target.addEventListener('pointermove', (event) => {
-          if (dragState) {
-            return;
-          }
-
-          updateCursor(event.clientX, event.clientY);
-        });
-
-        target.addEventListener('pointerup', (event) => {
-          if (!dragState || dragState.pointerId !== event.pointerId) {
-            return;
-          }
-
-          target.releasePointerCapture(event.pointerId);
-          dragState = null;
-          updateCursor(event.clientX, event.clientY);
-        });
-
-        target.addEventListener('pointercancel', () => {
-          dragState = null;
-          if (isLayoutEditMode) {
-            target.style.cursor = 'move';
-          }
-        });
-
-        target.addEventListener('pointerleave', () => {
-          if (!dragState) {
-            target.style.cursor = isLayoutEditMode ? 'move' : '';
-          }
-        });
-      }
-
-      makeEditable(leftPanel, 'Left Panel');
-      makeEditable(lowerLeftPanel, 'Bottom Left Panel');
-      makeEditable(output, 'Ray Ray Output');
-      makeEditable(contextPanel, 'Context Panel');
-      makeEditable(inputWrap, 'Input Bar');
-      makeEditable(leftPanelFrame, 'Left Panel Frame');
-      makeEditable(whiteBoxFrame, 'Center Panel Frame');
-      makeEditable(rightPanelFrame, 'Right Panel Frame');
-      makeEditable(blackBoxFrame, 'Black Panel Frame');
-      makeEditable(yellowButtonFrame, 'Yellow Button Frame');
-      makeEditable(garbageWireFrame, 'Garbage Wire');
-      makeEditable(belt, 'Wire Belt');
-      makeEditable(restartButton, 'Restart Button');
-      makeEditable(eli5ToggleControl, 'ELI5 Toggle');
-
-      if (layoutEditToggle) {
-        layoutEditToggle.addEventListener('click', () => {
-          setLayoutEditMode(!isLayoutEditMode);
-        });
-      }
-
-      if (layoutSave) {
-        layoutSave.addEventListener('click', () => {
-          saveLayout();
-        });
-      }
-
-      if (layoutReset) {
-        layoutReset.addEventListener('click', () => {
-          resetLayout();
-        });
       }
 
       if (uiScaleDown) {

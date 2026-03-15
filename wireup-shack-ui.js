@@ -302,11 +302,8 @@ function initRestartButton() {
     return;
   }
 
-  restartButton.addEventListener('click', () => {
-    sessionStorage.clear();
-    localStorage.clear();
-    window.location.reload();
-  });
+  restartButton.disabled = true;
+  restartButton.title = 'Restart temporarily disabled';
 }
 
 async function initWireupOutpost() {

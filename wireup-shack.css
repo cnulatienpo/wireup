@@ -246,10 +246,12 @@ button.shack-link {
   letter-spacing: 0.03em;
   text-transform: uppercase;
   text-shadow: 0 1px 0 rgba(255, 244, 204, 0.65);
-  cursor: pointer;
+  cursor: not-allowed;
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0.45;
+  pointer-events: none;
 }
 
 .cardboard-scroll::-webkit-scrollbar {
