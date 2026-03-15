@@ -1,0 +1,233 @@
+{
+  "query_log": {
+    "timestamp": "2026-03-15T14:31:15.243882+00:00",
+    "user_query": "how do i stitch clips together",
+    "query_type_guess": "workflow_recipe"
+  },
+  "embedding_trace": {
+    "embedding_model_used": "token-hash-embedding-v1",
+    "embedding_vector_length": 256,
+    "embedding_generation_time_ms": 0.093
+  },
+  "retrieval_results": [
+    {
+      "document_id": "glossary_2_mat",
+      "document_type": "glossary",
+      "operator_name": "MAT",
+      "similarity_score": 0.308607,
+      "text_preview_first_120_chars": "MATs control how surfaces look. These do not change shape or position. Surface appearance. The color and finish of the t",
+      "chunk_text": "MATs control how surfaces look. These do not change shape or position. Surface appearance. The color and finish of the train\u2019s outer shell."
+    },
+    {
+      "document_id": "glossary_22_sequence",
+      "document_type": "glossary",
+      "operator_name": "Sequence",
+      "similarity_score": 0.284268,
+      "text_preview_first_120_chars": "Sequence controls the order things are combined. This does not change the content itself. Order of mixing. Which train e",
+      "chunk_text": "Sequence controls the order things are combined. This does not change the content itself. Order of mixing. Which train enters the track first."
+    },
+    {
+      "document_id": "glossary_23_sequence",
+      "document_type": "glossary",
+      "operator_name": "Sequence",
+      "similarity_score": 0.284268,
+      "text_preview_first_120_chars": "Sequence controls the order things are combined. This does not change the content itself. Order of mixing. Which train e",
+      "chunk_text": "Sequence controls the order things are combined. This does not change the content itself. Order of mixing. Which train enters the track first."
+    },
+    {
+      "document_id": "glossary_6_image_filters",
+      "document_type": "glossary",
+      "operator_name": "Image Filters",
+      "similarity_score": 0.276026,
+      "text_preview_first_120_chars": "Image filters change the look of images. These do not create new images from scratch. Ways to change appearance. Changin",
+      "chunk_text": "Image filters change the look of images. These do not create new images from scratch. Ways to change appearance. Changing how the train video looks, like darker or blurrier."
+    },
+    {
+      "document_id": "glossary_15_signal_flow_taxonomy",
+      "document_type": "glossary",
+      "operator_name": "Signal Flow Taxonomy",
+      "similarity_score": 0.243975,
+      "text_preview_first_120_chars": "Signal flow taxonomy is the system TouchDesigner uses to describe how information moves and connects. This is not a set ",
+      "chunk_text": "Signal flow taxonomy is the system TouchDesigner uses to describe how information moves and connects. This is not a set of rules you must memorize. A map of how trains are allowed to move. Rules that explain which tracks trains can use and how they connect."
+    },
+    {
+      "document_id": "glossary_24_render",
+      "document_type": "glossary",
+      "operator_name": "Render",
+      "similarity_score": 0.240192,
+      "text_preview_first_120_chars": "Render controls how things are drawn. This does not change movement. Drawing rules. How the train is drawn on screen.",
+      "chunk_text": "Render controls how things are drawn. This does not change movement. Drawing rules. How the train is drawn on screen."
+    },
+    {
+      "document_id": "glossary_2_dat",
+      "document_type": "glossary",
+      "operator_name": "DAT",
+      "similarity_score": 0.235702,
+      "text_preview_first_120_chars": "DATs work with text and lists. These do not make images. Written information. A written list of train stops and times.",
+      "chunk_text": "DATs work with text and lists. These do not make images. Written information. A written list of train stops and times."
+    },
+    {
+      "document_id": "glossary_22_render",
+      "document_type": "glossary",
+      "operator_name": "Render",
+      "similarity_score": 0.227429,
+      "text_preview_first_120_chars": "Render controls how things are drawn. This does not move or change data. Drawing rules. Rules for how the train appears ",
+      "chunk_text": "Render controls how things are drawn. This does not move or change data. Drawing rules. Rules for how the train appears on screen."
+    },
+    {
+      "document_id": "glossary_23_render",
+      "document_type": "glossary",
+      "operator_name": "Render",
+      "similarity_score": 0.227429,
+      "text_preview_first_120_chars": "Render controls how things are drawn. This does not move or change data. Drawing rules. Rules for how the train appears ",
+      "chunk_text": "Render controls how things are drawn. This does not move or change data. Drawing rules. Rules for how the train appears on screen."
+    },
+    {
+      "document_id": "glossary_16_connection_words",
+      "document_type": "glossary",
+      "operator_name": "Connection Words",
+      "similarity_score": 0.219971,
+      "text_preview_first_120_chars": "Connection words are the terms TouchDesigner uses to describe how data is shared. These are not instructions. Labels on ",
+      "chunk_text": "Connection words are the terms TouchDesigner uses to describe how data is shared. These are not instructions. Labels on connections. Signs that explain how trains share tracks."
+    }
+  ],
+  "chunk_filtering_trace": {
+    "selected_context": [],
+    "dropped_context": [
+      {
+        "document_id": "glossary_2_mat",
+        "document_type": "glossary",
+        "operator_name": "MAT",
+        "similarity_score": 0.308607,
+        "text_preview_first_120_chars": "MATs control how surfaces look. These do not change shape or position. Surface appearance. The color and finish of the t",
+        "chunk_text": "MATs control how surfaces look. These do not change shape or position. Surface appearance. The color and finish of the train\u2019s outer shell.",
+        "doc_id": "glossary_2_mat",
+        "doc_type": "glossary",
+        "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+        "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+      },
+      {
+        "document_id": "glossary_22_sequence",
+        "document_type": "glossary",
+        "operator_name": "Sequence",
+        "similarity_score": 0.284268,
+        "text_preview_first_120_chars": "Sequence controls the order things are combined. This does not change the content itself. Order of mixing. Which train e",
+        "chunk_text": "Sequence controls the order things are combined. This does not change the content itself. Order of mixing. Which train enters the track first.",
+        "doc_id": "glossary_22_sequence",
+        "doc_type": "glossary",
+        "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+        "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+      },
+      {
+        "document_id": "glossary_23_sequence",
+        "document_type": "glossary",
+        "operator_name": "Sequence",
+        "similarity_score": 0.284268,
+        "text_preview_first_120_chars": "Sequence controls the order things are combined. This does not change the content itself. Order of mixing. Which train e",
+        "chunk_text": "Sequence controls the order things are combined. This does not change the content itself. Order of mixing. Which train enters the track first.",
+        "doc_id": "glossary_23_sequence",
+        "doc_type": "glossary",
+        "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+        "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+      },
+      {
+        "document_id": "glossary_6_image_filters",
+        "document_type": "glossary",
+        "operator_name": "Image Filters",
+        "similarity_score": 0.276026,
+        "text_preview_first_120_chars": "Image filters change the look of images. These do not create new images from scratch. Ways to change appearance. Changin",
+        "chunk_text": "Image filters change the look of images. These do not create new images from scratch. Ways to change appearance. Changing how the train video looks, like darker or blurrier.",
+        "doc_id": "glossary_6_image_filters",
+        "doc_type": "glossary",
+        "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+        "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+      },
+      {
+        "document_id": "glossary_15_signal_flow_taxonomy",
+        "document_type": "glossary",
+        "operator_name": "Signal Flow Taxonomy",
+        "similarity_score": 0.243975,
+        "text_preview_first_120_chars": "Signal flow taxonomy is the system TouchDesigner uses to describe how information moves and connects. This is not a set ",
+        "chunk_text": "Signal flow taxonomy is the system TouchDesigner uses to describe how information moves and connects. This is not a set of rules you must memorize. A map of how trains are allowed to move. Rules that explain which tracks trains can use and how they connect.",
+        "doc_id": "glossary_15_signal_flow_taxonomy",
+        "doc_type": "glossary",
+        "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+        "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+      },
+      {
+        "document_id": "glossary_24_render",
+        "document_type": "glossary",
+        "operator_name": "Render",
+        "similarity_score": 0.240192,
+        "text_preview_first_120_chars": "Render controls how things are drawn. This does not change movement. Drawing rules. How the train is drawn on screen.",
+        "chunk_text": "Render controls how things are drawn. This does not change movement. Drawing rules. How the train is drawn on screen.",
+        "doc_id": "glossary_24_render",
+        "doc_type": "glossary",
+        "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+        "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+      },
+      {
+        "document_id": "glossary_2_dat",
+        "document_type": "glossary",
+        "operator_name": "DAT",
+        "similarity_score": 0.235702,
+        "text_preview_first_120_chars": "DATs work with text and lists. These do not make images. Written information. A written list of train stops and times.",
+        "chunk_text": "DATs work with text and lists. These do not make images. Written information. A written list of train stops and times.",
+        "doc_id": "glossary_2_dat",
+        "doc_type": "glossary",
+        "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+        "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+      },
+      {
+        "document_id": "glossary_22_render",
+        "document_type": "glossary",
+        "operator_name": "Render",
+        "similarity_score": 0.227429,
+        "text_preview_first_120_chars": "Render controls how things are drawn. This does not move or change data. Drawing rules. Rules for how the train appears ",
+        "chunk_text": "Render controls how things are drawn. This does not move or change data. Drawing rules. Rules for how the train appears on screen.",
+        "doc_id": "glossary_22_render",
+        "doc_type": "glossary",
+        "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+        "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+      },
+      {
+        "document_id": "glossary_23_render",
+        "document_type": "glossary",
+        "operator_name": "Render",
+        "similarity_score": 0.227429,
+        "text_preview_first_120_chars": "Render controls how things are drawn. This does not move or change data. Drawing rules. Rules for how the train appears ",
+        "chunk_text": "Render controls how things are drawn. This does not move or change data. Drawing rules. Rules for how the train appears on screen.",
+        "doc_id": "glossary_23_render",
+        "doc_type": "glossary",
+        "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+        "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+      },
+      {
+        "document_id": "glossary_16_connection_words",
+        "document_type": "glossary",
+        "operator_name": "Connection Words",
+        "similarity_score": 0.219971,
+        "text_preview_first_120_chars": "Connection words are the terms TouchDesigner uses to describe how data is shared. These are not instructions. Labels on ",
+        "chunk_text": "Connection words are the terms TouchDesigner uses to describe how data is shared. These are not instructions. Labels on connections. Signs that explain how trains share tracks.",
+        "doc_id": "glossary_16_connection_words",
+        "doc_type": "glossary",
+        "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+        "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+      }
+    ]
+  },
+  "prompt_assembly_trace": {
+    "system_prompt": "You are Ray Ray, a TouchDesigner tutor. Use only retrieved context when possible, state uncertainty, and avoid hallucinating operator details.",
+    "retrieved_context": "",
+    "full_prompt": "SYSTEM_PROMPT:\nYou are Ray Ray, a TouchDesigner tutor. Use only retrieved context when possible, state uncertainty, and avoid hallucinating operator details.\n\nRETRIEVED_CONTEXT:\n\n\nUSER_QUERY:\nhow do i stitch clips together\n"
+  },
+  "pipeline_routing_trace": {
+    "response_mode": "recipe_responder",
+    "routing_stage": "pre_generation"
+  },
+  "response_trace": {
+    "model_used": "deepseek-chat",
+    "response_tokens": 11,
+    "generation_time_ms": 0.009
+  }
+}
