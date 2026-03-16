@@ -1,0 +1,63 @@
+[
+  {
+    "user_goal": "I want to make a video where stock clips morph into each other.",
+    "assistant_response": "Nice. In TouchDesigner people usually approach that two ways.\n\nIf you want hard cuts, use a Switch TOP and change the Index parameter.\n\nIf you want clips to morph smoothly, blend them with a Cross TOP or Level TOP and animate the opacity.\n\nAre you trying to change clips on music beats or just fade them over time?",
+    "conversation_style": "exploratory",
+    "concepts_used": [
+      "Switch TOP",
+      "Cross TOP",
+      "Level TOP"
+    ]
+  },
+  {
+    "user_goal": "How do I put noise on a TOP?",
+    "assistant_response": "The usual trick is to generate noise with a Noise TOP and then combine it with your image.\n\nFor example:\n\nNoise TOP → Composite TOP → your video\n\nIn the Composite TOP you can change the operation to Multiply or Add to mix the noise into the image.\n\nIf you want the noise animated, open the Noise TOP parameters and increase the Period or Offset values.",
+    "conversation_style": "instructional",
+    "concepts_used": [
+      "Noise TOP",
+      "Composite TOP"
+    ]
+  },
+  {
+    "user_goal": "I want particles to react to music.",
+    "assistant_response": "Great goal. Think of it as audio analysis first, then particle control.\n\nStart with Audio File In CHOP into Analyze CHOP so you can pull level or beat energy.\n\nThen export that channel into your Particle SOP birth rate or force values.\n\nWant a subtle response, or do you want hard beat hits that really spike the motion?",
+    "conversation_style": "exploratory",
+    "concepts_used": [
+      "Audio File In CHOP",
+      "Analyze CHOP",
+      "Particle SOP"
+    ]
+  },
+  {
+    "user_goal": "How can I make feedback trails from live video?",
+    "assistant_response": "Use a classic feedback loop.\n\nCamera TOP → Composite TOP\nFeedback TOP → Composite TOP\nComposite TOP output → Feedback TOP\n\nThen add a Level TOP before the Feedback TOP and lower opacity a little so old frames fade over time.\n\nIf the trails get too strong, reduce opacity more or clamp with a Math TOP.",
+    "conversation_style": "instructional",
+    "concepts_used": [
+      "Camera TOP",
+      "Feedback TOP",
+      "Composite TOP",
+      "Level TOP"
+    ]
+  },
+  {
+    "user_goal": "I need a clean way to switch visuals for different song sections.",
+    "assistant_response": "Solid use case. Build each look in its own branch, then route them through a Switch TOP.\n\nDrive the Switch TOP Index with a Count CHOP or Logic CHOP triggered by section markers.\n\nIf you want smoother transitions, fade each branch with Level TOPs and crossfade instead of hard switching.\n\nDo you already have section timing data, or should we generate it from audio?",
+    "conversation_style": "strategic",
+    "concepts_used": [
+      "Switch TOP",
+      "Count CHOP",
+      "Logic CHOP",
+      "Level TOP"
+    ]
+  },
+  {
+    "user_goal": "Can you explain instancing like I'm new to TouchDesigner?",
+    "assistant_response": "Totally. Instancing means drawing one geometry many times, with per-instance data controlling where and how each copy appears.\n\nA common setup is Grid SOP into Geometry COMP, then use CHOP channels for tx/ty/tz, scale, or color instance attributes.\n\nSo instead of building 1,000 separate objects, you send 1,000 rows of data to one object. That's why it's fast.",
+    "conversation_style": "conceptual",
+    "concepts_used": [
+      "Geometry COMP",
+      "Grid SOP",
+      "Instancing"
+    ]
+  }
+]

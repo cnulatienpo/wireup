@@ -29,6 +29,11 @@ from backend.workflow_verifier import verify_workflow
 from backend.ui_action_generator import generate_ui_actions
 from backend.retrieval_router import print_debug_table, rank_documents
 from backend.session_memory import get_session, is_follow_up_query, update_session
+from backend.conversation_examples import (
+    load_conversation_examples,
+    log_conversation_example_influence,
+    select_similar_examples,
+)
 
 ROOT = Path(__file__).resolve().parent
 GENERATED_RECIPES_PATH = ROOT / "data" / "wireup_runtime" / "generated_recipes.json"
@@ -1074,6 +1079,7 @@ def build_prompt(
     selected: List[Dict[str, Any]],
     generated_workflow: Dict[str, Any] | None = None,
     session: Dict[str, Any] | None = None,
+    teaching_examples: List[Dict[str, Any]] | None = None,
 ) -> Dict[str, str]:
     full_prompt = compose_prompt(
         user_query,
@@ -1081,6 +1087,7 @@ def build_prompt(
         selected,
         generated_workflow=generated_workflow,
         session=session,
+        teaching_examples=teaching_examples,
     )
 
     context_start = full_prompt.find("=== TASK ALIASES ===")
@@ -1157,6 +1164,7 @@ def run_audit(user_query: str, log_dir: Path | None = None, session_id: str = "d
         matched_task_alias=matched_task_alias,
     )
     selected, dropped = select_context(query_type, user_query, retrieval_results)
+    teaching_examples = select_similar_examples(user_query, query_type, max_examples=3)
 
     responder = route_mode(user_query, query_type, selected)
 
@@ -1191,6 +1199,7 @@ def run_audit(user_query: str, log_dir: Path | None = None, session_id: str = "d
         selected,
         generated_workflow=generated_workflow,
         session=session,
+        teaching_examples=teaching_examples,
     )
     full_prompt = prompt_parts["full_prompt"]
     prompt_assembly_trace = {
@@ -1203,6 +1212,11 @@ def run_audit(user_query: str, log_dir: Path | None = None, session_id: str = "d
     response_text, model_used = _post_chat_completion([
         {"role": "user", "content": full_prompt}
     ])
+    log_conversation_example_influence(
+        user_query=user_query,
+        query_type=query_type,
+        selected_examples=teaching_examples,
+    )
     known_operator_names = [chunk.operator_name for chunk in corpus if chunk.operator_name]
     generated_recipe = recipe_extractor(
         query_type_guess=query_type,
@@ -1243,6 +1257,10 @@ def run_audit(user_query: str, log_dir: Path | None = None, session_id: str = "d
             "dropped_context": dropped,
         },
         "prompt_assembly_trace": prompt_assembly_trace,
+        "conversation_examples_trace": {
+            "selected_examples": teaching_examples,
+            "examples_selected_count": len(teaching_examples),
+        },
         "session_memory_trace": {
             "is_follow_up": is_follow_up_query(user_query),
             "reused_previous_workflow": reused_previous_workflow,
@@ -1360,6 +1378,9 @@ def main(argv: List[str]) -> int:
         return 1
 
     user_query = " ".join(argv[1:]).strip()
+    loaded_examples = load_conversation_examples()
+    print("Conversation example library loaded")
+    print(f"Teaching examples available: {len(loaded_examples)}")
     report = run_audit(user_query)
     print_report(report)
     return 0
