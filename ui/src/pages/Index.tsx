@@ -1,11 +1,12 @@
-import { useState } from "react";
-import cardboardUI from "@/assets/FINISHED_UI.png";
+import { useState, type CSSProperties } from "react";
+
 import wireBelt from "@/assets/WIRE_BELT.svg";
-import LeftPanel from "@/components/LeftPanel";
+import cardboardUI from "@/assets/FINISHED_UI.png";
 import BottomLeftPanel from "@/components/BottomLeftPanel";
+import LeftPanel from "@/components/LeftPanel";
+import ResizablePanel from "@/components/ResizablePanel";
 
 const Index = () => {
-
   const [userInput, setUserInput] = useState("");
   const [response, setResponse] = useState("");
   const [context, setContext] = useState("No context loaded.");
@@ -13,20 +14,24 @@ const Index = () => {
 
   const handleSubmit = () => {
     if (!userInput.trim()) return;
+
     setIsLoading(true);
-    // Mock LLM response for now
+
     setTimeout(() => {
-      setResponse(prev =>
-        (prev ? prev + "\n\n" : "") +
-        `> ${userInput}\n\nThis is a mock response. Connect the LLM backend to get real answers.`
+      setResponse(
+        (prev) =>
+          (prev ? `${prev}\n\n` : "") +
+          `> ${userInput}\n\nThis is a mock response. Connect the LLM backend to get real answers.`,
       );
-      setContext(`Last prompt: "${userInput.slice(0, 80)}${userInput.length > 80 ? "..." : ""}"\nTokens: ~${Math.ceil(userInput.split(/\s+/).length * 1.3)}\nModel: not connected`);
+      setContext(
+        `Last prompt: "${userInput.slice(0, 80)}${userInput.length > 80 ? "..." : ""}"\nTokens: ~${Math.ceil(userInput.split(/\s+/).length * 1.3)}\nModel: not connected`,
+      );
       setUserInput("");
       setIsLoading(false);
     }, 600);
   };
 
-  const panelText: React.CSSProperties = {
+  const panelText: CSSProperties = {
     fontSize: "clamp(8px, 1.4vw, 15px)",
     lineHeight: 1.5,
     fontFamily: "'Courier New', monospace",
@@ -37,7 +42,7 @@ const Index = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-black">
-      <div className="relative isolate w-full max-w-[900px]">
+      <div className="relative isolate w-full max-w-[900px] panel-canvas">
         <img
           src={wireBelt}
           alt="Wire Belt"
@@ -49,14 +54,10 @@ const Index = () => {
             height: "auto",
           }}
         />
-        <img
-          src={cardboardUI}
-          alt="Cardboard UI"
-          className="relative z-10 w-full h-auto block"
-        />
-        {/* Left panel */}
-        <div
-          className="absolute z-20 overflow-y-auto cardboard-scroll"
+        <img src={cardboardUI} alt="Cardboard UI" className="relative z-10 w-full h-auto block" />
+
+        <ResizablePanel
+          className="z-20 overflow-y-auto cardboard-scroll"
           style={{
             top: "16%",
             left: "3.5%",
@@ -65,10 +66,10 @@ const Index = () => {
           }}
         >
           <LeftPanel />
-        </div>
-        {/* Bottom-left black rectangle panel */}
-        <div
-          className="absolute z-20 overflow-y-auto cardboard-scroll"
+        </ResizablePanel>
+
+        <ResizablePanel
+          className="z-20 overflow-y-auto cardboard-scroll"
           style={{
             top: "73%",
             left: "3.5%",
@@ -77,10 +78,10 @@ const Index = () => {
           }}
         >
           <BottomLeftPanel />
-        </div>
-        {/* White panel - LLM response */}
-        <div
-          className="absolute z-20 overflow-y-auto cardboard-scroll"
+        </ResizablePanel>
+
+        <ResizablePanel
+          className="z-20 overflow-y-auto cardboard-scroll"
           style={{
             top: "16%",
             left: "17%",
@@ -91,10 +92,10 @@ const Index = () => {
           <div style={{ ...panelText, color: "#2a2a2a" }}>
             {response || <span style={{ opacity: 0.4 }}>Waiting for input...</span>}
           </div>
-        </div>
-        {/* Black panel - user input */}
-        <div
-          className="absolute z-20 overflow-y-auto cardboard-scroll flex"
+        </ResizablePanel>
+
+        <ResizablePanel
+          className="z-20 overflow-y-auto cardboard-scroll flex"
           style={{
             top: "73%",
             left: "17%",
@@ -104,10 +105,10 @@ const Index = () => {
         >
           <textarea
             value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
+            onChange={(event) => setUserInput(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
                 handleSubmit();
               }
             }}
@@ -120,7 +121,6 @@ const Index = () => {
               padding: "3% 4%",
             }}
           />
-          {/* Hand-drawn arrow submit button */}
           <button
             onClick={handleSubmit}
             disabled={isLoading || !userInput.trim()}
@@ -132,7 +132,6 @@ const Index = () => {
             aria-label="Send"
           >
             <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* Hand-drawn arrow */}
               <path
                 d="M6 22 C10 21, 20 20, 28 20 C26 16, 24 13, 22 10 M28 20 C26 24, 24 27, 22 30 M7 21 C12 22, 18 21, 28 20"
                 stroke="hsl(30, 30%, 60%)"
@@ -143,10 +142,10 @@ const Index = () => {
               />
             </svg>
           </button>
-        </div>
-        {/* Yellow panel - context window */}
-        <div
-          className="absolute z-20 overflow-y-auto cardboard-scroll"
+        </ResizablePanel>
+
+        <ResizablePanel
+          className="z-20 overflow-y-auto cardboard-scroll"
           style={{
             top: "16%",
             right: "6%",
@@ -155,12 +154,15 @@ const Index = () => {
           }}
         >
           <div style={{ ...panelText, color: "#3d3520", fontSize: "clamp(7px, 1.1vw, 12px)" }}>
-            <strong style={{ fontSize: "clamp(8px, 1.2vw, 13px)", textDecoration: "underline" }}>CONTEXT</strong>
-            <br /><br />
+            <strong style={{ fontSize: "clamp(8px, 1.2vw, 13px)", textDecoration: "underline" }}>
+              CONTEXT
+            </strong>
+            <br />
+            <br />
             {context}
           </div>
-        </div>
-        {/* Restart button overlay (position locked) */}
+        </ResizablePanel>
+
         <button
           disabled
           className="absolute z-20 rounded-full bg-red-500/20 border-2 border-dashed border-red-400 flex items-center justify-center select-none touch-none opacity-35 cursor-not-allowed pointer-events-none"
