@@ -27,6 +27,7 @@ from backend.prompt_composer import SYSTEM_PROMPT, compose_prompt
 from backend.workflow_generator import generate_workflow
 from backend.workflow_verifier import verify_workflow
 from backend.retrieval_router import print_debug_table, rank_documents
+from backend.session_memory import get_session, is_follow_up_query, update_session
 
 ROOT = Path(__file__).resolve().parent
 GENERATED_RECIPES_PATH = ROOT / "data" / "wireup_runtime" / "generated_recipes.json"
@@ -1071,12 +1072,14 @@ def build_prompt(
     query_type_guess: str,
     selected: List[Dict[str, Any]],
     generated_workflow: Dict[str, Any] | None = None,
+    session: Dict[str, Any] | None = None,
 ) -> Dict[str, str]:
     full_prompt = compose_prompt(
         user_query,
         query_type_guess,
         selected,
         generated_workflow=generated_workflow,
+        session=session,
     )
 
     context_start = full_prompt.find("=== TASK ALIASES ===")
@@ -1130,13 +1133,16 @@ def save_debug_file(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
-def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
+def run_audit(user_query: str, log_dir: Path | None = None, session_id: str = "default") -> Dict[str, Any]:
     query_type = classify_query_type(user_query)
     query_log = {
         "timestamp": _now_iso(),
         "user_query": user_query,
         "query_type": query_type,
+        "session_id": session_id,
     }
+
+    session = get_session(session_id)
 
     corpus = list(get_embedded_corpus())
     matched_task_alias = match_task_alias(user_query, load_task_aliases())
@@ -1170,11 +1176,19 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
             operator_definitions=load_operator_definitions(),
         )
 
+    reused_previous_workflow = False
+    if not generated_workflow and is_follow_up_query(user_query):
+        prior_workflow = session.get("last_workflow", {}) if isinstance(session, dict) else {}
+        if isinstance(prior_workflow, dict) and prior_workflow:
+            generated_workflow = prior_workflow
+            reused_previous_workflow = True
+
     prompt_parts = build_prompt(
         user_query,
         query_type,
         selected,
         generated_workflow=generated_workflow,
+        session=session,
     )
     full_prompt = prompt_parts["full_prompt"]
     prompt_assembly_trace = {
@@ -1194,6 +1208,12 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
         response_text=response_text,
         known_operator_names=known_operator_names,
     )
+
+    if generated_workflow:
+        session = update_session(session_id, generated_workflow, user_query)
+    else:
+        session = update_session(session_id, None, user_query)
+
     response_ms = (time.perf_counter() - response_start) * 1000
     response_trace = {
         "model_used": model_used,
@@ -1221,6 +1241,11 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
             "dropped_context": dropped,
         },
         "prompt_assembly_trace": prompt_assembly_trace,
+        "session_memory_trace": {
+            "is_follow_up": is_follow_up_query(user_query),
+            "reused_previous_workflow": reused_previous_workflow,
+            "session_state": session,
+        },
         "pipeline_routing_trace": {
             "response_mode": responder,
             "routing_stage": "pre_generation",
