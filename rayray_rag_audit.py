@@ -24,6 +24,7 @@ from uuid import uuid4
 from sentence_transformers import SentenceTransformer
 from backend.query_classifier import classify_query
 from backend.prompt_composer import SYSTEM_PROMPT, compose_prompt
+from backend.workflow_generator import generate_workflow
 from backend.retrieval_router import print_debug_table, rank_documents
 
 ROOT = Path(__file__).resolve().parent
@@ -1022,8 +1023,18 @@ def route_mode(user_query: str, query_type: str, selected_context: List[Dict[str
     }.get(query_type, "fallback_responder")
 
 
-def build_prompt(user_query: str, query_type_guess: str, selected: List[Dict[str, Any]]) -> Dict[str, str]:
-    full_prompt = compose_prompt(user_query, query_type_guess, selected)
+def build_prompt(
+    user_query: str,
+    query_type_guess: str,
+    selected: List[Dict[str, Any]],
+    generated_workflow: Dict[str, Any] | None = None,
+) -> Dict[str, str]:
+    full_prompt = compose_prompt(
+        user_query,
+        query_type_guess,
+        selected,
+        generated_workflow=generated_workflow,
+    )
 
     context_start = full_prompt.find("=== TASK ALIASES ===")
     if context_start == -1:
@@ -1098,7 +1109,22 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
     selected, dropped = select_context(query_type, user_query, retrieval_results)
 
     responder = route_mode(user_query, query_type, selected)
-    prompt_parts = build_prompt(user_query, query_type, selected)
+
+    generated_workflow = None
+    if query_type == "workflow_recipe":
+        workflow_task_name = (matched_task_alias or {}).get("task") or user_query
+        generated_workflow = generate_workflow(
+            workflow_task_name,
+            operator_graph=[chunk.metadata for chunk in corpus if chunk.document_type == "operator_graph"],
+            recipes=load_generated_recipes(),
+        )
+
+    prompt_parts = build_prompt(
+        user_query,
+        query_type,
+        selected,
+        generated_workflow=generated_workflow,
+    )
     full_prompt = prompt_parts["full_prompt"]
     prompt_assembly_trace = {
         "system_prompt": prompt_parts["system_prompt"],
@@ -1149,6 +1175,7 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
             "routing_stage": "pre_generation",
         },
         "response_trace": response_trace,
+        "generated_workflow": generated_workflow,
         "recipe_extractor_trace": {
             "attempted": query_type == "workflow_recipe",
             "generated_recipe_document_id": generated_recipe.get("document_id") if generated_recipe else None,

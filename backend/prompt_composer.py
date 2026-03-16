@@ -169,7 +169,42 @@ def _build_operator_graph_sections(retrieved_graph_docs: List[Dict[str, Any]]) -
 
     return "\n\n".join(sections)
 
-def compose_prompt(user_query: str, query_type: str, retrieved_docs: List[Dict[str, Any]]) -> str:
+
+def _build_generated_workflow_section(workflow: Dict[str, Any] | None) -> str:
+    if not workflow:
+        return ""
+
+    steps = workflow.get("steps", []) if isinstance(workflow, dict) else []
+    if not isinstance(steps, list) or not steps:
+        return ""
+
+    lines = ["=== GENERATED WORKFLOW ===", ""]
+    for step in steps:
+        lines.append(str(step).strip())
+        lines.append("")
+
+    for param in workflow.get("parameters", []):
+        if not isinstance(param, dict):
+            continue
+        operator = str(param.get("operator", "")).strip()
+        parameter = str(param.get("parameter", "")).strip()
+        description = str(param.get("what_it_controls", "")).strip()
+        if not operator or not parameter:
+            continue
+        lines.append(f"{operator} — Parameter: {parameter}")
+        if description:
+            lines.append(description)
+        lines.append("")
+
+    return "\n".join(lines).rstrip()
+
+
+def compose_prompt(
+    user_query: str,
+    query_type: str,
+    retrieved_docs: List[Dict[str, Any]],
+    generated_workflow: Dict[str, Any] | None = None,
+) -> str:
     grouped_context: Dict[str, List[Dict[str, Any]]] = {
         "task_alias": [],
         "operator": [],
@@ -203,8 +238,11 @@ def compose_prompt(user_query: str, query_type: str, retrieved_docs: List[Dict[s
     goal_keywords = _extract_goal_keywords(user_query, grouped_context["recipe"])
     parameter_controls_section = _build_parameter_controls_section(grouped_context["operator"], goal_keywords)
     operator_graph_section = _build_operator_graph_sections(grouped_context["operator_graph"])
+    generated_workflow_section = _build_generated_workflow_section(generated_workflow)
 
-    optional_sections = [section for section in [parameter_controls_section, operator_graph_section] if section]
+    optional_sections = [
+        section for section in [parameter_controls_section, operator_graph_section, generated_workflow_section] if section
+    ]
     optional_context = "\n\n".join(optional_sections)
 
     if optional_context:

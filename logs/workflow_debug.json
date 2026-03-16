@@ -1,0 +1,8 @@
+{
+  "task": "sequential_video_playback",
+  "operators": [
+    "Movie File In TOP",
+    "Switch TOP",
+    "Cache TOP"
+  ]
+}
