@@ -23,6 +23,7 @@ from uuid import uuid4
 
 from sentence_transformers import SentenceTransformer
 from backend.query_classifier import classify_query
+from backend.prompt_composer import SYSTEM_PROMPT, compose_prompt
 from backend.retrieval_router import print_debug_table, rank_documents
 
 ROOT = Path(__file__).resolve().parent
@@ -853,129 +854,18 @@ def route_mode(user_query: str, query_type: str, selected_context: List[Dict[str
     }.get(query_type, "fallback_responder")
 
 
-STRICT_PROMPT = (
-    "You are Ray Ray, a TouchDesigner tutor.\n"
-    "Answer using the retrieved context as the primary source.\n"
-    "Do not invent operator parameters or behavior that is not present in the context.\n"
-    "If context is missing, say you are uncertain.\n\n"
-    "When explaining something, build your response using these layers when available:\n\n"
-    "1. Workflow / Action\n"
-    "Explain the practical solution first when the user asks a workflow question.\n\n"
-    "2. Identity\n"
-    "Name the relevant TouchDesigner operators.\n\n"
-    "3. Signal Story\n"
-    "Explain what happens to the signal as it moves through the operators.\n\n"
-    "4. Minimal Recipe\n"
-    "Provide a simple operator chain that solves the problem.\n\n"
-    "5. Failure Modes\n"
-    "Mention common mistakes if relevant.\n\n"
-    "6. Reasoning Lens\n"
-    "Include the ELI5 metaphor or mental model if available.\n\n"
-    "Use layers opportunistically: if a layer is missing from retrieved context, skip it.\n"
-    "For workflow questions, start with the solution, then expand using the layers.\n"
-    "For definition questions, start with the Identity layer and expand downward.\n"
-    "Do not fabricate layers that are not present in context."
-)
-
-WORKFLOW_PROMPT = (
-    "You are Ray Ray, a TouchDesigner tutor.\n\n"
-    "Use your knowledge of TouchDesigner to answer the user's workflow question.\n"
-    "Retrieved context provides definitions, metaphors, and operator explanations that should support your answer.\n\n"
-    "You may explain workflows using known TouchDesigner patterns.\n"
-    "When relevant, reference the retrieved context to reinforce explanations.\n\n"
-    "When explaining something, build your response using these layers when available:\n\n"
-    "1. Workflow / Action\n"
-    "Explain the practical solution first when the user asks a workflow question.\n\n"
-    "2. Identity\n"
-    "Name the relevant TouchDesigner operators.\n\n"
-    "3. Signal Story\n"
-    "Explain what happens to the signal as it moves through the operators.\n\n"
-    "4. Minimal Recipe\n"
-    "Provide a simple operator chain that solves the problem.\n\n"
-    "5. Failure Modes\n"
-    "Mention common mistakes if relevant.\n\n"
-    "6. Reasoning Lens\n"
-    "Include the ELI5 metaphor or mental model if available.\n\n"
-    "Use layers opportunistically: if a layer is missing from retrieved context, skip it.\n"
-    "For workflow questions, start with the solution, then expand using the layers.\n"
-    "For definition questions, start with the Identity layer and expand downward.\n"
-    "Do not fabricate layers that are not present in context."
-)
-
-
 def build_prompt(user_query: str, query_type_guess: str, selected: List[Dict[str, Any]]) -> Dict[str, str]:
-    system_prompt = WORKFLOW_PROMPT if query_type_guess == "workflow_recipe" else STRICT_PROMPT
+    full_prompt = compose_prompt(user_query, query_type_guess, selected)
 
-    layer_mappings = {
-        "identity": {"operator", "operator_definition"},
-        "signal_story": {"signal_flow", "operator_behavior"},
-        "failure_modes": {"failure_mode", "troubleshooting"},
-        "minimal_recipes": {"recipe", "workflow_recipe", "use_case", "question"},
-        "reasoning_lens": {"eli5", "metaphor", "mental_model"},
-    }
-    section_titles = {
-        "identity": "IDENTITY_LAYER",
-        "signal_story": "SIGNAL_STORY_LAYER",
-        "failure_modes": "FAILURE_MODES_LAYER",
-        "minimal_recipes": "MINIMAL_RECIPES_LAYER",
-        "reasoning_lens": "REASONING_LENS_LAYER",
-    }
+    context_start = full_prompt.find("=== OPERATORS ===")
+    if context_start == -1:
+        context_start = full_prompt.find("=== GLOSSARY ===")
+    if context_start == -1:
+        context_start = full_prompt.find("=== RECIPES ===")
+    retrieved_context = full_prompt[context_start:].strip() if context_start != -1 else ""
 
-    sections: Dict[str, List[Dict[str, Any]]] = {
-        "identity": [],
-        "signal_story": [],
-        "failure_modes": [],
-        "minimal_recipes": [],
-        "reasoning_lens": [],
-    }
-
-    for item in selected:
-        doc_type = str(item.get("document_type", "")).strip().lower()
-        doc_id = str(item.get("document_id", "")).strip().lower()
-        assigned_layer = None
-
-        for layer, mapped_types in layer_mappings.items():
-            if doc_type in mapped_types:
-                assigned_layer = layer
-                break
-
-        if not assigned_layer:
-            if "glossary" in doc_id or "definition" in doc_id:
-                assigned_layer = "identity"
-            elif "signal" in doc_id or "behavior" in doc_id:
-                assigned_layer = "signal_story"
-            elif "error" in doc_id or "troubleshoot" in doc_id or "failure" in doc_id:
-                assigned_layer = "failure_modes"
-            elif "recipe" in doc_id or "workflow" in doc_id or "chain" in doc_id:
-                assigned_layer = "minimal_recipes"
-            elif "eli5" in doc_id or "metaphor" in doc_id or "mental_model" in doc_id:
-                assigned_layer = "reasoning_lens"
-
-        if assigned_layer:
-            sections[assigned_layer].append(item)
-
-    section_blocks: List[str] = []
-    for layer_name in ["identity", "signal_story", "failure_modes", "minimal_recipes", "reasoning_lens"]:
-        docs = sections[layer_name]
-        if not docs:
-            continue
-
-        lines = []
-        for item in docs:
-            lines.append(
-                f"- {item['document_id']} ({item['document_type']}, operator={item['operator_name']}, score={item['similarity_score']}): "
-                f"{item['chunk_text']}"
-            )
-        section_blocks.append(f"{section_titles[layer_name]}:\n" + "\n".join(lines))
-
-    retrieved_context = "\n\n".join(section_blocks)
-    full_prompt = (
-        f"SYSTEM_PROMPT:\n{system_prompt}\n\n"
-        f"{retrieved_context}\n\n"
-        f"USER_QUERY:\n{user_query}\n"
-    )
     return {
-        "system_prompt": system_prompt,
+        "system_prompt": SYSTEM_PROMPT,
         "retrieved_context": retrieved_context,
         "full_prompt": full_prompt,
     }
