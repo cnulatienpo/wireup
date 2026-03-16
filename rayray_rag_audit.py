@@ -22,6 +22,7 @@ from urllib import request
 from uuid import uuid4
 
 from sentence_transformers import SentenceTransformer
+from backend.query_classifier import classify_query
 
 ROOT = Path(__file__).resolve().parent
 GENERATED_RECIPES_PATH = ROOT / "data" / "wireup_runtime" / "generated_recipes.json"
@@ -86,65 +87,7 @@ def _now_iso() -> str:
 
 
 def classify_query_type(user_query: str) -> str:
-    q = user_query.lower()
-    troubleshooting_keywords = [
-        "error",
-        "broken",
-        "crash",
-        "fix",
-        "why isn't",
-        "not working",
-        "issue",
-        "problem",
-        "warning",
-        "failed",
-    ]
-    recipe_keywords = [
-        "how do i",
-        "how to",
-        "steps",
-        "build",
-        "make",
-        "create",
-        "stitch",
-        "workflow",
-        "connect",
-        "setup",
-    ]
-    workflow_keywords = [
-        "how do i",
-        "how to",
-        "steps",
-        "build",
-        "make",
-        "create",
-        "stitch",
-        "workflow",
-        "connect",
-        "setup",
-    ]
-    definition_keywords = [
-        "what is",
-        "define",
-        "meaning of",
-        "meaning",
-        "difference",
-        "explain",
-    ]
-    generic_td_words = {"top", "chop", "sop", "dat"}
-
-    if any(k in q for k in troubleshooting_keywords):
-        return "troubleshooting"
-    # Check workflow intent before definition intent to avoid misrouting build/how-to prompts.
-    if any(k in q for k in workflow_keywords):
-        return "workflow_recipe"
-    has_definition_phrase = any(k in q for k in definition_keywords)
-    if has_definition_phrase:
-        return "operator_definition"
-    # Generic TouchDesigner nouns alone should not force operator_definition.
-    if any(word in re.findall(r"[a-z0-9]+", q) for word in generic_td_words):
-        return "unknown"
-    return "unknown"
+    return classify_query(user_query)
 
 
 def _iter_json_stream(raw: str) -> Iterable[Dict[str, Any]]:
@@ -450,13 +393,14 @@ def load_chunks() -> List[Chunk]:
                 )
             )
 
-    print("Loaded:")
-    print(f"{len(glossary_chunks)} operator docs")
-    print(f"{len(operator_recipe_chunks) + len(generated_recipe_chunks)} recipe docs")
+    print("Ray Ray system ready")
+    print("\nDocuments loaded:")
+    print(f"{len(glossary_chunks)} operators")
+    print(f"{len(operator_recipe_chunks) + len(generated_recipe_chunks)} recipes")
     print(f"{len(use_case_chunks)} use cases")
     print(f"{len(question_chunks)} questions")
     print(f"{len(control_mapping_chunks)} control mappings")
-    print(f"{len(failure_mode_chunks)} failure mode docs")
+    print("\nQuery classifier enabled")
 
     return chunks
 
@@ -683,6 +627,7 @@ def retrieve_top_chunks(
     corpus: List[Chunk],
     k: int = 10,
     inferred_goal: Dict[str, Any] | None = None,
+    query_type: str = "unknown",
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     emb_start = time.perf_counter()
     retrieval_query = query
@@ -704,11 +649,21 @@ def retrieve_top_chunks(
     }
     related_recipe = str((inferred_goal or {}).get("related_recipe", "")).strip()
 
+    retrieval_type_boosts = {
+        "workflow_recipe": {"recipe": 0.08, "use_case": 0.06, "operator": 0.03},
+        "parameter_control": {"control_mapping": 0.1, "operator": 0.04},
+        "operator_definition": {"operator": 0.07},
+        "troubleshooting": {"failure_mode": 0.1, "recipe": 0.05, "operator": 0.03},
+    }.get(query_type, {})
+
     for chunk in corpus:
         if chunk.embedding is None:
             raise ValueError(f"Chunk {chunk.document_id} is missing a precomputed embedding")
         score = cosine(query_vec, chunk.embedding)
         boost = 0.0
+
+        if chunk.document_type in retrieval_type_boosts:
+            boost += retrieval_type_boosts[chunk.document_type]
 
         if inferred_goal and related_recipe and chunk.document_id == related_recipe:
             boost += 0.2
@@ -773,13 +728,20 @@ def select_context(
     retrieval_results: List[Dict[str, Any]],
 ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     preferred_order = {
-        "workflow_recipe": ["question", "use_case", "recipe", "operator"],
-        "operator_definition": ["operator", "failure_mode"],
-        "troubleshooting": ["failure_mode", "operator"],
+        "workflow_recipe": ["recipe", "use_case", "operator"],
+        "parameter_control": ["control_mapping", "operator", "parameter"],
+        "operator_definition": ["glossary", "operator"],
+        "troubleshooting": ["errors", "recipe", "operator"],
     }.get(query_type)
 
-    if _is_control_mapping_query(user_query):
-        preferred_order = ["control_mapping", "recipe", "operator"]
+    doc_type_aliases = {
+        "glossary": {"operator"},
+        "errors": {"failure_mode"},
+        "parameter": {"control_mapping"},
+    }
+
+    if _is_control_mapping_query(user_query) and query_type == "unknown":
+        preferred_order = ["control_mapping", "operator", "parameter"]
 
     selected: List[Dict[str, Any]] = []
     dropped: List[Dict[str, Any]] = []
@@ -787,8 +749,26 @@ def select_context(
     for item in retrieval_results:
         doc_type = item["document_type"]
         score = item["similarity_score"]
-        if preferred_order and doc_type in preferred_order and score >= 0.01:
-            priority = preferred_order.index(doc_type)
+        if preferred_order and score >= 0.01:
+            priority = None
+            for idx, preferred in enumerate(preferred_order):
+                accepted_types = doc_type_aliases.get(preferred, {preferred})
+                if doc_type in accepted_types:
+                    priority = idx
+                    break
+
+            if priority is None:
+                decision_reason = f"type/score did not satisfy query_type={query_type}"
+                dropped.append(
+                    {
+                        **item,
+                        "doc_id": item["document_id"],
+                        "doc_type": doc_type,
+                        "decision_reason": decision_reason,
+                        "reason_dropped": decision_reason,
+                    }
+                )
+                continue
             decision_reason = f"matches query_type={query_type} and similarity={score}"
             selected.append(
                 {
@@ -1062,7 +1042,7 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
     query_log = {
         "timestamp": _now_iso(),
         "user_query": user_query,
-        "query_type_guess": query_type,
+        "query_type": query_type,
     }
 
     corpus = list(get_embedded_corpus())
@@ -1072,6 +1052,7 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
         corpus,
         k=10,
         inferred_goal=inferred_goal,
+        query_type=query_type,
     )
     selected, dropped = select_context(query_type, user_query, retrieval_results)
 
@@ -1143,7 +1124,7 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
             json.dumps(
                 {
                     "query": user_query,
-                    "query_type_guess": query_type,
+                    "query_type": query_type,
                     "inferred_goal": (
                         {
                             "use_case_id": inferred_goal.get("use_case_id"),
@@ -1171,7 +1152,7 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
 
 
 def print_report(report: Dict[str, Any]) -> None:
-    print(f"QUERY TYPE: {report['query_log']['query_type_guess']}")
+    print(f"QUERY TYPE: {report['query_log']['query_type']}")
     print("\nRETRIEVAL RESULTS")
     for idx, item in enumerate(report["retrieval_results"], start=1):
         print(f"{idx} {item['document_id']} score {item['similarity_score']}")
