@@ -489,7 +489,7 @@ app.get('/machines/index.json', (_req, res) => {
 app.use('/machines/files', express.static(path.join(__dirname, 'ipld', 'published')));
 
 app.get('/', (_req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.redirect('/outpost');
 });
 
 app.use(express.static(__dirname));

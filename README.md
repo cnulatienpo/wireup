@@ -20,7 +20,7 @@ This repo now includes `render.yaml` for a Render Web Service.
 
 ### Route behavior assumptions
 
-- `/` serves the intro page (`index.html`)
+- `/` redirects to `/outpost`
 - `/outpost` serves the Wireup Outpost app (`wireup-outpost.html`)
 - `/api/rayray` handles chat requests
 - `/wireup-shack.html` redirects to `/outpost`
@@ -46,14 +46,22 @@ Each resource entry must include:
 - `target`: output filename in `ipld/published/`
 - `purpose`: short machine-readable description
 
-## Run UI From Repo Root
+## Run Wireup Outpost From Repo Root
+
+Start the server-backed Outpost app locally:
+
+```bash
+npm run dev
+```
+
+## Run UI Sandbox From Repo Root
 
 The UI from `belt-fit-wizard` is imported under `ui/` and can be run from the
 root of this repository.
 
 ```bash
 npm run ui:install
-npm run dev
+npm run ui:dev
 ```
 
 Other commands:

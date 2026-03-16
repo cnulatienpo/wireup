@@ -109,7 +109,9 @@
       const maxUiScale = 2.4;
       const uiScaleStep = 0.05;
       const resizeHandleSize = 12;
+      const resizeHandleVisualSize = 14;
       const targetByKey = new Map();
+      const handleByKey = new Map();
       let currentAutoLayout = null;
       let uiScale = Number(localStorage.getItem(uiScaleStorageKey)) || 1;
       let customLayoutNormalized = null;
@@ -296,6 +298,7 @@
         document.body.classList.toggle('layout-edit-mode', isLayoutEditMode);
         document.body.style.cursor = isLayoutEditMode ? 'move' : '';
         updateLayoutToolbar();
+        updateAllResizeHandles();
       }
 
       function applySavedOrAutoLayout() {
@@ -322,6 +325,57 @@
           element.dataset.layoutKey = target.key;
           element.dataset.layoutLabel = target.label;
 
+          const handle = document.createElement('div');
+          handle.className = 'layout-resize-handle';
+          handle.dataset.layoutKey = target.key;
+          handle.setAttribute('aria-hidden', 'true');
+          document.body.appendChild(handle);
+          handleByKey.set(target.key, handle);
+
+        }
+
+        updateAllResizeHandles();
+      }
+
+      function getResizeHandleRightOffset(element) {
+        return element?.classList?.contains('cardboard-scroll') ? 22 : 4;
+      }
+
+      function updateResizeHandleForTarget(target) {
+        if (!target?.element) {
+          return;
+        }
+
+        const handle = handleByKey.get(target.key);
+        if (!handle) {
+          return;
+        }
+
+        if (!isLayoutEditMode) {
+          handle.style.display = 'none';
+          return;
+        }
+
+        const rect = target.element.getBoundingClientRect();
+        const rightOffset = getResizeHandleRightOffset(target.element);
+        const handleX = rect.right - rightOffset - resizeHandleVisualSize;
+        const handleY = rect.bottom - 4 - resizeHandleVisualSize;
+
+        if (rect.width <= 0 || rect.height <= 0) {
+          handle.style.display = 'none';
+          return;
+        }
+
+        handle.style.left = px(handleX);
+        handle.style.top = px(handleY);
+        handle.style.width = pxSize(resizeHandleVisualSize, resizeHandleVisualSize);
+        handle.style.height = pxSize(resizeHandleVisualSize, resizeHandleVisualSize);
+        handle.style.display = 'block';
+      }
+
+      function updateAllResizeHandles() {
+        for (const target of editableTargets) {
+          updateResizeHandleForTarget(target);
         }
       }
 
@@ -333,16 +387,64 @@
         return startElement.closest('.layout-target');
       }
 
-      function isResizeHandleHit(event, element) {
+      function getResizeEdges(event, element) {
         if (!event || !element) {
-          return false;
+          return null;
         }
 
         const rect = element.getBoundingClientRect();
-        const handleLeft = rect.right - (resizeHandleSize + 4);
-        const handleTop = rect.bottom - (resizeHandleSize + 4);
+        const edgeHitSize = resizeHandleSize + 4;
+        const x = event.clientX;
+        const y = event.clientY;
+        const isInside = x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+        if (!isInside) {
+          return null;
+        }
 
-        return event.clientX >= handleLeft && event.clientY >= handleTop;
+        let left = Math.abs(x - rect.left) <= edgeHitSize;
+        let right = Math.abs(x - rect.right) <= edgeHitSize;
+        let top = Math.abs(y - rect.top) <= edgeHitSize;
+        let bottom = Math.abs(y - rect.bottom) <= edgeHitSize;
+
+        if (left && right) {
+          left = Math.abs(x - rect.left) <= Math.abs(x - rect.right);
+          right = !left;
+        }
+
+        if (top && bottom) {
+          top = Math.abs(y - rect.top) <= Math.abs(y - rect.bottom);
+          bottom = !top;
+        }
+
+        if (!(left || right || top || bottom)) {
+          return null;
+        }
+
+        return { left, right, top, bottom };
+      }
+
+      function cursorForResizeEdges(edges) {
+        if (!edges) {
+          return 'move';
+        }
+
+        if ((edges.left && edges.top) || (edges.right && edges.bottom)) {
+          return 'nwse-resize';
+        }
+
+        if ((edges.right && edges.top) || (edges.left && edges.bottom)) {
+          return 'nesw-resize';
+        }
+
+        if (edges.left || edges.right) {
+          return 'ew-resize';
+        }
+
+        if (edges.top || edges.bottom) {
+          return 'ns-resize';
+        }
+
+        return 'move';
       }
 
       function syncElementToViewportRect(element, target) {
@@ -370,8 +472,9 @@
           return;
         }
 
-        const isResize = isResizeHandleHit(event, targetElement);
-        document.body.style.cursor = isResize ? 'nwse-resize' : 'move';
+        const resizeEdges = getResizeEdges(event, targetElement);
+        document.body.style.cursor = cursorForResizeEdges(resizeEdges);
+        updateAllResizeHandles();
       }
 
       function handleLayoutPointerDown(event) {
@@ -402,6 +505,7 @@
           return;
         }
 
+        const resizeEdges = getResizeEdges(event, pointerTarget);
         activePointerState = {
           pointerId: event.pointerId,
           element: pointerTarget,
@@ -411,8 +515,14 @@
           startRect,
           pointerOffsetX: event.clientX - startRect.left,
           pointerOffsetY: event.clientY - startRect.top,
-          isResizing: isResizeHandleHit(event, pointerTarget),
+          resizeEdges,
+          isResizing: Boolean(resizeEdges),
         };
+
+        document.body.style.cursor = activePointerState.isResizing
+          ? cursorForResizeEdges(resizeEdges)
+          : 'move';
+        updateAllResizeHandles();
 
         pointerTarget.setPointerCapture(event.pointerId);
         event.preventDefault();
@@ -424,23 +534,48 @@
           return;
         }
 
-        const deltaX = event.clientX - activePointerState.startX;
-        const deltaY = event.clientY - activePointerState.startY;
         const element = activePointerState.element;
         const target = activePointerState.target;
         if (activePointerState.isResizing) {
           const minWidth = target?.minWidth || 1;
           const minHeight = target?.minHeight || 1;
-          const nextWidth = Math.max(minWidth, activePointerState.startRect.width + deltaX);
-          const nextHeight = Math.max(minHeight, activePointerState.startRect.height + deltaY);
+          const edges = activePointerState.resizeEdges || {};
+          const startRect = activePointerState.startRect;
+          let nextLeft = startRect.left;
+          let nextTop = startRect.top;
+          let nextWidth = startRect.width;
+          let nextHeight = startRect.height;
 
+          if (edges.right) {
+            nextWidth = Math.max(minWidth, event.clientX - startRect.left);
+          }
+
+          if (edges.left) {
+            nextWidth = Math.max(minWidth, startRect.left + startRect.width - event.clientX);
+            nextLeft = startRect.left + startRect.width - nextWidth;
+          }
+
+          if (edges.bottom) {
+            nextHeight = Math.max(minHeight, event.clientY - startRect.top);
+          }
+
+          if (edges.top) {
+            nextHeight = Math.max(minHeight, startRect.top + startRect.height - event.clientY);
+            nextTop = startRect.top + startRect.height - nextHeight;
+          }
+
+          element.style.left = px(nextLeft);
+          element.style.top = px(nextTop);
           element.style.width = pxSize(nextWidth, minWidth);
           element.style.height = pxSize(nextHeight, minHeight);
+          document.body.style.cursor = cursorForResizeEdges(edges);
+          updateResizeHandleForTarget(target);
           return;
         }
 
         element.style.left = px(event.clientX - activePointerState.pointerOffsetX);
         element.style.top = px(event.clientY - activePointerState.pointerOffsetY);
+        updateResizeHandleForTarget(target);
       }
 
       function clearActivePointerState(event) {
@@ -460,6 +595,8 @@
         } else {
           document.body.style.cursor = '';
         }
+
+        updateAllResizeHandles();
       }
 
       function persistUiScale() {
@@ -785,6 +922,8 @@
           eli5ToggleControl.style.width = pxSize(layout.eli5ToggleControl.width, 70);
           eli5ToggleControl.style.height = pxSize(layout.eli5ToggleControl.height, 32);
         }
+
+        updateAllResizeHandles();
       }
 
       if (uiScaleDown) {
