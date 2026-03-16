@@ -11,16 +11,7 @@ from backend.parameter_instructions import extract_parameter_instructions, write
 print("Prompt composer initialized")
 print("Structured context enabled")
 
-SYSTEM_PROMPT = (
-    "You are Ray Ray, a TouchDesigner tutor.\n\n"
-    "Follow these rules:\n\n"
-    "Use retrieved context as the source of truth.\n\n"
-    "If context contains a recipe, explain it step-by-step.\n\n"
-    "If context contains control mappings, explain exactly where signals connect.\n\n"
-    "If context contains operator definitions, explain what the tool does.\n\n"
-    "Never invent parameters or operators not present in context.\n\n"
-    "If information is missing, say so."
-)
+SYSTEM_PROMPT = Path(__file__).with_name("system_prompt.txt").read_text(encoding="utf-8").strip()
 
 DOC_TYPE_ORDER = ["task_alias", "operator", "glossary", "recipe", "use_case", "control_mapping", "operator_graph", "error"]
 DOC_TYPE_HEADINGS = {
