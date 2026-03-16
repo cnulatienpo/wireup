@@ -26,6 +26,7 @@ from backend.query_classifier import classify_query
 from backend.prompt_composer import SYSTEM_PROMPT, compose_prompt
 from backend.workflow_generator import generate_workflow
 from backend.workflow_verifier import verify_workflow
+from backend.ui_action_generator import generate_ui_actions
 from backend.retrieval_router import print_debug_table, rank_documents
 from backend.session_memory import get_session, is_follow_up_query, update_session
 
@@ -1175,6 +1176,7 @@ def run_audit(user_query: str, log_dir: Path | None = None, session_id: str = "d
             generated_workflow,
             operator_definitions=load_operator_definitions(),
         )
+        generated_workflow = generate_ui_actions(generated_workflow)
 
     reused_previous_workflow = False
     if not generated_workflow and is_follow_up_query(user_query):
