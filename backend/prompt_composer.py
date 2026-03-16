@@ -22,7 +22,7 @@ SYSTEM_PROMPT = (
     "If information is missing, say so."
 )
 
-DOC_TYPE_ORDER = ["task_alias", "operator", "glossary", "recipe", "use_case", "control_mapping", "error"]
+DOC_TYPE_ORDER = ["task_alias", "operator", "glossary", "recipe", "use_case", "control_mapping", "operator_graph", "error"]
 DOC_TYPE_HEADINGS = {
     "task_alias": "=== TASK ALIASES ===",
     "operator": "=== OPERATORS ===",
@@ -30,6 +30,7 @@ DOC_TYPE_HEADINGS = {
     "recipe": "=== RECIPES ===",
     "use_case": "=== USE CASES ===",
     "control_mapping": "=== CONTROL MAPPINGS ===",
+    "operator_graph": "=== OPERATOR GRAPH ===",
     "error": "=== ERRORS ===",
 }
 DOC_TYPE_ALIASES = {
@@ -113,6 +114,61 @@ def _build_parameter_controls_section(
     return "\n".join(lines).rstrip()
 
 
+
+
+def _build_operator_graph_sections(retrieved_graph_docs: List[Dict[str, Any]]) -> str:
+    if not retrieved_graph_docs:
+        return ""
+
+    connection_lines: List[str] = ["=== OPERATOR CONNECTIONS ===", ""]
+    parameter_lines: List[str] = ["=== PARAMETER CONTROL ===", ""]
+
+    for doc in retrieved_graph_docs:
+        metadata = doc.get("metadata", {}) if isinstance(doc.get("metadata", {}), dict) else {}
+        operator = str(metadata.get("operator") or doc.get("operator_name") or "").strip()
+
+        for connection in metadata.get("connections", []):
+            if not isinstance(connection, dict):
+                continue
+            target = str(connection.get("target", "")).strip()
+            relationship = str(connection.get("relationship", "")).strip().replace("_", " ")
+            description = str(connection.get("description", "")).strip()
+            if not operator or not target:
+                continue
+            connection_lines.append(f"{operator} → {target}")
+            if relationship:
+                connection_lines.append(f"Relationship: {relationship}")
+            if description:
+                connection_lines.append(f"Description: {description}")
+            connection_lines.append("")
+
+        for param in metadata.get("parameter_controls", []):
+            if not isinstance(param, dict):
+                continue
+            parameter = str(param.get("parameter", "")).strip()
+            signal_type = str(param.get("signal_type", "")).strip()
+            drivers = [str(item).strip() for item in param.get("drivers", []) if str(item).strip()]
+            if not operator or not parameter:
+                continue
+            parameter_lines.append(f"Operator: {operator}")
+            parameter_lines.append(f"Parameter: {parameter}")
+            if signal_type:
+                parameter_lines.append(f"Controlled by: {signal_type}")
+            if drivers:
+                parameter_lines.append(f"Common drivers: {', '.join(drivers)}")
+            description = str(param.get("description", "")).strip()
+            if description:
+                parameter_lines.append(f"Description: {description}")
+            parameter_lines.append("")
+
+    sections: List[str] = []
+    if len(connection_lines) > 2:
+        sections.append("\n".join(connection_lines).rstrip())
+    if len(parameter_lines) > 2:
+        sections.append("\n".join(parameter_lines).rstrip())
+
+    return "\n\n".join(sections)
+
 def compose_prompt(user_query: str, query_type: str, retrieved_docs: List[Dict[str, Any]]) -> str:
     grouped_context: Dict[str, List[Dict[str, Any]]] = {
         "task_alias": [],
@@ -121,6 +177,7 @@ def compose_prompt(user_query: str, query_type: str, retrieved_docs: List[Dict[s
         "recipe": [],
         "use_case": [],
         "control_mapping": [],
+        "operator_graph": [],
         "error": [],
     }
 
@@ -145,13 +202,17 @@ def compose_prompt(user_query: str, query_type: str, retrieved_docs: List[Dict[s
 
     goal_keywords = _extract_goal_keywords(user_query, grouped_context["recipe"])
     parameter_controls_section = _build_parameter_controls_section(grouped_context["operator"], goal_keywords)
+    operator_graph_section = _build_operator_graph_sections(grouped_context["operator_graph"])
 
-    if parameter_controls_section:
+    optional_sections = [section for section in [parameter_controls_section, operator_graph_section] if section]
+    optional_context = "\n\n".join(optional_sections)
+
+    if optional_context:
         final_prompt = (
             f"SYSTEM_PROMPT\n{SYSTEM_PROMPT}\n\n"
             f"=== QUERY TYPE ===\n{query_type}\n\n"
             f"{structured_context}\n\n"
-            f"{parameter_controls_section}\n\n"
+            f"{optional_context}\n\n"
             f"USER QUESTION\n{user_query}\n"
         )
     else:
