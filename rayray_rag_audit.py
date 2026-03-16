@@ -82,6 +82,7 @@ USE_CASES_GENERATED_PATH = GENERATED_KNOWLEDGE_DIR / "use_cases_generated.json"
 QUESTIONS_GENERATED_PATH = GENERATED_KNOWLEDGE_DIR / "questions_generated.json"
 CONTROL_MAPPINGS_PATH = ROOT / "knowledge" / "control_mappings" / "control_mappings.json"
 TASK_ALIASES_PATH = ROOT / "knowledge" / "task_aliases" / "task_aliases.json"
+OPERATOR_GRAPH_PATH = ROOT / "knowledge" / "operator_graph" / "operator_graph.json"
 GOAL_INFERENCE_MIN_CONFIDENCE = float(os.getenv("GOAL_INFERENCE_MIN_CONFIDENCE", "0.2"))
 
 
@@ -417,6 +418,74 @@ def load_task_alias_documents() -> List[Chunk]:
     return chunks
 
 
+def load_operator_graph() -> List[Chunk]:
+    chunks: List[Chunk] = []
+    if not OPERATOR_GRAPH_PATH.exists():
+        return chunks
+
+    payload = json.loads(OPERATOR_GRAPH_PATH.read_text(encoding="utf-8"))
+    if not isinstance(payload, list):
+        return chunks
+
+    for idx, entry in enumerate(payload, start=1):
+        if not isinstance(entry, dict):
+            continue
+
+        operator = str(entry.get("operator", "")).strip()
+        if not operator:
+            continue
+
+        connections = entry.get("connections", [])
+        parameter_controls = entry.get("parameter_controls", [])
+        if not isinstance(connections, list):
+            connections = []
+        if not isinstance(parameter_controls, list):
+            parameter_controls = []
+
+        connection_text = []
+        for item in connections:
+            if not isinstance(item, dict):
+                continue
+            target = str(item.get("target", "")).strip()
+            relationship = str(item.get("relationship", "")).strip()
+            description = str(item.get("description", "")).strip()
+            connection_text.append(
+                f"{operator} -> {target} ({relationship}): {description}".strip()
+            )
+
+        parameter_text = []
+        for item in parameter_controls:
+            if not isinstance(item, dict):
+                continue
+            parameter = str(item.get("parameter", "")).strip()
+            signal_type = str(item.get("signal_type", "")).strip()
+            drivers = ", ".join(str(v).strip() for v in item.get("drivers", []) if str(v).strip())
+            description = str(item.get("description", "")).strip()
+            parameter_text.append(
+                f"Parameter {parameter} ({signal_type}) driven by {drivers}. {description}".strip()
+            )
+
+        text = " ".join(connection_text + parameter_text).strip() or operator
+
+        chunks.append(
+            Chunk(
+                document_id=f"operator_graph_{idx}_{_slugify(operator)}",
+                document_type="operator_graph",
+                operator_name=operator,
+                text=text,
+                source_file=str(OPERATOR_GRAPH_PATH.relative_to(ROOT)),
+                metadata={
+                    "document_type": "operator_graph",
+                    "operator": operator,
+                    "connections": connections,
+                    "parameter_controls": parameter_controls,
+                },
+            )
+        )
+
+    return chunks
+
+
 def _normalize_phrase(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", str(value).lower()).strip()
 
@@ -454,6 +523,7 @@ def load_chunks() -> List[Chunk]:
     question_chunks = load_questions()
     control_mapping_chunks = load_control_mappings()
     task_alias_chunks = load_task_alias_documents()
+    operator_graph_chunks = load_operator_graph()
 
     chunks += glossary_chunks
     chunks += operator_recipe_chunks
@@ -462,6 +532,7 @@ def load_chunks() -> List[Chunk]:
     chunks += question_chunks
     chunks += control_mapping_chunks
     chunks += task_alias_chunks
+    chunks += operator_graph_chunks
     chunks += failure_mode_chunks
 
     for recipe in load_generated_recipes():
@@ -491,6 +562,10 @@ def load_chunks() -> List[Chunk]:
     print(f"{len(use_case_chunks)} use cases")
     print(f"{len(question_chunks)} questions")
     print(f"{len(control_mapping_chunks)} control mappings")
+    graph_edges = sum(len(chunk.metadata.get("connections", [])) for chunk in operator_graph_chunks)
+    print("Operator graph loaded")
+    print(f"Graph nodes: {len(operator_graph_chunks)}")
+    print(f"Graph edges: {graph_edges}")
     print("Task alias system initialized")
     print(f"Loaded {len(task_alias_chunks)} workflow intents")
     print("\nQuery classifier enabled")
@@ -753,6 +828,7 @@ def retrieve_top_chunks(
                 "text_preview_first_120_chars": chunk.text[:120],
                 "chunk_text": chunk.text,
                 "title": chunk.document_id,
+                "metadata": chunk.metadata,
             }
         )
 
@@ -801,7 +877,7 @@ def select_context(
 ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     preferred_order = {
         "workflow_recipe": ["task_alias", "recipe", "use_case", "operator"],
-        "parameter_control": ["task_alias", "control_mapping", "operator", "parameter"],
+        "parameter_control": ["task_alias", "operator_graph", "control_mapping", "operator", "parameter"],
         "operator_definition": ["glossary", "operator"],
         "troubleshooting": ["errors", "recipe", "operator"],
     }.get(query_type)
@@ -1102,6 +1178,22 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
                     "retrieved_docs": retrieval_results,
                     "selected_docs": selected,
                     "dropped_docs": dropped,
+                    "matched_graph_nodes": sorted(
+                        {
+                            name
+                            for item in retrieval_results
+                            if item.get("document_type") == "operator_graph"
+                            for name in [
+                                str(item.get("operator_name", "")).strip(),
+                                *[
+                                    str(conn.get("target", "")).strip()
+                                    for conn in item.get("metadata", {}).get("connections", [])
+                                    if isinstance(conn, dict)
+                                ],
+                            ]
+                            if name
+                        }
+                    ),
                     "response_mode": responder,
                 },
                 indent=2,

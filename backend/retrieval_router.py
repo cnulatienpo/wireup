@@ -18,6 +18,7 @@ QUERY_TYPE_WEIGHTS: Dict[str, Dict[str, float]] = {
     },
     "parameter_control": {
         "control_mapping": 3.0,
+        "operator_graph": 3.0,
         "operator": 1.8,
         "recipe": 1.4,
         "use_case": 1.2,
