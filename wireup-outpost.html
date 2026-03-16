@@ -339,10 +339,28 @@
         }
 
         const rect = element.getBoundingClientRect();
-        const nearLeft = event.clientX <= rect.left + resizeHandleSize;
-        const nearRight = event.clientX >= rect.right - resizeHandleSize;
-        const nearTop = event.clientY <= rect.top + resizeHandleSize;
-        const nearBottom = event.clientY >= rect.bottom - resizeHandleSize;
+        const offsetX = event.clientX - rect.left;
+        const offsetY = event.clientY - rect.top;
+        const distanceLeft = offsetX;
+        const distanceRight = rect.width - offsetX;
+        const distanceTop = offsetY;
+        const distanceBottom = rect.height - offsetY;
+
+        let nearLeft = distanceLeft <= resizeHandleSize;
+        let nearRight = distanceRight <= resizeHandleSize;
+        let nearTop = distanceTop <= resizeHandleSize;
+        let nearBottom = distanceBottom <= resizeHandleSize;
+
+        // Avoid ambiguous horizontal/vertical edge selection on small targets.
+        if (nearLeft && nearRight) {
+          nearLeft = distanceLeft <= distanceRight;
+          nearRight = !nearLeft;
+        }
+
+        if (nearTop && nearBottom) {
+          nearTop = distanceTop <= distanceBottom;
+          nearBottom = !nearTop;
+        }
 
         if (!nearLeft && !nearRight && !nearTop && !nearBottom) {
           return null;
@@ -354,6 +372,19 @@
           top: nearTop,
           bottom: nearBottom,
         };
+      }
+
+      function syncElementToViewportRect(element, target) {
+        if (!element || !target) {
+          return;
+        }
+
+        const rect = element.getBoundingClientRect();
+        element.style.left = px(rect.left);
+        element.style.top = px(rect.top);
+        element.style.width = pxSize(rect.width, target.minWidth);
+        element.style.height = pxSize(rect.height, target.minHeight);
+        element.style.transform = 'none';
       }
 
       function getResizeCursor(edges) {
@@ -417,6 +448,8 @@
           return;
         }
 
+        syncElementToViewportRect(pointerTarget, target);
+
         const startRect = getElementRect(pointerTarget, target);
         if (!startRect) {
           return;
@@ -429,6 +462,8 @@
           startX: event.clientX,
           startY: event.clientY,
           startRect,
+          pointerOffsetX: event.clientX - startRect.left,
+          pointerOffsetY: event.clientY - startRect.top,
           resizeEdges: getResizeEdges(event, pointerTarget),
         };
 
@@ -485,8 +520,8 @@
           return;
         }
 
-        element.style.left = px(activePointerState.startRect.left + deltaX);
-        element.style.top = px(activePointerState.startRect.top + deltaY);
+        element.style.left = px(event.clientX - activePointerState.pointerOffsetX);
+        element.style.top = px(event.clientY - activePointerState.pointerOffsetY);
       }
 
       function clearActivePointerState(event) {
