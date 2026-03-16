@@ -20,7 +20,7 @@ The audit runner logs these pipeline stages:
 1. **Query logging**
    - `timestamp`
    - `user_query`
-   - `query_type_guess` (`operator_definition`, `workflow_recipe`, `troubleshooting`, `unknown`)
+   - `query_type` (`operator_definition`, `workflow_recipe`, `parameter_control`, `troubleshooting`, `concept_explanation`, `unknown`)
 
 2. **Embedding trace**
    - `embedding_model_used`
@@ -61,7 +61,7 @@ The audit runner logs these pipeline stages:
 
 8. **Retrieval visualization JSON**
    - `logs/retrieval_debug.json`
-   - contains query, `query_type_guess`, `retrieved_docs`, `selected_docs`, `dropped_docs`, and `response_mode`
+   - contains query, `query_type`, `retrieved_docs`, `selected_docs`, `dropped_docs`, and `response_mode`
 
 ## Log files
 
@@ -74,7 +74,7 @@ When `DEBUG_RAG=true`, the script writes:
 
 ## Interpreting output
 
-- **Wrong query type guess** can force wrong routing (for example glossary route for a workflow question).
+- **Wrong query type** can force wrong routing (for example glossary route for a workflow question).
 - **High-scoring but irrelevant retrieval** indicates weak retrieval signal.
 - **Selected context mismatching query type** suggests filtering rules need adjustment.
 - **Fallback responder** for specific queries usually means classification/routing ambiguity.
@@ -83,7 +83,7 @@ When `DEBUG_RAG=true`, the script writes:
 ## Common failure signatures
 
 1. **Recipe query routed to glossary_responder**
-   - Signature: `query_type_guess=operator_definition` and selected docs are mostly glossary.
+   - Signature: `query_type=operator_definition` and selected docs are mostly glossary.
    - Fix direction: improve query classification keywords.
 
 2. **Irrelevant top retrieval chunks**
