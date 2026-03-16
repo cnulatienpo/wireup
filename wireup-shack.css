@@ -310,6 +310,21 @@ body.layout-edit-mode .restart-button.layout-target {
   cursor: move;
 }
 
+
+body.layout-edit-mode .layout-target::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  right: 4px;
+  bottom: 4px;
+  background: #aaa;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.45);
+  cursor: nwse-resize;
+  pointer-events: none;
+}
+
 body.layout-edit-mode .layout-target::before {
   content: attr(data-layout-label);
   position: absolute;

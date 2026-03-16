@@ -108,7 +108,7 @@
       const minUiScale = 0.35;
       const maxUiScale = 2.4;
       const uiScaleStep = 0.05;
-      const resizeHandleSize = 14;
+      const resizeHandleSize = 12;
       const targetByKey = new Map();
       let currentAutoLayout = null;
       let uiScale = Number(localStorage.getItem(uiScaleStorageKey)) || 1;
@@ -333,45 +333,16 @@
         return startElement.closest('.layout-target');
       }
 
-      function getResizeEdges(event, element) {
+      function isResizeHandleHit(event, element) {
         if (!event || !element) {
-          return null;
+          return false;
         }
 
         const rect = element.getBoundingClientRect();
-        const offsetX = event.clientX - rect.left;
-        const offsetY = event.clientY - rect.top;
-        const distanceLeft = offsetX;
-        const distanceRight = rect.width - offsetX;
-        const distanceTop = offsetY;
-        const distanceBottom = rect.height - offsetY;
+        const handleLeft = rect.right - (resizeHandleSize + 4);
+        const handleTop = rect.bottom - (resizeHandleSize + 4);
 
-        let nearLeft = distanceLeft <= resizeHandleSize;
-        let nearRight = distanceRight <= resizeHandleSize;
-        let nearTop = distanceTop <= resizeHandleSize;
-        let nearBottom = distanceBottom <= resizeHandleSize;
-
-        // Avoid ambiguous horizontal/vertical edge selection on small targets.
-        if (nearLeft && nearRight) {
-          nearLeft = distanceLeft <= distanceRight;
-          nearRight = !nearLeft;
-        }
-
-        if (nearTop && nearBottom) {
-          nearTop = distanceTop <= distanceBottom;
-          nearBottom = !nearTop;
-        }
-
-        if (!nearLeft && !nearRight && !nearTop && !nearBottom) {
-          return null;
-        }
-
-        return {
-          left: nearLeft,
-          right: nearRight,
-          top: nearTop,
-          bottom: nearBottom,
-        };
+        return event.clientX >= handleLeft && event.clientY >= handleTop;
       }
 
       function syncElementToViewportRect(element, target) {
@@ -387,30 +358,6 @@
         element.style.transform = 'none';
       }
 
-      function getResizeCursor(edges) {
-        if (!edges) {
-          return 'move';
-        }
-
-        if ((edges.left && edges.top) || (edges.right && edges.bottom)) {
-          return 'nwse-resize';
-        }
-
-        if ((edges.right && edges.top) || (edges.left && edges.bottom)) {
-          return 'nesw-resize';
-        }
-
-        if (edges.left || edges.right) {
-          return 'ew-resize';
-        }
-
-        if (edges.top || edges.bottom) {
-          return 'ns-resize';
-        }
-
-        return 'move';
-      }
-
       function updateLayoutHoverCursor(event) {
         if (!isLayoutEditMode) {
           document.body.style.cursor = '';
@@ -423,8 +370,8 @@
           return;
         }
 
-        const resizeEdges = getResizeEdges(event, targetElement);
-        document.body.style.cursor = getResizeCursor(resizeEdges);
+        const isResize = isResizeHandleHit(event, targetElement);
+        document.body.style.cursor = isResize ? 'nwse-resize' : 'move';
       }
 
       function handleLayoutPointerDown(event) {
@@ -464,7 +411,7 @@
           startRect,
           pointerOffsetX: event.clientX - startRect.left,
           pointerOffsetY: event.clientY - startRect.top,
-          resizeEdges: getResizeEdges(event, pointerTarget),
+          isResizing: isResizeHandleHit(event, pointerTarget),
         };
 
         pointerTarget.setPointerCapture(event.pointerId);
@@ -481,40 +428,12 @@
         const deltaY = event.clientY - activePointerState.startY;
         const element = activePointerState.element;
         const target = activePointerState.target;
-        const resizeEdges = activePointerState.resizeEdges;
-
-        if (resizeEdges) {
+        if (activePointerState.isResizing) {
           const minWidth = target?.minWidth || 1;
           const minHeight = target?.minHeight || 1;
-          let nextLeft = activePointerState.startRect.left;
-          let nextTop = activePointerState.startRect.top;
-          let nextWidth = activePointerState.startRect.width;
-          let nextHeight = activePointerState.startRect.height;
+          const nextWidth = Math.max(minWidth, activePointerState.startRect.width + deltaX);
+          const nextHeight = Math.max(minHeight, activePointerState.startRect.height + deltaY);
 
-          if (resizeEdges.left) {
-            const maxDelta = activePointerState.startRect.width - minWidth;
-            const clampedDelta = Math.min(deltaX, maxDelta);
-            nextLeft = activePointerState.startRect.left + clampedDelta;
-            nextWidth = activePointerState.startRect.width - clampedDelta;
-          }
-
-          if (resizeEdges.right) {
-            nextWidth = Math.max(minWidth, activePointerState.startRect.width + deltaX);
-          }
-
-          if (resizeEdges.top) {
-            const maxDelta = activePointerState.startRect.height - minHeight;
-            const clampedDelta = Math.min(deltaY, maxDelta);
-            nextTop = activePointerState.startRect.top + clampedDelta;
-            nextHeight = activePointerState.startRect.height - clampedDelta;
-          }
-
-          if (resizeEdges.bottom) {
-            nextHeight = Math.max(minHeight, activePointerState.startRect.height + deltaY);
-          }
-
-          element.style.left = px(nextLeft);
-          element.style.top = px(nextTop);
           element.style.width = pxSize(nextWidth, minWidth);
           element.style.height = pxSize(nextHeight, minHeight);
           return;
