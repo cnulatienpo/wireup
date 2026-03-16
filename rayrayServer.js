@@ -123,6 +123,29 @@ function buildKnowledgeContext(operatorName, explainMode = 'td') {
   return runtime.explainContext(context, explainMode);
 }
 
+function buildMenuGuidanceContext(operatorName) {
+  const menuGuidance = runtime.getOperatorMenuGuidance(operatorName);
+
+  if (!menuGuidance.length) {
+    return 'Important controls:\n- No operator menu guidance found.';
+  }
+
+  const lines = ['Important controls:'];
+
+  menuGuidance.forEach((menu) => {
+    lines.push(`Open the ${menu.menu} menu (${menu.operator}):`);
+    if (menu.meaning) {
+      lines.push(`- Meaning: ${menu.meaning}`);
+    }
+
+    menu.important_controls.slice(0, 6).forEach((control) => {
+      lines.push(`- ${control}`);
+    });
+  });
+
+  return lines.join('\n');
+}
+
 const COMPARISON_SECTIONS = ['Identity', 'Signal Story', 'Failure Modes', 'Recipes', 'Reasoning Lens'];
 
 function formatSectionValue(value) {
@@ -158,7 +181,11 @@ async function compareOperators(operatorA, operatorB, question, recentHistory = 
   const prompt = buildComparisonPrompt(operatorA, operatorB, question, recentHistory, followUp);
   const context = runtime.retrieveContext(`${operatorA} ${operatorB}`);
   const explanation = runtime.explainContext(context, explainMode);
-  return generateRayRayResponse([{ role: 'user', content: `${prompt}\n\nRuntime explanation mode (${explainMode}):\n${explanation}` }]);
+  const menuGuidance = [
+    `${operatorA}:\n${buildMenuGuidanceContext(operatorA)}`,
+    `${operatorB}:\n${buildMenuGuidanceContext(operatorB)}`,
+  ].join('\n\n');
+  return generateRayRayResponse([{ role: 'user', content: `${prompt}\n\nRuntime explanation mode (${explainMode}):\n${explanation}\n\nOperator parameter guidance:\n${menuGuidance}` }]);
 }
 
 function summarizeNeighborhood(nodes = []) {
@@ -388,9 +415,10 @@ async function handleRayrayRequest(req, res) {
     }
 
     const context = buildKnowledgeContext(operator, explainMode);
+    const menuGuidanceContext = buildMenuGuidanceContext(operator);
     const runtimeContext = runtime.retrieveContext(question);
     const runtimePatterns = runtime.detectPatterns(effectiveState);
-    const prompt = buildPrompt(`${context}\n\nRuntime concepts: ${JSON.stringify(runtimeContext.concepts || [])}\nRuntime patterns: ${JSON.stringify(runtimePatterns)}`, question, effectiveState, previousState, mode, recentHistory, followUp);
+    const prompt = buildPrompt(`${context}\n\n${menuGuidanceContext}\n\nRuntime concepts: ${JSON.stringify(runtimeContext.concepts || [])}\nRuntime patterns: ${JSON.stringify(runtimePatterns)}`, question, effectiveState, previousState, mode, recentHistory, followUp);
     const answer = await generateRayRayResponse([{ role: 'user', content: prompt }]);
 
     appendInteraction(sessionId, {
