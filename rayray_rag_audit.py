@@ -77,6 +77,7 @@ GENERATED_KNOWLEDGE_DIR = ROOT / "knowledge" / "generated"
 RECIPES_GENERATED_PATH = GENERATED_KNOWLEDGE_DIR / "recipes_generated.json"
 USE_CASES_GENERATED_PATH = GENERATED_KNOWLEDGE_DIR / "use_cases_generated.json"
 QUESTIONS_GENERATED_PATH = GENERATED_KNOWLEDGE_DIR / "questions_generated.json"
+CONTROL_MAPPINGS_PATH = ROOT / "knowledge" / "control_mappings" / "control_mappings.json"
 GOAL_INFERENCE_MIN_CONFIDENCE = float(os.getenv("GOAL_INFERENCE_MIN_CONFIDENCE", "0.2"))
 
 
@@ -354,6 +355,63 @@ def load_questions() -> List[Chunk]:
     return chunks
 
 
+def load_control_mappings() -> List[Chunk]:
+    chunks: List[Chunk] = []
+    if not CONTROL_MAPPINGS_PATH.exists():
+        return chunks
+
+    payload = json.loads(CONTROL_MAPPINGS_PATH.read_text(encoding="utf-8"))
+    if not isinstance(payload, list):
+        return chunks
+
+    for idx, entry in enumerate(payload, start=1):
+        if not isinstance(entry, dict):
+            continue
+
+        operator = str(entry.get("operator", "")).strip()
+        parameter = str(entry.get("parameter", "")).strip()
+        signal_type = str(entry.get("signal_type", "")).strip()
+        accepts_external_control = bool(entry.get("accepts_external_control", False))
+        driver_nodes = [str(node).strip() for node in entry.get("driver_nodes", []) if str(node).strip()]
+        connection_methods = [
+            str(method).strip() for method in entry.get("connection_methods", []) if str(method).strip()
+        ]
+        typical_goal = str(entry.get("typical_goal", "")).strip()
+
+        if not operator or not parameter:
+            continue
+
+        text = (
+            f"Operator: {operator}. Parameter: {parameter}. "
+            f"Accepts external control: {accepts_external_control}. "
+            f"Signal type: {signal_type}. "
+            f"Driver nodes: {', '.join(driver_nodes)}. "
+            f"Connection methods: {', '.join(connection_methods)}. "
+            f"Typical goal: {typical_goal}."
+        ).strip()
+
+        chunks.append(
+            Chunk(
+                document_id=f"control_mapping_{idx}_{_slugify(f'{operator}_{parameter}')}",
+                document_type="control_mapping",
+                operator_name=operator,
+                text=text,
+                source_file=str(CONTROL_MAPPINGS_PATH.relative_to(ROOT)),
+                metadata={
+                    "document_type": "control_mapping",
+                    "operator": operator,
+                    "parameter": parameter,
+                    "signal_type": signal_type,
+                    "driver_nodes": driver_nodes,
+                    "connection_methods": connection_methods,
+                    "typical_goal": typical_goal,
+                },
+            )
+        )
+
+    return chunks
+
+
 def load_chunks() -> List[Chunk]:
     chunks: List[Chunk] = []
 
@@ -362,12 +420,14 @@ def load_chunks() -> List[Chunk]:
     generated_recipe_chunks = load_recipes()
     use_case_chunks = load_use_cases()
     question_chunks = load_questions()
+    control_mapping_chunks = load_control_mappings()
 
     chunks += glossary_chunks
     chunks += operator_recipe_chunks
     chunks += generated_recipe_chunks
     chunks += use_case_chunks
     chunks += question_chunks
+    chunks += control_mapping_chunks
     chunks += failure_mode_chunks
 
     for recipe in load_generated_recipes():
@@ -395,6 +455,7 @@ def load_chunks() -> List[Chunk]:
     print(f"{len(operator_recipe_chunks) + len(generated_recipe_chunks)} recipe docs")
     print(f"{len(use_case_chunks)} use cases")
     print(f"{len(question_chunks)} questions")
+    print(f"{len(control_mapping_chunks)} control mappings")
     print(f"{len(failure_mode_chunks)} failure mode docs")
 
     return chunks
@@ -692,12 +753,33 @@ def retrieve_top_chunks(
     return retrieval_results, embedding_trace
 
 
-def select_context(query_type: str, retrieval_results: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+def _is_control_mapping_query(user_query: str) -> bool:
+    lowered = user_query.lower()
+    control_keywords = [
+        "connect",
+        "drive",
+        "control",
+        "export",
+        "where do i put",
+        "how do i connect",
+        "hook up",
+    ]
+    return any(keyword in lowered for keyword in control_keywords)
+
+
+def select_context(
+    query_type: str,
+    user_query: str,
+    retrieval_results: List[Dict[str, Any]],
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     preferred_order = {
         "workflow_recipe": ["question", "use_case", "recipe", "operator"],
         "operator_definition": ["operator", "failure_mode"],
         "troubleshooting": ["failure_mode", "operator"],
     }.get(query_type)
+
+    if _is_control_mapping_query(user_query):
+        preferred_order = ["control_mapping", "recipe", "operator"]
 
     selected: List[Dict[str, Any]] = []
     dropped: List[Dict[str, Any]] = []
@@ -991,7 +1073,7 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
         k=10,
         inferred_goal=inferred_goal,
     )
-    selected, dropped = select_context(query_type, retrieval_results)
+    selected, dropped = select_context(query_type, user_query, retrieval_results)
 
     responder = route_mode(user_query, query_type, selected)
     prompt_parts = build_prompt(user_query, query_type, selected)

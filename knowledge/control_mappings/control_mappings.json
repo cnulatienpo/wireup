@@ -1,0 +1,53 @@
+[
+  {
+    "operator": "Movie File In TOP",
+    "parameter": "Index",
+    "accepts_external_control": true,
+    "signal_type": "CHOP",
+    "driver_nodes": [
+      "Math CHOP",
+      "LFO CHOP",
+      "Count CHOP"
+    ],
+    "connection_methods": [
+      "drag CHOP channel onto parameter",
+      "parameter export",
+      "parameter expression"
+    ],
+    "typical_goal": "Drive playback position or clip selection"
+  },
+  {
+    "operator": "Level TOP",
+    "parameter": "Opacity",
+    "accepts_external_control": true,
+    "signal_type": "CHOP",
+    "driver_nodes": [
+      "LFO CHOP",
+      "Noise CHOP",
+      "Audio Spectrum CHOP"
+    ],
+    "connection_methods": [
+      "drag CHOP channel onto parameter",
+      "parameter export",
+      "CHOP reference"
+    ],
+    "typical_goal": "Animate transparency and intensity over time"
+  },
+  {
+    "operator": "Switch TOP",
+    "parameter": "Index",
+    "accepts_external_control": true,
+    "signal_type": "CHOP",
+    "driver_nodes": [
+      "Count CHOP",
+      "Logic CHOP",
+      "Keyboard In CHOP"
+    ],
+    "connection_methods": [
+      "drag CHOP channel onto parameter",
+      "parameter export",
+      "Python parameter expression"
+    ],
+    "typical_goal": "Select between multiple TOP inputs based on control signals"
+  }
+]
