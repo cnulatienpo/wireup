@@ -244,12 +244,46 @@ def _build_current_network_context(session: Dict[str, Any] | None) -> str:
     return "\n".join(lines).rstrip()
 
 
+def _build_teaching_examples_section(examples: List[Dict[str, Any]]) -> str:
+    if not examples:
+        return ""
+
+    lines = ["=== TEACHING EXAMPLES ===", ""]
+    for idx, example in enumerate(examples, start=1):
+        user_goal = str(example.get("user_goal", "")).strip()
+        assistant_response = str(example.get("assistant_response", "")).strip()
+        conversation_style = str(example.get("conversation_style", "")).strip()
+        concepts_used = [
+            str(item).strip()
+            for item in example.get("concepts_used", [])
+            if str(item).strip()
+        ]
+
+        if not user_goal or not assistant_response:
+            continue
+
+        lines.append(f"Example {idx}")
+        lines.append(f"User goal: {user_goal}")
+        lines.append(f"Assistant response: {assistant_response}")
+        if conversation_style:
+            lines.append(f"Conversation style: {conversation_style}")
+        if concepts_used:
+            lines.append(f"Concepts used: {', '.join(concepts_used)}")
+        lines.append("")
+
+    if len(lines) <= 2:
+        return ""
+
+    return "\n".join(lines).rstrip()
+
+
 def compose_prompt(
     user_query: str,
     query_type: str,
     retrieved_docs: List[Dict[str, Any]],
     generated_workflow: Dict[str, Any] | None = None,
     session: Dict[str, Any] | None = None,
+    teaching_examples: List[Dict[str, Any]] | None = None,
 ) -> str:
     grouped_context: Dict[str, List[Dict[str, Any]]] = {
         "task_alias": [],
@@ -287,6 +321,7 @@ def compose_prompt(
     generated_workflow_section = _build_generated_workflow_section(generated_workflow)
     user_actions_section = _build_user_actions_section(generated_workflow)
     current_network_section = _build_current_network_context(session)
+    teaching_examples_section = _build_teaching_examples_section(teaching_examples or [])
 
     optional_sections = [
         section
@@ -296,6 +331,7 @@ def compose_prompt(
             operator_graph_section,
             generated_workflow_section,
             user_actions_section,
+            teaching_examples_section,
         ]
         if section
     ]
