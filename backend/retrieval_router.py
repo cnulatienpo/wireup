@@ -14,6 +14,7 @@ QUERY_TYPE_WEIGHTS: Dict[str, Dict[str, float]] = {
         "glossary": 0.6,
         "question": 0.5,
         "control_mapping": 1.2,
+        "task_alias": 2.8,
     },
     "parameter_control": {
         "control_mapping": 3.0,
@@ -21,12 +22,14 @@ QUERY_TYPE_WEIGHTS: Dict[str, Dict[str, float]] = {
         "recipe": 1.4,
         "use_case": 1.2,
         "glossary": 0.5,
+        "task_alias": 2.5,
     },
     "operator_definition": {
         "glossary": 2.5,
         "operator": 2.0,
         "recipe": 0.8,
         "use_case": 0.6,
+        "task_alias": 1.6,
     },
     "troubleshooting": {
         "error": 2.5,
@@ -34,6 +37,7 @@ QUERY_TYPE_WEIGHTS: Dict[str, Dict[str, float]] = {
         "recipe": 2.0,
         "operator": 1.2,
         "glossary": 0.5,
+        "task_alias": 2.5,
     },
     "unknown": {},
 }
