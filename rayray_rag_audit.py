@@ -25,6 +25,7 @@ from sentence_transformers import SentenceTransformer
 from backend.query_classifier import classify_query
 from backend.prompt_composer import SYSTEM_PROMPT, compose_prompt
 from backend.workflow_generator import generate_workflow
+from backend.workflow_verifier import verify_workflow
 from backend.retrieval_router import print_debug_table, rank_documents
 
 ROOT = Path(__file__).resolve().parent
@@ -84,6 +85,9 @@ QUESTIONS_GENERATED_PATH = GENERATED_KNOWLEDGE_DIR / "questions_generated.json"
 CONTROL_MAPPINGS_PATH = ROOT / "knowledge" / "control_mappings" / "control_mappings.json"
 TASK_ALIASES_PATH = ROOT / "knowledge" / "task_aliases" / "task_aliases.json"
 OPERATOR_GRAPH_PATH = ROOT / "knowledge" / "operator_graph" / "operator_graph.json"
+OPERATORS_DIR = ROOT / "knowledge" / "operators"
+OPERATOR_LOOKUP_PATH = ROOT / "data" / "wireup_runtime" / "operator_lookup.json"
+MASTER_INDEX_PATH = ROOT / "data" / "wireup_runtime" / "master_index.json"
 GOAL_INFERENCE_MIN_CONFIDENCE = float(os.getenv("GOAL_INFERENCE_MIN_CONFIDENCE", "0.2"))
 
 
@@ -196,6 +200,45 @@ def load_operator_recipes_and_failures() -> Tuple[List[Chunk], List[Chunk]]:
                 )
 
     return recipe_chunks, failure_chunks
+
+
+def load_operator_definitions() -> Dict[str, Dict[str, Any]]:
+    definitions: Dict[str, Dict[str, Any]] = {}
+
+    if OPERATORS_DIR.exists():
+        for operator_file in OPERATORS_DIR.glob("*.json"):
+            try:
+                payload = json.loads(operator_file.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                continue
+
+            if not isinstance(payload, dict):
+                continue
+
+            name = str(payload.get("operator_name") or payload.get("name") or "").strip()
+            if name:
+                definitions[name] = payload
+
+    if OPERATOR_LOOKUP_PATH.exists():
+        lookup_payload = json.loads(OPERATOR_LOOKUP_PATH.read_text(encoding="utf-8"))
+        if isinstance(lookup_payload, dict):
+            for normalized_name in lookup_payload.values():
+                name = str(normalized_name).strip()
+                if name and name not in definitions:
+                    definitions[name] = {"operator_name": name}
+
+    if MASTER_INDEX_PATH.exists():
+        master_payload = json.loads(MASTER_INDEX_PATH.read_text(encoding="utf-8"))
+        operators = master_payload.get("operators", {}) if isinstance(master_payload, dict) else {}
+        if isinstance(operators, dict):
+            for operator_payload in operators.values():
+                if not isinstance(operator_payload, dict):
+                    continue
+                name = str(operator_payload.get("name") or "").strip()
+                if name and name not in definitions:
+                    definitions[name] = {"operator_name": name}
+
+    return definitions
 
 
 def load_recipes() -> List[Chunk]:
@@ -1117,6 +1160,14 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
             workflow_task_name,
             operator_graph=[chunk.metadata for chunk in corpus if chunk.document_type == "operator_graph"],
             recipes=load_generated_recipes(),
+        )
+        generated_workflow = {
+            **generated_workflow,
+            "operator_graph": [chunk.metadata for chunk in corpus if chunk.document_type == "operator_graph"],
+        }
+        generated_workflow = verify_workflow(
+            generated_workflow,
+            operator_definitions=load_operator_definitions(),
         )
 
     prompt_parts = build_prompt(
