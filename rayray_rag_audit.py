@@ -23,6 +23,7 @@ from uuid import uuid4
 
 from sentence_transformers import SentenceTransformer
 from backend.query_classifier import classify_query
+from backend.retrieval_router import print_debug_table, rank_documents
 
 ROOT = Path(__file__).resolve().parent
 GENERATED_RECIPES_PATH = ROOT / "data" / "wireup_runtime" / "generated_recipes.json"
@@ -625,7 +626,7 @@ def infer_goal(query: str, corpus: List[Chunk]) -> Dict[str, Any] | None:
 def retrieve_top_chunks(
     query: str,
     corpus: List[Chunk],
-    k: int = 10,
+    k: int = 6,
     inferred_goal: Dict[str, Any] | None = None,
     query_type: str = "unknown",
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
@@ -643,61 +644,39 @@ def retrieve_top_chunks(
     query_vec = embedding_fn(retrieval_query)
     emb_ms = (time.perf_counter() - emb_start) * 1000
 
-    scored = []
-    inferred_operators = {
-        _normalize_token(str(op)) for op in (inferred_goal or {}).get("operators", []) if str(op).strip()
-    }
-    related_recipe = str((inferred_goal or {}).get("related_recipe", "")).strip()
-
-    retrieval_type_boosts = {
-        "workflow_recipe": {"recipe": 0.08, "use_case": 0.06, "operator": 0.03},
-        "parameter_control": {"control_mapping": 0.1, "operator": 0.04},
-        "operator_definition": {"operator": 0.07},
-        "troubleshooting": {"failure_mode": 0.1, "recipe": 0.05, "operator": 0.03},
-    }.get(query_type, {})
-
+    all_documents: List[Dict[str, Any]] = []
     for chunk in corpus:
         if chunk.embedding is None:
             raise ValueError(f"Chunk {chunk.document_id} is missing a precomputed embedding")
-        score = cosine(query_vec, chunk.embedding)
-        boost = 0.0
 
-        if chunk.document_type in retrieval_type_boosts:
-            boost += retrieval_type_boosts[chunk.document_type]
-
-        if inferred_goal and related_recipe and chunk.document_id == related_recipe:
-            boost += 0.2
-
-        if inferred_goal and inferred_operators:
-            chunk_operators = {
-                _normalize_token(str(op))
-                for op in (chunk.metadata.get("operators", []) if isinstance(chunk.metadata, dict) else [])
-                if str(op).strip()
-            }
-            if chunk.operator_name:
-                chunk_operators.add(_normalize_token(chunk.operator_name))
-
-            if inferred_operators.intersection(chunk_operators):
-                boost += 0.08
-
-        scored.append((score + boost, score, boost, chunk))
-    scored.sort(key=lambda x: x[0], reverse=True)
-
-    retrieval_results: List[Dict[str, Any]] = []
-    for final_score, base_score, boost, chunk in scored[:k]:
-        retrieval_results.append(
+        embedding_score = cosine(query_vec, chunk.embedding)
+        all_documents.append(
             {
                 "document_id": chunk.document_id,
                 "document_type": chunk.document_type,
                 "source_file": chunk.source_file,
                 "operator_name": chunk.operator_name,
-                "similarity_score": round(float(final_score), 6),
-                "base_similarity_score": round(float(base_score), 6),
-                "similarity_boost": round(float(boost), 6),
+                "embedding_score": round(float(embedding_score), 6),
                 "text_preview_first_120_chars": chunk.text[:120],
                 "chunk_text": chunk.text,
+                "title": chunk.document_id,
             }
         )
+
+    retrieval_results = rank_documents(
+        user_query=query,
+        query_type=query_type,
+        all_documents=all_documents,
+        top_k=k,
+    )
+
+    for item in retrieval_results:
+        item["similarity_score"] = item["final_score"]
+        item["base_similarity_score"] = item["embedding_score"]
+        item["similarity_boost"] = round(item["final_score"] - item["embedding_score"], 6)
+
+    if DEBUG_RAG:
+        print_debug_table(retrieval_results)
 
     embedding_trace = {
         "embedding_model_used": EMBEDDING_MODEL_NAME,
