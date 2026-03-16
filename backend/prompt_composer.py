@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 from typing import Any, Dict, List
+
+from backend.parameter_instructions import extract_parameter_instructions, write_parameter_debug_log
 
 print("Prompt composer initialized")
 print("Structured context enabled")
@@ -57,6 +60,56 @@ def _format_doc(doc: Dict[str, Any], section: str) -> str:
     return f"{title}\nDescription: {text}" if text else title
 
 
+def _extract_goal_keywords(user_query: str, recipe_docs: List[Dict[str, Any]]) -> List[str]:
+    text_parts = [str(user_query or "")]
+    for doc in recipe_docs:
+        text_parts.append(str(doc.get("chunk_text") or doc.get("text") or ""))
+    return re.findall(r"[a-z0-9]+", " ".join(text_parts).lower())
+
+
+def _build_parameter_controls_section(
+    retrieved_operator_docs: List[Dict[str, Any]],
+    goal_keywords: List[str],
+) -> str:
+    parameter_steps: List[Dict[str, Any]] = []
+    for operator_doc in retrieved_operator_docs:
+        operator_name = str(
+            operator_doc.get("operator_name")
+            or operator_doc.get("title")
+            or operator_doc.get("document_id")
+            or ""
+        ).strip()
+        if not operator_name:
+            continue
+        parameter_steps.extend(extract_parameter_instructions(operator_name, goal_keywords))
+
+    debug_entries: List[Dict[str, Any]] = []
+    instructions_by_operator: Dict[str, List[Dict[str, Any]]] = {}
+    for step in parameter_steps:
+        instructions_by_operator.setdefault(step["operator"], []).append(step)
+
+    for operator, instructions in instructions_by_operator.items():
+        debug_entries.append({"operator": operator, "parameters_returned": len(instructions)})
+
+    write_parameter_debug_log(debug_entries)
+
+    if not instructions_by_operator:
+        return ""
+
+    lines = ["=== PARAMETER CONTROLS ===", ""]
+    for operator, instructions in instructions_by_operator.items():
+        lines.append(f"Operator: {operator}")
+        lines.append("")
+        for item in instructions:
+            lines.append(item["parameter"])
+            lines.append(item["what_it_controls"])
+            if item.get("how_to_use"):
+                lines.append(item["how_to_use"])
+            lines.append("")
+
+    return "\n".join(lines).rstrip()
+
+
 def compose_prompt(user_query: str, query_type: str, retrieved_docs: List[Dict[str, Any]]) -> str:
     grouped_context: Dict[str, List[Dict[str, Any]]] = {
         "operator": [],
@@ -86,12 +139,25 @@ def compose_prompt(user_query: str, query_type: str, retrieved_docs: List[Dict[s
 
     structured_context = "\n\n".join(structured_sections) or "=== STRUCTURED CONTEXT ===\n(no retrieved context)"
 
-    final_prompt = (
-        f"SYSTEM_PROMPT\n{SYSTEM_PROMPT}\n\n"
-        f"=== QUERY TYPE ===\n{query_type}\n\n"
-        f"{structured_context}\n\n"
-        f"USER QUESTION\n{user_query}\n"
-    )
+    goal_keywords = _extract_goal_keywords(user_query, grouped_context["recipe"])
+    parameter_controls_section = _build_parameter_controls_section(grouped_context["operator"], goal_keywords)
+
+    if parameter_controls_section:
+        final_prompt = (
+            f"SYSTEM_PROMPT\n{SYSTEM_PROMPT}\n\n"
+            f"=== QUERY TYPE ===\n{query_type}\n\n"
+            f"{structured_context}\n\n"
+            f"{parameter_controls_section}\n\n"
+            f"USER QUESTION\n{user_query}\n"
+        )
+    else:
+        final_prompt = (
+            f"SYSTEM_PROMPT\n{SYSTEM_PROMPT}\n\n"
+            f"=== QUERY TYPE ===\n{query_type}\n\n"
+            f"{structured_context}\n\n"
+            f"USER QUESTION\n{user_query}\n"
+        )
+
 
     prompt_log_path = Path(__file__).resolve().parents[1] / "logs" / "rag_prompt.txt"
     prompt_log_path.parent.mkdir(parents=True, exist_ok=True)
