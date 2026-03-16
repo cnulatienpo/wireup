@@ -81,6 +81,7 @@ RECIPES_GENERATED_PATH = GENERATED_KNOWLEDGE_DIR / "recipes_generated.json"
 USE_CASES_GENERATED_PATH = GENERATED_KNOWLEDGE_DIR / "use_cases_generated.json"
 QUESTIONS_GENERATED_PATH = GENERATED_KNOWLEDGE_DIR / "questions_generated.json"
 CONTROL_MAPPINGS_PATH = ROOT / "knowledge" / "control_mappings" / "control_mappings.json"
+TASK_ALIASES_PATH = ROOT / "knowledge" / "task_aliases" / "task_aliases.json"
 GOAL_INFERENCE_MIN_CONFIDENCE = float(os.getenv("GOAL_INFERENCE_MIN_CONFIDENCE", "0.2"))
 
 
@@ -357,6 +358,92 @@ def load_control_mappings() -> List[Chunk]:
     return chunks
 
 
+def load_task_aliases() -> List[Dict[str, Any]]:
+    if not TASK_ALIASES_PATH.exists():
+        return []
+
+    payload = json.loads(TASK_ALIASES_PATH.read_text(encoding="utf-8"))
+    if isinstance(payload, dict):
+        payload = [payload]
+    if not isinstance(payload, list):
+        return []
+
+    aliases: List[Dict[str, Any]] = []
+    for entry in payload:
+        if not isinstance(entry, dict):
+            continue
+        task = str(entry.get("task", "")).strip()
+        phrases = [str(alias).strip() for alias in entry.get("aliases", []) if str(alias).strip()]
+        operators = [str(op).strip() for op in entry.get("operators", []) if str(op).strip()]
+        recipes = [str(recipe).strip() for recipe in entry.get("related_recipes", []) if str(recipe).strip()]
+        if task and phrases:
+            aliases.append(
+                {
+                    "task": task,
+                    "aliases": phrases,
+                    "operators": operators,
+                    "recipes": recipes,
+                }
+            )
+
+    return aliases
+
+
+def load_task_alias_documents() -> List[Chunk]:
+    chunks: List[Chunk] = []
+    for idx, entry in enumerate(load_task_aliases(), start=1):
+        text = (
+            f"Task: {entry['task']}. "
+            f"Aliases: {', '.join(entry['aliases'])}. "
+            f"Operators: {', '.join(entry['operators'])}. "
+            f"Recipes: {', '.join(entry['recipes'])}."
+        )
+        chunks.append(
+            Chunk(
+                document_id=f"task_alias_{idx}_{_slugify(entry['task'])}",
+                document_type="task_alias",
+                operator_name=entry["task"],
+                text=text,
+                source_file=str(TASK_ALIASES_PATH.relative_to(ROOT)),
+                metadata={
+                    "document_type": "task_alias",
+                    "task": entry["task"],
+                    "aliases": entry["aliases"],
+                    "operators": entry["operators"],
+                    "recipes": entry["recipes"],
+                },
+            )
+        )
+    return chunks
+
+
+def _normalize_phrase(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", str(value).lower()).strip()
+
+
+def match_task_alias(user_query: str, task_aliases: List[Dict[str, Any]]) -> Dict[str, Any] | None:
+    normalized_query = _normalize_phrase(user_query)
+    for entry in task_aliases:
+        for alias in entry.get("aliases", []):
+            normalized_alias = _normalize_phrase(alias)
+            if normalized_alias and normalized_alias in normalized_query:
+                return entry
+    return None
+
+
+def expand_query_with_task_alias(query: str, match: Dict[str, Any] | None) -> str:
+    if not match:
+        return query
+
+    keywords = [
+        match.get("task", ""),
+        *[str(op).lower() for op in match.get("operators", [])],
+        *[str(recipe).lower() for recipe in match.get("recipes", [])],
+    ]
+    suffix = " ".join(item for item in keywords if item)
+    return f"{query} {suffix}".strip()
+
+
 def load_chunks() -> List[Chunk]:
     chunks: List[Chunk] = []
 
@@ -366,6 +453,7 @@ def load_chunks() -> List[Chunk]:
     use_case_chunks = load_use_cases()
     question_chunks = load_questions()
     control_mapping_chunks = load_control_mappings()
+    task_alias_chunks = load_task_alias_documents()
 
     chunks += glossary_chunks
     chunks += operator_recipe_chunks
@@ -373,6 +461,7 @@ def load_chunks() -> List[Chunk]:
     chunks += use_case_chunks
     chunks += question_chunks
     chunks += control_mapping_chunks
+    chunks += task_alias_chunks
     chunks += failure_mode_chunks
 
     for recipe in load_generated_recipes():
@@ -402,6 +491,8 @@ def load_chunks() -> List[Chunk]:
     print(f"{len(use_case_chunks)} use cases")
     print(f"{len(question_chunks)} questions")
     print(f"{len(control_mapping_chunks)} control mappings")
+    print("Task alias system initialized")
+    print(f"Loaded {len(task_alias_chunks)} workflow intents")
     print("\nQuery classifier enabled")
 
     return chunks
@@ -630,9 +721,10 @@ def retrieve_top_chunks(
     k: int = 6,
     inferred_goal: Dict[str, Any] | None = None,
     query_type: str = "unknown",
+    matched_task_alias: Dict[str, Any] | None = None,
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     emb_start = time.perf_counter()
-    retrieval_query = query
+    retrieval_query = expand_query_with_task_alias(query, matched_task_alias)
     if inferred_goal:
         operators_str = ", ".join(inferred_goal.get("operators", []))
         retrieval_query = (
@@ -708,8 +800,8 @@ def select_context(
     retrieval_results: List[Dict[str, Any]],
 ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     preferred_order = {
-        "workflow_recipe": ["recipe", "use_case", "operator"],
-        "parameter_control": ["control_mapping", "operator", "parameter"],
+        "workflow_recipe": ["task_alias", "recipe", "use_case", "operator"],
+        "parameter_control": ["task_alias", "control_mapping", "operator", "parameter"],
         "operator_definition": ["glossary", "operator"],
         "troubleshooting": ["errors", "recipe", "operator"],
     }.get(query_type)
@@ -857,7 +949,9 @@ def route_mode(user_query: str, query_type: str, selected_context: List[Dict[str
 def build_prompt(user_query: str, query_type_guess: str, selected: List[Dict[str, Any]]) -> Dict[str, str]:
     full_prompt = compose_prompt(user_query, query_type_guess, selected)
 
-    context_start = full_prompt.find("=== OPERATORS ===")
+    context_start = full_prompt.find("=== TASK ALIASES ===")
+    if context_start == -1:
+        context_start = full_prompt.find("=== OPERATORS ===")
     if context_start == -1:
         context_start = full_prompt.find("=== GLOSSARY ===")
     if context_start == -1:
@@ -915,6 +1009,7 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
     }
 
     corpus = list(get_embedded_corpus())
+    matched_task_alias = match_task_alias(user_query, load_task_aliases())
     inferred_goal = infer_goal(user_query, corpus)
     retrieval_results, embedding_trace = retrieve_top_chunks(
         user_query,
@@ -922,6 +1017,7 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
         k=10,
         inferred_goal=inferred_goal,
         query_type=query_type,
+        matched_task_alias=matched_task_alias,
     )
     selected, dropped = select_context(query_type, user_query, retrieval_results)
 
@@ -993,6 +1089,7 @@ def run_audit(user_query: str, log_dir: Path | None = None) -> Dict[str, Any]:
             json.dumps(
                 {
                     "query": user_query,
+                    "matched_task_alias": matched_task_alias.get("task") if matched_task_alias else None,
                     "query_type": query_type,
                     "inferred_goal": (
                         {

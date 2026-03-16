@@ -22,8 +22,9 @@ SYSTEM_PROMPT = (
     "If information is missing, say so."
 )
 
-DOC_TYPE_ORDER = ["operator", "glossary", "recipe", "use_case", "control_mapping", "error"]
+DOC_TYPE_ORDER = ["task_alias", "operator", "glossary", "recipe", "use_case", "control_mapping", "error"]
 DOC_TYPE_HEADINGS = {
+    "task_alias": "=== TASK ALIASES ===",
     "operator": "=== OPERATORS ===",
     "glossary": "=== GLOSSARY ===",
     "recipe": "=== RECIPES ===",
@@ -53,6 +54,8 @@ def _format_doc(doc: Dict[str, Any], section: str) -> str:
     title = str(doc.get("operator_name") or doc.get("title") or doc.get("document_id") or "Untitled").strip()
     text = str(doc.get("chunk_text") or doc.get("text") or "").strip()
 
+    if section == "task_alias":
+        return f"Task: {title}\n{text}" if text else f"Task: {title}"
     if section == "control_mapping":
         return f"Operator: {title}\n{text}" if text else f"Operator: {title}"
     if section == "recipe":
@@ -112,6 +115,7 @@ def _build_parameter_controls_section(
 
 def compose_prompt(user_query: str, query_type: str, retrieved_docs: List[Dict[str, Any]]) -> str:
     grouped_context: Dict[str, List[Dict[str, Any]]] = {
+        "task_alias": [],
         "operator": [],
         "glossary": [],
         "recipe": [],

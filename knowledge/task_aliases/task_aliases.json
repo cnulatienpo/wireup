@@ -1,0 +1,91 @@
+[
+  {
+    "task": "sequential_video_playback",
+    "aliases": [
+      "stitch clips together",
+      "play clips in order",
+      "sequence videos",
+      "run clips back to back",
+      "combine clips into a sequence"
+    ],
+    "operators": [
+      "Movie File In TOP",
+      "Switch TOP",
+      "Cache TOP"
+    ],
+    "related_recipes": [
+      "sequential_clip_playback",
+      "clip_switching_network"
+    ]
+  },
+  {
+    "task": "video_blending",
+    "aliases": [
+      "blend videos",
+      "mix two videos",
+      "combine video feeds",
+      "crossfade video clips"
+    ],
+    "operators": [
+      "Composite TOP",
+      "Cross TOP",
+      "Level TOP"
+    ],
+    "related_recipes": [
+      "video_blend_network",
+      "crossfade_between_sources"
+    ]
+  },
+  {
+    "task": "clip_switching",
+    "aliases": [
+      "switch between clips",
+      "toggle clips",
+      "switch video source",
+      "alternate between videos"
+    ],
+    "operators": [
+      "Switch TOP",
+      "Select TOP",
+      "Movie File In TOP"
+    ],
+    "related_recipes": [
+      "clip_switching_network"
+    ]
+  },
+  {
+    "task": "parameter_control",
+    "aliases": [
+      "drive a parameter",
+      "connect chop to parameter",
+      "control parameter with chop",
+      "export chop channel"
+    ],
+    "operators": [
+      "Math CHOP",
+      "LFO CHOP",
+      "Constant CHOP"
+    ],
+    "related_recipes": [
+      "chop_parameter_export"
+    ]
+  },
+  {
+    "task": "frame_looping",
+    "aliases": [
+      "loop frames",
+      "repeat frames",
+      "make frame loop",
+      "play frames on repeat"
+    ],
+    "operators": [
+      "Cache TOP",
+      "Feedback TOP",
+      "Speed CHOP"
+    ],
+    "related_recipes": [
+      "frame_loop_playback",
+      "feedback_loop_setup"
+    ]
+  }
+]
