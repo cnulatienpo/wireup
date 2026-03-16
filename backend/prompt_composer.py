@@ -198,6 +198,34 @@ def _build_generated_workflow_section(workflow: Dict[str, Any] | None) -> str:
 
     return "\n".join(lines).rstrip()
 
+
+
+def _build_user_actions_section(workflow: Dict[str, Any] | None) -> str:
+    if not isinstance(workflow, dict):
+        return ""
+
+    ui_actions = workflow.get("ui_actions", {})
+    if not isinstance(ui_actions, dict):
+        return ""
+
+    actions = ui_actions.get("actions", [])
+    if not isinstance(actions, list) or not actions:
+        return ""
+
+    lines = ["=== USER ACTIONS ===", ""]
+    for action in actions:
+        if not isinstance(action, dict):
+            continue
+        instruction = str(action.get("instruction", "")).strip()
+        if not instruction:
+            continue
+        lines.append(instruction)
+
+    if len(lines) <= 2:
+        return ""
+
+    return "\n".join(lines).rstrip()
+
 def _build_current_network_context(session: Dict[str, Any] | None) -> str:
     if not isinstance(session, dict):
         return ""
@@ -266,6 +294,7 @@ def compose_prompt(
     parameter_controls_section = _build_parameter_controls_section(grouped_context["operator"], goal_keywords)
     operator_graph_section = _build_operator_graph_sections(grouped_context["operator_graph"])
     generated_workflow_section = _build_generated_workflow_section(generated_workflow)
+    user_actions_section = _build_user_actions_section(generated_workflow)
     current_network_section = _build_current_network_context(session)
 
     optional_sections = [
@@ -275,6 +304,7 @@ def compose_prompt(
             parameter_controls_section,
             operator_graph_section,
             generated_workflow_section,
+            user_actions_section,
         ]
         if section
     ]
