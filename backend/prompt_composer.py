@@ -198,12 +198,39 @@ def _build_generated_workflow_section(workflow: Dict[str, Any] | None) -> str:
 
     return "\n".join(lines).rstrip()
 
+def _build_current_network_context(session: Dict[str, Any] | None) -> str:
+    if not isinstance(session, dict):
+        return ""
+
+    operators = [str(item).strip() for item in session.get("operators_in_context", []) if str(item).strip()]
+    parameters = [str(item).strip() for item in session.get("parameters_discussed", []) if str(item).strip()]
+
+    if not operators and not parameters:
+        return ""
+
+    lines = ["=== CURRENT NETWORK CONTEXT ===", ""]
+    lines.append("Operators already in network:")
+    lines.append("")
+    if operators:
+        lines.extend(operators)
+    else:
+        lines.append("(none)")
+
+    lines.extend(["", "Parameters already discussed:", ""])
+    if parameters:
+        lines.extend(parameters)
+    else:
+        lines.append("(none)")
+
+    return "\n".join(lines).rstrip()
+
 
 def compose_prompt(
     user_query: str,
     query_type: str,
     retrieved_docs: List[Dict[str, Any]],
     generated_workflow: Dict[str, Any] | None = None,
+    session: Dict[str, Any] | None = None,
 ) -> str:
     grouped_context: Dict[str, List[Dict[str, Any]]] = {
         "task_alias": [],
@@ -239,9 +266,17 @@ def compose_prompt(
     parameter_controls_section = _build_parameter_controls_section(grouped_context["operator"], goal_keywords)
     operator_graph_section = _build_operator_graph_sections(grouped_context["operator_graph"])
     generated_workflow_section = _build_generated_workflow_section(generated_workflow)
+    current_network_section = _build_current_network_context(session)
 
     optional_sections = [
-        section for section in [parameter_controls_section, operator_graph_section, generated_workflow_section] if section
+        section
+        for section in [
+            current_network_section,
+            parameter_controls_section,
+            operator_graph_section,
+            generated_workflow_section,
+        ]
+        if section
     ]
     optional_context = "\n\n".join(optional_sections)
 
