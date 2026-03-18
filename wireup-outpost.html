@@ -109,7 +109,6 @@
       const minUiScale = 0.35;
       const maxUiScale = 2.4;
       const uiScaleStep = 0.05;
-      const resizeHandleSize = 12;
       const resizeHandleVisualSize = 14;
       const targetByKey = new Map();
       const handleByKey = new Map();
@@ -119,6 +118,7 @@
       let isLayoutEditMode = false;
       let activePointerState = null;
       let saveStatusTimeout = null;
+      let hasManualLayoutChanges = false;
 
       const editableTargets = [
         { key: 'leftPanelFrame', element: leftPanelFrame, label: 'left-panel-frame', minWidth: 32, minHeight: 32 },
@@ -330,11 +330,26 @@
         }
       }
 
+      function getPointerCanvasPosition(event, canvasMetrics = getCanvasMetrics()) {
+        return {
+          x: event.clientX - canvasMetrics.left,
+          y: event.clientY - canvasMetrics.top,
+        };
+      }
+
       function applySavedOrAutoLayout() {
         if (customLayoutNormalized) {
           const customLayout = deserializeLayout(customLayoutNormalized);
           if (customLayout) {
             applyLayoutPreset(customLayout);
+            return;
+          }
+        }
+
+        if (hasManualLayoutChanges) {
+          const manualLayout = captureCurrentLayout();
+          if (manualLayout && Object.keys(manualLayout).length) {
+            applyLayoutPreset(manualLayout);
             return;
           }
         }
@@ -430,35 +445,7 @@
           return { left: false, right: true, top: false, bottom: true };
         }
 
-        const rect = element.getBoundingClientRect();
-        const edgeHitSize = resizeHandleSize + 4;
-        const x = event.clientX;
-        const y = event.clientY;
-        const isInside = x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
-        if (!isInside) {
-          return null;
-        }
-
-        let left = Math.abs(x - rect.left) <= edgeHitSize;
-        let right = Math.abs(x - rect.right) <= edgeHitSize;
-        let top = Math.abs(y - rect.top) <= edgeHitSize;
-        let bottom = Math.abs(y - rect.bottom) <= edgeHitSize;
-
-        if (left && right) {
-          left = Math.abs(x - rect.left) <= Math.abs(x - rect.right);
-          right = !left;
-        }
-
-        if (top && bottom) {
-          top = Math.abs(y - rect.top) <= Math.abs(y - rect.bottom);
-          bottom = !top;
-        }
-
-        if (!(left || right || top || bottom)) {
-          return null;
-        }
-
-        return { left, right, top, bottom };
+        return null;
       }
 
       function cursorForResizeEdges(edges) {
@@ -546,6 +533,7 @@
         }
 
         const resizeEdges = getResizeEdges(event, pointerTarget);
+        const pointerPosition = getPointerCanvasPosition(event, canvasMetrics);
         activePointerState = {
           pointerId: event.pointerId,
           element: pointerTarget,
@@ -554,8 +542,8 @@
           startY: event.clientY,
           startRect,
           canvasMetrics,
-          pointerOffsetX: event.clientX - canvasMetrics.left - startRect.left,
-          pointerOffsetY: event.clientY - canvasMetrics.top - startRect.top,
+          pointerOffsetX: pointerPosition.x - startRect.left,
+          pointerOffsetY: pointerPosition.y - startRect.top,
           resizeEdges,
           isResizing: Boolean(resizeEdges),
         };
@@ -587,21 +575,23 @@
           let nextWidth = startRect.width;
           let nextHeight = startRect.height;
 
+          const pointerPosition = getPointerCanvasPosition(event, activePointerState.canvasMetrics);
+
           if (edges.right) {
-            nextWidth = Math.max(minWidth, event.clientX - activePointerState.canvasMetrics.left - startRect.left);
+            nextWidth = Math.max(minWidth, pointerPosition.x - startRect.left);
           }
 
           if (edges.left) {
-            nextWidth = Math.max(minWidth, startRect.left + startRect.width - (event.clientX - activePointerState.canvasMetrics.left));
+            nextWidth = Math.max(minWidth, startRect.left + startRect.width - pointerPosition.x);
             nextLeft = startRect.left + startRect.width - nextWidth;
           }
 
           if (edges.bottom) {
-            nextHeight = Math.max(minHeight, event.clientY - activePointerState.canvasMetrics.top - startRect.top);
+            nextHeight = Math.max(minHeight, pointerPosition.y - startRect.top);
           }
 
           if (edges.top) {
-            nextHeight = Math.max(minHeight, startRect.top + startRect.height - (event.clientY - activePointerState.canvasMetrics.top));
+            nextHeight = Math.max(minHeight, startRect.top + startRect.height - pointerPosition.y);
             nextTop = startRect.top + startRect.height - nextHeight;
           }
 
@@ -609,13 +599,16 @@
           element.style.top = px(nextTop);
           element.style.width = pxSize(nextWidth, minWidth);
           element.style.height = pxSize(nextHeight, minHeight);
+          hasManualLayoutChanges = true;
           document.body.style.cursor = cursorForResizeEdges(edges);
           updateResizeHandleForTarget(target);
           return;
         }
 
-        element.style.left = px(event.clientX - activePointerState.canvasMetrics.left - activePointerState.pointerOffsetX);
-        element.style.top = px(event.clientY - activePointerState.canvasMetrics.top - activePointerState.pointerOffsetY);
+        const pointerPosition = getPointerCanvasPosition(event, activePointerState.canvasMetrics);
+        element.style.left = px(pointerPosition.x - activePointerState.pointerOffsetX);
+        element.style.top = px(pointerPosition.y - activePointerState.pointerOffsetY);
+        hasManualLayoutChanges = true;
         updateResizeHandleForTarget(target);
       }
 
@@ -979,6 +972,7 @@
             return;
           }
           customLayoutNormalized = serializeLayout(snapshot);
+          hasManualLayoutChanges = false;
           saveCustomLayout(customLayoutNormalized);
           showLayoutSavedState();
           setLayoutEditMode(false);
@@ -989,6 +983,7 @@
         layoutReset.addEventListener('click', () => {
           clearCustomLayout();
           customLayoutNormalized = null;
+          hasManualLayoutChanges = false;
           setLayoutEditMode(false);
           applySavedOrAutoLayout();
         });
