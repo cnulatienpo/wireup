@@ -1,0 +1,36 @@
+[
+  {
+    "id": "blur_top_basic_soften",
+    "title": "Blur an incoming image with Blur TOP",
+    "operator": "Blur (TOP)",
+    "keywords": ["blur", "soften", "movie file in", "image", "filter", "soft"],
+    "steps": [
+      "Add a Blur TOP after your Movie File In TOP.",
+      "Open the Blur parameter page.",
+      "Increase Filter Size until the image softens.",
+      "Adjust Extend if you need cleaner edge behavior."
+    ],
+    "parameters": {
+      "Filter Size": "Controls how strong the blur is.",
+      "Extend": "Controls how the blur behaves at the image edges."
+    },
+    "explanation": "This recipe uses Blur TOP to soften the source image by increasing the blur radius and tuning edge handling."
+  },
+  {
+    "id": "add_top_combine_inputs",
+    "title": "Combine two image inputs with Add TOP",
+    "operator": "Add (TOP)",
+    "keywords": ["add", "combine", "mix", "two inputs", "sum", "layer"],
+    "steps": [
+      "Add an Add TOP after the two TOPs you want to combine.",
+      "Connect the first image to input 0 and the second image to input 1.",
+      "Open the Add TOP parameter page.",
+      "Adjust the input weights until the blend looks right."
+    ],
+    "parameters": {
+      "Operand 1": "Sets the weight for the first input.",
+      "Operand 2": "Sets the weight for the second input."
+    },
+    "explanation": "This recipe sums two TOP inputs so you can brighten or combine layers by balancing each input weight."
+  }
+]
