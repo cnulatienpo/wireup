@@ -6,12 +6,21 @@ from pathlib import Path
 import re
 from typing import Any, Dict, List
 
+from backend.conversation_examples import (
+    format_conversation_examples,
+    load_conversation_examples,
+    log_conversation_examples_used,
+    select_conversation_examples,
+)
 from backend.parameter_instructions import extract_parameter_instructions, write_parameter_debug_log
 
 print("Prompt composer initialized")
 print("Structured context enabled")
+print("Conversation example system initialized")
+print("Example-driven teaching enabled")
 
 SYSTEM_PROMPT = Path(__file__).with_name("system_prompt.txt").read_text(encoding="utf-8").strip()
+conversation_examples = load_conversation_examples()
 
 DOC_TYPE_ORDER = ["task_alias", "operator", "glossary", "recipe", "use_case", "control_mapping", "operator_graph", "error"]
 DOC_TYPE_HEADINGS = {
@@ -245,36 +254,10 @@ def _build_current_network_context(session: Dict[str, Any] | None) -> str:
 
 
 def _build_teaching_examples_section(examples: List[Dict[str, Any]]) -> str:
-    if not examples:
+    examples_block = format_conversation_examples(examples)
+    if not examples_block:
         return ""
-
-    lines = ["=== TEACHING EXAMPLES ===", ""]
-    for idx, example in enumerate(examples, start=1):
-        user_goal = str(example.get("user_goal", "")).strip()
-        assistant_response = str(example.get("assistant_response", "")).strip()
-        conversation_style = str(example.get("conversation_style", "")).strip()
-        concepts_used = [
-            str(item).strip()
-            for item in example.get("concepts_used", [])
-            if str(item).strip()
-        ]
-
-        if not user_goal or not assistant_response:
-            continue
-
-        lines.append(f"Example {idx}")
-        lines.append(f"User goal: {user_goal}")
-        lines.append(f"Assistant response: {assistant_response}")
-        if conversation_style:
-            lines.append(f"Conversation style: {conversation_style}")
-        if concepts_used:
-            lines.append(f"Concepts used: {', '.join(concepts_used)}")
-        lines.append("")
-
-    if len(lines) <= 2:
-        return ""
-
-    return "\n".join(lines).rstrip()
+    return f"=== TEACHING EXAMPLES ===\n{examples_block}"
 
 
 def compose_prompt(
@@ -321,7 +304,10 @@ def compose_prompt(
     generated_workflow_section = _build_generated_workflow_section(generated_workflow)
     user_actions_section = _build_user_actions_section(generated_workflow)
     current_network_section = _build_current_network_context(session)
-    teaching_examples_section = _build_teaching_examples_section(teaching_examples or [])
+    selected_examples = teaching_examples or select_conversation_examples(user_query, conversation_examples)
+    teaching_examples_section = _build_teaching_examples_section(selected_examples)
+    if selected_examples:
+        log_conversation_examples_used(user_query, selected_examples)
 
     optional_sections = [
         section
