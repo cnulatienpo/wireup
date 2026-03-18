@@ -24,7 +24,7 @@ from uuid import uuid4
 from sentence_transformers import SentenceTransformer
 from backend.query_classifier import classify_query
 from backend.prompt_composer import SYSTEM_PROMPT, compose_prompt
-from backend.response_formatter import format_action_response
+from backend.tutor_brain import generate_response
 from backend.workflow_generator import generate_workflow
 from backend.workflow_verifier import verify_workflow
 from backend.ui_action_generator import generate_ui_actions
@@ -1215,10 +1215,11 @@ def run_audit(user_query: str, log_dir: Path | None = None, session_id: str = "d
     ])
 
     if query_type == "workflow_recipe":
-        response_text = format_action_response(
-            (generated_workflow or {}).get("ui_actions", {}),
-            generated_workflow,
+        response_text = generate_response(
             user_query,
+            selected,
+            generated_workflow,
+            (generated_workflow or {}).get("ui_actions", {}),
         )
     log_conversation_example_influence(
         user_query=user_query,
