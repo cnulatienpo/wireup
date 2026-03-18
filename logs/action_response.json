@@ -1,0 +1,9 @@
+{
+  "status": [
+    "Action loop formatter enabled",
+    "Step-by-step tutor mode active"
+  ],
+  "steps": [],
+  "fallback": "Are you trying to switch clips instantly or blend them together?",
+  "user_query": "how do i switch clips?"
+}
