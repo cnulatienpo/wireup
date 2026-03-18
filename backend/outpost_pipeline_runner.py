@@ -20,7 +20,7 @@ if str(ROOT) not in sys.path:
 from backend.query_classifier import classify_query
 from backend.retrieval_router import rank_documents, write_retrieval_debug
 from backend.session_memory import update_session
-from backend.tutor_brain import generate_response
+from backend.tutor_brain import build_structured_response, generate_response
 from backend.ui_action_generator import generate_ui_actions
 from backend.workflow_generator import generate_workflow
 
@@ -222,12 +222,17 @@ def run_pipeline(payload: Dict[str, Any]) -> Dict[str, Any]:
     ui_actions = workflow_with_actions.get("ui_actions", {})
 
     _write_rag_prompt(query, query_type, ranked_docs, workflow_with_actions)
-    response = generate_response(query, ranked_docs, workflow_with_actions, ui_actions)
+    explanation = generate_response(query, ranked_docs, workflow_with_actions, ui_actions)
+    structured_response = build_structured_response(explanation, workflow_with_actions, ui_actions)
     update_session(session_id, workflow_with_actions, query)
 
     return {
         "session_id": session_id,
-        "response": response,
+        "response": structured_response['answer'],
+        "answer": structured_response['answer'],
+        "explanation": structured_response['explanation'],
+        "ui_execution": structured_response['ui_execution'],
+        "expected_visual_result": structured_response['expected_visual_result'],
         "workflow_used": True,
         "query_type": query_type,
         "workflow": workflow_with_actions,

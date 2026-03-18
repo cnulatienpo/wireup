@@ -283,6 +283,58 @@ def _write_log(intent: Dict[str, str], strategy: str, plan: List[str], steps: Li
     TUTOR_BRAIN_LOG_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
+
+def build_structured_response(
+    explanation: str,
+    workflow: Dict[str, Any] | None,
+    ui_actions: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """Return Ray Ray's structured execution payload."""
+    action_steps = _steps_from_actions(ui_actions)
+    if not action_steps:
+        action_steps = _steps_from_workflow(workflow)
+
+    ui_execution: List[Dict[str, str]] = []
+    expected_bits: List[str] = []
+    for step in action_steps[:6]:
+        action_text = _normalize_text(step.get('action', ''))
+        expect_text = _normalize_text(step.get('expect', ''))
+        if not action_text:
+            continue
+        ui_execution.append({
+            'step': action_text,
+            'why': expect_text or 'That lets you confirm the TouchDesigner change immediately.',
+        })
+        if expect_text:
+            expected_bits.append(expect_text)
+
+    if not ui_execution:
+        ui_execution = [
+            {
+                'step': 'Click the relevant node in the network and open its parameter panel.',
+                'why': 'That gives you a real UI target instead of a vague explanation.',
+            }
+        ]
+        expected_bits.append('You should see the node become active and its controls appear in the parameter panel.')
+
+    expected_visual_result = ' '.join(dict.fromkeys(expected_bits)).strip()
+    if not expected_visual_result:
+        expected_visual_result = 'You should see the network respond in the viewer or parameter panel after each change.'
+
+    lines = [explanation.strip(), '', 'Do This In TouchDesigner']
+    for index, step in enumerate(ui_execution, start=1):
+        lines.append(f"{index}. {step['step']}")
+        lines.append(f"   Why: {step['why']}")
+    lines.extend(['', f'Expected visual result: {expected_visual_result}'])
+
+    return {
+        'answer': '\n'.join(line for line in lines if line is not None).strip(),
+        'explanation': explanation.strip(),
+        'ui_execution': ui_execution,
+        'expected_visual_result': expected_visual_result,
+    }
+
+
 def generate_response(
     user_query: str,
     context: Any,

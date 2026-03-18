@@ -119,6 +119,113 @@ function detectOperator(question = '', state = {}) {
   return matches[0] || null;
 }
 
+
+function cleanText(value = '') {
+  return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
+function formatStructuredRayRayAnswer(payload = {}) {
+  const explanation = cleanText(payload.explanation || payload.answer || '');
+  const uiExecution = Array.isArray(payload.ui_execution) ? payload.ui_execution : [];
+  const expectedVisualResult = cleanText(payload.expected_visual_result || '');
+
+  const lines = [];
+  if (explanation) {
+    lines.push(explanation, '');
+  }
+
+  if (uiExecution.length) {
+    lines.push('Do This In TouchDesigner');
+    uiExecution.forEach((item, index) => {
+      lines.push(`${index + 1}. ${cleanText(item.step)}`);
+      if (item.why) {
+        lines.push(`   Why: ${cleanText(item.why)}`);
+      }
+    });
+    lines.push('');
+  }
+
+  if (expectedVisualResult) {
+    lines.push(`Expected visual result: ${expectedVisualResult}`);
+  }
+
+  return lines.join('\n').trim();
+}
+
+function buildUiExecution({ operator = '', parameterNames = [], state = {}, question = '' } = {}) {
+  const selectedName = cleanText(state.selectedNode || operator || 'the node');
+  const operatorLabel = cleanText(operator || state.nodeType || 'the operator');
+  const networkName = cleanText(state.network || 'the current network');
+  const parameters = Array.isArray(parameterNames) ? parameterNames.filter(Boolean) : [];
+  const primaryParameter = parameters[0] || '';
+  const hasChopContext = /\bchop\b/i.test(question)
+    || /\bchop\b/i.test(JSON.stringify(state.parameters || {}))
+    || (Array.isArray(state.upstream) && state.upstream.some((node) => /CHOP/i.test(node?.type || node?.family || '')));
+
+  const steps = [
+    {
+      step: `Click the ${selectedName} ${operatorLabel ? `(${operatorLabel}) ` : ''}node in the network editor.`.replace(/\s+/g, ' ').trim(),
+      why: 'That makes sure the right operator is active before you change anything.',
+    },
+    {
+      step: `Look at the parameter panel on the right side of TouchDesigner while you stay inside ${networkName}.`,
+      why: 'That panel is where this operator exposes the controls you can actually change.',
+    },
+  ];
+
+  if (primaryParameter) {
+    steps.push({
+      step: `Find the parameter labeled "${primaryParameter}" in the parameter panel.`,
+      why: 'That is the specific runtime parameter currently available for this operator.',
+    });
+
+    if (hasChopContext) {
+      steps.push({
+        step: `Drag the CHOP channel you want to use onto the "${primaryParameter}" parameter label, then release when the target highlights.`,
+        why: 'Dropping onto the exact parameter label creates the live connection without guessing the destination.',
+      });
+    } else {
+      steps.push({
+        step: `Click in the value field next to "${primaryParameter}" and adjust it directly.`,
+        why: 'That lets you test the change on the exact control that exists in the current runtime data.',
+      });
+    }
+  } else {
+    steps.push({
+      step: 'Open the parameter pages for this node and use the first visible control that matches the question you asked.',
+      why: 'This keeps the guidance grounded in controls you can actually see instead of inventing parameter names.',
+    });
+  }
+
+  return steps;
+}
+
+function buildExpectedVisualResult({ operator = '', parameterNames = [], question = '' } = {}) {
+  const primaryParameter = (Array.isArray(parameterNames) ? parameterNames[0] : '') || '';
+  if (/\bchop\b/i.test(question) && primaryParameter) {
+    return `You should see the "${primaryParameter}" control show an active connection, and the related value should update as the CHOP channel changes.`;
+  }
+
+  if (primaryParameter) {
+    return `You should see the "${primaryParameter}" value change in the parameter panel, and the ${operator || 'operator'} output should react in its viewer if that control affects the result.`;
+  }
+
+  return `You should see the ${operator || 'selected operator'} stay selected, its parameter panel visible, and the viewer update as you change one of the controls that is present.`;
+}
+
+function buildStructuredRayRayPayload({ explanation = '', operator = '', state = {}, question = '', parameterNames = [] } = {}) {
+  const payload = {
+    explanation: cleanText(explanation),
+    ui_execution: buildUiExecution({ operator, parameterNames, state, question }),
+    expected_visual_result: buildExpectedVisualResult({ operator, parameterNames, question }),
+  };
+
+  return {
+    ...payload,
+    answer: formatStructuredRayRayAnswer(payload),
+  };
+}
+
 function buildKnowledgeContext(operatorName, explainMode = 'td') {
   const context = runtime.retrieveContext(operatorName);
   return runtime.explainContext(context, explainMode);
@@ -384,7 +491,14 @@ async function handleRayrayRequest(req, res) {
 
     const flow = buildSignalFlowDescription(effectiveState);
     if (mode === 'explain_patch') {
-      const answer = flow.beginnerSummary;
+      const structured = buildStructuredRayRayPayload({
+        explanation: flow.beginnerSummary,
+        operator: effectiveState.nodeType || '',
+        state: effectiveState,
+        question,
+        parameterNames: Object.keys(effectiveState.parameters || {}),
+      });
+      const answer = structured.answer;
       appendInteraction(sessionId, {
         question,
         state: effectiveState,
@@ -394,7 +508,7 @@ async function handleRayrayRequest(req, res) {
 
       return res.json({
         sessionId,
-        answer,
+        ...structured,
         flow,
       });
     }
@@ -411,7 +525,15 @@ async function handleRayrayRequest(req, res) {
 
     if (comparisonOperators.length === 2) {
       const [operatorA, operatorB] = comparisonOperators;
-      const answer = await compareOperators(operatorA, operatorB, question, recentHistory, followUp, explainMode);
+      const explanation = await compareOperators(operatorA, operatorB, question, recentHistory, followUp, explainMode);
+      const structured = buildStructuredRayRayPayload({
+        explanation,
+        operator: operatorA,
+        state: effectiveState,
+        question,
+        parameterNames: Object.keys(effectiveState.parameters || {}),
+      });
+      const answer = structured.answer;
 
       appendInteraction(sessionId, {
         question,
@@ -422,7 +544,7 @@ async function handleRayrayRequest(req, res) {
 
       return res.json({
         sessionId,
-        answer,
+        ...structured,
         comparison: {
           operatorA,
           operatorB,
@@ -441,7 +563,10 @@ async function handleRayrayRequest(req, res) {
         timestamp: Date.now(),
       });
 
-      return res.json({ sessionId, answer });
+      return res.json({
+        sessionId,
+        ...buildStructuredRayRayPayload({ explanation: answer, state: effectiveState, question }),
+      });
     }
 
     const context = buildKnowledgeContext(operator, explainMode);
@@ -449,7 +574,15 @@ async function handleRayrayRequest(req, res) {
     const runtimeContext = runtime.retrieveContext(question);
     const runtimePatterns = runtime.detectPatterns(effectiveState);
     const prompt = buildPrompt(`${context}\n\n${menuGuidanceContext}\n\nRuntime concepts: ${JSON.stringify(runtimeContext.concepts || [])}\nRuntime patterns: ${JSON.stringify(runtimePatterns)}`, question, effectiveState, previousState, mode, recentHistory, followUp);
-    const answer = await generateRayRayResponse([{ role: 'user', content: prompt }]);
+    const explanation = await generateRayRayResponse([{ role: 'user', content: prompt }]);
+    const structured = buildStructuredRayRayPayload({
+      explanation,
+      operator,
+      state: effectiveState,
+      question,
+      parameterNames: Object.keys(effectiveState.parameters || {}),
+    });
+    const answer = structured.answer;
 
     appendInteraction(sessionId, {
       question,
@@ -458,9 +591,10 @@ async function handleRayrayRequest(req, res) {
       timestamp: Date.now(),
     });
 
-    return res.json({ sessionId, answer });
+    return res.json({ sessionId, ...structured });
   } catch (error) {
-    return res.status(500).json({ answer: `Ray Ray hit an error: ${error.message}` });
+    const structured = buildStructuredRayRayPayload({ explanation: `Ray Ray hit an error: ${error.message}` });
+    return res.status(500).json(structured);
   }
 
 }
