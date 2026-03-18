@@ -290,6 +290,34 @@ function buildRecentConversationContext(history = []) {
   return lines.join('\n');
 }
 
+function normalizeBridgeSessionId(sessionId, bridgeName = 'wireup-outpost') {
+  const fallback = `${bridgeName}:outpost`;
+  const raw = typeof sessionId === 'string' ? sessionId.trim() : '';
+
+  if (!raw) {
+    return fallback;
+  }
+
+  const namespaced = raw.startsWith(`${bridgeName}:`) ? raw : `${bridgeName}:${raw}`;
+  return namespaced.slice(0, 128);
+}
+
+function buildBridgeRequest(body = {}, bridgeName = 'wireup-outpost') {
+  const state = body?.state && typeof body.state === 'object' ? body.state : {};
+  const question = typeof body?.question === 'string'
+    ? body.question
+    : (typeof body?.query === 'string' ? body.query : '');
+
+  return {
+    question,
+    state,
+    mode: body?.mode || 'qa',
+    explainMode: body?.explainMode || 'td',
+    sessionId: normalizeBridgeSessionId(body?.sessionId || body?.session_id, bridgeName),
+    bridge: bridgeName,
+  };
+}
+
 function buildPrompt(context, question, state, previousState = null, mode = 'qa', recentHistory = [], followUp = false) {
   const patchContext = buildPatchContext(state);
   const flowContext = buildSignalFlowContext(state);
@@ -330,7 +358,8 @@ function buildPrompt(context, question, state, previousState = null, mode = 'qa'
 
 async function handleRayrayRequest(req, res) {
   try {
-    const { question = '', state = {}, mode = 'qa', explainMode = 'td', sessionId: incomingSessionId } = req.body || {};
+    const requestBody = req.body || {};
+    const { question = '', state = {}, mode = 'qa', explainMode = 'td', sessionId: incomingSessionId } = requestBody;
 
     const sessionId = ensureSession(incomingSessionId);
 
@@ -435,8 +464,17 @@ async function handleRayrayRequest(req, res) {
 
 }
 
+
+async function handleOutpostBridgeRequest(req, res) {
+  req.body = buildBridgeRequest(req.body, 'wireup-outpost');
+  return handleRayrayRequest(req, res);
+}
+
 app.post('/rayray', handleRayrayRequest);
 app.post('/api/rayray', handleRayrayRequest);
+app.post('/query', handleOutpostBridgeRequest);
+app.post('/outpost/query', handleOutpostBridgeRequest);
+app.post('/api/outpost/query', handleOutpostBridgeRequest);
 
 app.get('/healthz', (_req, res) => {
   res.status(200).json({ ok: true });
