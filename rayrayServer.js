@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const { spawnSync } = require('child_process');
 const runtime = require('./runtime/index.cjs');
 const { buildSignalFlowDescription } = require('./signalFlowInterpreter');
 const { interpretParameters } = require('./parameterInterpreter');
@@ -466,8 +467,45 @@ async function handleRayrayRequest(req, res) {
 
 
 async function handleOutpostBridgeRequest(req, res) {
-  req.body = buildBridgeRequest(req.body, 'wireup-outpost');
-  return handleRayrayRequest(req, res);
+  try {
+    const rawBody = req.body || {};
+    const query = typeof rawBody?.query === 'string'
+      ? rawBody.query
+      : (typeof rawBody?.question === 'string' ? rawBody.question : '');
+    const sessionId = typeof rawBody?.session_id === 'string'
+      ? rawBody.session_id
+      : (typeof rawBody?.sessionId === 'string' ? rawBody.sessionId : '');
+
+    if (typeof query !== 'string' || !query.trim()) {
+      return res.status(400).json({ response: 'Please include a non-empty query.', workflow_used: false });
+    }
+
+    if (sessionId === 'outpost') {
+      const pipeline = spawnSync('python', ['backend/outpost_pipeline_runner.py'], {
+        cwd: __dirname,
+        input: JSON.stringify({ query, session_id: sessionId }),
+        encoding: 'utf-8',
+      });
+
+      if (pipeline.status !== 0) {
+        const errorOutput = (pipeline.stderr || pipeline.stdout || '').trim();
+        return res.status(500).json({
+          response: `Outpost pipeline error: ${errorOutput || 'Unknown error'}`,
+          workflow_used: false,
+        });
+      }
+
+      const rawOutput = (pipeline.stdout || '').trim();
+      const jsonLine = rawOutput.split('\n').reverse().find((line) => line.trim().startsWith('{')) || '{}';
+      const payload = JSON.parse(jsonLine);
+      return res.json(payload);
+    }
+
+    req.body = buildBridgeRequest(rawBody, 'wireup-outpost');
+    return handleRayrayRequest(req, res);
+  } catch (error) {
+    return res.status(500).json({ response: `Outpost bridge error: ${error.message}`, workflow_used: false });
+  }
 }
 
 app.post('/rayray', handleRayrayRequest);
@@ -534,4 +572,7 @@ app.use(express.static(__dirname));
 
 app.listen(PORT, () => {
   console.log('Ray Ray server running at http://localhost:3000');
+  console.log('Outpost pipeline ready');
+  console.log('TOX path registered');
+  console.log('Session routing locked to outpost');
 });

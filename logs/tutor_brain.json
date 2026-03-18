@@ -25,7 +25,15 @@
       "expect": "You should see the Switch TOP appear in the network."
     },
     {
-      "action": "Drag the output of the first Movie File In TOP into the first input of the Switch TOP.",
+      "action": "Press TAB, type Cache, and drop the Cache TOP in the network.",
+      "expect": "You should see the Cache TOP appear in the network."
+    },
+    {
+      "action": "Drag the output of the Movie File In TOP into the first input of the Switch TOP.",
+      "expect": "You should see a wire connecting those nodes."
+    },
+    {
+      "action": "Drag the output of the Switch TOP into the first input of the Cache TOP.",
       "expect": "You should see a wire connecting those nodes."
     }
   ]
