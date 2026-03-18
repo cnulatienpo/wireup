@@ -24,6 +24,9 @@ const runtimeData = runtime.loadRuntime();
 const operatorNames = Object.keys(runtimeData.master_index?.operators || {});
 
 const TOX_DISCONNECT_TIMEOUT_MS = 10_000;
+const ACTION_RECIPE_PATH = path.join(__dirname, 'data', 'wireup_runtime', 'action_recipes.json');
+
+let actionRecipeCache = null;
 
 const toxStatus = {
   lastStateAt: null,
@@ -122,6 +125,98 @@ function detectOperator(question = '', state = {}) {
 
 function cleanText(value = '') {
   return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
+function loadActionRecipes() {
+  if (actionRecipeCache) {
+    return actionRecipeCache;
+  }
+
+  try {
+    const raw = fs.readFileSync(ACTION_RECIPE_PATH, 'utf8');
+    const parsed = JSON.parse(raw);
+    actionRecipeCache = Array.isArray(parsed) ? parsed : [];
+  } catch (_error) {
+    actionRecipeCache = [];
+  }
+
+  return actionRecipeCache;
+}
+
+function detectIntent(question = '') {
+  const q = String(question || '').toLowerCase();
+  const actionPhrases = ['how do i', 'make', 'apply', 'connect', 'blur', 'add', 'use'];
+  return actionPhrases.some((phrase) => q.includes(phrase)) ? 'ACTION_REQUEST' : 'EXPLANATION_REQUEST';
+}
+
+function extractActionKeywords(question = '', operator = '') {
+  const stopWords = new Set([
+    'a', 'an', 'and', 'after', 'at', 'do', 'for', 'how', 'i', 'if', 'in', 'is', 'it', 'me', 'my', 'needed', 'of',
+    'on', 'or', 'the', 'to', 'use', 'with', 'you', 'your', 'into', 'from', 'this', 'that', 'need', 'can', 'please',
+    'apply', 'make', 'connect', 'add', 'blur', 'top', 'chop', 'sop', 'dop', 'mat', 'comp', 'operator'
+  ]);
+  const keywordSet = new Set(tokenize(question));
+  tokenize(operator).forEach((token) => keywordSet.delete(token));
+  return Array.from(keywordSet).filter((token) => token && !stopWords.has(token));
+}
+
+function scoreActionRecipe(recipe = {}, operator = '', keywords = []) {
+  const recipeOperator = cleanText(recipe.operator || '');
+  const normalizedRecipeOperator = normalizeOperatorName(recipeOperator);
+  const normalizedOperator = normalizeOperatorName(operator);
+  let score = normalizedRecipeOperator && normalizedRecipeOperator === normalizedOperator ? 100 : 0;
+
+  const haystack = normalizeOperatorName([
+    recipe.title,
+    recipe.operator,
+    recipe.explanation,
+    ...(Array.isArray(recipe.keywords) ? recipe.keywords : []),
+    ...(Array.isArray(recipe.steps) ? recipe.steps : []),
+    ...Object.keys(recipe.parameters || {}),
+  ].join(' '));
+
+  keywords.forEach((keyword) => {
+    if (haystack.includes(normalizeOperatorName(keyword))) {
+      score += 10;
+    }
+  });
+
+  return score;
+}
+
+function findBestActionRecipe(question = '', operator = '') {
+  const recipes = loadActionRecipes();
+  if (!operator || !recipes.length) {
+    return null;
+  }
+
+  const keywords = extractActionKeywords(question, operator);
+  const ranked = recipes
+    .map((recipe) => ({ recipe, score: scoreActionRecipe(recipe, operator, keywords) }))
+    .filter((entry) => entry.score >= 100)
+    .sort((a, b) => b.score - a.score);
+
+  return ranked[0]?.recipe || null;
+}
+
+function buildRecipeAnswer(recipe = {}) {
+  const steps = Array.isArray(recipe.steps)
+    ? recipe.steps.map((step, index) => `${index + 1}. ${cleanText(step)}`).filter(Boolean)
+    : [];
+  const parameterNames = Object.keys(recipe.parameters || {}).filter(Boolean);
+  const parameterLine = parameterNames.length ? `Parameter names: ${parameterNames.join(', ')}` : 'Parameter names: None';
+  const explanation = cleanText(recipe.explanation || '');
+
+  return {
+    explanation,
+    parameterNames,
+    answer: [
+      'Steps:',
+      ...steps,
+      parameterLine,
+      explanation ? `Explanation: ${explanation}` : '',
+    ].filter(Boolean).join('\n'),
+  };
 }
 
 function formatStructuredRayRayAnswer(payload = {}) {
@@ -522,6 +617,31 @@ async function handleRayrayRequest(req, res) {
 
     const comparisonOperators = detectComparisonOperators(question);
     const recentHistory = getRecentHistory(sessionId, 5);
+    const operator = detectOperator(question, effectiveState);
+    const intent = detectIntent(question);
+
+    if (intent === 'ACTION_REQUEST') {
+      const actionRecipe = findBestActionRecipe(question, operator);
+      const recipeResponse = actionRecipe ? buildRecipeAnswer(actionRecipe) : null;
+      const answer = recipeResponse ? recipeResponse.answer : 'No recipe found for this action';
+      const parameterNames = recipeResponse ? recipeResponse.parameterNames : [];
+      const explanation = recipeResponse ? recipeResponse.explanation : '';
+      appendInteraction(sessionId, {
+        question,
+        state: effectiveState,
+        answer,
+        timestamp: Date.now(),
+      });
+
+      return res.json({
+        sessionId,
+        answer,
+        explanation,
+        parameterNames,
+        operator: operator || '',
+        mode: 'recipe_execution',
+      });
+    }
 
     if (comparisonOperators.length === 2) {
       const [operatorA, operatorB] = comparisonOperators;
@@ -551,8 +671,6 @@ async function handleRayrayRequest(req, res) {
         },
       });
     }
-
-    const operator = detectOperator(question, effectiveState);
 
     if (!operator) {
       const answer = "I couldn't determine which operator you're asking about.";
