@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="wireup-shack.css" />
 </head>
 <body>
-  <div id="outpost-root">
+  <div id="outpost-root" class="outpost-root">
     <img id="shack-ui" class="shack-ui" src="./ui/ui%20base.png" alt="Wireup UI base" />
     <img id="ui-left-panel" class="shack-component" src="./ui/ui%20left%20panel.png" alt="Left panel art" />
     <img id="ui-white-box" class="shack-component" src="./ui/ui%20white%20box.png" alt="Center panel art" />
@@ -67,6 +67,7 @@
 
   <script>
     (function () {
+      const outpostRoot = document.getElementById('outpost-root');
       const img = document.getElementById('shack-ui');
       const leftPanelFrame = document.getElementById('ui-left-panel');
       const whiteBoxFrame = document.getElementById('ui-white-box');
@@ -153,6 +154,19 @@
         return Number.isFinite(parsed) ? parsed : fallback;
       }
 
+      function getCanvasMetrics() {
+        const canvasRect = outpostRoot?.getBoundingClientRect?.() || { left: 0, top: 0 };
+        const width = Math.max(outpostRoot?.clientWidth || window.innerWidth, 1);
+        const height = Math.max(outpostRoot?.clientHeight || window.innerHeight, 1);
+
+        return {
+          left: canvasRect.left,
+          top: canvasRect.top,
+          width,
+          height,
+        };
+      }
+
       function getElementRect(element, target) {
         if (!element || !target) {
           return null;
@@ -183,8 +197,9 @@
       }
 
       function serializeLayout(layout) {
-        const viewportWidth = Math.max(window.innerWidth, 1);
-        const viewportHeight = Math.max(window.innerHeight, 1);
+        const canvasMetrics = getCanvasMetrics();
+        const viewportWidth = canvasMetrics.width;
+        const viewportHeight = canvasMetrics.height;
         const serialized = {};
 
         for (const target of editableTargets) {
@@ -209,8 +224,9 @@
           return null;
         }
 
-        const viewportWidth = Math.max(window.innerWidth, 1);
-        const viewportHeight = Math.max(window.innerHeight, 1);
+        const canvasMetrics = getCanvasMetrics();
+        const viewportWidth = canvasMetrics.width;
+        const viewportHeight = canvasMetrics.height;
         const deserialized = {};
 
         for (const target of editableTargets) {
@@ -310,7 +326,7 @@
             continue;
           }
 
-          syncElementToViewportRect(target.element, target);
+          syncElementToCanvasRect(target.element, target);
         }
       }
 
@@ -342,7 +358,7 @@
           handle.className = 'layout-resize-handle';
           handle.dataset.layoutKey = target.key;
           handle.setAttribute('aria-hidden', 'true');
-          document.body.appendChild(handle);
+          outpostRoot.appendChild(handle);
           handleByKey.set(target.key, handle);
 
         }
@@ -369,18 +385,16 @@
           return;
         }
 
-        const rect = target.element.getBoundingClientRect();
-        const rightOffset = getResizeHandleRightOffset(target.element);
-        const handleX = rect.right - rightOffset - resizeHandleVisualSize;
-        const handleY = rect.bottom - 4 - resizeHandleVisualSize;
+        const rect = getElementRect(target.element, target);
 
-        if (rect.width <= 0 || rect.height <= 0) {
+        if (!rect || rect.width <= 0 || rect.height <= 0) {
           handle.style.display = 'none';
           return;
         }
 
-        handle.style.left = px(handleX);
-        handle.style.top = px(handleY);
+        const rightOffset = getResizeHandleRightOffset(target.element);
+        handle.style.left = px(rect.left + rect.width - rightOffset - resizeHandleVisualSize);
+        handle.style.top = px(rect.top + rect.height - 4 - resizeHandleVisualSize);
         handle.style.width = pxSize(resizeHandleVisualSize, resizeHandleVisualSize);
         handle.style.height = pxSize(resizeHandleVisualSize, resizeHandleVisualSize);
         handle.style.display = 'block';
@@ -397,12 +411,23 @@
           return null;
         }
 
+        const handle = startElement.closest('.layout-resize-handle');
+        if (handle) {
+          const targetKey = handle.dataset.layoutKey;
+          return targetKey ? document.querySelector(`.layout-target[data-layout-key="${targetKey}"]`) : null;
+        }
+
         return startElement.closest('.layout-target');
       }
 
       function getResizeEdges(event, element) {
         if (!event || !element) {
           return null;
+        }
+
+        const handle = event?.target instanceof Element ? event.target.closest('.layout-resize-handle') : null;
+        if (handle && handle.dataset.layoutKey === element.dataset.layoutKey) {
+          return { left: false, right: true, top: false, bottom: true };
         }
 
         const rect = element.getBoundingClientRect();
@@ -460,14 +485,15 @@
         return 'move';
       }
 
-      function syncElementToViewportRect(element, target) {
+      function syncElementToCanvasRect(element, target) {
         if (!element || !target) {
           return;
         }
 
         const rect = element.getBoundingClientRect();
-        element.style.left = px(rect.left);
-        element.style.top = px(rect.top);
+        const canvasMetrics = getCanvasMetrics();
+        element.style.left = px(rect.left - canvasMetrics.left);
+        element.style.top = px(rect.top - canvasMetrics.top);
         element.style.width = pxSize(rect.width, target.minWidth);
         element.style.height = pxSize(rect.height, target.minHeight);
         element.style.transform = 'none';
@@ -511,9 +537,10 @@
           return;
         }
 
-        syncElementToViewportRect(pointerTarget, target);
+        syncElementToCanvasRect(pointerTarget, target);
 
         const startRect = getElementRect(pointerTarget, target);
+        const canvasMetrics = getCanvasMetrics();
         if (!startRect) {
           return;
         }
@@ -526,8 +553,9 @@
           startX: event.clientX,
           startY: event.clientY,
           startRect,
-          pointerOffsetX: event.clientX - startRect.left,
-          pointerOffsetY: event.clientY - startRect.top,
+          canvasMetrics,
+          pointerOffsetX: event.clientX - canvasMetrics.left - startRect.left,
+          pointerOffsetY: event.clientY - canvasMetrics.top - startRect.top,
           resizeEdges,
           isResizing: Boolean(resizeEdges),
         };
@@ -560,20 +588,20 @@
           let nextHeight = startRect.height;
 
           if (edges.right) {
-            nextWidth = Math.max(minWidth, event.clientX - startRect.left);
+            nextWidth = Math.max(minWidth, event.clientX - activePointerState.canvasMetrics.left - startRect.left);
           }
 
           if (edges.left) {
-            nextWidth = Math.max(minWidth, startRect.left + startRect.width - event.clientX);
+            nextWidth = Math.max(minWidth, startRect.left + startRect.width - (event.clientX - activePointerState.canvasMetrics.left));
             nextLeft = startRect.left + startRect.width - nextWidth;
           }
 
           if (edges.bottom) {
-            nextHeight = Math.max(minHeight, event.clientY - startRect.top);
+            nextHeight = Math.max(minHeight, event.clientY - activePointerState.canvasMetrics.top - startRect.top);
           }
 
           if (edges.top) {
-            nextHeight = Math.max(minHeight, startRect.top + startRect.height - event.clientY);
+            nextHeight = Math.max(minHeight, startRect.top + startRect.height - (event.clientY - activePointerState.canvasMetrics.top));
             nextTop = startRect.top + startRect.height - nextHeight;
           }
 
@@ -586,8 +614,8 @@
           return;
         }
 
-        element.style.left = px(event.clientX - activePointerState.pointerOffsetX);
-        element.style.top = px(event.clientY - activePointerState.pointerOffsetY);
+        element.style.left = px(event.clientX - activePointerState.canvasMetrics.left - activePointerState.pointerOffsetX);
+        element.style.top = px(event.clientY - activePointerState.canvasMetrics.top - activePointerState.pointerOffsetY);
         updateResizeHandleForTarget(target);
       }
 
@@ -680,8 +708,9 @@
           return;
         }
 
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
+        const canvasMetrics = getCanvasMetrics();
+        const viewportWidth = canvasMetrics.width;
+        const viewportHeight = canvasMetrics.height;
         const bounds = getContentBounds(img) || {
           x: 0,
           y: 0,
@@ -704,9 +733,11 @@
         const contentWidth = bounds.width * scale;
         const contentHeight = bounds.height * scale;
 
-        img.style.width = renderWidth + 'px';
-        img.style.height = renderHeight + 'px';
-        img.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
+        img.style.left = px(offsetX);
+        img.style.top = px(offsetY);
+        img.style.width = pxSize(renderWidth, 1);
+        img.style.height = pxSize(renderHeight, 1);
+        img.style.transform = 'none';
 
         const restartSize = contentWidth * 0.09;
         const restartX = contentX + contentWidth * 0.035 + 48;
