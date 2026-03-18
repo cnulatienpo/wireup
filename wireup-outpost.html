@@ -4,32 +4,32 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wireup Outpost</title>
-  <link rel="stylesheet" href="wireup-shack.css" />
+  <link rel="stylesheet" href="wireup-outpost.css" />
 </head>
 <body>
   <div id="outpost-root" class="outpost-root" data-session-id="outpost" data-query-endpoint="/query">
-    <img id="shack-ui" class="shack-ui" src="./ui/ui%20base.png" alt="Wireup UI base" />
-    <img id="ui-left-panel" class="shack-component" src="./ui/ui%20left%20panel.png" alt="Left panel art" />
-    <img id="ui-white-box" class="shack-component" src="./ui/ui%20white%20box.png" alt="Center panel art" />
-    <img id="ui-right-panel" class="shack-component" src="./ui/ui%20right%20panel.png" alt="Right panel art" />
-    <img id="ui-black-box" class="shack-component" src="./ui/ui%20black%20box.png" alt="Bottom input panel art" />
-    <img id="ui-yellow-button" class="shack-component" src="./ui/ui%20yellow%20button.png" alt="Yellow button art" />
-    <img id="ui-garbage-wire" class="shack-component" src="./ui/GARBAGE%20WITH%20EMPTY%20WIRE%20without%20black.png" alt="Garbage bag with empty wire" />
-    <img id="shack-belt" class="shack-belt" src="./ui/src/assets/WIRE_BELT.svg" alt="Wire belt" />
+    <img id="outpost-ui" class="outpost-ui" src="./ui/ui%20base.png" alt="Wireup UI base" />
+    <img id="ui-left-panel" class="outpost-component" src="./ui/ui%20left%20panel.png" alt="Left panel art" />
+    <img id="ui-white-box" class="outpost-component" src="./ui/ui%20white%20box.png" alt="Center panel art" />
+    <img id="ui-right-panel" class="outpost-component" src="./ui/ui%20right%20panel.png" alt="Right panel art" />
+    <img id="ui-black-box" class="outpost-component" src="./ui/ui%20black%20box.png" alt="Bottom input panel art" />
+    <img id="ui-yellow-button" class="outpost-component" src="./ui/ui%20yellow%20button.png" alt="Yellow button art" />
+    <img id="ui-garbage-wire" class="outpost-component" src="./ui/GARBAGE%20WITH%20EMPTY%20WIRE%20without%20black.png" alt="Garbage bag with empty wire" />
+    <img id="outpost-belt" class="outpost-belt" src="./ui/src/assets/WIRE_BELT.svg" alt="Wire belt" />
 
-    <main class="shack-overlay" aria-label="Wireup Outpost controls">
-      <h1 class="shack-title">Wireup Outpost</h1>
-      <a class="shack-link" href="index.html">Back Home</a>
-      <button id="ui-scale-down" class="shack-link" type="button" aria-label="Scale down">UI -</button>
-      <button id="ui-scale-up" class="shack-link" type="button" aria-label="Scale up">UI +</button>
-      <button id="ui-scale-reset" class="shack-link" type="button" aria-label="Reset UI scale">Fit UI</button>
-      <button id="layout-edit-toggle" class="shack-link" type="button" aria-label="Toggle layout edit mode">Edit Layout</button>
-      <button id="layout-save" class="shack-link" type="button" aria-label="Save layout">Save Layout</button>
-      <button id="layout-reset" class="shack-link" type="button" aria-label="Reset saved layout">Reset Layout</button>
-      <span id="ui-scale-readout" class="shack-scale-readout">100%</span>
+    <main class="outpost-overlay" aria-label="Wireup Outpost controls">
+      <h1 class="outpost-title">Wireup Outpost</h1>
+      <a class="outpost-link" href="index.html">Back Home</a>
+      <button id="ui-scale-down" class="outpost-link" type="button" aria-label="Scale down">UI -</button>
+      <button id="ui-scale-up" class="outpost-link" type="button" aria-label="Scale up">UI +</button>
+      <button id="ui-scale-reset" class="outpost-link" type="button" aria-label="Reset UI scale">Fit UI</button>
+      <button id="layout-edit-toggle" class="outpost-link" type="button" aria-label="Toggle layout edit mode">Edit Layout</button>
+      <button id="layout-save" class="outpost-link" type="button" aria-label="Save layout">Save Layout</button>
+      <button id="layout-reset" class="outpost-link" type="button" aria-label="Reset saved layout">Reset Layout</button>
+      <span id="ui-scale-readout" class="outpost-scale-readout">100%</span>
     </main>
 
-    <label id="eli5-toggle-control" class="shack-link eli5-toggle-control" for="explain-eli5-toggle">
+    <label id="eli5-toggle-control" class="outpost-link eli5-toggle-control" for="explain-eli5-toggle">
       <input id="explain-eli5-toggle" type="checkbox" />
       eli5
     </label>
@@ -68,14 +68,14 @@
   <script>
     (function () {
       const outpostRoot = document.getElementById('outpost-root');
-      const img = document.getElementById('shack-ui');
+      const img = document.getElementById('outpost-ui');
       const leftPanelFrame = document.getElementById('ui-left-panel');
       const whiteBoxFrame = document.getElementById('ui-white-box');
       const rightPanelFrame = document.getElementById('ui-right-panel');
       const blackBoxFrame = document.getElementById('ui-black-box');
       const yellowButtonFrame = document.getElementById('ui-yellow-button');
       const garbageWireFrame = document.getElementById('ui-garbage-wire');
-      const belt = document.getElementById('shack-belt');
+      const belt = document.getElementById('outpost-belt');
       const output = document.getElementById('rayray-output');
       const leftPanel = document.getElementById('left-panel');
       const lowerLeftPanel = document.getElementById('lower-left-panel');
@@ -1010,6 +1010,6 @@
       window.addEventListener('resize', applyAutoFit);
     })();
   </script>
-  <script type="module" src="./wireup-shack-ui.js"></script>
+  <script type="module" src="./wireup-outpost-ui.js"></script>
 </body>
 </html>
