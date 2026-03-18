@@ -18,7 +18,7 @@ body {
   overflow: visible;
 }
 
-.shack-ui {
+.outpost-ui {
   position: absolute;
   top: 0;
   left: 0;
@@ -28,7 +28,7 @@ body {
   pointer-events: none;
 }
 
-.shack-component {
+.outpost-component {
   position: absolute;
   top: 0;
   left: 0;
@@ -38,7 +38,7 @@ body {
   pointer-events: none;
 }
 
-.shack-belt {
+.outpost-belt {
   position: absolute;
   top: 0;
   left: 0;
@@ -48,7 +48,7 @@ body {
   pointer-events: none;
 }
 
-.shack-overlay {
+.outpost-overlay {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -65,12 +65,12 @@ body {
   max-width: calc(100vw - 2rem);
 }
 
-body.layout-edit-mode .shack-overlay {
+body.layout-edit-mode .outpost-overlay {
   top: 50%;
   bottom: auto;
 }
 
-.shack-title {
+.outpost-title {
   margin: 0;
   color: #ffffff;
   font-family: Garamond, "Times New Roman", serif;
@@ -78,7 +78,7 @@ body.layout-edit-mode .shack-overlay {
   line-height: 1;
 }
 
-.shack-link {
+.outpost-link {
   color: #ffffff;
   text-decoration: none;
   border: 1px solid #ffffff;
@@ -88,7 +88,7 @@ body.layout-edit-mode .shack-overlay {
   cursor: pointer;
 }
 
-button.shack-link {
+button.outpost-link {
   font-size: 0.95rem;
 }
 
@@ -106,7 +106,7 @@ button.shack-link {
   height: 1rem;
 }
 
-.shack-scale-readout {
+.outpost-scale-readout {
   color: #fff8e8;
   border: 1px solid rgba(255, 255, 255, 0.65);
   padding: 0.3rem 0.45rem;
@@ -304,11 +304,11 @@ body.layout-edit-mode .layout-target {
   cursor: move;
 }
 
-body.layout-edit-mode .shack-component.layout-target {
+body.layout-edit-mode .outpost-component.layout-target {
   pointer-events: auto;
 }
 
-body.layout-edit-mode .shack-belt.layout-target {
+body.layout-edit-mode .outpost-belt.layout-target {
   pointer-events: auto;
 }
 
