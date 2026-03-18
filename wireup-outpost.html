@@ -297,8 +297,21 @@
         isLayoutEditMode = Boolean(enabled);
         document.body.classList.toggle('layout-edit-mode', isLayoutEditMode);
         document.body.style.cursor = isLayoutEditMode ? 'move' : '';
+        if (isLayoutEditMode) {
+          normalizeEditableTargetGeometry();
+        }
         updateLayoutToolbar();
         updateAllResizeHandles();
+      }
+
+      function normalizeEditableTargetGeometry() {
+        for (const target of editableTargets) {
+          if (!target?.element) {
+            continue;
+          }
+
+          syncElementToViewportRect(target.element, target);
+        }
       }
 
       function applySavedOrAutoLayout() {
@@ -659,6 +672,10 @@
       }
 
       function applyAutoFit() {
+        if (isLayoutEditMode) {
+          return;
+        }
+
         if (!img.naturalWidth || !img.naturalHeight) {
           return;
         }
@@ -690,39 +707,6 @@
         img.style.width = renderWidth + 'px';
         img.style.height = renderHeight + 'px';
         img.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
-
-        function placeLayer(layerImg, rect) {
-          if (!layerImg || !rect) {
-            return;
-          }
-
-          const x = offsetX + renderWidth * rect.x;
-          const y = offsetY + renderHeight * rect.y;
-          const width = renderWidth * rect.width;
-          const height = renderHeight * rect.height;
-
-          layerImg.style.width = width + 'px';
-          layerImg.style.height = height + 'px';
-          layerImg.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
-        }
-
-        placeLayer(leftPanelFrame, uiLayerLayout.leftPanel);
-        placeLayer(whiteBoxFrame, uiLayerLayout.whiteBox);
-        placeLayer(rightPanelFrame, uiLayerLayout.rightPanel);
-        placeLayer(blackBoxFrame, uiLayerLayout.blackBox);
-        placeLayer(yellowButtonFrame, uiLayerLayout.yellowButton);
-        placeLayer(garbageWireFrame, uiLayerLayout.garbageWire);
-
-        if (belt) {
-          const beltWidth = contentWidth * beltWidthFraction;
-          const beltHeight = beltWidth / beltRatio;
-          const beltX = contentX + contentWidth - beltWidth - contentWidth * beltInsetXFraction;
-          const beltY = contentY + contentHeight - beltHeight - contentHeight * beltInsetYFraction;
-
-          belt.style.width = beltWidth + 'px';
-          belt.style.height = beltHeight + 'px';
-          belt.style.transform = 'translate(' + beltX + 'px, ' + beltY + 'px)';
-        }
 
         const restartSize = contentWidth * 0.09;
         const restartX = contentX + contentWidth * 0.035 + 48;
@@ -879,6 +863,7 @@
           restartButton.style.top = px(layout.restartButton.top);
           restartButton.style.width = pxSize(layout.restartButton.width, 28);
           restartButton.style.height = pxSize(layout.restartButton.height, 28);
+          restartButton.style.transform = 'none';
         }
 
         if (leftPanel && layout.leftPanel) {
@@ -886,6 +871,7 @@
           leftPanel.style.top = px(layout.leftPanel.top);
           leftPanel.style.width = pxSize(layout.leftPanel.width, 80);
           leftPanel.style.height = pxSize(layout.leftPanel.height, 50);
+          leftPanel.style.transform = 'none';
         }
 
         if (lowerLeftPanel && layout.lowerLeftPanel) {
@@ -893,6 +879,7 @@
           lowerLeftPanel.style.top = px(layout.lowerLeftPanel.top);
           lowerLeftPanel.style.width = pxSize(layout.lowerLeftPanel.width, 80);
           lowerLeftPanel.style.height = pxSize(layout.lowerLeftPanel.height, 50);
+          lowerLeftPanel.style.transform = 'none';
         }
 
         if (output && layout.output) {
@@ -900,6 +887,7 @@
           output.style.top = px(layout.output.top);
           output.style.width = pxSize(layout.output.width, 80);
           output.style.height = pxSize(layout.output.height, 50);
+          output.style.transform = 'none';
         }
 
         if (contextPanel && layout.contextPanel) {
@@ -907,6 +895,7 @@
           contextPanel.style.top = px(layout.contextPanel.top);
           contextPanel.style.width = pxSize(layout.contextPanel.width, 80);
           contextPanel.style.height = pxSize(layout.contextPanel.height, 50);
+          contextPanel.style.transform = 'none';
         }
 
         if (inputWrap && layout.inputWrap) {
@@ -914,6 +903,7 @@
           inputWrap.style.top = px(layout.inputWrap.top);
           inputWrap.style.width = pxSize(layout.inputWrap.width, 120);
           inputWrap.style.height = pxSize(layout.inputWrap.height, 50);
+          inputWrap.style.transform = 'none';
         }
 
         if (eli5ToggleControl && layout.eli5ToggleControl) {
@@ -921,6 +911,7 @@
           eli5ToggleControl.style.top = px(layout.eli5ToggleControl.top);
           eli5ToggleControl.style.width = pxSize(layout.eli5ToggleControl.width, 70);
           eli5ToggleControl.style.height = pxSize(layout.eli5ToggleControl.height, 32);
+          eli5ToggleControl.style.transform = 'none';
         }
 
         updateAllResizeHandles();
