@@ -1,0 +1,27 @@
+{
+  "actions": [
+    {
+      "type": "create_node",
+      "operator": "Movie File In TOP",
+      "instruction": "Press TAB, type Movie File In, and drop the Movie File In TOP in the network."
+    },
+    {
+      "type": "create_node",
+      "operator": "Switch TOP",
+      "instruction": "Press TAB, type Switch, and drop the Switch TOP in the network."
+    },
+    {
+      "type": "create_node",
+      "operator": "Cache TOP",
+      "instruction": "Press TAB, type Cache, and drop the Cache TOP in the network."
+    },
+    {
+      "type": "connect_nodes",
+      "instruction": "Drag the output of the Movie File In TOP into the first input of the Switch TOP."
+    },
+    {
+      "type": "connect_nodes",
+      "instruction": "Drag the output of the Switch TOP into the first input of the Cache TOP."
+    }
+  ]
+}

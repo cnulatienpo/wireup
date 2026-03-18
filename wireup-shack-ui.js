@@ -165,6 +165,25 @@ function shouldEscalateToCloud(localResult) {
   return Boolean(window?.RAYRAY_FORCE_CLOUD);
 }
 
+function isOutpostSession() {
+  return Boolean(document.getElementById('outpost-root'));
+}
+
+function getOutpostSessionConfig() {
+  const root = document.getElementById('outpost-root');
+  if (!root) {
+    return null;
+  }
+
+  const sessionId = root.dataset.sessionId || '';
+  const endpoint = root.dataset.queryEndpoint || '/query';
+
+  return {
+    sessionId,
+    endpoint,
+  };
+}
+
 async function sendQuestion({ input, output }) {
   try {
     const question = input.value.trim();
@@ -186,13 +205,21 @@ async function sendQuestion({ input, output }) {
       return;
     }
 
-    const payload = JSON.stringify({
-      question,
-      context: currentContext,
-      explainMode: getExplainMode(),
-    });
+    const outpostConfig = getOutpostSessionConfig();
+    const payload = JSON.stringify(
+      outpostConfig
+        ? {
+            query: question,
+            session_id: outpostConfig.sessionId,
+          }
+        : {
+            question,
+            context: currentContext,
+            explainMode: getExplainMode(),
+          }
+    );
 
-    const endpoints = ['/api/rayray', '/rayray'];
+    const endpoints = outpostConfig ? [outpostConfig.endpoint, '/outpost/query', '/api/outpost/query'] : ['/api/rayray', '/rayray'];
     let lastError = null;
 
     for (const endpoint of endpoints) {
@@ -233,7 +260,7 @@ async function sendQuestion({ input, output }) {
           continue;
         }
 
-        const answer = data.answer || data.responseText || 'No response received.';
+        const answer = data.response || data.answer || data.responseText || 'No response received.';
         if (answer.includes(LLM_FALLBACK_MARKER)) {
           appendMessage(output, 'Ray Ray', localResult.text);
         } else {

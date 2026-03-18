@@ -1,0 +1,5 @@
+{
+  "tox_path": "tox/wireup.tox",
+  "session_id": "outpost",
+  "api_url": "http://localhost:3000/query"
+}
