@@ -31,13 +31,29 @@ def _safe_json_loads(raw_text):
         return None
 
 
-def _build_output(question, state, answer, flow=None):
+def _build_output(question, state, answer, flow=None, explanation='', ui_execution=None, expected_visual_result=''):
     lines = [
         f"Selected Node: {state.get('selectedNode')}",
         f"Operator Type: {state.get('nodeType')}",
         f"Question Input: {question}",
         f"Ray Ray Response: {answer}",
     ]
+
+    if explanation:
+        lines.append(f"Explanation: {explanation}")
+
+    if isinstance(ui_execution, list) and ui_execution:
+        lines.append('Do This In TouchDesigner:')
+        for index, item in enumerate(ui_execution, start=1):
+            step = item.get('step') if isinstance(item, dict) else ''
+            why = item.get('why') if isinstance(item, dict) else ''
+            if step:
+                lines.append(f"  {index}. {step}")
+            if why:
+                lines.append(f"     Why: {why}")
+
+    if expected_visual_result:
+        lines.append(f"Expected visual result: {expected_visual_result}")
 
     if isinstance(flow, dict):
         path = flow.get('path') or []
@@ -84,7 +100,15 @@ def handle_web_response(raw_text):
         'nodeType': None,
     }
 
-    _set_response_view(_build_output(question, state, answer, payload.get('flow')))
+    _set_response_view(_build_output(
+        question,
+        state,
+        answer,
+        payload.get('flow'),
+        payload.get('explanation', ''),
+        payload.get('ui_execution'),
+        payload.get('expected_visual_result', ''),
+    ))
 
 
 def onReceive(dat, rowIndex, message, bytes, peer):
