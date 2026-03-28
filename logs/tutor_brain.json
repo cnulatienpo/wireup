@@ -1,0 +1,40 @@
+{
+  "status": [
+    "Tutor brain initialized",
+    "Multi-pass response system active"
+  ],
+  "intent": {
+    "user_goal": "sequence video clips",
+    "difficulty": "beginner",
+    "type": "build"
+  },
+  "strategy": "guided_build",
+  "plan": [
+    "introduce approach briefly",
+    "give step-by-step actions",
+    "describe what user sees",
+    "offer next step"
+  ],
+  "steps_generated": [
+    {
+      "action": "Press TAB, type Movie File In, and drop the Movie File In TOP in the network.",
+      "expect": "You should see the Movie File In TOP appear in the network."
+    },
+    {
+      "action": "Press TAB, type Switch, and drop the Switch TOP in the network.",
+      "expect": "You should see the Switch TOP appear in the network."
+    },
+    {
+      "action": "Press TAB, type Cache, and drop the Cache TOP in the network.",
+      "expect": "You should see the Cache TOP appear in the network."
+    },
+    {
+      "action": "Drag the output of the Movie File In TOP into the first input of the Switch TOP.",
+      "expect": "You should see a wire connecting those nodes."
+    },
+    {
+      "action": "Drag the output of the Switch TOP into the first input of the Cache TOP.",
+      "expect": "You should see a wire connecting those nodes."
+    }
+  ]
+}

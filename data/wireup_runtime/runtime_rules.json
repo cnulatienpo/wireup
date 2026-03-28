@@ -1,0 +1,30 @@
+{
+  "patterns": [
+    {
+      "id": "disabled",
+      "when_any": [
+        "bypass",
+        "disabled",
+        "off"
+      ],
+      "explain": "Operator may be bypassed or disabled; effect might not appear."
+    },
+    {
+      "id": "feedback",
+      "when_any": [
+        "feedback",
+        "loop"
+      ],
+      "explain": "Feedback loops require careful level control to avoid runaway values."
+    },
+    {
+      "id": "resolution",
+      "when_any": [
+        "resolution",
+        "pixel",
+        "size"
+      ],
+      "explain": "Resolution mismatches often cause scaling artifacts or blur."
+    }
+  ]
+}

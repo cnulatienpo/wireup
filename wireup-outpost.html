@@ -4,17 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wireup Outpost</title>
-  <link rel="stylesheet" href="wireup-shack.css" />
+  <link rel="stylesheet" href="wireup-outpost.css" />
 </head>
 <body>
-  <div id="outpost-root">
-    <img id="shack-belt" class="shack-belt" src="/ui/src/assets/WIRE_BELT.svg" alt="Wire belt" />
-    <img id="shack-ui" class="shack-ui" src="/wireup.png" alt="Wireup cardboard UI" />
+  <div id="outpost-root" class="outpost-root" data-session-id="outpost" data-query-endpoint="/query">
+    <img id="outpost-ui" class="outpost-ui" src="./ui/ui%20base.png" alt="Wireup UI base" />
+    <img id="ui-left-panel" class="outpost-component" src="./ui/ui%20left%20panel.png" alt="Left panel art" />
+    <img id="ui-white-box" class="outpost-component" src="./ui/ui%20white%20box.png" alt="Center panel art" />
+    <img id="ui-right-panel" class="outpost-component" src="./ui/ui%20right%20panel.png" alt="Right panel art" />
+    <img id="ui-black-box" class="outpost-component" src="./ui/ui%20black%20box.png" alt="Bottom input panel art" />
+    <img id="ui-yellow-button" class="outpost-component" src="./ui/ui%20yellow%20button.png" alt="Yellow button art" />
+    <img id="ui-garbage-wire" class="outpost-component" src="./ui/GARBAGE%20WITH%20EMPTY%20WIRE%20without%20black.png" alt="Garbage bag with empty wire" />
+    <img id="outpost-belt" class="outpost-belt" src="./ui/src/assets/WIRE_BELT.svg" alt="Wire belt" />
 
-    <main class="shack-overlay" aria-label="Wireup Outpost controls">
-      <h1 class="shack-title">Wireup Outpost</h1>
-      <a class="shack-link" href="index.html">Back Home</a>
+    <main class="outpost-overlay" aria-label="Wireup Outpost controls">
+      <h1 class="outpost-title">Wireup Outpost</h1>
+      <a class="outpost-link" href="index.html">Back Home</a>
+      <button id="ui-scale-down" class="outpost-link" type="button" aria-label="Scale down">UI -</button>
+      <button id="ui-scale-up" class="outpost-link" type="button" aria-label="Scale up">UI +</button>
+      <button id="ui-scale-reset" class="outpost-link" type="button" aria-label="Reset UI scale">Fit UI</button>
+      <button id="layout-edit-toggle" class="outpost-link" type="button" aria-label="Toggle layout edit mode">Edit Layout</button>
+      <button id="layout-save" class="outpost-link" type="button" aria-label="Save layout">Save Layout</button>
+      <button id="layout-reset" class="outpost-link" type="button" aria-label="Reset saved layout">Reset Layout</button>
+      <span id="ui-scale-readout" class="outpost-scale-readout">100%</span>
     </main>
+
+    <label id="eli5-toggle-control" class="outpost-link eli5-toggle-control" for="explain-eli5-toggle">
+      <input id="explain-eli5-toggle" type="checkbox" />
+      eli5
+    </label>
 
     <aside id="left-panel" class="left-panel cardboard-scroll" aria-label="Left panel"></aside>
     <aside id="lower-left-panel" class="lower-left-panel cardboard-scroll" aria-label="Bottom left panel"></aside>
@@ -44,25 +62,587 @@
       </button>
     </div>
 
-    <button id="restart-button" class="restart-button" type="button" aria-label="Restart">Restart</button>
+    <button id="restart-button" class="restart-button" type="button" aria-label="Restart" title="Restart temporarily disabled" disabled>Restart</button>
   </div>
 
   <script>
     (function () {
-      const img = document.getElementById('shack-ui');
-      const belt = document.getElementById('shack-belt');
+      const outpostRoot = document.getElementById('outpost-root');
+      const img = document.getElementById('outpost-ui');
+      const leftPanelFrame = document.getElementById('ui-left-panel');
+      const whiteBoxFrame = document.getElementById('ui-white-box');
+      const rightPanelFrame = document.getElementById('ui-right-panel');
+      const blackBoxFrame = document.getElementById('ui-black-box');
+      const yellowButtonFrame = document.getElementById('ui-yellow-button');
+      const garbageWireFrame = document.getElementById('ui-garbage-wire');
+      const belt = document.getElementById('outpost-belt');
       const output = document.getElementById('rayray-output');
       const leftPanel = document.getElementById('left-panel');
       const lowerLeftPanel = document.getElementById('lower-left-panel');
       const inputWrap = document.querySelector('.rayray-input-wrap');
       const contextPanel = document.getElementById('context-panel');
       const restartButton = document.getElementById('restart-button');
+      const uiScaleDown = document.getElementById('ui-scale-down');
+      const uiScaleUp = document.getElementById('ui-scale-up');
+      const uiScaleReset = document.getElementById('ui-scale-reset');
+      const uiScaleReadout = document.getElementById('ui-scale-readout');
+      const layoutEditToggle = document.getElementById('layout-edit-toggle');
+      const layoutSave = document.getElementById('layout-save');
+      const layoutReset = document.getElementById('layout-reset');
+      const eli5ToggleControl = document.getElementById('eli5-toggle-control');
       const threshold = 30;
       const alphaThreshold = 20;
       const beltRatio = 1.656;
       const beltWidthFraction = 0.2;
       const beltInsetXFraction = 0.086;
       const beltInsetYFraction = 0.064;
+      const layoutStorageKey = 'wireup.outpost.layout.v2';
+      const uiLayerLayout = {
+        leftPanel: { x: 0.03, y: 0.14, width: 0.186, height: 0.484 },
+        whiteBox: { x: 0.236, y: 0.17, width: 0.443, height: 0.56 },
+        rightPanel: { x: 0.705, y: 0.17, width: 0.232, height: 0.535 },
+        blackBox: { x: 0.225, y: 0.725, width: 0.478, height: 0.154 },
+        yellowButton: { x: 0.034, y: 0.705, width: 0.176, height: 0.195 },
+        garbageWire: { x: 0.78, y: 0.74, width: 0.16, height: 0.21 },
+      };
+      const uiScaleStorageKey = 'wireup.outpost.uiScale.v1';
+      const minUiScale = 0.35;
+      const maxUiScale = 2.4;
+      const uiScaleStep = 0.05;
+      const resizeHandleVisualSize = 14;
+      const targetByKey = new Map();
+      const handleByKey = new Map();
+      let currentAutoLayout = null;
+      let uiScale = Number(localStorage.getItem(uiScaleStorageKey)) || 1;
+      let customLayoutNormalized = null;
+      let isLayoutEditMode = false;
+      let activePointerState = null;
+      let saveStatusTimeout = null;
+      let hasManualLayoutChanges = false;
+
+      const editableTargets = [
+        { key: 'leftPanelFrame', element: leftPanelFrame, label: 'left-panel-frame', minWidth: 32, minHeight: 32 },
+        { key: 'whiteBoxFrame', element: whiteBoxFrame, label: 'white-box-frame', minWidth: 32, minHeight: 32 },
+        { key: 'rightPanelFrame', element: rightPanelFrame, label: 'right-panel-frame', minWidth: 32, minHeight: 32 },
+        { key: 'blackBoxFrame', element: blackBoxFrame, label: 'black-box-frame', minWidth: 32, minHeight: 32 },
+        { key: 'yellowButtonFrame', element: yellowButtonFrame, label: 'yellow-button-frame', minWidth: 32, minHeight: 32 },
+        { key: 'garbageWireFrame', element: garbageWireFrame, label: 'garbage-wire-frame', minWidth: 32, minHeight: 32 },
+        { key: 'beltFrame', element: belt, label: 'belt', minWidth: 32, minHeight: 20 },
+        { key: 'restartButton', element: restartButton, label: 'restart-button', minWidth: 28, minHeight: 28 },
+        { key: 'leftPanel', element: leftPanel, label: 'left-panel', minWidth: 80, minHeight: 50 },
+        { key: 'lowerLeftPanel', element: lowerLeftPanel, label: 'lower-left-panel', minWidth: 80, minHeight: 50 },
+        { key: 'output', element: output, label: 'chat-output', minWidth: 80, minHeight: 50 },
+        { key: 'contextPanel', element: contextPanel, label: 'context-panel', minWidth: 80, minHeight: 50 },
+        { key: 'inputWrap', element: inputWrap, label: 'input-wrap', minWidth: 120, minHeight: 50 },
+        { key: 'eli5ToggleControl', element: eli5ToggleControl, label: 'eli5-toggle', minWidth: 70, minHeight: 32 },
+      ];
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function updateUiScaleReadout() {
+        if (!uiScaleReadout) {
+          return;
+        }
+
+        uiScaleReadout.textContent = `${Math.round(uiScale * 100)}%`;
+      }
+
+      function readNumber(value, fallback = 0) {
+        const parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : fallback;
+      }
+
+      function getCanvasMetrics() {
+        const canvasRect = outpostRoot?.getBoundingClientRect?.() || { left: 0, top: 0 };
+        const width = Math.max(outpostRoot?.clientWidth || window.innerWidth, 1);
+        const height = Math.max(outpostRoot?.clientHeight || window.innerHeight, 1);
+
+        return {
+          left: canvasRect.left,
+          top: canvasRect.top,
+          width,
+          height,
+        };
+      }
+
+      function getElementRect(element, target) {
+        if (!element || !target) {
+          return null;
+        }
+
+        return {
+          left: readNumber(element.style.left, 0),
+          top: readNumber(element.style.top, 0),
+          width: Math.max(target.minWidth, readNumber(element.style.width, target.minWidth)),
+          height: Math.max(target.minHeight, readNumber(element.style.height, target.minHeight)),
+        };
+      }
+
+      function captureCurrentLayout() {
+        const layout = {};
+
+        for (const target of editableTargets) {
+          if (!target.element) {
+            continue;
+          }
+          const rect = getElementRect(target.element, target);
+          if (rect) {
+            layout[target.key] = rect;
+          }
+        }
+
+        return layout;
+      }
+
+      function serializeLayout(layout) {
+        const canvasMetrics = getCanvasMetrics();
+        const viewportWidth = canvasMetrics.width;
+        const viewportHeight = canvasMetrics.height;
+        const serialized = {};
+
+        for (const target of editableTargets) {
+          const rect = layout?.[target.key];
+          if (!rect) {
+            continue;
+          }
+
+          serialized[target.key] = {
+            left: rect.left / viewportWidth,
+            top: rect.top / viewportHeight,
+            width: rect.width / viewportWidth,
+            height: rect.height / viewportHeight,
+          };
+        }
+
+        return serialized;
+      }
+
+      function deserializeLayout(rawLayout) {
+        if (!rawLayout || typeof rawLayout !== 'object') {
+          return null;
+        }
+
+        const canvasMetrics = getCanvasMetrics();
+        const viewportWidth = canvasMetrics.width;
+        const viewportHeight = canvasMetrics.height;
+        const deserialized = {};
+
+        for (const target of editableTargets) {
+          const normalized = rawLayout[target.key];
+          if (!normalized || typeof normalized !== 'object') {
+            continue;
+          }
+
+          const left = readNumber(normalized.left, 0) * viewportWidth;
+          const top = readNumber(normalized.top, 0) * viewportHeight;
+          const width = Math.max(target.minWidth, readNumber(normalized.width, target.minWidth / viewportWidth) * viewportWidth);
+          const height = Math.max(target.minHeight, readNumber(normalized.height, target.minHeight / viewportHeight) * viewportHeight);
+
+          deserialized[target.key] = { left, top, width, height };
+        }
+
+        return Object.keys(deserialized).length ? deserialized : null;
+      }
+
+      function loadCustomLayout() {
+        try {
+          const raw = localStorage.getItem(layoutStorageKey);
+          if (!raw) {
+            return null;
+          }
+
+          const parsed = JSON.parse(raw);
+          return parsed && typeof parsed === 'object' ? parsed : null;
+        } catch (_error) {
+          return null;
+        }
+      }
+
+      function saveCustomLayout(normalizedLayout) {
+        try {
+          localStorage.setItem(layoutStorageKey, JSON.stringify(normalizedLayout));
+        } catch (_error) {
+          // Ignore storage failures and keep in-memory layout.
+        }
+      }
+
+      function clearCustomLayout() {
+        try {
+          localStorage.removeItem(layoutStorageKey);
+        } catch (_error) {
+          // Ignore storage failures.
+        }
+      }
+
+      function updateLayoutToolbar() {
+        if (layoutEditToggle) {
+          layoutEditToggle.textContent = isLayoutEditMode ? 'Done Editing' : 'Edit Layout';
+          layoutEditToggle.setAttribute('aria-pressed', isLayoutEditMode ? 'true' : 'false');
+        }
+
+        if (layoutSave) {
+          layoutSave.disabled = false;
+        }
+      }
+
+      function showLayoutSavedState() {
+        if (!layoutSave) {
+          return;
+        }
+
+        layoutSave.textContent = 'Saved';
+        layoutSave.setAttribute('aria-label', 'Layout saved');
+
+        if (saveStatusTimeout) {
+          clearTimeout(saveStatusTimeout);
+        }
+
+        saveStatusTimeout = setTimeout(() => {
+          if (!layoutSave) {
+            return;
+          }
+          layoutSave.textContent = 'Save Layout';
+          layoutSave.setAttribute('aria-label', 'Save layout');
+          saveStatusTimeout = null;
+        }, 1200);
+      }
+
+      function setLayoutEditMode(enabled) {
+        isLayoutEditMode = Boolean(enabled);
+        document.body.classList.toggle('layout-edit-mode', isLayoutEditMode);
+        document.body.style.cursor = isLayoutEditMode ? 'move' : '';
+        if (isLayoutEditMode) {
+          normalizeEditableTargetGeometry();
+        }
+        updateLayoutToolbar();
+        updateAllResizeHandles();
+      }
+
+      function normalizeEditableTargetGeometry() {
+        for (const target of editableTargets) {
+          if (!target?.element) {
+            continue;
+          }
+
+          syncElementToCanvasRect(target.element, target);
+        }
+      }
+
+      function getPointerCanvasPosition(event, canvasMetrics = getCanvasMetrics()) {
+        return {
+          x: event.clientX - canvasMetrics.left,
+          y: event.clientY - canvasMetrics.top,
+        };
+      }
+
+      function applySavedOrAutoLayout() {
+        if (customLayoutNormalized) {
+          const customLayout = deserializeLayout(customLayoutNormalized);
+          if (customLayout) {
+            applyLayoutPreset(customLayout);
+            return;
+          }
+        }
+
+        if (hasManualLayoutChanges) {
+          const manualLayout = captureCurrentLayout();
+          if (manualLayout && Object.keys(manualLayout).length) {
+            applyLayoutPreset(manualLayout);
+            return;
+          }
+        }
+
+        applyLayoutPreset(currentAutoLayout);
+      }
+
+      function installLayoutTargets() {
+        for (const target of editableTargets) {
+          const element = target.element;
+          if (!element) {
+            continue;
+          }
+
+          targetByKey.set(target.key, target);
+          element.classList.add('layout-target');
+          element.dataset.layoutKey = target.key;
+          element.dataset.layoutLabel = target.label;
+
+          const handle = document.createElement('div');
+          handle.className = 'layout-resize-handle';
+          handle.dataset.layoutKey = target.key;
+          handle.setAttribute('aria-hidden', 'true');
+          outpostRoot.appendChild(handle);
+          handleByKey.set(target.key, handle);
+
+        }
+
+        updateAllResizeHandles();
+      }
+
+      function getResizeHandleRightOffset(element) {
+        return element?.classList?.contains('cardboard-scroll') ? 22 : 4;
+      }
+
+      function updateResizeHandleForTarget(target) {
+        if (!target?.element) {
+          return;
+        }
+
+        const handle = handleByKey.get(target.key);
+        if (!handle) {
+          return;
+        }
+
+        if (!isLayoutEditMode) {
+          handle.style.display = 'none';
+          return;
+        }
+
+        const rect = getElementRect(target.element, target);
+
+        if (!rect || rect.width <= 0 || rect.height <= 0) {
+          handle.style.display = 'none';
+          return;
+        }
+
+        const rightOffset = getResizeHandleRightOffset(target.element);
+        handle.style.left = px(rect.left + rect.width - rightOffset - resizeHandleVisualSize);
+        handle.style.top = px(rect.top + rect.height - 4 - resizeHandleVisualSize);
+        handle.style.width = pxSize(resizeHandleVisualSize, resizeHandleVisualSize);
+        handle.style.height = pxSize(resizeHandleVisualSize, resizeHandleVisualSize);
+        handle.style.display = 'block';
+      }
+
+      function updateAllResizeHandles() {
+        for (const target of editableTargets) {
+          updateResizeHandleForTarget(target);
+        }
+      }
+
+      function findLayoutTargetElement(startElement) {
+        if (!startElement || !(startElement instanceof Element)) {
+          return null;
+        }
+
+        const handle = startElement.closest('.layout-resize-handle');
+        if (handle) {
+          const targetKey = handle.dataset.layoutKey;
+          return targetKey ? document.querySelector(`.layout-target[data-layout-key="${targetKey}"]`) : null;
+        }
+
+        return startElement.closest('.layout-target');
+      }
+
+      function getResizeEdges(event, element) {
+        if (!event || !element) {
+          return null;
+        }
+
+        const handle = event?.target instanceof Element ? event.target.closest('.layout-resize-handle') : null;
+        if (handle && handle.dataset.layoutKey === element.dataset.layoutKey) {
+          return { left: false, right: true, top: false, bottom: true };
+        }
+
+        return null;
+      }
+
+      function cursorForResizeEdges(edges) {
+        if (!edges) {
+          return 'move';
+        }
+
+        if ((edges.left && edges.top) || (edges.right && edges.bottom)) {
+          return 'nwse-resize';
+        }
+
+        if ((edges.right && edges.top) || (edges.left && edges.bottom)) {
+          return 'nesw-resize';
+        }
+
+        if (edges.left || edges.right) {
+          return 'ew-resize';
+        }
+
+        if (edges.top || edges.bottom) {
+          return 'ns-resize';
+        }
+
+        return 'move';
+      }
+
+      function syncElementToCanvasRect(element, target) {
+        if (!element || !target) {
+          return;
+        }
+
+        const rect = element.getBoundingClientRect();
+        const canvasMetrics = getCanvasMetrics();
+        element.style.left = px(rect.left - canvasMetrics.left);
+        element.style.top = px(rect.top - canvasMetrics.top);
+        element.style.width = pxSize(rect.width, target.minWidth);
+        element.style.height = pxSize(rect.height, target.minHeight);
+        element.style.transform = 'none';
+      }
+
+      function updateLayoutHoverCursor(event) {
+        if (!isLayoutEditMode) {
+          document.body.style.cursor = '';
+          return;
+        }
+
+        const targetElement = findLayoutTargetElement(event.target);
+        if (!targetElement) {
+          document.body.style.cursor = '';
+          return;
+        }
+
+        const resizeEdges = getResizeEdges(event, targetElement);
+        document.body.style.cursor = cursorForResizeEdges(resizeEdges);
+        updateAllResizeHandles();
+      }
+
+      function handleLayoutPointerDown(event) {
+        if (!isLayoutEditMode || event.button !== 0) {
+          return;
+        }
+
+        const targetElement = findLayoutTargetElement(event.target);
+        if (!targetElement) {
+          return;
+        }
+
+        const targetKey = targetElement.dataset.layoutKey;
+        const target = targetByKey.get(targetKey);
+        if (!target) {
+          return;
+        }
+
+        const pointerTarget = target.element;
+        if (!pointerTarget) {
+          return;
+        }
+
+        syncElementToCanvasRect(pointerTarget, target);
+
+        const startRect = getElementRect(pointerTarget, target);
+        const canvasMetrics = getCanvasMetrics();
+        if (!startRect) {
+          return;
+        }
+
+        const resizeEdges = getResizeEdges(event, pointerTarget);
+        const pointerPosition = getPointerCanvasPosition(event, canvasMetrics);
+        activePointerState = {
+          pointerId: event.pointerId,
+          element: pointerTarget,
+          target,
+          startX: event.clientX,
+          startY: event.clientY,
+          startRect,
+          canvasMetrics,
+          pointerOffsetX: pointerPosition.x - startRect.left,
+          pointerOffsetY: pointerPosition.y - startRect.top,
+          resizeEdges,
+          isResizing: Boolean(resizeEdges),
+        };
+
+        document.body.style.cursor = activePointerState.isResizing
+          ? cursorForResizeEdges(resizeEdges)
+          : 'move';
+        updateAllResizeHandles();
+
+        pointerTarget.setPointerCapture(event.pointerId);
+        event.preventDefault();
+      }
+
+      function handleLayoutPointerMove(event) {
+        if (!activePointerState || event.pointerId !== activePointerState.pointerId) {
+          updateLayoutHoverCursor(event);
+          return;
+        }
+
+        const element = activePointerState.element;
+        const target = activePointerState.target;
+        if (activePointerState.isResizing) {
+          const minWidth = target?.minWidth || 1;
+          const minHeight = target?.minHeight || 1;
+          const edges = activePointerState.resizeEdges || {};
+          const startRect = activePointerState.startRect;
+          let nextLeft = startRect.left;
+          let nextTop = startRect.top;
+          let nextWidth = startRect.width;
+          let nextHeight = startRect.height;
+
+          const pointerPosition = getPointerCanvasPosition(event, activePointerState.canvasMetrics);
+
+          if (edges.right) {
+            nextWidth = Math.max(minWidth, pointerPosition.x - startRect.left);
+          }
+
+          if (edges.left) {
+            nextWidth = Math.max(minWidth, startRect.left + startRect.width - pointerPosition.x);
+            nextLeft = startRect.left + startRect.width - nextWidth;
+          }
+
+          if (edges.bottom) {
+            nextHeight = Math.max(minHeight, pointerPosition.y - startRect.top);
+          }
+
+          if (edges.top) {
+            nextHeight = Math.max(minHeight, startRect.top + startRect.height - pointerPosition.y);
+            nextTop = startRect.top + startRect.height - nextHeight;
+          }
+
+          element.style.left = px(nextLeft);
+          element.style.top = px(nextTop);
+          element.style.width = pxSize(nextWidth, minWidth);
+          element.style.height = pxSize(nextHeight, minHeight);
+          hasManualLayoutChanges = true;
+          document.body.style.cursor = cursorForResizeEdges(edges);
+          updateResizeHandleForTarget(target);
+          return;
+        }
+
+        const pointerPosition = getPointerCanvasPosition(event, activePointerState.canvasMetrics);
+        element.style.left = px(pointerPosition.x - activePointerState.pointerOffsetX);
+        element.style.top = px(pointerPosition.y - activePointerState.pointerOffsetY);
+        hasManualLayoutChanges = true;
+        updateResizeHandleForTarget(target);
+      }
+
+      function clearActivePointerState(event) {
+        if (!activePointerState || event.pointerId !== activePointerState.pointerId) {
+          return;
+        }
+
+        try {
+          activePointerState.element.releasePointerCapture(event.pointerId);
+        } catch (_error) {
+          // Ignore if pointer capture was already released.
+        }
+
+        activePointerState = null;
+        if (isLayoutEditMode) {
+          document.body.style.cursor = 'move';
+        } else {
+          document.body.style.cursor = '';
+        }
+
+        updateAllResizeHandles();
+      }
+
+      function persistUiScale() {
+        localStorage.setItem(uiScaleStorageKey, String(uiScale));
+        updateUiScaleReadout();
+      }
+
+      function setUiScale(nextScale) {
+        uiScale = clamp(nextScale, minUiScale, maxUiScale);
+        persistUiScale();
+        applyAutoFit();
+      }
 
       function getContentBounds(image) {
         const canvas = document.createElement('canvas');
@@ -113,12 +693,17 @@
       }
 
       function applyAutoFit() {
+        if (isLayoutEditMode) {
+          return;
+        }
+
         if (!img.naturalWidth || !img.naturalHeight) {
           return;
         }
 
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
+        const canvasMetrics = getCanvasMetrics();
+        const viewportWidth = canvasMetrics.width;
+        const viewportHeight = canvasMetrics.height;
         const bounds = getContentBounds(img) || {
           x: 0,
           y: 0,
@@ -126,10 +711,11 @@
           height: img.naturalHeight
         };
 
-        const scale = Math.max(
+        const baseScale = Math.max(
           viewportWidth / bounds.width,
           viewportHeight / bounds.height
         );
+        const scale = baseScale * uiScale;
 
         const renderWidth = img.naturalWidth * scale;
         const renderHeight = img.naturalHeight * scale;
@@ -140,68 +726,280 @@
         const contentWidth = bounds.width * scale;
         const contentHeight = bounds.height * scale;
 
-        img.style.width = renderWidth + 'px';
-        img.style.height = renderHeight + 'px';
-        img.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
+        img.style.left = px(offsetX);
+        img.style.top = px(offsetY);
+        img.style.width = pxSize(renderWidth, 1);
+        img.style.height = pxSize(renderHeight, 1);
+        img.style.transform = 'none';
 
-        if (belt) {
-          const beltWidth = contentWidth * beltWidthFraction;
-          const beltHeight = beltWidth / beltRatio;
-          const beltX = contentX + contentWidth - beltWidth - contentWidth * beltInsetXFraction;
-          const beltY = contentY + contentHeight - beltHeight - contentHeight * beltInsetYFraction;
+        const restartSize = contentWidth * 0.09;
+        const restartX = contentX + contentWidth * 0.035 + 48;
+        const restartY = contentY + contentHeight - (contentHeight * 0.13) - restartSize;
+        const beltWidth = contentWidth * beltWidthFraction;
+        const beltHeight = beltWidth / beltRatio;
+        const beltX = contentX + contentWidth - beltWidth - contentWidth * beltInsetXFraction;
+        const beltY = contentY + contentHeight - beltHeight - contentHeight * beltInsetYFraction;
 
-          belt.style.width = beltWidth + 'px';
-          belt.style.height = beltHeight + 'px';
-          belt.style.transform = 'translate(' + beltX + 'px, ' + beltY + 'px)';
-        }
+        currentAutoLayout = {
+          leftPanelFrame: layerRectToPixels({ left: contentX, top: contentY, width: contentWidth, height: contentHeight }, uiLayerLayout.leftPanel),
+          whiteBoxFrame: layerRectToPixels({ left: contentX, top: contentY, width: contentWidth, height: contentHeight }, uiLayerLayout.whiteBox),
+          rightPanelFrame: layerRectToPixels({ left: contentX, top: contentY, width: contentWidth, height: contentHeight }, uiLayerLayout.rightPanel),
+          blackBoxFrame: layerRectToPixels({ left: contentX, top: contentY, width: contentWidth, height: contentHeight }, uiLayerLayout.blackBox),
+          yellowButtonFrame: layerRectToPixels({ left: contentX, top: contentY, width: contentWidth, height: contentHeight }, uiLayerLayout.yellowButton),
+          garbageWireFrame: layerRectToPixels({ left: contentX, top: contentY, width: contentWidth, height: contentHeight }, uiLayerLayout.garbageWire),
+          beltFrame: {
+            left: beltX,
+            top: beltY,
+            width: beltWidth,
+            height: beltHeight,
+          },
+          restartButton: {
+            left: restartX,
+            top: restartY,
+            width: restartSize,
+            height: restartSize,
+          },
+          leftPanel: {
+            left: contentX + contentWidth * 0.042,
+            top: contentY + contentHeight * 0.16,
+            width: contentWidth * 0.112,
+            height: contentHeight * 0.70,
+          },
+          lowerLeftPanel: {
+            left: contentX + contentWidth * 0.042,
+            top: contentY + contentHeight * 0.73,
+            width: contentWidth * 0.112,
+            height: contentHeight * 0.13,
+          },
+          output: {
+            left: contentX + contentWidth * 0.236,
+            top: contentY + contentHeight * 0.17,
+            width: contentWidth * 0.452,
+            height: contentHeight * 0.56,
+          },
+          contextPanel: {
+            left: contentX + contentWidth * 0.738,
+            top: contentY + contentHeight * 0.17,
+            width: contentWidth * 0.192,
+            height: contentHeight * 0.56,
+          },
+          inputWrap: {
+            left: contentX + contentWidth * 0.236,
+            top: contentY + contentHeight * 0.73,
+            width: contentWidth * 0.452,
+            height: contentHeight * 0.13,
+          },
+          eli5ToggleControl: {
+            left: contentX + contentWidth * 0.34,
+            top: contentY + contentHeight * 0.08,
+            width: contentWidth * 0.1,
+            height: contentHeight * 0.055,
+          },
+        };
 
-        if (leftPanel) {
-          leftPanel.style.left = contentX + contentWidth * 0.042 + 'px';
-          leftPanel.style.top = contentY + contentHeight * 0.16 + 'px';
-          leftPanel.style.width = contentWidth * 0.112 + 'px';
-          leftPanel.style.height = contentHeight * 0.70 + 'px';
-        }
-
-        if (lowerLeftPanel) {
-          lowerLeftPanel.style.left = contentX + contentWidth * 0.042 + 'px';
-          lowerLeftPanel.style.top = contentY + contentHeight * 0.73 + 'px';
-          lowerLeftPanel.style.width = contentWidth * 0.112 + 'px';
-          lowerLeftPanel.style.height = contentHeight * 0.13 + 'px';
-        }
-
-        if (output) {
-          output.style.left = contentX + contentWidth * 0.236 + 'px';
-          output.style.top = contentY + contentHeight * 0.17 + 'px';
-          output.style.width = contentWidth * 0.452 + 'px';
-          output.style.height = contentHeight * 0.56 + 'px';
-        }
-
-        if (contextPanel) {
-          contextPanel.style.left = contentX + contentWidth * 0.738 + 'px';
-          contextPanel.style.top = contentY + contentHeight * 0.17 + 'px';
-          contextPanel.style.width = contentWidth * 0.192 + 'px';
-          contextPanel.style.height = contentHeight * 0.56 + 'px';
-        }
-
-        if (inputWrap) {
-          inputWrap.style.left = contentX + contentWidth * 0.236 + 'px';
-          inputWrap.style.top = contentY + contentHeight * 0.73 + 'px';
-          inputWrap.style.width = contentWidth * 0.452 + 'px';
-          inputWrap.style.height = contentHeight * 0.13 + 'px';
-        }
-
-        // Place restart exactly where the Loveable overlay sat: left 3.5%, bottom 13%, size 9% of UI bounds.
-        if (restartButton) {
-          const restartSize = contentWidth * 0.09;
-          const restartX = contentX + contentWidth * 0.035;
-          const restartY = contentY + contentHeight - (contentHeight * 0.13) - restartSize;
-
-          restartButton.style.left = restartX + 'px';
-          restartButton.style.top = restartY + 'px';
-          restartButton.style.width = restartSize + 'px';
-          restartButton.style.height = restartSize + 'px';
-        }
+        applySavedOrAutoLayout();
       }
+
+      function px(value) {
+        return `${Math.round(value)}px`;
+      }
+
+      function pxSize(value, minSize = 1) {
+        return `${Math.max(minSize, Math.round(value))}px`;
+      }
+
+      function layerRectToPixels(content, layerRect) {
+        if (!content || !layerRect) {
+          return null;
+        }
+
+        return {
+          left: content.left + content.width * layerRect.x,
+          top: content.top + content.height * layerRect.y,
+          width: content.width * layerRect.width,
+          height: content.height * layerRect.height,
+        };
+      }
+
+      function applyLayoutPreset(layout) {
+        if (!layout) {
+          return;
+        }
+
+        if (leftPanelFrame && layout.leftPanelFrame) {
+          leftPanelFrame.style.left = px(layout.leftPanelFrame.left);
+          leftPanelFrame.style.top = px(layout.leftPanelFrame.top);
+          leftPanelFrame.style.width = pxSize(layout.leftPanelFrame.width, 32);
+          leftPanelFrame.style.height = pxSize(layout.leftPanelFrame.height, 32);
+          leftPanelFrame.style.transform = 'none';
+        }
+
+        if (whiteBoxFrame && layout.whiteBoxFrame) {
+          whiteBoxFrame.style.left = px(layout.whiteBoxFrame.left);
+          whiteBoxFrame.style.top = px(layout.whiteBoxFrame.top);
+          whiteBoxFrame.style.width = pxSize(layout.whiteBoxFrame.width, 32);
+          whiteBoxFrame.style.height = pxSize(layout.whiteBoxFrame.height, 32);
+          whiteBoxFrame.style.transform = 'none';
+        }
+
+        if (rightPanelFrame && layout.rightPanelFrame) {
+          rightPanelFrame.style.left = px(layout.rightPanelFrame.left);
+          rightPanelFrame.style.top = px(layout.rightPanelFrame.top);
+          rightPanelFrame.style.width = pxSize(layout.rightPanelFrame.width, 32);
+          rightPanelFrame.style.height = pxSize(layout.rightPanelFrame.height, 32);
+          rightPanelFrame.style.transform = 'none';
+        }
+
+        if (blackBoxFrame && layout.blackBoxFrame) {
+          blackBoxFrame.style.left = px(layout.blackBoxFrame.left);
+          blackBoxFrame.style.top = px(layout.blackBoxFrame.top);
+          blackBoxFrame.style.width = pxSize(layout.blackBoxFrame.width, 32);
+          blackBoxFrame.style.height = pxSize(layout.blackBoxFrame.height, 32);
+          blackBoxFrame.style.transform = 'none';
+        }
+
+        if (yellowButtonFrame && layout.yellowButtonFrame) {
+          yellowButtonFrame.style.left = px(layout.yellowButtonFrame.left);
+          yellowButtonFrame.style.top = px(layout.yellowButtonFrame.top);
+          yellowButtonFrame.style.width = pxSize(layout.yellowButtonFrame.width, 32);
+          yellowButtonFrame.style.height = pxSize(layout.yellowButtonFrame.height, 32);
+          yellowButtonFrame.style.transform = 'none';
+        }
+
+        if (garbageWireFrame && layout.garbageWireFrame) {
+          garbageWireFrame.style.left = px(layout.garbageWireFrame.left);
+          garbageWireFrame.style.top = px(layout.garbageWireFrame.top);
+          garbageWireFrame.style.width = pxSize(layout.garbageWireFrame.width, 32);
+          garbageWireFrame.style.height = pxSize(layout.garbageWireFrame.height, 32);
+          garbageWireFrame.style.transform = 'none';
+        }
+
+        if (belt && layout.beltFrame) {
+          belt.style.left = px(layout.beltFrame.left);
+          belt.style.top = px(layout.beltFrame.top);
+          belt.style.width = pxSize(layout.beltFrame.width, 32);
+          belt.style.height = pxSize(layout.beltFrame.height, 20);
+          belt.style.transform = 'none';
+        }
+
+        if (restartButton && layout.restartButton) {
+          restartButton.style.left = px(layout.restartButton.left);
+          restartButton.style.top = px(layout.restartButton.top);
+          restartButton.style.width = pxSize(layout.restartButton.width, 28);
+          restartButton.style.height = pxSize(layout.restartButton.height, 28);
+          restartButton.style.transform = 'none';
+        }
+
+        if (leftPanel && layout.leftPanel) {
+          leftPanel.style.left = px(layout.leftPanel.left);
+          leftPanel.style.top = px(layout.leftPanel.top);
+          leftPanel.style.width = pxSize(layout.leftPanel.width, 80);
+          leftPanel.style.height = pxSize(layout.leftPanel.height, 50);
+          leftPanel.style.transform = 'none';
+        }
+
+        if (lowerLeftPanel && layout.lowerLeftPanel) {
+          lowerLeftPanel.style.left = px(layout.lowerLeftPanel.left);
+          lowerLeftPanel.style.top = px(layout.lowerLeftPanel.top);
+          lowerLeftPanel.style.width = pxSize(layout.lowerLeftPanel.width, 80);
+          lowerLeftPanel.style.height = pxSize(layout.lowerLeftPanel.height, 50);
+          lowerLeftPanel.style.transform = 'none';
+        }
+
+        if (output && layout.output) {
+          output.style.left = px(layout.output.left);
+          output.style.top = px(layout.output.top);
+          output.style.width = pxSize(layout.output.width, 80);
+          output.style.height = pxSize(layout.output.height, 50);
+          output.style.transform = 'none';
+        }
+
+        if (contextPanel && layout.contextPanel) {
+          contextPanel.style.left = px(layout.contextPanel.left);
+          contextPanel.style.top = px(layout.contextPanel.top);
+          contextPanel.style.width = pxSize(layout.contextPanel.width, 80);
+          contextPanel.style.height = pxSize(layout.contextPanel.height, 50);
+          contextPanel.style.transform = 'none';
+        }
+
+        if (inputWrap && layout.inputWrap) {
+          inputWrap.style.left = px(layout.inputWrap.left);
+          inputWrap.style.top = px(layout.inputWrap.top);
+          inputWrap.style.width = pxSize(layout.inputWrap.width, 120);
+          inputWrap.style.height = pxSize(layout.inputWrap.height, 50);
+          inputWrap.style.transform = 'none';
+        }
+
+        if (eli5ToggleControl && layout.eli5ToggleControl) {
+          eli5ToggleControl.style.left = px(layout.eli5ToggleControl.left);
+          eli5ToggleControl.style.top = px(layout.eli5ToggleControl.top);
+          eli5ToggleControl.style.width = pxSize(layout.eli5ToggleControl.width, 70);
+          eli5ToggleControl.style.height = pxSize(layout.eli5ToggleControl.height, 32);
+          eli5ToggleControl.style.transform = 'none';
+        }
+
+        updateAllResizeHandles();
+      }
+
+      if (uiScaleDown) {
+        uiScaleDown.addEventListener('click', () => {
+          setUiScale(uiScale - uiScaleStep);
+        });
+      }
+
+      if (uiScaleUp) {
+        uiScaleUp.addEventListener('click', () => {
+          setUiScale(uiScale + uiScaleStep);
+        });
+      }
+
+      if (uiScaleReset) {
+        uiScaleReset.addEventListener('click', () => {
+          setUiScale(1);
+        });
+      }
+
+      if (layoutEditToggle) {
+        layoutEditToggle.addEventListener('click', () => {
+          setLayoutEditMode(!isLayoutEditMode);
+        });
+      }
+
+      if (layoutSave) {
+        layoutSave.addEventListener('click', () => {
+          const snapshot = captureCurrentLayout();
+          if (!snapshot || !Object.keys(snapshot).length) {
+            return;
+          }
+          customLayoutNormalized = serializeLayout(snapshot);
+          hasManualLayoutChanges = false;
+          saveCustomLayout(customLayoutNormalized);
+          showLayoutSavedState();
+          setLayoutEditMode(false);
+        });
+      }
+
+      if (layoutReset) {
+        layoutReset.addEventListener('click', () => {
+          clearCustomLayout();
+          customLayoutNormalized = null;
+          hasManualLayoutChanges = false;
+          setLayoutEditMode(false);
+          applySavedOrAutoLayout();
+        });
+      }
+
+      document.addEventListener('pointerdown', handleLayoutPointerDown);
+      document.addEventListener('pointermove', handleLayoutPointerMove);
+      document.addEventListener('pointerup', clearActivePointerState);
+      document.addEventListener('pointercancel', clearActivePointerState);
+
+      installLayoutTargets();
+      customLayoutNormalized = loadCustomLayout();
+      setLayoutEditMode(false);
+
+      uiScale = clamp(uiScale, minUiScale, maxUiScale);
+      updateUiScaleReadout();
 
       if (img.complete) {
         applyAutoFit();
@@ -212,6 +1010,6 @@
       window.addEventListener('resize', applyAutoFit);
     })();
   </script>
-  <script type="module" src="./wireup-shack-ui.js"></script>
+  <script type="module" src="./wireup-outpost-ui.js"></script>
 </body>
 </html>

@@ -1,7 +1,8 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { loadIndex, getOperatorSources } = require('./rayrayIndex');
+const { spawnSync } = require('child_process');
+const runtime = require('./runtime/index.cjs');
 const { buildSignalFlowDescription } = require('./signalFlowInterpreter');
 const { interpretParameters } = require('./parameterInterpreter');
 const {
@@ -19,12 +20,13 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(__dirname));
 
-const operatorIndex = loadIndex();
-const operatorNames = Object.keys(operatorIndex.operators || {});
-
-const parsedFileCache = new Map();
+const runtimeData = runtime.loadRuntime();
+const operatorNames = Object.keys(runtimeData.master_index?.operators || {});
 
 const TOX_DISCONNECT_TIMEOUT_MS = 10_000;
+const ACTION_RECIPE_PATH = path.join(__dirname, 'data', 'wireup_runtime', 'action_recipes.json');
+
+let actionRecipeCache = null;
 
 const toxStatus = {
   lastStateAt: null,
@@ -120,147 +122,238 @@ function detectOperator(question = '', state = {}) {
   return matches[0] || null;
 }
 
-function parseConcatenatedJson(content) {
-  const docs = [];
-  let start = -1;
-  let depth = 0;
-  let inString = false;
-  let escaped = false;
 
-  for (let i = 0; i < content.length; i += 1) {
-    const char = content[i];
+function cleanText(value = '') {
+  return String(value || '').replace(/\s+/g, ' ').trim();
+}
 
-    if (inString) {
-      if (escaped) {
-        escaped = false;
-      } else if (char === '\\') {
-        escaped = true;
-      } else if (char === '"') {
-        inString = false;
+function loadActionRecipes() {
+  if (actionRecipeCache) {
+    return actionRecipeCache;
+  }
+
+  try {
+    const raw = fs.readFileSync(ACTION_RECIPE_PATH, 'utf8');
+    const parsed = JSON.parse(raw);
+    actionRecipeCache = Array.isArray(parsed) ? parsed : [];
+  } catch (_error) {
+    actionRecipeCache = [];
+  }
+
+  return actionRecipeCache;
+}
+
+function detectIntent(question = '') {
+  const q = String(question || '').toLowerCase();
+  const actionPhrases = ['how do i', 'make', 'apply', 'connect', 'blur', 'add', 'use'];
+  return actionPhrases.some((phrase) => q.includes(phrase)) ? 'ACTION_REQUEST' : 'EXPLANATION_REQUEST';
+}
+
+function extractActionKeywords(question = '', operator = '') {
+  const stopWords = new Set([
+    'a', 'an', 'and', 'after', 'at', 'do', 'for', 'how', 'i', 'if', 'in', 'is', 'it', 'me', 'my', 'needed', 'of',
+    'on', 'or', 'the', 'to', 'use', 'with', 'you', 'your', 'into', 'from', 'this', 'that', 'need', 'can', 'please',
+    'apply', 'make', 'connect', 'add', 'blur', 'top', 'chop', 'sop', 'dop', 'mat', 'comp', 'operator'
+  ]);
+  const keywordSet = new Set(tokenize(question));
+  tokenize(operator).forEach((token) => keywordSet.delete(token));
+  return Array.from(keywordSet).filter((token) => token && !stopWords.has(token));
+}
+
+function scoreActionRecipe(recipe = {}, operator = '', keywords = []) {
+  const recipeOperator = cleanText(recipe.operator || '');
+  const normalizedRecipeOperator = normalizeOperatorName(recipeOperator);
+  const normalizedOperator = normalizeOperatorName(operator);
+  let score = normalizedRecipeOperator && normalizedRecipeOperator === normalizedOperator ? 100 : 0;
+
+  const haystack = normalizeOperatorName([
+    recipe.title,
+    recipe.operator,
+    recipe.explanation,
+    ...(Array.isArray(recipe.keywords) ? recipe.keywords : []),
+    ...(Array.isArray(recipe.steps) ? recipe.steps : []),
+    ...Object.keys(recipe.parameters || {}),
+  ].join(' '));
+
+  keywords.forEach((keyword) => {
+    if (haystack.includes(normalizeOperatorName(keyword))) {
+      score += 10;
+    }
+  });
+
+  return score;
+}
+
+function findBestActionRecipe(question = '', operator = '') {
+  const recipes = loadActionRecipes();
+  if (!operator || !recipes.length) {
+    return null;
+  }
+
+  const keywords = extractActionKeywords(question, operator);
+  const ranked = recipes
+    .map((recipe) => ({ recipe, score: scoreActionRecipe(recipe, operator, keywords) }))
+    .filter((entry) => entry.score >= 100)
+    .sort((a, b) => b.score - a.score);
+
+  return ranked[0]?.recipe || null;
+}
+
+function buildRecipeAnswer(recipe = {}) {
+  const steps = Array.isArray(recipe.steps)
+    ? recipe.steps.map((step, index) => `${index + 1}. ${cleanText(step)}`).filter(Boolean)
+    : [];
+  const parameterNames = Object.keys(recipe.parameters || {}).filter(Boolean);
+  const parameterLine = parameterNames.length ? `Parameter names: ${parameterNames.join(', ')}` : 'Parameter names: None';
+  const explanation = cleanText(recipe.explanation || '');
+
+  return {
+    explanation,
+    parameterNames,
+    answer: [
+      'Steps:',
+      ...steps,
+      parameterLine,
+      explanation ? `Explanation: ${explanation}` : '',
+    ].filter(Boolean).join('\n'),
+  };
+}
+
+function formatStructuredRayRayAnswer(payload = {}) {
+  const explanation = cleanText(payload.explanation || payload.answer || '');
+  const uiExecution = Array.isArray(payload.ui_execution) ? payload.ui_execution : [];
+  const expectedVisualResult = cleanText(payload.expected_visual_result || '');
+
+  const lines = [];
+  if (explanation) {
+    lines.push(explanation, '');
+  }
+
+  if (uiExecution.length) {
+    lines.push('Do This In TouchDesigner');
+    uiExecution.forEach((item, index) => {
+      lines.push(`${index + 1}. ${cleanText(item.step)}`);
+      if (item.why) {
+        lines.push(`   Why: ${cleanText(item.why)}`);
       }
-      continue;
-    }
-
-    if (char === '"') {
-      inString = true;
-      continue;
-    }
-
-    if (char === '{') {
-      if (depth === 0) start = i;
-      depth += 1;
-    } else if (char === '}') {
-      depth -= 1;
-      if (depth === 0 && start !== -1) {
-        const jsonText = content.slice(start, i + 1);
-        docs.push(JSON.parse(jsonText));
-        start = -1;
-      }
-    }
+    });
+    lines.push('');
   }
 
-  return docs;
-}
-
-function getParsedFileDocs(fileName) {
-  if (parsedFileCache.has(fileName)) {
-    return parsedFileCache.get(fileName);
+  if (expectedVisualResult) {
+    lines.push(`Expected visual result: ${expectedVisualResult}`);
   }
 
-  const filePath = path.join(__dirname, fileName);
-  const raw = fs.readFileSync(filePath, 'utf8');
-  const docs = parseConcatenatedJson(raw);
-
-  parsedFileCache.set(fileName, docs);
-  return docs;
+  return lines.join('\n').trim();
 }
 
-function resolvePathWithParent(root, jsonPath) {
-  const cleanPath = jsonPath.replace(/^\$/, '');
-  const tokens = cleanPath.match(/[^.\[\]]+|\[(\d+)\]/g) || [];
+function buildUiExecution({ operator = '', parameterNames = [], state = {}, question = '' } = {}) {
+  const selectedName = cleanText(state.selectedNode || operator || 'the node');
+  const operatorLabel = cleanText(operator || state.nodeType || 'the operator');
+  const networkName = cleanText(state.network || 'the current network');
+  const parameters = Array.isArray(parameterNames) ? parameterNames.filter(Boolean) : [];
+  const primaryParameter = parameters[0] || '';
+  const hasChopContext = /\bchop\b/i.test(question)
+    || /\bchop\b/i.test(JSON.stringify(state.parameters || {}))
+    || (Array.isArray(state.upstream) && state.upstream.some((node) => /CHOP/i.test(node?.type || node?.family || '')));
 
-  let current = root;
-  let parent = null;
+  const steps = [
+    {
+      step: `Click the ${selectedName} ${operatorLabel ? `(${operatorLabel}) ` : ''}node in the network editor.`.replace(/\s+/g, ' ').trim(),
+      why: 'That makes sure the right operator is active before you change anything.',
+    },
+    {
+      step: `Look at the parameter panel on the right side of TouchDesigner while you stay inside ${networkName}.`,
+      why: 'That panel is where this operator exposes the controls you can actually change.',
+    },
+  ];
 
-  for (const token of tokens) {
-    parent = current;
-    if (token.startsWith('[') && token.endsWith(']')) {
-      current = current?.[Number(token.slice(1, -1))];
-    } else {
-      current = current?.[token];
-    }
-  }
-
-  return { value: current, parent };
-}
-
-function extractSourceEntry(source) {
-  const docs = getParsedFileDocs(source.file);
-  const docMatch = source.path.match(/^\$(\d+)/);
-  if (!docMatch) return null;
-
-  const docIndex = Number(docMatch[1]);
-  const doc = docs[docIndex];
-  if (!doc) return null;
-
-  const relativePath = source.path.replace(/^\$\d+\.?/, '');
-  if (!relativePath) return doc;
-
-  const resolved = resolvePathWithParent(doc, relativePath);
-  if (resolved.value && typeof resolved.value === 'object') return resolved.value;
-  if (resolved.parent && typeof resolved.parent === 'object') return resolved.parent;
-
-  return resolved.value;
-}
-
-function buildKnowledgeContext(operatorName) {
-  const sources = getOperatorSources(operatorName);
-  if (!sources.length) {
-    return `Operator: ${operatorName}\n\nNo indexed knowledge fragments were found.`;
-  }
-
-  const fragments = sources
-    .map((source) => ({ source, data: extractSourceEntry(source) }))
-    .filter((entry) => entry.data != null)
-    .map((entry, index) => {
-      const body =
-        typeof entry.data === 'string'
-          ? entry.data
-          : JSON.stringify(entry.data, null, 2);
-
-      return `Fragment ${index + 1} (${entry.source.file} | ${entry.source.path})\n${body}`;
+  if (primaryParameter) {
+    steps.push({
+      step: `Find the parameter labeled "${primaryParameter}" in the parameter panel.`,
+      why: 'That is the specific runtime parameter currently available for this operator.',
     });
 
-  return [`Operator: ${operatorName}`, '', ...fragments].join('\n\n');
+    if (hasChopContext) {
+      steps.push({
+        step: `Drag the CHOP channel you want to use onto the "${primaryParameter}" parameter label, then release when the target highlights.`,
+        why: 'Dropping onto the exact parameter label creates the live connection without guessing the destination.',
+      });
+    } else {
+      steps.push({
+        step: `Click in the value field next to "${primaryParameter}" and adjust it directly.`,
+        why: 'That lets you test the change on the exact control that exists in the current runtime data.',
+      });
+    }
+  } else {
+    steps.push({
+      step: 'Open the parameter pages for this node and use the first visible control that matches the question you asked.',
+      why: 'This keeps the guidance grounded in controls you can actually see instead of inventing parameter names.',
+    });
+  }
+
+  return steps;
+}
+
+function buildExpectedVisualResult({ operator = '', parameterNames = [], question = '' } = {}) {
+  const primaryParameter = (Array.isArray(parameterNames) ? parameterNames[0] : '') || '';
+  if (/\bchop\b/i.test(question) && primaryParameter) {
+    return `You should see the "${primaryParameter}" control show an active connection, and the related value should update as the CHOP channel changes.`;
+  }
+
+  if (primaryParameter) {
+    return `You should see the "${primaryParameter}" value change in the parameter panel, and the ${operator || 'operator'} output should react in its viewer if that control affects the result.`;
+  }
+
+  return `You should see the ${operator || 'selected operator'} stay selected, its parameter panel visible, and the viewer update as you change one of the controls that is present.`;
+}
+
+function buildStructuredRayRayPayload({ explanation = '', operator = '', state = {}, question = '', parameterNames = [] } = {}) {
+  const payload = {
+    explanation: cleanText(explanation),
+    ui_execution: buildUiExecution({ operator, parameterNames, state, question }),
+    expected_visual_result: buildExpectedVisualResult({ operator, parameterNames, question }),
+  };
+
+  return {
+    ...payload,
+    answer: formatStructuredRayRayAnswer(payload),
+  };
+}
+
+function buildKnowledgeContext(operatorName, explainMode = 'td') {
+  const context = runtime.retrieveContext(operatorName);
+  return runtime.explainContext(context, explainMode);
+}
+
+function buildMenuGuidanceContext(operatorName) {
+  const menuGuidance = runtime.getOperatorMenuGuidance(operatorName);
+
+  if (!menuGuidance.length) {
+    return 'Important controls:\n- No operator menu guidance found.';
+  }
+
+  const lines = ['Important controls:'];
+
+  menuGuidance.forEach((menu) => {
+    lines.push(`Open the ${menu.menu} menu (${menu.operator}):`);
+    if (menu.meaning) {
+      lines.push(`- Meaning: ${menu.meaning}`);
+    }
+
+    menu.important_controls.slice(0, 6).forEach((control) => {
+      lines.push(`- ${control}`);
+    });
+  });
+
+  return lines.join('\n');
 }
 
 const COMPARISON_SECTIONS = ['Identity', 'Signal Story', 'Failure Modes', 'Recipes', 'Reasoning Lens'];
 
-function findSectionValue(entry, sectionName) {
-  if (!entry || typeof entry !== 'object') {
-    return null;
-  }
-
-  const normalizedSection = normalizeOperatorName(sectionName);
-  for (const [key, value] of Object.entries(entry)) {
-    if (normalizeOperatorName(key) === normalizedSection) {
-      return value;
-    }
-  }
-
-  for (const value of Object.values(entry)) {
-    if (value && typeof value === 'object') {
-      const nested = findSectionValue(value, sectionName);
-      if (nested != null) return nested;
-    }
-  }
-
-  return null;
-}
-
 function formatSectionValue(value) {
   if (value == null) {
-    return 'Not explicitly documented in indexed fragments.';
+    return 'Not explicitly documented in runtime index.';
   }
 
   if (typeof value === 'string') {
@@ -271,58 +364,31 @@ function formatSectionValue(value) {
 }
 
 function buildOperatorComparisonContext(operatorName) {
-  const sources = getOperatorSources(operatorName);
-  const entries = sources
-    .map((source) => extractSourceEntry(source))
-    .filter((data) => data != null);
-
-  const sectionBlocks = COMPARISON_SECTIONS.map((sectionName) => {
-    const sectionValue = entries
-      .map((entry) => findSectionValue(entry, sectionName))
-      .find((value) => value != null);
-
-    return `${sectionName}:\n${formatSectionValue(sectionValue)}`;
-  });
-
-  if (!entries.length) {
-    sectionBlocks.push('Knowledge Fragments:\nNo indexed knowledge fragments were found.');
+  const entry = runtime.getOperator(operatorName);
+  if (!entry) {
+    return 'No runtime entry found.';
   }
 
-  return sectionBlocks.join('\n\n');
+  const sectionMap = {
+    Identity: entry.identity,
+    'Signal Story': entry.signal_story,
+    'Failure Modes': entry.failure_modes,
+    Recipes: entry.recipes,
+    'Reasoning Lens': entry.lenses,
+  };
+
+  return COMPARISON_SECTIONS.map((name) => `${name}:\n${formatSectionValue(sectionMap[name])}`).join('\n\n');
 }
 
-function buildComparisonPrompt(operatorA, operatorB, question, recentHistory = [], followUp = false) {
-  const contextA = buildOperatorComparisonContext(operatorA);
-  const contextB = buildOperatorComparisonContext(operatorB);
-  const recentConversation = buildRecentConversationContext(recentHistory);
-  const followUpInstruction = followUp
-    ? 'This appears to be a follow-up question, so keep continuity with prior context when useful.'
-    : 'Treat this as a standalone comparison unless recent conversation clearly helps.';
-
-  return [
-    'You are Ray Ray, a TouchDesigner tutor.',
-    '',
-    'Explain the practical difference between these operators.',
-    'Keep the answer short and beginner friendly.',
-    'Cover: (1) what each operator does, (2) how they differ, (3) when to use one vs the other.',
-    '',
-    `Operator A: ${operatorA}`,
-    contextA,
-    '',
-    `Operator B: ${operatorB}`,
-    contextB,
-    '',
-    recentConversation,
-    followUpInstruction,
-    '',
-    'User question:',
-    question,
-  ].join('\n');
-}
-
-async function compareOperators(operatorA, operatorB, question, recentHistory = [], followUp = false) {
+async function compareOperators(operatorA, operatorB, question, recentHistory = [], followUp = false, explainMode = 'td') {
   const prompt = buildComparisonPrompt(operatorA, operatorB, question, recentHistory, followUp);
-  return generateRayRayResponse([{ role: 'user', content: prompt }]);
+  const context = runtime.retrieveContext(`${operatorA} ${operatorB}`);
+  const explanation = runtime.explainContext(context, explainMode);
+  const menuGuidance = [
+    `${operatorA}:\n${buildMenuGuidanceContext(operatorA)}`,
+    `${operatorB}:\n${buildMenuGuidanceContext(operatorB)}`,
+  ].join('\n\n');
+  return generateRayRayResponse([{ role: 'user', content: `${prompt}\n\nRuntime explanation mode (${explainMode}):\n${explanation}\n\nOperator parameter guidance:\n${menuGuidance}` }]);
 }
 
 function summarizeNeighborhood(nodes = []) {
@@ -427,6 +493,34 @@ function buildRecentConversationContext(history = []) {
   return lines.join('\n');
 }
 
+function normalizeBridgeSessionId(sessionId, bridgeName = 'wireup-outpost') {
+  const fallback = `${bridgeName}:outpost`;
+  const raw = typeof sessionId === 'string' ? sessionId.trim() : '';
+
+  if (!raw) {
+    return fallback;
+  }
+
+  const namespaced = raw.startsWith(`${bridgeName}:`) ? raw : `${bridgeName}:${raw}`;
+  return namespaced.slice(0, 128);
+}
+
+function buildBridgeRequest(body = {}, bridgeName = 'wireup-outpost') {
+  const state = body?.state && typeof body.state === 'object' ? body.state : {};
+  const question = typeof body?.question === 'string'
+    ? body.question
+    : (typeof body?.query === 'string' ? body.query : '');
+
+  return {
+    question,
+    state,
+    mode: body?.mode || 'qa',
+    explainMode: body?.explainMode || 'td',
+    sessionId: normalizeBridgeSessionId(body?.sessionId || body?.session_id, bridgeName),
+    bridge: bridgeName,
+  };
+}
+
 function buildPrompt(context, question, state, previousState = null, mode = 'qa', recentHistory = [], followUp = false) {
   const patchContext = buildPatchContext(state);
   const flowContext = buildSignalFlowContext(state);
@@ -467,7 +561,8 @@ function buildPrompt(context, question, state, previousState = null, mode = 'qa'
 
 async function handleRayrayRequest(req, res) {
   try {
-    const { question = '', state = {}, mode = 'qa', sessionId: incomingSessionId } = req.body || {};
+    const requestBody = req.body || {};
+    const { question = '', state = {}, mode = 'qa', explainMode = 'td', sessionId: incomingSessionId } = requestBody;
 
     const sessionId = ensureSession(incomingSessionId);
 
@@ -491,7 +586,14 @@ async function handleRayrayRequest(req, res) {
 
     const flow = buildSignalFlowDescription(effectiveState);
     if (mode === 'explain_patch') {
-      const answer = flow.beginnerSummary;
+      const structured = buildStructuredRayRayPayload({
+        explanation: flow.beginnerSummary,
+        operator: effectiveState.nodeType || '',
+        state: effectiveState,
+        question,
+        parameterNames: Object.keys(effectiveState.parameters || {}),
+      });
+      const answer = structured.answer;
       appendInteraction(sessionId, {
         question,
         state: effectiveState,
@@ -501,7 +603,7 @@ async function handleRayrayRequest(req, res) {
 
       return res.json({
         sessionId,
-        answer,
+        ...structured,
         flow,
       });
     }
@@ -515,11 +617,15 @@ async function handleRayrayRequest(req, res) {
 
     const comparisonOperators = detectComparisonOperators(question);
     const recentHistory = getRecentHistory(sessionId, 5);
+    const operator = detectOperator(question, effectiveState);
+    const intent = detectIntent(question);
 
-    if (comparisonOperators.length === 2) {
-      const [operatorA, operatorB] = comparisonOperators;
-      const answer = await compareOperators(operatorA, operatorB, question, recentHistory, followUp);
-
+    if (intent === 'ACTION_REQUEST') {
+      const actionRecipe = findBestActionRecipe(question, operator);
+      const recipeResponse = actionRecipe ? buildRecipeAnswer(actionRecipe) : null;
+      const answer = recipeResponse ? recipeResponse.answer : 'No recipe found for this action';
+      const parameterNames = recipeResponse ? recipeResponse.parameterNames : [];
+      const explanation = recipeResponse ? recipeResponse.explanation : '';
       appendInteraction(sessionId, {
         question,
         state: effectiveState,
@@ -530,14 +636,41 @@ async function handleRayrayRequest(req, res) {
       return res.json({
         sessionId,
         answer,
+        explanation,
+        parameterNames,
+        operator: operator || '',
+        mode: 'recipe_execution',
+      });
+    }
+
+    if (comparisonOperators.length === 2) {
+      const [operatorA, operatorB] = comparisonOperators;
+      const explanation = await compareOperators(operatorA, operatorB, question, recentHistory, followUp, explainMode);
+      const structured = buildStructuredRayRayPayload({
+        explanation,
+        operator: operatorA,
+        state: effectiveState,
+        question,
+        parameterNames: Object.keys(effectiveState.parameters || {}),
+      });
+      const answer = structured.answer;
+
+      appendInteraction(sessionId, {
+        question,
+        state: effectiveState,
+        answer,
+        timestamp: Date.now(),
+      });
+
+      return res.json({
+        sessionId,
+        ...structured,
         comparison: {
           operatorA,
           operatorB,
         },
       });
     }
-
-    const operator = detectOperator(question, effectiveState);
 
     if (!operator) {
       const answer = "I couldn't determine which operator you're asking about.";
@@ -548,12 +681,26 @@ async function handleRayrayRequest(req, res) {
         timestamp: Date.now(),
       });
 
-      return res.json({ sessionId, answer });
+      return res.json({
+        sessionId,
+        ...buildStructuredRayRayPayload({ explanation: answer, state: effectiveState, question }),
+      });
     }
 
-    const context = buildKnowledgeContext(operator);
-    const prompt = buildPrompt(context, question, effectiveState, previousState, mode, recentHistory, followUp);
-    const answer = await generateRayRayResponse([{ role: 'user', content: prompt }]);
+    const context = buildKnowledgeContext(operator, explainMode);
+    const menuGuidanceContext = buildMenuGuidanceContext(operator);
+    const runtimeContext = runtime.retrieveContext(question);
+    const runtimePatterns = runtime.detectPatterns(effectiveState);
+    const prompt = buildPrompt(`${context}\n\n${menuGuidanceContext}\n\nRuntime concepts: ${JSON.stringify(runtimeContext.concepts || [])}\nRuntime patterns: ${JSON.stringify(runtimePatterns)}`, question, effectiveState, previousState, mode, recentHistory, followUp);
+    const explanation = await generateRayRayResponse([{ role: 'user', content: prompt }]);
+    const structured = buildStructuredRayRayPayload({
+      explanation,
+      operator,
+      state: effectiveState,
+      question,
+      parameterNames: Object.keys(effectiveState.parameters || {}),
+    });
+    const answer = structured.answer;
 
     appendInteraction(sessionId, {
       question,
@@ -562,15 +709,62 @@ async function handleRayrayRequest(req, res) {
       timestamp: Date.now(),
     });
 
-    return res.json({ sessionId, answer });
+    return res.json({ sessionId, ...structured });
   } catch (error) {
-    return res.status(500).json({ answer: `Ray Ray hit an error: ${error.message}` });
+    const structured = buildStructuredRayRayPayload({ explanation: `Ray Ray hit an error: ${error.message}` });
+    return res.status(500).json(structured);
   }
 
 }
 
+
+async function handleOutpostBridgeRequest(req, res) {
+  try {
+    const rawBody = req.body || {};
+    const query = typeof rawBody?.query === 'string'
+      ? rawBody.query
+      : (typeof rawBody?.question === 'string' ? rawBody.question : '');
+    const sessionId = typeof rawBody?.session_id === 'string'
+      ? rawBody.session_id
+      : (typeof rawBody?.sessionId === 'string' ? rawBody.sessionId : '');
+
+    if (typeof query !== 'string' || !query.trim()) {
+      return res.status(400).json({ response: 'Please include a non-empty query.', workflow_used: false });
+    }
+
+    if (sessionId === 'outpost') {
+      const pipeline = spawnSync('python', ['backend/outpost_pipeline_runner.py'], {
+        cwd: __dirname,
+        input: JSON.stringify({ query, session_id: sessionId }),
+        encoding: 'utf-8',
+      });
+
+      if (pipeline.status !== 0) {
+        const errorOutput = (pipeline.stderr || pipeline.stdout || '').trim();
+        return res.status(500).json({
+          response: `Outpost pipeline error: ${errorOutput || 'Unknown error'}`,
+          workflow_used: false,
+        });
+      }
+
+      const rawOutput = (pipeline.stdout || '').trim();
+      const jsonLine = rawOutput.split('\n').reverse().find((line) => line.trim().startsWith('{')) || '{}';
+      const payload = JSON.parse(jsonLine);
+      return res.json(payload);
+    }
+
+    req.body = buildBridgeRequest(rawBody, 'wireup-outpost');
+    return handleRayrayRequest(req, res);
+  } catch (error) {
+    return res.status(500).json({ response: `Outpost bridge error: ${error.message}`, workflow_used: false });
+  }
+}
+
 app.post('/rayray', handleRayrayRequest);
 app.post('/api/rayray', handleRayrayRequest);
+app.post('/query', handleOutpostBridgeRequest);
+app.post('/outpost/query', handleOutpostBridgeRequest);
+app.post('/api/outpost/query', handleOutpostBridgeRequest);
 
 app.get('/healthz', (_req, res) => {
   res.status(200).json({ ok: true });
@@ -623,11 +817,14 @@ app.get('/machines/index.json', (_req, res) => {
 app.use('/machines/files', express.static(path.join(__dirname, 'ipld', 'published')));
 
 app.get('/', (_req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.redirect('/outpost');
 });
 
 app.use(express.static(__dirname));
 
 app.listen(PORT, () => {
   console.log('Ray Ray server running at http://localhost:3000');
+  console.log('Outpost pipeline ready');
+  console.log('TOX path registered');
+  console.log('Session routing locked to outpost');
 });

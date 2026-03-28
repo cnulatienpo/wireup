@@ -1,0 +1,234 @@
+{
+  "edges": [
+    {
+      "from": "Signal Flow",
+      "to": "Optical Flow (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Real Time",
+      "to": "Time Machine (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "TOP",
+      "to": "Add (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "CHOP",
+      "to": "CHOP to TOP",
+      "type": "mentions"
+    },
+    {
+      "from": "Time",
+      "to": "Time Machine (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Inside vs Outside",
+      "to": "Inside (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Channel",
+      "to": "Channel Mix (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Sick",
+      "to": "SICK (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Window Placement",
+      "to": "Window",
+      "type": "mentions"
+    },
+    {
+      "from": "Open / Close",
+      "to": "OpenColorIO (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Device Mappings",
+      "to": "Video Device In (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "In Device",
+      "to": "Video Device In (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Out Device",
+      "to": "Video Device In (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Ch",
+      "to": "Cache (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "ID",
+      "to": "Inside (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Time Panel",
+      "to": "Time Machine (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Signal Flow Taxonomy",
+      "to": "Optical Flow (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Family-Specific Flow Rules",
+      "to": "Optical Flow (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Text Data",
+      "to": "Text (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Order of Evaluation",
+      "to": "Reorder (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Side Effects",
+      "to": "Inside (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "CHOP Family",
+      "to": "CHOP to TOP",
+      "type": "mentions"
+    },
+    {
+      "from": "Shared Mem In",
+      "to": "Shared Mem In (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Shared Mem Name",
+      "to": "Shared Mem In (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Shared Mem Type",
+      "to": "Shared Mem In (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Shared Mem Out",
+      "to": "Shared Mem In (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Light Color",
+      "to": "OpenColorIO (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Render",
+      "to": "Web Render (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Material Render",
+      "to": "Web Render (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Wireframe Color",
+      "to": "OpenColorIO (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Normal Offset",
+      "to": "Normal Map (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Transform Order",
+      "to": "Reorder (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Rotate Order",
+      "to": "Reorder (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Parent Transform Source",
+      "to": "Transform (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Reset Transform",
+      "to": "Transform (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Commit to Main Transform",
+      "to": "Transform (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Display Link",
+      "to": "Direct Display Out (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Display Capture Geometry",
+      "to": "Direct Display Out (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Window Roll",
+      "to": "Window",
+      "type": "mentions"
+    },
+    {
+      "from": "Background Color",
+      "to": "OpenColorIO (TOP)",
+      "type": "mentions"
+    },
+    {
+      "from": "Annotate",
+      "to": "Annotate",
+      "type": "mentions"
+    },
+    {
+      "from": "Window",
+      "to": "Window",
+      "type": "mentions"
+    },
+    {
+      "from": "Constraint",
+      "to": "Constraint",
+      "type": "mentions"
+    },
+    {
+      "from": "Actor",
+      "to": "Actor",
+      "type": "mentions"
+    },
+    {
+      "from": "Bullet Solver",
+      "to": "Bullet Solver",
+      "type": "mentions"
+    },
+    {
+      "from": "Force",
+      "to": "Force",
+      "type": "mentions"
+    }
+  ]
+}

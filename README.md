@@ -20,7 +20,7 @@ This repo now includes `render.yaml` for a Render Web Service.
 
 ### Route behavior assumptions
 
-- `/` serves the intro page (`index.html`)
+- `/` redirects to `/outpost`
 - `/outpost` serves the Wireup Outpost app (`wireup-outpost.html`)
 - `/api/rayray` handles chat requests
 - `/wireup-shack.html` redirects to `/outpost`
@@ -46,14 +46,22 @@ Each resource entry must include:
 - `target`: output filename in `ipld/published/`
 - `purpose`: short machine-readable description
 
-## Run UI From Repo Root
+## Run Wireup Outpost From Repo Root
+
+Start the server-backed Outpost app locally:
+
+```bash
+npm run dev
+```
+
+## Run UI Sandbox From Repo Root
 
 The UI from `belt-fit-wizard` is imported under `ui/` and can be run from the
 root of this repository.
 
 ```bash
 npm run ui:install
-npm run dev
+npm run ui:dev
 ```
 
 Other commands:
@@ -62,3 +70,35 @@ Other commands:
 npm run build
 npm run preview
 ```
+
+## Runtime Knowledge Architecture
+
+Canonical runtime knowledge now lives in `data/wireup_runtime/`:
+
+- `master_index.json`
+- `operator_lookup.json`
+- `concept_index.json`
+- `concept_graph.json`
+- `runtime_rules.json`
+
+Runtime modules:
+
+- `runtime/loader/index.js` (browser loader)
+- `runtime/retrieval/index.js` (operator/context retrieval)
+- `runtime/reasoning/index.js` (pattern detection + explanation modes)
+- `runtime/index.cjs` (server runtime API)
+
+Explanation modes supported end-to-end:
+
+- `td`
+- `eli5`
+- `dual`
+
+## Deprecated Legacy Knowledge Sources
+
+The following files are deprecated and no longer used by the runtime path:
+
+- `rayray_index.json`
+- `touch designer tops.json`
+- `td simple glossery.json`
+- `touch designer glossery part 3.json`

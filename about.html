@@ -129,7 +129,7 @@
       <span id="tox-text">Waiting for wireup.tox...</span>
     </div>
 
-    <button id="restart-btn" type="button">Restart</button>
+    <button id="restart-btn" type="button" title="Restart temporarily disabled" disabled>Restart</button>
   </div>
 
   <script>
@@ -232,7 +232,10 @@
         }
       }
 
-      restartBtn.addEventListener('click', restartSystem);
+      if (restartBtn) {
+        restartBtn.disabled = true;
+        restartBtn.title = 'Restart temporarily disabled';
+      }
 
       fetchToxStatus();
       pollHandle = setInterval(fetchToxStatus, 2000);

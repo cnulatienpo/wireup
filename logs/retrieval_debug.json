@@ -1,0 +1,211 @@
+{
+  "query": "how do i stitch clips together",
+  "query_type_guess": "workflow_recipe",
+  "retrieved_docs": [
+    {
+      "document_id": "glossary_6_td_synchro",
+      "document_type": "glossary",
+      "operator_name": "TD Synchro",
+      "similarity_score": 0.227383,
+      "text_preview_first_120_chars": "TD Synchro groups parts used to keep things in time together. This does not create content. Keeping things lined up. Mak",
+      "chunk_text": "TD Synchro groups parts used to keep things in time together. This does not create content. Keeping things lined up. Making sure multiple trains arrive at the station at the same time."
+    },
+    {
+      "document_id": "glossary_6_tdvs",
+      "document_type": "glossary",
+      "operator_name": "TDVS",
+      "similarity_score": 0.219511,
+      "text_preview_first_120_chars": "TDVS groups parts made for video server workflows. This is not simple playback. Large-scale output tools. Sending the tr",
+      "chunk_text": "TDVS groups parts made for video server workflows. This is not simple playback. Large-scale output tools. Sending the train video to many screens at once."
+    },
+    {
+      "document_id": "glossary_15_merge",
+      "document_type": "glossary",
+      "operator_name": "Merge",
+      "similarity_score": 0.207683,
+      "text_preview_first_120_chars": "A merge is where multiple inputs come together into one. This is not keeping inputs separate. Tracks coming together. Tw",
+      "chunk_text": "A merge is where multiple inputs come together into one. This is not keeping inputs separate. Tracks coming together. Two trains entering the same main line."
+    },
+    {
+      "document_id": "glossary_16_connect",
+      "document_type": "glossary",
+      "operator_name": "Connect",
+      "similarity_score": 0.206002,
+      "text_preview_first_120_chars": "Connect means linking an output to an input. This does not change the data. Joining tracks. Linking one section of track",
+      "chunk_text": "Connect means linking an output to an input. This does not change the data. Joining tracks. Linking one section of track to the next."
+    },
+    {
+      "document_id": "glossary_7_tools",
+      "document_type": "glossary",
+      "operator_name": "Tools",
+      "similarity_score": 0.200002,
+      "text_preview_first_120_chars": "Tools group parts that help build, manage, or inspect things. These are not the final result. Work tools. Inspection too",
+      "chunk_text": "Tools group parts that help build, manage, or inspect things. These are not the final result. Work tools. Inspection tools used to check the train system."
+    },
+    {
+      "document_id": "glossary_2_chop",
+      "document_type": "glossary",
+      "operator_name": "CHOP",
+      "similarity_score": 0.186825,
+      "text_preview_first_120_chars": "CHOPs work with changing numbers. These are not images. Values that move up and down. The train\u2019s speed going faster or ",
+      "chunk_text": "CHOPs work with changing numbers. These are not images. Values that move up and down. The train\u2019s speed going faster or slower over time."
+    },
+    {
+      "document_id": "glossary_16_link",
+      "document_type": "glossary",
+      "operator_name": "Link",
+      "similarity_score": 0.183294,
+      "text_preview_first_120_chars": "Link means keeping two things connected so they stay in sync. This is not a one-time copy. Tied together. Two signals th",
+      "chunk_text": "Link means keeping two things connected so they stay in sync. This is not a one-time copy. Tied together. Two signals that always change together on the train line."
+    },
+    {
+      "document_id": "glossary_15_branch",
+      "document_type": "glossary",
+      "operator_name": "Branch",
+      "similarity_score": 0.181799,
+      "text_preview_first_120_chars": "A branch is where one output feeds into multiple paths. This is not a merge. A fork in the tracks. One train signal send",
+      "chunk_text": "A branch is where one output feeds into multiple paths. This is not a merge. A fork in the tracks. One train signal sending instructions to two different routes."
+    },
+    {
+      "document_id": "glossary_16_bind",
+      "document_type": "glossary",
+      "operator_name": "Bind",
+      "similarity_score": 0.174819,
+      "text_preview_first_120_chars": "Bind means locking one thing to follow another. This is not a loose connection. Locked together. A train car that must f",
+      "chunk_text": "Bind means locking one thing to follow another. This is not a loose connection. Locked together. A train car that must follow the engine."
+    },
+    {
+      "document_id": "glossary_16_compatible",
+      "document_type": "glossary",
+      "operator_name": "Compatible",
+      "similarity_score": 0.160095,
+      "text_preview_first_120_chars": "Compatible means two things can connect directly. This does not mean they will work well together. Tracks that line up. ",
+      "chunk_text": "Compatible means two things can connect directly. This does not mean they will work well together. Tracks that line up. Two rail sections that fit together."
+    }
+  ],
+  "selected_docs": [
+    {
+      "document_id": "glossary_6_td_synchro",
+      "document_type": "glossary",
+      "operator_name": "TD Synchro",
+      "similarity_score": 0.227383,
+      "text_preview_first_120_chars": "TD Synchro groups parts used to keep things in time together. This does not create content. Keeping things lined up. Mak",
+      "chunk_text": "TD Synchro groups parts used to keep things in time together. This does not create content. Keeping things lined up. Making sure multiple trains arrive at the station at the same time.",
+      "doc_id": "glossary_6_td_synchro",
+      "doc_type": "glossary",
+      "decision_reason": "fallback top semantic match for query_type=workflow_recipe similarity=0.227383",
+      "reason_selected": "fallback top semantic match for query_type=workflow_recipe similarity=0.227383"
+    },
+    {
+      "document_id": "glossary_6_tdvs",
+      "document_type": "glossary",
+      "operator_name": "TDVS",
+      "similarity_score": 0.219511,
+      "text_preview_first_120_chars": "TDVS groups parts made for video server workflows. This is not simple playback. Large-scale output tools. Sending the tr",
+      "chunk_text": "TDVS groups parts made for video server workflows. This is not simple playback. Large-scale output tools. Sending the train video to many screens at once.",
+      "doc_id": "glossary_6_tdvs",
+      "doc_type": "glossary",
+      "decision_reason": "fallback top semantic match for query_type=workflow_recipe similarity=0.219511",
+      "reason_selected": "fallback top semantic match for query_type=workflow_recipe similarity=0.219511"
+    },
+    {
+      "document_id": "glossary_15_merge",
+      "document_type": "glossary",
+      "operator_name": "Merge",
+      "similarity_score": 0.207683,
+      "text_preview_first_120_chars": "A merge is where multiple inputs come together into one. This is not keeping inputs separate. Tracks coming together. Tw",
+      "chunk_text": "A merge is where multiple inputs come together into one. This is not keeping inputs separate. Tracks coming together. Two trains entering the same main line.",
+      "doc_id": "glossary_15_merge",
+      "doc_type": "glossary",
+      "decision_reason": "fallback top semantic match for query_type=workflow_recipe similarity=0.207683",
+      "reason_selected": "fallback top semantic match for query_type=workflow_recipe similarity=0.207683"
+    },
+    {
+      "document_id": "glossary_16_connect",
+      "document_type": "glossary",
+      "operator_name": "Connect",
+      "similarity_score": 0.206002,
+      "text_preview_first_120_chars": "Connect means linking an output to an input. This does not change the data. Joining tracks. Linking one section of track",
+      "chunk_text": "Connect means linking an output to an input. This does not change the data. Joining tracks. Linking one section of track to the next.",
+      "doc_id": "glossary_16_connect",
+      "doc_type": "glossary",
+      "decision_reason": "fallback top semantic match for query_type=workflow_recipe similarity=0.206002",
+      "reason_selected": "fallback top semantic match for query_type=workflow_recipe similarity=0.206002"
+    }
+  ],
+  "dropped_docs": [
+    {
+      "document_id": "glossary_7_tools",
+      "document_type": "glossary",
+      "operator_name": "Tools",
+      "similarity_score": 0.200002,
+      "text_preview_first_120_chars": "Tools group parts that help build, manage, or inspect things. These are not the final result. Work tools. Inspection too",
+      "chunk_text": "Tools group parts that help build, manage, or inspect things. These are not the final result. Work tools. Inspection tools used to check the train system.",
+      "doc_id": "glossary_7_tools",
+      "doc_type": "glossary",
+      "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+      "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+    },
+    {
+      "document_id": "glossary_2_chop",
+      "document_type": "glossary",
+      "operator_name": "CHOP",
+      "similarity_score": 0.186825,
+      "text_preview_first_120_chars": "CHOPs work with changing numbers. These are not images. Values that move up and down. The train\u2019s speed going faster or ",
+      "chunk_text": "CHOPs work with changing numbers. These are not images. Values that move up and down. The train\u2019s speed going faster or slower over time.",
+      "doc_id": "glossary_2_chop",
+      "doc_type": "glossary",
+      "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+      "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+    },
+    {
+      "document_id": "glossary_16_link",
+      "document_type": "glossary",
+      "operator_name": "Link",
+      "similarity_score": 0.183294,
+      "text_preview_first_120_chars": "Link means keeping two things connected so they stay in sync. This is not a one-time copy. Tied together. Two signals th",
+      "chunk_text": "Link means keeping two things connected so they stay in sync. This is not a one-time copy. Tied together. Two signals that always change together on the train line.",
+      "doc_id": "glossary_16_link",
+      "doc_type": "glossary",
+      "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+      "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+    },
+    {
+      "document_id": "glossary_15_branch",
+      "document_type": "glossary",
+      "operator_name": "Branch",
+      "similarity_score": 0.181799,
+      "text_preview_first_120_chars": "A branch is where one output feeds into multiple paths. This is not a merge. A fork in the tracks. One train signal send",
+      "chunk_text": "A branch is where one output feeds into multiple paths. This is not a merge. A fork in the tracks. One train signal sending instructions to two different routes.",
+      "doc_id": "glossary_15_branch",
+      "doc_type": "glossary",
+      "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+      "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+    },
+    {
+      "document_id": "glossary_16_bind",
+      "document_type": "glossary",
+      "operator_name": "Bind",
+      "similarity_score": 0.174819,
+      "text_preview_first_120_chars": "Bind means locking one thing to follow another. This is not a loose connection. Locked together. A train car that must f",
+      "chunk_text": "Bind means locking one thing to follow another. This is not a loose connection. Locked together. A train car that must follow the engine.",
+      "doc_id": "glossary_16_bind",
+      "doc_type": "glossary",
+      "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+      "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+    },
+    {
+      "document_id": "glossary_16_compatible",
+      "document_type": "glossary",
+      "operator_name": "Compatible",
+      "similarity_score": 0.160095,
+      "text_preview_first_120_chars": "Compatible means two things can connect directly. This does not mean they will work well together. Tracks that line up. ",
+      "chunk_text": "Compatible means two things can connect directly. This does not mean they will work well together. Tracks that line up. Two rail sections that fit together.",
+      "doc_id": "glossary_16_compatible",
+      "doc_type": "glossary",
+      "decision_reason": "type/score did not satisfy query_type=workflow_recipe",
+      "reason_dropped": "type/score did not satisfy query_type=workflow_recipe"
+    }
+  ],
+  "response_mode": "recipe_responder"
+}

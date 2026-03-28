@@ -1,0 +1,318 @@
+[
+  {
+    "operator": "Movie File In TOP",
+    "connections": [
+      {
+        "target": "Switch TOP",
+        "relationship": "image_flow",
+        "description": "Video clips feed into a Switch TOP to select which clip is active"
+      },
+      {
+        "target": "Null TOP",
+        "relationship": "image_flow",
+        "description": "Null TOP is often used to stabilize output"
+      }
+    ],
+    "parameter_controls": [
+      {
+        "parameter": "Index",
+        "signal_type": "CHOP",
+        "drivers": ["Math CHOP", "Count CHOP", "LFO CHOP"],
+        "description": "Controls which frame or clip is selected"
+      }
+    ]
+  },
+  {
+    "operator": "Switch TOP",
+    "connections": [
+      {
+        "target": "Level TOP",
+        "relationship": "image_flow",
+        "description": "Selected image stream often continues into post-processing"
+      },
+      {
+        "target": "Out TOP",
+        "relationship": "image_flow",
+        "description": "Switch can directly feed final output"
+      }
+    ],
+    "parameter_controls": [
+      {
+        "parameter": "Index",
+        "signal_type": "CHOP",
+        "drivers": ["Math CHOP", "LFO CHOP", "Logic CHOP"],
+        "description": "Chooses the active input"
+      }
+    ]
+  },
+  {
+    "operator": "Level TOP",
+    "connections": [
+      {
+        "target": "Null TOP",
+        "relationship": "image_flow",
+        "description": "Level-adjusted output is stabilized through Null"
+      }
+    ],
+    "parameter_controls": [
+      {
+        "parameter": "Opacity",
+        "signal_type": "CHOP",
+        "drivers": ["LFO CHOP", "Audio Spectrum CHOP", "Math CHOP"],
+        "description": "Animates transparency or gain"
+      }
+    ]
+  },
+  {
+    "operator": "Composite TOP",
+    "connections": [
+      {
+        "target": "Null TOP",
+        "relationship": "image_flow",
+        "description": "Composited result commonly passed to Null before output"
+      }
+    ],
+    "parameter_controls": [
+      {
+        "parameter": "Operand",
+        "signal_type": "DAT",
+        "drivers": ["Table DAT", "Select DAT"],
+        "description": "Operation mode can be switched via table-driven logic"
+      }
+    ]
+  },
+  {
+    "operator": "Render TOP",
+    "connections": [
+      {
+        "target": "Null TOP",
+        "relationship": "image_flow",
+        "description": "Rendered scene output is often cached through Null"
+      },
+      {
+        "target": "Bloom TOP",
+        "relationship": "image_flow",
+        "description": "Render output frequently goes into bloom post FX"
+      }
+    ],
+    "parameter_controls": [
+      {
+        "parameter": "Camera",
+        "signal_type": "DAT",
+        "drivers": ["Table DAT", "Panel CHOP"],
+        "description": "Camera path can be switched via UI/table control"
+      }
+    ]
+  },
+  {
+    "operator": "Null TOP",
+    "connections": [
+      {
+        "target": "Out TOP",
+        "relationship": "image_flow",
+        "description": "Null TOP is a common final handoff to output"
+      }
+    ]
+  },
+  {
+    "operator": "Noise TOP",
+    "connections": [
+      {
+        "target": "Displace TOP",
+        "relationship": "image_flow",
+        "description": "Noise texture drives displacement maps"
+      }
+    ],
+    "parameter_controls": [
+      {
+        "parameter": "Period",
+        "signal_type": "CHOP",
+        "drivers": ["LFO CHOP", "Pattern CHOP"],
+        "description": "Controls noise scale over time"
+      }
+    ]
+  },
+  {
+    "operator": "Audio Device In CHOP",
+    "connections": [
+      {
+        "target": "Audio Spectrum CHOP",
+        "relationship": "signal_flow",
+        "description": "Live audio is analyzed for frequency content"
+      },
+      {
+        "target": "Analyze CHOP",
+        "relationship": "signal_flow",
+        "description": "Audio RMS/peaks are extracted for control"
+      }
+    ]
+  },
+  {
+    "operator": "Audio Spectrum CHOP",
+    "connections": [
+      {
+        "target": "Math CHOP",
+        "relationship": "signal_flow",
+        "description": "Spectrum channels are remapped and normalized"
+      },
+      {
+        "target": "Trail CHOP",
+        "relationship": "signal_flow",
+        "description": "Spectrum history is visualized in a trail"
+      }
+    ]
+  },
+  {
+    "operator": "Analyze CHOP",
+    "connections": [
+      {
+        "target": "Math CHOP",
+        "relationship": "signal_flow",
+        "description": "Analyzed levels are scaled into useful ranges"
+      }
+    ]
+  },
+  {
+    "operator": "Math CHOP",
+    "connections": [
+      {
+        "target": "Lag CHOP",
+        "relationship": "signal_flow",
+        "description": "Mapped channels are smoothed"
+      },
+      {
+        "target": "CHOP Export",
+        "relationship": "parameter_control",
+        "description": "Math CHOP channels are often exported to parameters"
+      }
+    ],
+    "parameter_controls": [
+      {
+        "parameter": "Mult-Add",
+        "signal_type": "CHOP",
+        "drivers": ["Constant CHOP", "MIDI In CHOP"],
+        "description": "Sets scaling profile for outgoing control signals"
+      }
+    ]
+  },
+  {
+    "operator": "Lag CHOP",
+    "connections": [
+      {
+        "target": "Null CHOP",
+        "relationship": "signal_flow",
+        "description": "Lagged channels are stabilized at a Null endpoint"
+      }
+    ]
+  },
+  {
+    "operator": "Count CHOP",
+    "connections": [
+      {
+        "target": "Switch TOP",
+        "relationship": "parameter_control",
+        "description": "Count output often drives Switch index"
+      },
+      {
+        "target": "Trigger CHOP",
+        "relationship": "trigger",
+        "description": "Count thresholds can fire trigger envelopes"
+      }
+    ]
+  },
+  {
+    "operator": "LFO CHOP",
+    "connections": [
+      {
+        "target": "Level TOP",
+        "relationship": "parameter_control",
+        "description": "LFO channels modulate visual intensity"
+      },
+      {
+        "target": "Transform TOP",
+        "relationship": "parameter_control",
+        "description": "LFO drives translate/rotate/scale parameters"
+      }
+    ]
+  },
+  {
+    "operator": "Logic CHOP",
+    "connections": [
+      {
+        "target": "Trigger CHOP",
+        "relationship": "trigger",
+        "description": "Boolean edges generate trigger events"
+      },
+      {
+        "target": "Switch TOP",
+        "relationship": "parameter_control",
+        "description": "On/off states select visual branches"
+      }
+    ]
+  },
+  {
+    "operator": "Trigger CHOP",
+    "connections": [
+      {
+        "target": "Filter CHOP",
+        "relationship": "signal_flow",
+        "description": "Triggered envelopes are filtered for smoother control"
+      },
+      {
+        "target": "CHOP Export",
+        "relationship": "parameter_control",
+        "description": "Envelope output is exported to animation parameters"
+      }
+    ]
+  },
+  {
+    "operator": "Table DAT",
+    "connections": [
+      {
+        "target": "DAT to CHOP",
+        "relationship": "data_table",
+        "description": "Table rows are converted into channel data"
+      },
+      {
+        "target": "Replicator COMP",
+        "relationship": "data_table",
+        "description": "Table records define replicated operator instances"
+      }
+    ]
+  },
+  {
+    "operator": "DAT to CHOP",
+    "connections": [
+      {
+        "target": "Math CHOP",
+        "relationship": "signal_flow",
+        "description": "Converted channels are normalized and remapped"
+      }
+    ]
+  },
+  {
+    "operator": "Button COMP",
+    "connections": [
+      {
+        "target": "Panel CHOP",
+        "relationship": "signal_flow",
+        "description": "UI panel states are read as channels"
+      }
+    ]
+  },
+  {
+    "operator": "Panel CHOP",
+    "connections": [
+      {
+        "target": "Logic CHOP",
+        "relationship": "signal_flow",
+        "description": "Panel events are debounced and thresholded"
+      },
+      {
+        "target": "CHOP Execute DAT",
+        "relationship": "trigger",
+        "description": "Panel channels trigger Python callbacks"
+      }
+    ]
+  }
+]

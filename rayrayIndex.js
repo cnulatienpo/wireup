@@ -1,21 +1,23 @@
-const fs = require('fs');
-const path = require('path');
-
-const INDEX_PATH = path.join(__dirname, 'rayray_index.json');
+// Deprecated: retained for backwards compatibility.
+// Runtime lookups now use data/wireup_runtime/* through runtime/index.cjs.
+const runtime = require('./runtime/index.cjs');
 
 function loadIndex() {
-  const raw = fs.readFileSync(INDEX_PATH, 'utf8');
-  return JSON.parse(raw);
+  const data = runtime.loadRuntime();
+  return {
+    operators: data.master_index?.operators || {},
+    glossary: data.concept_index || {},
+  };
 }
 
 function getOperatorSources(operatorName) {
-  const index = loadIndex();
-  return index.operators?.[operatorName] ?? [];
+  const entry = runtime.getOperator(operatorName);
+  return entry ? [entry] : [];
 }
 
 function getGlossarySource(term) {
   const index = loadIndex();
-  return index.glossary?.[term] ?? [];
+  return index.glossary?.[String(term).toLowerCase()] ?? null;
 }
 
 module.exports = {

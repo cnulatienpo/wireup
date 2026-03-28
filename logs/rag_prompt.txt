@@ -1,0 +1,16 @@
+Query: how do i stitch clips together
+Query type: workflow_recipe
+
+Retrieved context:
+- [task_alias] sequential_video_playback (score=1.4)
+- [task_alias] video_blending (score=0.466668)
+- [task_alias] clip_switching (score=0.466668)
+- [question] how do i build a general workflow (score=0.25)
+- [operator_graph] Movie File In TOP (score=0.166667)
+- [question] how to connect project1__level1 -> project1__moviefilein1 -> project1__null1 (score=0.083334)
+
+Workflow steps:
+- Step 1: Create a Movie File In TOP and load your source media or input data.
+- Step 2: Create a Switch TOP and connect Movie File In TOP to it.
+- Step 3: Create a Cache TOP and connect it after Switch TOP in the chain.
+- Step 4: Use Cache TOP as the stable output for downstream nodes.
